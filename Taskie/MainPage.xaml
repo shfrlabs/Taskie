@@ -9,22 +9,67 @@
     mc:Ignorable="d"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
     <Grid>
-        <Grid Background="Transparent" x:Name="TTB" VerticalAlignment="Top" Height="48">
-            <Image Source="Assets\Square150x150Logo.scale-200.png" Width="16" Height="16" HorizontalAlignment="Left" Margin="16,0,0,0"/>
-            <TextBlock Margin="42,0,0,0" VerticalAlignment="Center" FontSize="12">Taskie</TextBlock>
+        <Grid Background="Transparent" x:Name="TTB" VerticalAlignment="Top" Height="48" Canvas.ZIndex="9999">
+            <Image Source="Assets\Logo.png" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0"/>
+            <TextBlock Margin="45,0,0,0" VerticalAlignment="Center" FontSize="12">Taskie</TextBlock>
         </Grid>
-        <muxc:NavigationView x:Name="Navigation"
-    IsBackButtonVisible="Visible"
-    IsBackEnabled="False"
-    SelectionChanged="Navigation_SelectionChanged"
-    AlwaysShowHeader="True"
-    Margin="0,48,0,0"
-    PaneDisplayMode="Left"
-    ExpandedModeThresholdWidth="500"
-    SelectionFollowsFocus="Disabled"
-    IsTabStop="False"
-    IsSettingsVisible="False">
-            <Frame x:Name="contentFrame" />
-        </muxc:NavigationView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Frame x:Name="contentFrame" Grid.Column="1" Margin="-20, 0, 0, 0" Background="{StaticResource LayerFillColorDefaultBrush}"/>
+            <Grid Grid.Column="0" Margin="0, 38, 20, 10" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="110"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="180"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Bottom">
+                    <Button Background="{StaticResource SystemAccentColorLight2}" x:Name="AddItemBtn" Click="AddItemBtn_Click" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 , 10">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE710;" FontSize="18" Margin="11,0,10,0" Foreground="{StaticResource ToggleButtonCheckedForegroundThemeBrush}"/>
+                            <TextBlock FontSize="15" Foreground="{StaticResource ToggleButtonCheckedForegroundThemeBrush}">New list</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <AutoSuggestBox Margin="10,0,10,2" Style="{StaticResource SearchStyle}" PlaceholderText="Search" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" FontSize="15" VerticalAlignment="Bottom">
+                        <AutoSuggestBox.QueryIcon>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE721;" FontSize="18" Opacity=".7"/>
+                        </AutoSuggestBox.QueryIcon>
+                    </AutoSuggestBox>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="1">
+                    <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
+                    <!--<Button x:Name="AddItemBtn" CornerRadius="3" Click="AddItemBtn_Click" HorizontalAlignment="Center" Width="138" HorizontalContentAlignment="Left" Height="35" BorderThickness="0" Background="Transparent">
+                        <StackPanel Orientation="Horizontal" Margin="6,0,0,0">
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE710;" FontSize="14" Margin="0,0,15,0"/>
+                            <TextBlock>Add list</TextBlock>
+                        </StackPanel>
+                    </Button>-->
+                    <ListView x:Name="Navigation" Margin="7,2,7,0" SelectionMode="Single" SelectionChanged="Navigation_SelectionChanged_1"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="2">
+                    <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
+                    <Button x:Name="UpdateButton" Click="UpdateButton_Click" HorizontalContentAlignment="Left" Margin="10, 3, 10 ,10" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" BorderThickness="2" BorderBrush="{StaticResource SystemAccentColorLight2}">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74A;" FontSize="18" Margin="10,0,10,0"/>
+                            <TextBlock FontSize="15">Upgrade</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="ExportImportButton" Click="ExportImportButton_Click" Margin="10, 0, 10 ,10" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEDE1;" FontSize="18" Margin="11,0,10,0"/>
+                            <TextBlock FontSize="15">Transfer</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="SettingsButton" Click="SettingsButton_Click" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 ,0">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" FontSize="18" Margin="11,0,10,0"/>
+                            <TextBlock FontSize="15">Settings</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>

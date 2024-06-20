@@ -2,8 +2,25 @@
     x:Class="Taskie.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Taskie">
+    xmlns:local="using:Taskie"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls">
     <Application.Resources>
-        <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+        <controls:XamlControlsResources>
+            <controls:XamlControlsResources.MergedDictionaries>
+                <ResourceDictionary>
+                    <Style x:Key="SearchStyle" TargetType="AutoSuggestBox" BasedOn="{StaticResource DefaultAutoSuggestBoxStyle}">
+                        <Style.Setters>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="BorderBrush" Value="{ThemeResource ControlElevationBorderBrush}"/>
+                            <Setter Property="QueryIcon">
+                                <Setter.Value>
+                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE721;" />
+                                </Setter.Value>
+                            </Setter>
+                        </Style.Setters>
+                    </Style>
+                </ResourceDictionary>
+            </controls:XamlControlsResources.MergedDictionaries>
+        </controls:XamlControlsResources>
     </Application.Resources>
 </Application>

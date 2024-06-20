@@ -29,9 +29,9 @@ namespace Taskie
 
         private void ListRenamed(string oldname, string newname)
         {
-            foreach (var item in Navigation.MenuItems)
+            foreach (var item in Navigation.Items)
             {
-                if (item is Microsoft.UI.Xaml.Controls.NavigationViewItem navigationItem)
+                if (item is ListViewItem navigationItem)
                 {
                     if (navigationItem.Tag.ToString() == oldname)
                     {
@@ -47,13 +47,13 @@ namespace Taskie
         {
             contentFrame.Content = new StackPanel();
             Navigation.SelectedItem = null;
-            foreach (var item in Navigation.MenuItems)
+            foreach (var item in Navigation.Items)
             {
-                if (item is Microsoft.UI.Xaml.Controls.NavigationViewItem navigationItem)
+                if (item is ListViewItem navigationItem)
                 {
                     if (navigationItem.Tag.ToString() == name)
                     {
-                        Navigation.MenuItems.Remove(item);
+                        Navigation.Items.Remove(item);
                         break;
                     }
                 }
@@ -72,12 +72,14 @@ namespace Taskie
 
         private void SetupNavigationMenu()
         {
-            Navigation.MenuItems.Add(new Microsoft.UI.Xaml.Controls.NavigationViewItem() { Tag = "AddItem", Content = "Add a new list", Icon = new SymbolIcon(Symbol.Add) });
-            Navigation.MenuItems.Add(new Microsoft.UI.Xaml.Controls.NavigationViewItem() { Tag = "ExportImport", Content = "Export/Import lists", Icon = new SymbolIcon(Symbol.Import) });
-            Navigation.MenuItems.Add(new Microsoft.UI.Xaml.Controls.NavigationViewItemSeparator() { Content = "Your lists" });
             foreach (string listName in TaskieLib.Tools.GetLists())
             {
-                Navigation.MenuItems.Add(new Microsoft.UI.Xaml.Controls.NavigationViewItem() { Tag = listName, Content = listName, Icon = new SymbolIcon(Symbol.Document) });
+                StackPanel content = new StackPanel();
+                content.Orientation = Orientation.Horizontal;
+                content.VerticalAlignment = VerticalAlignment.Center;
+                content.Children.Add(new FontIcon() { Glyph = "📄", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14});
+                content.Children.Add(new TextBlock { Text = listName, Margin = new Thickness(12, 0, 0, 0) });
+                Navigation.Items.Add(new ListViewItem() { Tag = listName, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
             }
         }
 
@@ -87,37 +89,18 @@ namespace Taskie
                 dialogTimer.Stop();
             dialogTimer = new DispatcherTimer();
             dialogTimer.Interval = TimeSpan.FromMilliseconds(500);
-            dialogTimer.Tick += async (s, e) =>
+            dialogTimer.Tick += (s, e) =>
             {
                 dialogTimer.Stop();
-                Microsoft.UI.Xaml.Controls.NavigationViewItem item = new Microsoft.UI.Xaml.Controls.NavigationViewItem() { Tag = name, Content = name, Icon = new SymbolIcon(Symbol.Document) };
-                Navigation.MenuItems.Add(item);
+                StackPanel content = new StackPanel();
+                content.VerticalAlignment = VerticalAlignment.Center;
+                content.Orientation = Orientation.Horizontal;
+                content.Margin = new Thickness(-7, 0, 0, 0);
+                content.Children.Add(new FontIcon() { Glyph = "📄", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14});
+                content.Children.Add(new TextBlock { Text = name, Margin = new Thickness(12, 0, 0, 0) });
+                Navigation.Items.Add(new ListViewItem() { Tag = name, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
             };
             dialogTimer.Start();
-        }
-        private async void Navigation_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
-        {
-            var selectedItem = args.SelectedItem as Microsoft.UI.Xaml.Controls.NavigationViewItem;
-            if (selectedItem != null && selectedItem.Tag is string tag)
-            {
-                if ((string)selectedItem.Tag == "AddItem")
-                {
-                    contentFrame.Content = null;
-                    sender.SelectedItem = null;
-                    await ShowAddItemDialog();
-                }
-                else if ((string)selectedItem.Tag == "ExportImport")
-                {
-                    contentFrame.Navigate(typeof(ExportImportPage));
-                }
-                else if (args.IsSettingsSelected)
-                {
-                }
-                else
-                {
-                    contentFrame.Navigate(typeof(TaskPage), tag);
-                }
-            }
         }
 
         public string RequestedName = "";
@@ -145,6 +128,41 @@ namespace Taskie
         {
             Tools.CreateList(RequestedName);
             RequestedName = null;
+        }
+
+        private void AddItemBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ExportImportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Navigation_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            ListView NavList = sender as ListView;
+            var selectedItem = NavList.SelectedItem as ListViewItem;
+            if (selectedItem != null && selectedItem.Tag is string tag)
+            {
+                contentFrame.Navigate(typeof(TaskPage), tag);
+            }
+        }
+
+        private void SearchBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
