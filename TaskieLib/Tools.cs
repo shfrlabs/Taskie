@@ -131,6 +131,7 @@ namespace TaskieLib
         }
         private static string GetFilePath(string listName)
         {
+            Debug.WriteLine(ApplicationData.Current.LocalFolder.Path);
             return Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{listName}.json");
         }
 

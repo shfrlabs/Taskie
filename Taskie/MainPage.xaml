@@ -23,29 +23,38 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="110"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="180"/>
+                    <RowDefinition Height="135"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Bottom">
-                    <Button Background="{StaticResource SystemAccentColorLight2}" x:Name="AddItemBtn" Click="AddItemBtn_Click" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 , 10">
+                    <Button Background="{StaticResource SystemAccentColorLight2}" x:Name="AddItemBtn" Click="ShowAddItemDialog" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 , 10">
+                        <Button.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.ThemeDictionaries>
+                                    <ResourceDictionary x:Key="Dark">
+                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{StaticResource SystemAccentColorLight3}"/>
+                                        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{StaticResource SystemAccentColorLight3}"/>
+                                    </ResourceDictionary>
+                                    <ResourceDictionary x:Key="Light">
+                                        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{StaticResource SystemAccentColorLight3}"/>
+                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{StaticResource SystemAccentColorLight3}"/>
+                                    </ResourceDictionary>
+                                </ResourceDictionary.ThemeDictionaries>
+                            </ResourceDictionary>
+                        </Button.Resources>
                         <StackPanel Orientation="Horizontal">
                             <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE710;" FontSize="18" Margin="11,0,10,0" Foreground="{StaticResource ToggleButtonCheckedForegroundThemeBrush}"/>
                             <TextBlock FontSize="15" Foreground="{StaticResource ToggleButtonCheckedForegroundThemeBrush}">New list</TextBlock>
                         </StackPanel>
                     </Button>
-                    <AutoSuggestBox Margin="10,0,10,2" Style="{StaticResource SearchStyle}" PlaceholderText="Search" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" FontSize="15" VerticalAlignment="Bottom">
+                    <AutoSuggestBox TextChanged="AutoSuggestBox_TextChanged" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="10,0,10,2" Style="{StaticResource SearchStyle}" PlaceholderText="Search" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" FontSize="15" VerticalAlignment="Bottom" x:Name="searchbox">
                         <AutoSuggestBox.QueryIcon>
                             <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE721;" FontSize="18" Opacity=".7"/>
                         </AutoSuggestBox.QueryIcon>
                     </AutoSuggestBox>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Grid.Row="1">
+                <Rectangle Grid.Row="1" Fill="Transparent" x:Name="rectlist" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="7,23,7,0" SizeChanged="rectlist_SizeChanged"/>
+                <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Stretch">
                     <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
-                    <!--<Button x:Name="AddItemBtn" CornerRadius="3" Click="AddItemBtn_Click" HorizontalAlignment="Center" Width="138" HorizontalContentAlignment="Left" Height="35" BorderThickness="0" Background="Transparent">
-                        <StackPanel Orientation="Horizontal" Margin="6,0,0,0">
-                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE710;" FontSize="14" Margin="0,0,15,0"/>
-                            <TextBlock>Add list</TextBlock>
-                        </StackPanel>
-                    </Button>-->
                     <ListView x:Name="Navigation" Margin="7,2,7,0" SelectionMode="Single" SelectionChanged="Navigation_SelectionChanged_1"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="2">
@@ -54,12 +63,6 @@
                         <StackPanel Orientation="Horizontal">
                             <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74A;" FontSize="18" Margin="10,0,10,0"/>
                             <TextBlock FontSize="15">Upgrade</TextBlock>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="ExportImportButton" Click="ExportImportButton_Click" Margin="10, 0, 10 ,10" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8">
-                        <StackPanel Orientation="Horizontal">
-                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEDE1;" FontSize="18" Margin="11,0,10,0"/>
-                            <TextBlock FontSize="15">Transfer</TextBlock>
                         </StackPanel>
                     </Button>
                     <Button x:Name="SettingsButton" Click="SettingsButton_Click" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 ,0">

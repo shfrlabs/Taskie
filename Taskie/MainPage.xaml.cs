@@ -10,18 +10,25 @@ using System.Runtime.CompilerServices;
 using TaskieLib;
 using Windows.Networking;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media;
+using System.Diagnostics;
+using Windows.UI.Xaml.Shapes;
+using System.Reflection;
+using System.Linq;
+using Windows.UI.WindowManagement;
+using Windows.UI.Xaml.Hosting;
 
 namespace Taskie
 {
     public sealed partial class MainPage : Page
     {
-        private DispatcherTimer dialogTimer;
-
         public MainPage()
         {
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Windows.Foundation.Size(600, 500));
             InitializeComponent();
             SetupTitleBar();
             SetupNavigationMenu();
+            Navigation.Height = rectlist.ActualHeight;
             TaskieLib.Tools.ListCreatedEvent += UpdateLists;
             Tools.ListDeletedEvent += ListDeleted;
             Tools.ListRenamedEvent += ListRenamed;
@@ -77,7 +84,8 @@ namespace Taskie
                 StackPanel content = new StackPanel();
                 content.Orientation = Orientation.Horizontal;
                 content.VerticalAlignment = VerticalAlignment.Center;
-                content.Children.Add(new FontIcon() { Glyph = "📄", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14});
+                content.Margin = new Thickness(-7, 0, 0, 0);
+                content.Children.Add(new FontIcon() { Glyph = "📄", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
                 content.Children.Add(new TextBlock { Text = listName, Margin = new Thickness(12, 0, 0, 0) });
                 Navigation.Items.Add(new ListViewItem() { Tag = listName, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
             }
@@ -85,38 +93,30 @@ namespace Taskie
 
         private void UpdateLists(string name)
         {
-            if (dialogTimer != null && dialogTimer.IsEnabled)
-                dialogTimer.Stop();
-            dialogTimer = new DispatcherTimer();
-            dialogTimer.Interval = TimeSpan.FromMilliseconds(500);
-            dialogTimer.Tick += (s, e) =>
-            {
-                dialogTimer.Stop();
-                StackPanel content = new StackPanel();
-                content.VerticalAlignment = VerticalAlignment.Center;
-                content.Orientation = Orientation.Horizontal;
-                content.Margin = new Thickness(-7, 0, 0, 0);
-                content.Children.Add(new FontIcon() { Glyph = "📄", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14});
-                content.Children.Add(new TextBlock { Text = name, Margin = new Thickness(12, 0, 0, 0) });
-                Navigation.Items.Add(new ListViewItem() { Tag = name, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
-            };
-            dialogTimer.Start();
+            Navigation.Items.Clear();
+            SetupNavigationMenu();
+            contentFrame.Content = null;
         }
 
         public string RequestedName = "";
 
-        private async Task ShowAddItemDialog()
+        private void ShowAddItemDialog(object sender, RoutedEventArgs e)
         {
-            ContentDialog dialog = new ContentDialog();
-            dialog.Title = "Create a list";
-            TextBox text = new TextBox();
+            Flyout flyout = new Flyout();
+            StackPanel panel = new StackPanel();
+            panel.Orientation = Orientation.Vertical;
+            flyout.Content = panel;
+            panel.Children.Add(new TextBlock() { Text = "Create a list" });
+            TextBox text = new TextBox() { Margin = new Thickness(0, 20, 0, 5) };
+            text.MinWidth = 200;
             text.PlaceholderText = "List name";
             text.TextChanged += Text_TextChanged;
-            dialog.Content = text;
-            dialog.PrimaryButtonText = "Create";
-            dialog.SecondaryButtonText = "Cancel";
-            dialog.PrimaryButtonClick += Dialog_PrimaryButtonClick;
-            await dialog.ShowAsync();
+            panel.Children.Add(text);
+            Button button = new Button() { Content = "Create" };
+            button.Click += AddList;
+            panel.Children.Add(button);
+            AddItemBtn.Flyout = flyout;
+            flyout.ShowAt(AddItemBtn);
         }
 
         private void Text_TextChanged(object sender, TextChangedEventArgs e)
@@ -124,25 +124,23 @@ namespace Taskie
             RequestedName = (sender as TextBox).Text;
         }
 
-        private void Dialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void AddList(object sender, RoutedEventArgs e)
         {
+            Debug.WriteLine("Ok" + RequestedName);
             Tools.CreateList(RequestedName);
             RequestedName = null;
+            UpdateLists(RequestedName);
+            AddItemBtn.Flyout.Hide();
         }
 
-        private void AddItemBtn_Click(object sender, RoutedEventArgs e)
+        private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void ExportImportButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-
+            AppWindow window = await AppWindow.TryCreateAsync();
+            window.Title = "Settings";
+            Frame settingsContent = new Frame();
+            settingsContent.Navigate(typeof(SettingsPage));
+            ElementCompositionPreview.SetAppWindowContent(window, settingsContent);
+            await window.TryShowAsync();
         }
 
         private void Navigation_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
@@ -162,6 +160,31 @@ namespace Taskie
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
+
+        }
+
+        private void rectlist_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Navigation.Height = rectlist.ActualHeight;
+        }
+
+        private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            sender.ItemsSource = Array.FindAll<string>(Tools.GetLists(), s => s.Contains(sender.Text));
+            if (sender.Text == null) { sender.IsSuggestionListOpen = false; }
+        }
+
+        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            contentFrame.Navigate(typeof(TaskPage), Array.FindAll<string>(Tools.GetLists(), s => s.Contains(sender.Text))[0]);
+            foreach (ListViewItem item in Navigation.Items)
+            {
+                Debug.WriteLine(item.Tag.ToString());
+                Debug.WriteLine(sender.Text);
+                if (item.Tag.ToString().Contains(sender.Text)) { Navigation.SelectedItem = item; break; }
+            }
+            sender.Text = "";
+            searchbox.ItemsSource = null;
 
         }
     }
