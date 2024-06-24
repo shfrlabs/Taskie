@@ -140,7 +140,14 @@ namespace Taskie
             Frame settingsContent = new Frame();
             settingsContent.Navigate(typeof(SettingsPage));
             ElementCompositionPreview.SetAppWindowContent(window, settingsContent);
+            window.Closed += SettingsWindowClosed;
+            (sender as Button).IsEnabled = false;
             await window.TryShowAsync();
+        }
+
+        private void SettingsWindowClosed(AppWindow sender, AppWindowClosedEventArgs args)
+        {
+            SettingsButton.IsEnabled = true;
         }
 
         private void Navigation_SelectionChanged_1(object sender, SelectionChangedEventArgs e)

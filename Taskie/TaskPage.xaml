@@ -6,8 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    mc:Ignorable="d"
-    Background="{StaticResource LayerFillColorDefaultBrush}">
+    mc:Ignorable="d">
 
     <Page.Resources>
         <DataTemplate x:Key="TaskItemTemplate">
@@ -36,14 +35,21 @@
 
     <Grid Margin="20">
         <Grid HorizontalAlignment="Stretch">
-            <TextBlock x:Name="testname" FontWeight="SemiBold" FontSize="28" FontFamily="Segoe UI Variable"></TextBlock>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <AppBarButton Icon="Rename" Click="RenameList_Click" Label="Rename list" LabelPosition="Collapsed" Margin="0,0,5,0"></AppBarButton>
-                <AppBarButton Icon="Delete" Click="DeleteList_Click" Label="Delete list" LabelPosition="Collapsed"></AppBarButton>
-            </StackPanel>
+            <TextBlock x:Name="testname" FontWeight="SemiBold" FontSize="28" FontFamily="Segoe UI Variable" Margin="0,0,120,0" TextTrimming="CharacterEllipsis"></TextBlock>
+            <Button Background="Transparent" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Right" Canvas.ZIndex="999" Margin="0, 15, 14, 0">
+                <Button.Content>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE712;" FontSize="14"/>
+                </Button.Content>
+                <Button.Flyout>
+                    <MenuFlyout Placement="BottomEdgeAlignedRight">
+                        <MenuFlyoutItem Icon="Rename" Click="RenameList_Click" Text="Rename list"></MenuFlyoutItem>
+                        <MenuFlyoutItem Icon="Delete" Click="DeleteList_Click" Text="Delete list"></MenuFlyoutItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
         </Grid>
-        <ScrollViewer HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,50,0,0">
-            <ListView x:Name="taskListView" Margin="0,0,0,69" SelectionMode="None" ItemTemplate="{StaticResource TaskItemTemplate}">
+        <ScrollViewer HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-12, 50, 0, 48">
+            <ListView x:Name="taskListView" Margin="0,0,-13,0" SelectionMode="None" ItemTemplate="{StaticResource TaskItemTemplate}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -51,7 +57,8 @@
                 </ListView.ItemContainerStyle>
             </ListView>
         </ScrollViewer>
-        <AutoSuggestBox QueryIcon="Add" VerticalContentAlignment="Center" QuerySubmitted="AutoSuggestBox_QuerySubmitted" FontSize="14" Background="{StaticResource LayerFillColorDefaultBrush}" HorizontalAlignment="Right" MinWidth="400" Height="48" VerticalAlignment="Bottom" BorderThickness="1" CornerRadius="8" PlaceholderText="Add a task...">
+        <Rectangle Fill="{StaticResource LayerFillColorDefaultBrush}" Canvas.ZIndex="-10" VerticalAlignment="Bottom" Height="66" Margin="-20"/>
+        <AutoSuggestBox QueryIcon="Add" Background="Transparent" BorderThickness="0" Margin="0,0,0,-8" Canvas.ZIndex="10" VerticalContentAlignment="Center" QuerySubmitted="AutoSuggestBox_QuerySubmitted" FontSize="14" HorizontalAlignment="Stretch" Height="45" VerticalAlignment="Bottom" CornerRadius="8" PlaceholderText="Add a task...">
         </AutoSuggestBox>
     </Grid>
 </Page>
