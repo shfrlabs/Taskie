@@ -43,7 +43,13 @@ namespace Taskie
                     if (navigationItem.Tag.ToString() == oldname)
                     {
                         navigationItem.Tag = newname;
-                        navigationItem.Content = newname;
+                        StackPanel content = new StackPanel();
+                        content.Orientation = Orientation.Horizontal;
+                        content.VerticalAlignment = VerticalAlignment.Center;
+                        content.Margin = new Thickness(-7, 0, 0, 0);
+                        content.Children.Add(new FontIcon() { Glyph = "📄", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
+                        content.Children.Add(new TextBlock { Text = newname, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis });
+                        navigationItem.Content = content;
                         break;
                     }
                 }
@@ -86,7 +92,7 @@ namespace Taskie
                 content.VerticalAlignment = VerticalAlignment.Center;
                 content.Margin = new Thickness(-7, 0, 0, 0);
                 content.Children.Add(new FontIcon() { Glyph = "📄", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
-                content.Children.Add(new TextBlock { Text = listName, Margin = new Thickness(12, 0, 0, 0) });
+                content.Children.Add(new TextBlock { Text = listName, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis });
                 Navigation.Items.Add(new ListViewItem() { Tag = listName, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
             }
         }
@@ -98,39 +104,14 @@ namespace Taskie
             contentFrame.Content = null;
         }
 
-        public string RequestedName = "";
-
-        private void ShowAddItemDialog(object sender, RoutedEventArgs e)
-        {
-            Flyout flyout = new Flyout();
-            StackPanel panel = new StackPanel();
-            panel.Orientation = Orientation.Vertical;
-            flyout.Content = panel;
-            panel.Children.Add(new TextBlock() { Text = "Create a list" });
-            TextBox text = new TextBox() { Margin = new Thickness(0, 20, 0, 5) };
-            text.MinWidth = 200;
-            text.PlaceholderText = "List name";
-            text.TextChanged += Text_TextChanged;
-            panel.Children.Add(text);
-            Button button = new Button() { Content = "Create" };
-            button.Click += AddList;
-            panel.Children.Add(button);
-            AddItemBtn.Flyout = flyout;
-            flyout.ShowAt(AddItemBtn);
-        }
-
-        private void Text_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            RequestedName = (sender as TextBox).Text;
-        }
-
         private void AddList(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Ok" + RequestedName);
-            Tools.CreateList(RequestedName);
-            RequestedName = null;
-            UpdateLists(RequestedName);
-            AddItemBtn.Flyout.Hide();
+            string listName = Tools.CreateList("New list");
+            UpdateLists("New list");
+            foreach (ListViewItem item in Navigation.Items)
+            {
+                if (item.Tag.ToString().Contains(listName)) { Navigation.SelectedItem = item; break; }
+            }
         }
 
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)

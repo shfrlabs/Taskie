@@ -70,7 +70,7 @@ namespace TaskieLib
 
             return new List<ListTask>();
         }
-        public static void CreateList(string listName)
+        public static string CreateList(string listName)
         {
             try
             {
@@ -78,10 +78,12 @@ namespace TaskieLib
                 string filePath = GetFilePath(newName);
                 File.Create(filePath).Close();
                 ListCreatedEvent?.Invoke(newName);
+                return newName;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error creating list: {ex.Message}");
+                return null;
             }
         }
         public static void DeleteList(string listName)
@@ -125,7 +127,7 @@ namespace TaskieLib
             int count = 2;
             while (File.Exists(GetFilePath(uniqueName)))
             {
-                uniqueName = $"{listName} (new {count++})";
+                uniqueName = $"{listName} ({count++})";
             }
             return uniqueName;
         }

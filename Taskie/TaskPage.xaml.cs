@@ -16,6 +16,9 @@ using TaskieLib;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Shapes;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace Taskie
 {
@@ -46,7 +49,6 @@ namespace Taskie
                     taskListView.Items.Add(task);
                 }
             }
-            
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -144,6 +146,81 @@ namespace Taskie
             }
             catch { }
             
+        }
+
+        private void NameBox_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ChangeWidth(sender);
+        }
+
+        private void ChangeWidth(object sender)
+        {
+            System.Diagnostics.Debug.WriteLine((sender as Rectangle).ActualWidth);
+            foreach (ListTask task in taskListView.Items)
+            {
+                var item = taskListView.ContainerFromItem(task) as ListViewItem;
+                if (item != null)
+                {
+                    var taskNameText = FindDescendant<TextBlock>(item, "TaskNameText");
+
+                    if (taskNameText != null)
+                    {
+                        taskNameText.MaxWidth = (sender as Rectangle).ActualWidth;
+                    }
+                }
+            }
+        }
+
+        private T FindDescendant<T>(DependencyObject parent, string name) where T : FrameworkElement
+        {
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is T frameworkElement && frameworkElement.Name == name)
+                {
+                    return frameworkElement;
+                }
+
+                var result = FindDescendant<T>(child, name);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
+            return null;
+        }
+
+        private void NameBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            ChangeWidth(sender);
+        }
+
+        private void AutoSuggestBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                List<ListTask> tasks = new List<ListTask>();
+                if (Tools.ReadList(listname) != null && (Tools.ReadList(listname)).Count > 0)
+                {
+                    foreach (ListTask task2add in Tools.ReadList(listname))
+                    {
+                        tasks.Add(task2add);
+                    }
+                };
+                ListTask task = new ListTask()
+                {
+                    Name = (sender as AutoSuggestBox).Text,
+                    CreationDate = DateTime.Now,
+                    IsDone = false
+                };
+                tasks.Add(task);
+                taskListView.Items.Add(task);
+                Tools.SaveList(listname, tasks);
+            }
         }
     }
 }

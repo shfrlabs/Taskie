@@ -10,16 +10,16 @@
 
     <Page.Resources>
         <DataTemplate x:Key="TaskItemTemplate">
-            <Grid HorizontalAlignment="Stretch" Height="58" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,0,5" CornerRadius="8" BorderThickness="1">
+            <Grid HorizontalAlignment="Stretch" Height="Auto" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,0,5" CornerRadius="8" BorderThickness="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="32"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="34"/>
                 </Grid.ColumnDefinitions>
                 <CheckBox Grid.Column="0" Checked="TaskStateChanged" Unchecked="TaskStateChanged" IsChecked="{Binding IsDone}"/>
-                <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Name}"/>
-                </StackPanel>
+                <Grid Grid.Column="1">
+                    <TextBlock Text="{Binding Name}" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="TaskNameText"/>
+                </Grid>
                 <Button Background="Transparent" Height="32" BorderThickness="0" Width="34" Padding="0" Grid.Column="2">
                     <FontIcon FontSize="14" Glyph="&#xE10C;" />
                     <Button.Flyout>
@@ -57,8 +57,9 @@
                 </ListView.ItemContainerStyle>
             </ListView>
         </ScrollViewer>
-        <Rectangle Fill="{StaticResource LayerFillColorDefaultBrush}" Canvas.ZIndex="-10" VerticalAlignment="Bottom" Height="66" Margin="-20"/>
-        <AutoSuggestBox QueryIcon="Add" Background="Transparent" BorderThickness="0" Margin="0,0,0,-8" Canvas.ZIndex="10" VerticalContentAlignment="Center" QuerySubmitted="AutoSuggestBox_QuerySubmitted" FontSize="14" HorizontalAlignment="Stretch" Height="45" VerticalAlignment="Bottom" CornerRadius="8" PlaceholderText="Add a task...">
+        <Rectangle HorizontalAlignment="Stretch" Margin="48,0,55,0" Grid.Column="1" Canvas.ZIndex="-10" x:Name="NameBox" SizeChanged="NameBox_SizeChanged" Loaded="NameBox_Loaded"/>
+        <Rectangle Fill="{StaticResource LayerFillColorDefaultBrush}" Opacity=".5" Canvas.ZIndex="-10" VerticalAlignment="Bottom" Height="66" Margin="-20"/>
+        <AutoSuggestBox KeyDown="AutoSuggestBox_KeyDown"  QueryIcon="Add" Background="Transparent" BorderThickness="0" Margin="0,0,0,-8" Canvas.ZIndex="10" VerticalContentAlignment="Center" QuerySubmitted="AutoSuggestBox_QuerySubmitted" FontSize="14" HorizontalAlignment="Stretch" Height="45" VerticalAlignment="Bottom" CornerRadius="8" PlaceholderText="Add a task...">
         </AutoSuggestBox>
     </Grid>
 </Page>
