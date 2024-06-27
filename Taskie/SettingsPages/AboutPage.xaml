@@ -15,7 +15,7 @@
         <TextBlock FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0">About</TextBlock>
         <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Visible" Grid.Row="1">
             <StackPanel Orientation="Vertical" Margin="1,0,0,0">
-                <Image HorizontalAlignment="Center" Height="80"/>
+                <Image Source="Assets\Logowithtext.png" HorizontalAlignment="Center" Height="80"/>
                 <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Your fast and private Windows to-do companion. Made with UWP." Margin="0,0,0,20"/>
                 <TextBlock TextWrapping="Wrap">Thank you so much for supporting my work. Taskie is one of my first projects, which I've poured a lot of love into. I hope you enjoy! You can purchase Taskie Pro for $2 lifetime to support my future work.</TextBlock>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
