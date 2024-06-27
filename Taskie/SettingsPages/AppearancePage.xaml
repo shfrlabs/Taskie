@@ -7,7 +7,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Appearance</TextBlock>
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0">Appearance</TextBlock>
+        <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Visible" Grid.Row="1">
+            <StackPanel Orientation="Vertical" Margin="1,0,0,0">
+                <TextBlock Text="App theme" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
+                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10">Change the theme of the app.</TextBlock>
+                <RadioButton Content="Light" IsEnabled="False"></RadioButton>
+                <RadioButton Content="Dark" IsEnabled="False"></RadioButton>
+                <RadioButton Content="System" IsChecked="True" IsEnabled="False"></RadioButton>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
