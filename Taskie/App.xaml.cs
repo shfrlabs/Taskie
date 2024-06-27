@@ -39,6 +39,7 @@ namespace Taskie
         /// <param name="e">Szczegóły dotyczące żądania uruchomienia i procesu.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            bool canEnablePrelaunch = Windows.Foundation.Metadata.ApiInformation.IsMethodPresent("Windows.ApplicationModel.Core.CoreApplication", "EnablePrelaunch");
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Nie powtarzaj inicjowania aplikacji, gdy w oknie znajduje się już zawartość,
@@ -61,6 +62,10 @@ namespace Taskie
 
             if (e.PrelaunchActivated == false)
             {
+                if (canEnablePrelaunch)
+                {
+                    Windows.ApplicationModel.Core.CoreApplication.EnablePrelaunch(true);
+                }
                 if (rootFrame.Content == null)
                 {
                     // Kiedy stos nawigacji nie jest przywrócony, przejdź do pierwszej strony,

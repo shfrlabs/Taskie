@@ -17,6 +17,8 @@ using System.Reflection;
 using System.Linq;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml.Hosting;
+using System.Collections.Generic;
+using Windows.Media.Protection.PlayReady;
 
 namespace Taskie
 {
@@ -46,9 +48,8 @@ namespace Taskie
                         StackPanel content = new StackPanel();
                         content.Orientation = Orientation.Horizontal;
                         content.VerticalAlignment = VerticalAlignment.Center;
-                        content.Margin = new Thickness(-7, 0, 0, 0);
                         content.Children.Add(new FontIcon() { Glyph = "📄", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
-                        content.Children.Add(new TextBlock { Text = newname, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis });
+                        content.Children.Add(new TextBlock() { Text = newname, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis });
                         navigationItem.Content = content;
                         break;
                     }
@@ -90,11 +91,48 @@ namespace Taskie
                 StackPanel content = new StackPanel();
                 content.Orientation = Orientation.Horizontal;
                 content.VerticalAlignment = VerticalAlignment.Center;
-                content.Margin = new Thickness(-7, 0, 0, 0);
                 content.Children.Add(new FontIcon() { Glyph = "📄", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
                 content.Children.Add(new TextBlock { Text = listName, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis });
                 Navigation.Items.Add(new ListViewItem() { Tag = listName, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
+                AddRightClickMenu();
             }
+        }
+
+        private void AddRightClickMenu()
+        {
+            foreach (ListViewItem item in Navigation.Items) {
+                item.RightTapped += OpenRightClickList;
+            }
+        }
+
+        private void OpenRightClickList(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
+        {
+            MenuFlyout flyout = new MenuFlyout();
+            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = "Rename list", Tag = (sender as ListViewItem).Tag });
+            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = "Delete list", Tag = (sender as ListViewItem).Tag });
+            (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
+            (flyout.Items[1] as MenuFlyoutItem).Click += DeleteList_Click;
+            flyout.ShowAt(sender as ListViewItem);
+        }
+
+        private async void RenameList_Click(object sender, RoutedEventArgs e)
+        {
+            string listname = (sender as  MenuFlyoutItem).Tag as string;
+            TextBox input = new TextBox() { PlaceholderText = "List name", Text = listname };
+            ContentDialog dialog = new ContentDialog() { Title = "Rename list", PrimaryButtonText = "OK", SecondaryButtonText = "Cancel", Content = input };
+            ContentDialogResult result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                string text = input.Text;
+                Tools.RenameList(listname, text);
+                listname = text;
+            }
+        }
+
+        private void DeleteList_Click(object sender, RoutedEventArgs e)
+        {
+            string listname = (sender as MenuFlyoutItem).Tag as string;
+            Tools.DeleteList(listname);
         }
 
         private void UpdateLists(string name)
