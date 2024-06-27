@@ -120,6 +120,8 @@ namespace Taskie
             window.Title = "Settings";
             Frame settingsContent = new Frame();
             settingsContent.Navigate(typeof(SettingsPage));
+            window.TitleBar.ExtendsContentIntoTitleBar = true;
+            window.TitleBar.ButtonBackgroundColor = Colors.Transparent;
             ElementCompositionPreview.SetAppWindowContent(window, settingsContent);
             window.Closed += SettingsWindowClosed;
             (sender as Button).IsEnabled = false;
@@ -141,12 +143,7 @@ namespace Taskie
             }
         }
 
-        private void SearchBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        private void UpgradeButton_Click(object sender, RoutedEventArgs e)
         {
 
         }

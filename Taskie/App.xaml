@@ -8,6 +8,17 @@
         <controls:XamlControlsResources>
             <controls:XamlControlsResources.MergedDictionaries>
                 <ResourceDictionary>
+                    <ResourceDictionary.ThemeDictionaries>
+                        <ResourceDictionary x:Key="Default">
+                            <Color x:Key="BGColor">#202020</Color>
+                        </ResourceDictionary>
+                        <ResourceDictionary x:Key="Light">
+                            <Color x:Key="BGColor">#f3f3f3</Color>
+                        </ResourceDictionary>
+                        <ResourceDictionary x:Key="HighContrast">
+                            <Color x:Key="BGColor">#000</Color>
+                        </ResourceDictionary>
+                    </ResourceDictionary.ThemeDictionaries>
                     <Style x:Key="SearchStyle" TargetType="AutoSuggestBox" BasedOn="{StaticResource DefaultAutoSuggestBoxStyle}">
                         <Style.Setters>
                             <Setter Property="VerticalContentAlignment" Value="Center"/>

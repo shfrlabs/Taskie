@@ -1,0 +1,38 @@
+﻿<Page
+    x:Class="Taskie.SettingsPages.ExportImportPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Taskie"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Backups" FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0"/>
+        <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Visible" Grid.Row="1">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Back up" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="1,0,0,10"/>
+                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10">Export all your lists with one click below. To backup an individual list, right-click on it and select "Share" to generate a file that you can use to restore the list back into the app.</TextBlock>
+                <Button x:Name="export" Style="{StaticResource AccentButtonStyle}" Click="export_Click" Margin="1,0,0,20">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <FontIcon Margin="0,0,10,0" Glyph="&#xEDE1;" FontSize="15"/>
+                        <TextBlock>Export</TextBlock>
+                    </StackPanel>
+                </Button>
+                <NavigationViewItemSeparator Margin="0,0,0,20"/>
+                <TextBlock Text="Restore" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="1,0,0,10"/>
+                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10">Import an individual list backup (*.json) or a full backup (*.taskie) here to restore it in the app. If a list's name is repeated, the imported list will have (2) added to the end if its name.</TextBlock>
+                <Button x:Name="import" Style="{StaticResource AccentButtonStyle}" IsEnabled="False" Margin="1,0,0,20">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <FontIcon Margin="0,0,10,0" Glyph="&#xEDE2;" FontSize="15"/>
+                        <TextBlock>Import</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
