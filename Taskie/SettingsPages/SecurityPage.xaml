@@ -12,15 +12,15 @@
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0">Security</TextBlock>
+        <TextBlock FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0" x:Uid="SecurityHeader"/>
         <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Visible" Grid.Row="1">
             <StackPanel Orientation="Vertical" Margin="1,0,0,0">
-                <TextBlock Text="Use authentication" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
-                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10">Make the app ask you for your credentials or biometrics through Windows Hello before opening.</TextBlock>
-                <ToggleSwitch IsEnabled="False" Margin="0,0,0,20"/>
-                <TextBlock Text="Encryption" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
-                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10">Store app data more securely. May impact performance. Requires "Use authentication" to be on.</TextBlock>
-                <ToggleSwitch IsEnabled="False" Margin="0,0,0,20"/>
+                <TextBlock x:Uid="AuthText" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
+                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10" x:Uid="AuthDescription"/>
+                <ToggleSwitch Margin="0,0,0,20" Toggled="ToggleSwitch_Toggled" Tag="Auth" x:Name="AuthToggle"/>
+                <TextBlock x:Uid="EncryptionText" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
+                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10" x:Uid="EncryptionDescription"/>
+                <ToggleSwitch Margin="0,0,0,20" Toggled="ToggleSwitch_Toggled" Tag="Encryption" x:Name="EncryptionToggle"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

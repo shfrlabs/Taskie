@@ -12,14 +12,14 @@
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0">Appearance</TextBlock>
+        <TextBlock FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0" x:Uid="AppearanceText"/>
         <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Visible" Grid.Row="1">
             <StackPanel Orientation="Vertical" Margin="1,0,0,0">
-                <TextBlock Text="App theme" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
-                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10">Change the theme of the app.</TextBlock>
-                <RadioButton Content="Light" IsEnabled="False"></RadioButton>
-                <RadioButton Content="Dark" IsEnabled="False"></RadioButton>
-                <RadioButton Content="System" IsChecked="True" IsEnabled="False"></RadioButton>
+                <TextBlock x:Uid="AppThemeText" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
+                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10" x:Uid="AppThemeSubText"/>
+                <RadioButton x:Uid="LightThemeRadio" x:Name="LightRadio" Tag="Light" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"/>
+                <RadioButton x:Uid="DarkThemeRadio" x:Name="DarkRadio" Tag="Dark" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"/>
+                <RadioButton x:Uid="SystemThemeRadio" x:Name="SystemRadio" Tag="System" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"></RadioButton>
             </StackPanel>
         </ScrollViewer>
     </Grid>

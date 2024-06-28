@@ -12,24 +12,24 @@
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Backups" FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0"/>
+        <TextBlock x:Uid="BackupsText" FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0"/>
         <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Visible" Grid.Row="1">
             <StackPanel Orientation="Vertical">
-                <TextBlock Text="Back up" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="1,0,0,10"/>
-                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10">Export all your lists with one click below. To backup an individual list, right-click on it and select "Share" to generate a file that you can use to restore the list back into the app.</TextBlock>
+                <TextBlock x:Uid="BackupHeader" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="1,0,0,10"/>
+                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10" x:Uid="BackupText"/>
                 <Button x:Name="export" Style="{StaticResource AccentButtonStyle}" Click="export_Click" Margin="1,0,0,20">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <FontIcon Margin="0,0,10,0" Glyph="&#xEDE1;" FontSize="15"/>
-                        <TextBlock>Export</TextBlock>
+                        <TextBlock x:Uid="ExportButton"/>
                     </StackPanel>
                 </Button>
                 <NavigationViewItemSeparator Margin="0,0,0,20"/>
-                <TextBlock Text="Restore" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="1,0,0,10"/>
-                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10">Import an individual list backup (*.json) or a full backup (*.taskie) here to restore it in the app. If a list's name is repeated, the imported list will have (2) added to the end if its name.</TextBlock>
+                <TextBlock x:Uid="RestoreHeader" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="1,0,0,10"/>
+                <TextBlock x:Uid="RestoreText" FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10"/>
                 <Button x:Name="import" Style="{StaticResource AccentButtonStyle}" IsEnabled="False" Margin="1,0,0,20">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <FontIcon Margin="0,0,10,0" Glyph="&#xEDE2;" FontSize="15"/>
-                        <TextBlock>Import</TextBlock>
+                        <TextBlock x:Uid="ImportButton"/>
                     </StackPanel>
                 </Button>
             </StackPanel>

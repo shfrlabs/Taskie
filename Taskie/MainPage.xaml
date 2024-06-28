@@ -43,10 +43,10 @@
                         </Button.Resources>
                         <StackPanel Orientation="Horizontal">
                             <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE710;" FontSize="18" Margin="11,0,10,0" Foreground="{StaticResource ToggleButtonCheckedForegroundThemeBrush}"/>
-                            <TextBlock FontSize="15" Foreground="Black">New list</TextBlock>
+                            <TextBlock FontSize="15" Foreground="Black" x:Uid="NewListBtn"/>
                         </StackPanel>
                     </Button>
-                    <AutoSuggestBox TextChanged="AutoSuggestBox_TextChanged" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="10,0,10,2" Style="{StaticResource SearchStyle}" PlaceholderText="Search" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" FontSize="15" VerticalAlignment="Bottom" x:Name="searchbox">
+                    <AutoSuggestBox TextChanged="AutoSuggestBox_TextChanged" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="10,0,10,2" Style="{StaticResource SearchStyle}" x:Uid="SearchBox" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" FontSize="15" VerticalAlignment="Bottom" x:Name="searchbox">
                         <AutoSuggestBox.QueryIcon>
                             <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE721;" FontSize="18" Opacity=".7"/>
                         </AutoSuggestBox.QueryIcon>
@@ -62,13 +62,13 @@
                     <Button x:Name="UpdateButton" Click="UpgradeButton_Click" HorizontalContentAlignment="Left" Margin="10, 3, 10 ,10" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" BorderThickness="2" BorderBrush="{StaticResource SystemAccentColorLight2}">
                         <StackPanel Orientation="Horizontal">
                             <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74A;" FontSize="18" Margin="10,0,10,0"/>
-                            <TextBlock FontSize="15">Upgrade</TextBlock>
+                            <TextBlock FontSize="15" x:Uid="UpgradeText"></TextBlock>
                         </StackPanel>
                     </Button>
                     <Button x:Name="SettingsButton" Click="SettingsButton_Click" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 ,0">
                         <StackPanel Orientation="Horizontal">
                             <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" FontSize="18" Margin="11,0,10,0"/>
-                            <TextBlock FontSize="15">Settings</TextBlock>
+                            <TextBlock FontSize="15" x:Uid="SettingsText"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>

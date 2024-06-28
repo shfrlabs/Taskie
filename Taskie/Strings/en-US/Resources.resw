@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutApp.Text" xml:space="preserve">
+    <value>Thank you so much for supporting me. Taskie is one of my first projects, which I've poured a lot of love into. I hope you enjoy! You can purchase Taskie Pro for $2 lifetime to support my future work.</value>
+  </data>
+  <data name="AboutCategory" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="AddTaskBox.PlaceholderText" xml:space="preserve">
+    <value>Add a task...</value>
+  </data>
+  <data name="AdvertTag.Text" xml:space="preserve">
+    <value>Your fast and private Windows to-do companion.</value>
+  </data>
+  <data name="AdvertUWPTag.Text" xml:space="preserve">
+    <value>Made with UWP.</value>
+  </data>
+  <data name="AppearanceCategory" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="AppearanceText.Text" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="AppThemeSubText.Text" xml:space="preserve">
+    <value>Change the theme of the app.</value>
+  </data>
+  <data name="AppThemeText.Text" xml:space="preserve">
+    <value>App theme</value>
+  </data>
+  <data name="AuthDescription.Text" xml:space="preserve">
+    <value>Make the app ask you for your credentials or biometrics through Windows Hello before opening.</value>
+  </data>
+  <data name="AuthText.Text" xml:space="preserve">
+    <value>Use authentication</value>
+  </data>
+  <data name="BackupHeader.Text" xml:space="preserve">
+    <value>Back up</value>
+  </data>
+  <data name="BackupsCategory" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="BackupsText.Text" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="BackupText.Text" xml:space="preserve">
+    <value>Export all your lists with one click below. To backup an individual list, right-click on it and select "Share" to generate a file that you can use to restore the list back into the app.</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="DarkThemeRadio.Content" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="DeleteList.Text" xml:space="preserve">
+    <value>Delete list</value>
+  </data>
+  <data name="DeleteTask.Text" xml:space="preserve">
+    <value>Delete task</value>
+  </data>
+  <data name="DonateLink.Content" xml:space="preserve">
+    <value>Donate</value>
+  </data>
+  <data name="EncryptionDescription.Text" xml:space="preserve">
+    <value>Store app data more securely. May impact performance. Requires "Use authentication" to be on.</value>
+  </data>
+  <data name="EncryptionText.Text" xml:space="preserve">
+    <value>Encryption</value>
+  </data>
+  <data name="ExportButton.Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="GitHubLink.Content" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="ImportButton.Text" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="LightThemeRadio.Content" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="ListName" xml:space="preserve">
+    <value>List name</value>
+  </data>
+  <data name="NewList" xml:space="preserve">
+    <value>New list</value>
+  </data>
+  <data name="NewListBtn.Text" xml:space="preserve">
+    <value>New list</value>
+  </data>
+  <data name="RenameList.Text" xml:space="preserve">
+    <value>Rename list</value>
+  </data>
+  <data name="RenameTask.Text" xml:space="preserve">
+    <value>Rename task</value>
+  </data>
+  <data name="RestoreHeader.Text" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="RestoreText.Text" xml:space="preserve">
+    <value>Import an individual list backup (*.json) or a full backup (*.taskie) here to restore it in the app. If a list's name is repeated, the imported list will have (2) added to the end if its name.</value>
+  </data>
+  <data name="SearchBox.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SecurityCategory" xml:space="preserve">
+    <value>Security</value>
+  </data>
+  <data name="SecurityHeader.Text" xml:space="preserve">
+    <value>Security</value>
+  </data>
+  <data name="SettingsText.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SystemThemeRadio.Content" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="TaskName" xml:space="preserve">
+    <value>Task name</value>
+  </data>
+  <data name="TwitterLink.Content" xml:space="preserve">
+    <value>Twitter</value>
+  </data>
+  <data name="UpgradeText.Text" xml:space="preserve">
+    <value>Upgrade</value>
+  </data>
+</root>

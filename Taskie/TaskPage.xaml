@@ -24,8 +24,8 @@
                     <FontIcon FontSize="14" Glyph="&#xE10C;" />
                     <Button.Flyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem Icon="Delete" Click="DeleteTask_Click" Text="Delete task"/>
-                            <MenuFlyoutItem Icon="Rename" Click="RenameTask_Click" Text="Rename task"/>
+                            <MenuFlyoutItem Icon="Delete" Click="DeleteTask_Click" x:Uid="DeleteTask"/>
+                            <MenuFlyoutItem Icon="Rename" Click="RenameTask_Click" x:Uid="RenameTask"/>
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>
@@ -42,8 +42,8 @@
                 </Button.Content>
                 <Button.Flyout>
                     <MenuFlyout Placement="BottomEdgeAlignedRight">
-                        <MenuFlyoutItem Icon="Rename" Click="RenameList_Click" Text="Rename list"></MenuFlyoutItem>
-                        <MenuFlyoutItem Icon="Delete" Click="DeleteList_Click" Text="Delete list"></MenuFlyoutItem>
+                        <MenuFlyoutItem Icon="Rename" Click="RenameList_Click" x:Uid="RenameList"></MenuFlyoutItem>
+                        <MenuFlyoutItem Icon="Delete" Click="DeleteList_Click" x:Uid="DeleteList"></MenuFlyoutItem>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
@@ -59,7 +59,7 @@
         </ScrollViewer>
         <Rectangle HorizontalAlignment="Stretch" Margin="48,0,55,0" Grid.Column="1" Canvas.ZIndex="-10" x:Name="NameBox" SizeChanged="NameBox_SizeChanged" Loaded="NameBox_Loaded"/>
         <Rectangle Fill="{StaticResource LayerFillColorDefaultBrush}" Opacity=".5" Canvas.ZIndex="-10" VerticalAlignment="Bottom" Height="66" Margin="-20"/>
-        <AutoSuggestBox KeyDown="AutoSuggestBox_KeyDown"  QueryIcon="Add" Background="Transparent" BorderThickness="0" Margin="0,0,0,-8" Canvas.ZIndex="10" VerticalContentAlignment="Center" QuerySubmitted="AutoSuggestBox_QuerySubmitted" FontSize="14" HorizontalAlignment="Stretch" Height="45" VerticalAlignment="Bottom" CornerRadius="8" PlaceholderText="Add a task...">
+        <AutoSuggestBox KeyDown="AutoSuggestBox_KeyDown" QueryIcon="Add" Background="Transparent" BorderThickness="0" Margin="0,0,0,-8" Canvas.ZIndex="10" VerticalContentAlignment="Center" QuerySubmitted="AutoSuggestBox_QuerySubmitted" FontSize="14" HorizontalAlignment="Stretch" Height="45" VerticalAlignment="Bottom" CornerRadius="8" x:Uid="AddTaskBox">
         </AutoSuggestBox>
     </Grid>
 </Page>

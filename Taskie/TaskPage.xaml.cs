@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml.Shapes;
 using System.ComponentModel;
 using System.Reflection;
+using Windows.ApplicationModel.Resources;
 
 namespace Taskie
 {
@@ -72,12 +73,14 @@ namespace Taskie
             Tools.SaveList(listname, tasks);
         }
 
+        public ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+
         private async void RenameTask_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyoutItem menuFlyoutItem = (MenuFlyoutItem)sender;
             var note = menuFlyoutItem.DataContext as ListTask;
-            TextBox input = new TextBox() { PlaceholderText = "Task name", Text = note.Name };
-            ContentDialog dialog = new ContentDialog() { Title = "Rename task", PrimaryButtonText = "OK", SecondaryButtonText = "Cancel", Content = input };
+            TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("TaskName"), Text = note.Name };
+            ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameTask/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
@@ -113,8 +116,9 @@ namespace Taskie
 
         private async void RenameList_Click(object sender, RoutedEventArgs e)
         {
-            TextBox input = new TextBox() { PlaceholderText = "List name", Text = listname };
-            ContentDialog dialog = new ContentDialog() { Title = "Rename list", PrimaryButtonText = "OK", SecondaryButtonText = "Cancel", Content = input };
+            TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("ListName"), Text = listname };
+            string renamelisttext = resourceLoader.GetString("RenameList/Text");
+            ContentDialog dialog = new ContentDialog() { Title = renamelisttext, PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {

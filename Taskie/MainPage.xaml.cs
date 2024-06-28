@@ -19,6 +19,7 @@ using Windows.UI.WindowManagement;
 using Windows.UI.Xaml.Hosting;
 using System.Collections.Generic;
 using Windows.Media.Protection.PlayReady;
+using Windows.ApplicationModel.Resources;
 
 namespace Taskie
 {
@@ -35,6 +36,8 @@ namespace Taskie
             Tools.ListDeletedEvent += ListDeleted;
             Tools.ListRenamedEvent += ListRenamed;
         }
+        
+        public ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
 
         private void ListRenamed(string oldname, string newname)
         {
@@ -108,8 +111,8 @@ namespace Taskie
         private void OpenRightClickList(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
         {
             MenuFlyout flyout = new MenuFlyout();
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = "Rename list", Tag = (sender as ListViewItem).Tag });
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = "Delete list", Tag = (sender as ListViewItem).Tag });
+            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = resourceLoader.GetString("RenameList/Text"), Tag = (sender as ListViewItem).Tag });
+            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag });
             (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
             (flyout.Items[1] as MenuFlyoutItem).Click += DeleteList_Click;
             flyout.ShowAt(sender as ListViewItem);
@@ -118,8 +121,8 @@ namespace Taskie
         private async void RenameList_Click(object sender, RoutedEventArgs e)
         {
             string listname = (sender as  MenuFlyoutItem).Tag as string;
-            TextBox input = new TextBox() { PlaceholderText = "List name", Text = listname };
-            ContentDialog dialog = new ContentDialog() { Title = "Rename list", PrimaryButtonText = "OK", SecondaryButtonText = "Cancel", Content = input };
+            TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("ListName"), Text = listname };
+            ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameList/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
@@ -144,8 +147,8 @@ namespace Taskie
 
         private void AddList(object sender, RoutedEventArgs e)
         {
-            string listName = Tools.CreateList("New list");
-            UpdateLists("New list");
+            string listName = Tools.CreateList(resourceLoader.GetString("NewList"));
+            UpdateLists(resourceLoader.GetString("NewList"));
             foreach (ListViewItem item in Navigation.Items)
             {
                 if (item.Tag.ToString().Contains(listName)) { Navigation.SelectedItem = item; break; }
@@ -155,7 +158,7 @@ namespace Taskie
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             AppWindow window = await AppWindow.TryCreateAsync();
-            window.Title = "Settings";
+            window.Title = resourceLoader.GetString("SettingsText/Text");
             Frame settingsContent = new Frame();
             settingsContent.Navigate(typeof(SettingsPage));
             window.TitleBar.ExtendsContentIntoTitleBar = true;
@@ -183,7 +186,7 @@ namespace Taskie
 
         private void UpgradeButton_Click(object sender, RoutedEventArgs e)
         {
-
+            // TODO: make btn work, add all free limits
         }
 
         private void rectlist_SizeChanged(object sender, SizeChangedEventArgs e)

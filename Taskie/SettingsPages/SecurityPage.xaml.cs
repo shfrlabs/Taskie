@@ -12,20 +12,40 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using TaskieLib;
 
 namespace Taskie.SettingsPages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class SecurityPage : Page
     {
         public SecurityPage()
         {
             this.InitializeComponent();
+            SetSettings();
+        }
+
+        private void SetSettings()
+        {
+            if (Settings.isAuthUsed)
+            { AuthToggle.IsOn = true; }
+            else
+            { AuthToggle.IsOn = false; }
+            if (Settings.isDataEncrypted)
+            { EncryptionToggle.IsOn = true; }
+            else
+            { EncryptionToggle.IsOn = false; }
+        }
+
+        private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            if ((sender as ToggleSwitch)?.Tag?.ToString() == "Auth")
+            {
+                Settings.isAuthUsed = (sender as ToggleSwitch).IsOn;
+            }
+            else if ((sender as ToggleSwitch)?.Tag?.ToString() == "Encryption")
+            {
+                Settings.isDataEncrypted = (sender as ToggleSwitch).IsOn;
+            }
         }
     }
 }

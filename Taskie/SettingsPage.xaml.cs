@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Linq;
 using Taskie.SettingsPages;
 using System.Collections.Generic;
+using Windows.ApplicationModel.Resources;
 
 namespace Taskie
 {
@@ -38,11 +39,12 @@ namespace Taskie
         }
         private void addPages()
         {
+            ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
             List<SettingCategory> settingCategories = new List<SettingCategory>() {
-                new SettingCategory() { Emoji = "🎨", Name = "Appearance", Page = "AppearancePage" },
-                new SettingCategory() { Emoji = "☁️", Name = "Backups", Page = "ExportImportPage" },
-                new SettingCategory() { Emoji = "🔒", Name = "Security", Page = "SecurityPage" },
-                new SettingCategory() { Emoji = "ℹ️", Name = "About", Page = "AboutPage" }
+                new SettingCategory() { Emoji = "🎨", Name = resourceLoader.GetString("AppearanceCategory"), Page = "AppearancePage" },
+                new SettingCategory() { Emoji = "☁️", Name = resourceLoader.GetString("BackupsCategory"), Page = "ExportImportPage" },
+                new SettingCategory() { Emoji = "🔒", Name = resourceLoader.GetString("SecurityCategory"), Page = "SecurityPage" },
+                new SettingCategory() { Emoji = "ℹ️", Name = resourceLoader.GetString("AboutCategory"), Page = "AboutPage" }
             };
             settingPageList.ItemsSource = settingCategories;
         }
