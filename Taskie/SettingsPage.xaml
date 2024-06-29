@@ -15,7 +15,7 @@
             <ColumnDefinition Width="160"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Rectangle VerticalAlignment="Stretch" Margin="-20" Grid.Column="0" Grid.RowSpan="4" Fill="{StaticResource SystemAltLowColor}" Canvas.ZIndex="-10" Opacity="1" Width="180" HorizontalAlignment="Left"/>
+        <Rectangle x:Name="rect2" VerticalAlignment="Stretch" Margin="-20" Grid.Column="0" Grid.RowSpan="4" Fill="{StaticResource SystemAltLowColor}" Canvas.ZIndex="-10" Opacity="1" Width="180" HorizontalAlignment="Left"/>
         <Grid Background="Transparent" x:Name="TTB" VerticalAlignment="Top" Height="36" Grid.Column="0" Canvas.ZIndex="9999">
             <FontIcon Width="20" Height="20" HorizontalAlignment="Left" FontSize="16" Glyph="&#xE713;" Margin="16,0,0,0"/>
             <TextBlock Margin="45,0,0,0" VerticalAlignment="Center" FontSize="12" x:Uid="SettingsText"/>

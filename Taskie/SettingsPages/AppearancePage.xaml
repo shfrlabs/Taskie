@@ -20,6 +20,13 @@
                 <RadioButton x:Uid="LightThemeRadio" x:Name="LightRadio" Tag="Light" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"/>
                 <RadioButton x:Uid="DarkThemeRadio" x:Name="DarkRadio" Tag="Dark" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"/>
                 <RadioButton x:Uid="SystemThemeRadio" x:Name="SystemRadio" Tag="System" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"></RadioButton>
+                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,10,5,10" x:Uid="ChangeThemeWarning"/>
+                <Button x:Name="RestartButton" Click="RestartButton_Click">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
+                        <FontIcon Glyph="&#xE895;" Margin="0,0,20,0"/>
+                        <TextBlock x:Uid="RestartButton"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </ScrollViewer>
     </Grid>

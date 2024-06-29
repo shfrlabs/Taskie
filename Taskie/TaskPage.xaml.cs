@@ -18,8 +18,10 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Shapes;
 using System.ComponentModel;
+using Windows.UI;
 using System.Reflection;
 using Windows.ApplicationModel.Resources;
+using System.Diagnostics;
 
 namespace Taskie
 {
@@ -28,11 +30,49 @@ namespace Taskie
         public TaskPage()
         {
             this.InitializeComponent();
+            ActualThemeChanged += TaskPage_ActualThemeChanged;
+            
+        }
+
+        private void TaskPage_ActualThemeChanged(FrameworkElement sender, object args)
+        {
+            Brush bg = Application.Current.Resources["LayerFillColorDefaultBrush"] as Brush;
+            addTaskRect.Fill = bg;
+
+            foreach (var item in taskListView.Items)
+            {
+                var container = taskListView.ContainerFromItem(item) as ListViewItem;
+                if (container != null)
+                {
+                    var rootGrid = FindVisualChild<Grid>(container, "rootGrid");
+                    if (rootGrid != null)
+                    {
+                        rootGrid.Background = bg;                      ;
+                    }
+                }
+            }
         }
 
         public string listname { get; set; }
 
+        private T FindVisualChild<T>(DependencyObject obj, string name) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                var child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is FrameworkElement && ((FrameworkElement)child).Name == name)
+                {
+                    return (T)child;
+                }
 
+                var childOfChild = FindVisualChild<T>(child, name);
+                if (childOfChild != null)
+                {
+                    return childOfChild;
+                }
+            }
+            return null;
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

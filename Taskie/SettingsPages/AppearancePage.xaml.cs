@@ -2,6 +2,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using TaskieLib;
+using Windows.ApplicationModel.Core;
+using System;
 
 namespace Taskie.SettingsPages
 {
@@ -58,6 +60,11 @@ namespace Taskie.SettingsPages
                 Settings.Theme = selectedTheme;
                 isUpdating = false;
             }
+        }
+
+        private async void RestartButton_Click(object sender, RoutedEventArgs e)
+        {
+            var result = await CoreApplication.RequestRestartAsync("Theme has been changed");
         }
     }
 }

@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Hosting;
 using System.Collections.Generic;
 using Windows.Media.Protection.PlayReady;
 using Windows.ApplicationModel.Resources;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Taskie
 {
@@ -31,12 +32,27 @@ namespace Taskie
             InitializeComponent();
             SetupTitleBar();
             SetupNavigationMenu();
+            CheckSecurity();
             Navigation.Height = rectlist.ActualHeight;
-            TaskieLib.Tools.ListCreatedEvent += UpdateLists;
+            Tools.ListCreatedEvent += UpdateLists;
             Tools.ListDeletedEvent += ListDeleted;
             Tools.ListRenamedEvent += ListRenamed;
+            ActualThemeChanged += MainPage_ActualThemeChanged;
         }
-        
+
+        public void CheckSecurity()
+        {
+            // yeah like ill do it...
+        }
+
+
+        private void MainPage_ActualThemeChanged(FrameworkElement sender = null, object args = null)
+        {
+            (rect1.Fill as AcrylicBrush).TintColor = (Color)Application.Current.Resources["SystemAltHighColor"];
+            (rect1.Fill as AcrylicBrush).FallbackColor = (Color)Application.Current.Resources["SystemAltLowColor"];
+            (rect2.Fill as SolidColorBrush).Color = (Color)Application.Current.Resources["SystemAltLowColor"];
+        }
+
         public ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
 
         private void ListRenamed(string oldname, string newname)
@@ -166,6 +182,17 @@ namespace Taskie
             ElementCompositionPreview.SetAppWindowContent(window, settingsContent);
             window.Closed += SettingsWindowClosed;
             (sender as Button).IsEnabled = false;
+            if (Settings.Theme == "Dark")
+            {
+                window.TitleBar.ButtonForegroundColor = Windows.UI.Colors.White;
+                window.TitleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.White;
+
+            }
+            else if (Settings.Theme == "Light")
+            {
+                window.TitleBar.ButtonForegroundColor = Windows.UI.Colors.Black;
+                window.TitleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.Black;
+            }
             await window.TryShowAsync();
         }
 

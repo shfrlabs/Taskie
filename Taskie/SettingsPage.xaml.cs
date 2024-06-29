@@ -18,6 +18,7 @@ using System.Linq;
 using Taskie.SettingsPages;
 using System.Collections.Generic;
 using Windows.ApplicationModel.Resources;
+using Windows.Foundation;
 
 namespace Taskie
 {
@@ -29,6 +30,14 @@ namespace Taskie
             addPages();
             settingPageList.SelectedItem = settingPageList.Items.FirstOrDefault();
             contentFrame.Navigate(typeof(AppearancePage));
+            ActualThemeChanged += SettingsPage_ActualThemeChanged;
+        }
+
+        private void SettingsPage_ActualThemeChanged(FrameworkElement sender, object args)
+        {
+            (this.Background as AcrylicBrush).TintColor = (Color)Application.Current.Resources["SystemAltHighColor"];
+            (this.Background as AcrylicBrush).FallbackColor = (Color)Application.Current.Resources["SystemAltLowColor"];
+            (rect2.Fill as SolidColorBrush).Color = (Color)Application.Current.Resources["SystemAltLowColor"];
         }
 
         private class SettingCategory

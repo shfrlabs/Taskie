@@ -42,7 +42,7 @@
                             </ResourceDictionary>
                         </Button.Resources>
                         <StackPanel Orientation="Horizontal">
-                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE710;" FontSize="18" Margin="11,0,10,0" Foreground="{StaticResource ToggleButtonCheckedForegroundThemeBrush}"/>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE710;" FontSize="18" Margin="11,0,10,0" Foreground="Black"/>
                             <TextBlock FontSize="15" Foreground="Black" x:Uid="NewListBtn"/>
                         </StackPanel>
                     </Button>
@@ -73,12 +73,12 @@
                     </Button>
                 </StackPanel>
             </Grid>
-            <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.RowSpan="3" Margin="-20,-50,-50,-50" Canvas.ZIndex="-10" Grid.ColumnSpan="2">
+            <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.RowSpan="3" Margin="-20,-50,-50,-50" Canvas.ZIndex="-10" Grid.ColumnSpan="2" x:Name="rect1">
                 <Rectangle.Fill>
-                    <AcrylicBrush TintColor="{StaticResource SystemAltHighColor}" TintOpacity=".8" BackgroundSource="HostBackdrop" FallbackColor="{StaticResource SystemAltLowColor}"/>
+                    <AcrylicBrush TintColor="{StaticResource SystemAltHighColor}" TintOpacity=".9" BackgroundSource="HostBackdrop" FallbackColor="{StaticResource SystemAltLowColor}"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <Rectangle VerticalAlignment="Stretch" Margin="-20" Grid.Column="0" Grid.RowSpan="4" Fill="{StaticResource SystemAltLowColor}" Canvas.ZIndex="-10" Opacity="1" Width="180" HorizontalAlignment="Left"/>
+            <Rectangle VerticalAlignment="Stretch" Margin="-20" Grid.Column="0" Grid.RowSpan="4" Fill="{StaticResource SystemAltLowColor}" Canvas.ZIndex="-10" Opacity="1" Width="180" HorizontalAlignment="Left" x:Name="rect2"/>
         </Grid>
     </Grid>
 </Page>

@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography.X509Certificates;
+using TaskieLib;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -28,6 +32,15 @@ namespace Taskie
         /// </summary>
         public App()
         {
+            if (Settings.Theme == "Dark")
+            {
+                Application.Current.RequestedTheme = ApplicationTheme.Dark;
+
+            }
+            else if (Settings.Theme == "Light")
+            {
+                Application.Current.RequestedTheme = ApplicationTheme.Light;
+            }
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -75,6 +88,17 @@ namespace Taskie
                 }
                 // Upewnij się, ze bieżące okno jest aktywne
                 Window.Current.Activate();
+                if (Settings.Theme == "Dark")
+                {
+                    ApplicationView.GetForCurrentView().TitleBar.ButtonForegroundColor = Windows.UI.Colors.White;
+                    ApplicationView.GetForCurrentView().TitleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.White;
+
+                }
+                else if (Settings.Theme == "Light")
+                {
+                    ApplicationView.GetForCurrentView().TitleBar.ButtonForegroundColor = Windows.UI.Colors.Black;
+                    ApplicationView.GetForCurrentView().TitleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.Black;
+                }
             }
         }
 

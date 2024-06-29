@@ -165,6 +165,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="ChangeThemeWarning.Text" xml:space="preserve">
+    <value>Changing the theme requires restarting the app.</value>
+  </data>
   <data name="DarkThemeRadio.Content" xml:space="preserve">
     <value>Dark</value>
   </data>
@@ -209,6 +212,9 @@
   </data>
   <data name="RenameTask.Text" xml:space="preserve">
     <value>Rename task</value>
+  </data>
+  <data name="RestartButton.Text" xml:space="preserve">
+    <value>Restart</value>
   </data>
   <data name="RestoreHeader.Text" xml:space="preserve">
     <value>Restore</value>
