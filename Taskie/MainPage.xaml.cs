@@ -21,6 +21,10 @@ using System.Collections.Generic;
 using Windows.Media.Protection.PlayReady;
 using Windows.ApplicationModel.Resources;
 using System.Security.Cryptography.X509Certificates;
+using Windows.Security.Credentials.UI;
+using Windows.Storage.Pickers;
+using Windows.Storage.Provider;
+using Windows.Storage;
 
 namespace Taskie
 {
@@ -40,9 +44,25 @@ namespace Taskie
             ActualThemeChanged += MainPage_ActualThemeChanged;
         }
 
-        public void CheckSecurity()
+        public async void CheckSecurity()
         {
-            // yeah like ill do it...
+            UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
+            if (availability != UserConsentVerifierAvailability.Available && Settings.isAuthUsed)
+            {
+                Settings.isAuthUsed = false;
+                ContentDialog contentDialog = new ContentDialog() { Title = resourceLoader.GetString("AuthDisabledTitle"), Content = resourceLoader.GetString("AuthDisabledDescription"), PrimaryButtonText = "OK" };
+                await contentDialog.ShowAsync();
+            }
+            if (Settings.isAuthUsed)
+            {
+                Navigation.Visibility = Visibility.Collapsed;
+                UserConsentVerificationResult consent = await UserConsentVerifier.RequestVerificationAsync(resourceLoader.GetString("LoginMessage"));
+                if (consent != UserConsentVerificationResult.Verified)
+                {
+                    Application.Current.Exit();
+                }
+                Navigation.Visibility = Visibility.Visible;
+            }
         }
 
 
@@ -129,10 +149,54 @@ namespace Taskie
             MenuFlyout flyout = new MenuFlyout();
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = resourceLoader.GetString("RenameList/Text"), Tag = (sender as ListViewItem).Tag });
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag });
+            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = (sender as ListViewItem).Tag });
             (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
             (flyout.Items[1] as MenuFlyoutItem).Click += DeleteList_Click;
+            (flyout.Items[2] as MenuFlyoutItem).Click += ExportList_Click;
             flyout.ShowAt(sender as ListViewItem);
         }
+
+        private async void ExportList_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                {
+                    FileSavePicker savePicker = new FileSavePicker
+                    {
+                        DefaultFileExtension = ".json",
+                        SuggestedStartLocation = PickerLocationId.Desktop,
+                        SuggestedFileName = (sender as MenuFlyoutItem)?.Tag?.ToString() ?? string.Empty
+                    };
+                    savePicker.FileTypeChoices.Add("JSON", new List<string>() { ".json" });
+
+                    StorageFile file = await savePicker.PickSaveFileAsync();
+                    if (file != null)
+                    {
+                        CachedFileManager.DeferUpdates(file);
+
+                        string content = Tools.GetTaskFileContent((sender as MenuFlyoutItem)?.Tag?.ToString() ?? string.Empty);
+                        await FileIO.WriteTextAsync(file, content);
+
+                        FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                        if (status != FileUpdateStatus.Complete)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Status: " + status);
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Cancelled");
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                // Handle or log the exception
+                System.Diagnostics.Debug.WriteLine("Exception: " + ex.Message);
+            }
+        }
+
 
         private async void RenameList_Click(object sender, RoutedEventArgs e)
         {

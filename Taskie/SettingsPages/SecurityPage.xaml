@@ -18,9 +18,6 @@
                 <TextBlock x:Uid="AuthText" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
                 <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10" x:Uid="AuthDescription"/>
                 <ToggleSwitch Margin="0,0,0,20" Toggled="ToggleSwitch_Toggled" Tag="Auth" x:Name="AuthToggle"/>
-                <TextBlock x:Uid="EncryptionText" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
-                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10" x:Uid="EncryptionDescription"/>
-                <ToggleSwitch Margin="0,0,0,20" Toggled="ToggleSwitch_Toggled" Tag="Encryption" x:Name="EncryptionToggle"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

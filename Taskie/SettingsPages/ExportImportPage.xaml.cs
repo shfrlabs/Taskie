@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using TaskieLib;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -17,13 +19,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-//Szablon elementu Pusta strona jest udokumentowany na stronie https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace Taskie.SettingsPages
 {
-    /// <summary>
-    /// Pusta strona, która może być używana samodzielnie lub do której można nawigować wewnątrz ramki.
-    /// </summary>
     public sealed partial class ExportImportPage : Page
     {
         public ExportImportPage()
@@ -49,6 +46,76 @@ namespace Taskie.SettingsPages
             {
             }
             File.Delete(exportFile.Path);
+        }
+
+        private async void import_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new FileOpenPicker();
+            picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            picker.FileTypeFilter.Add(".taskie");
+            picker.FileTypeFilter.Add(".json");
+
+            var files = await picker.PickMultipleFilesAsync();
+            if (files != null)
+            {
+                foreach (StorageFile file in files)
+                {
+                    string fileExtension = Path.GetExtension(file.Name).ToLower();
+                    if (fileExtension == ".json")
+                    {
+                        Tools.ImportFile(file);
+                    }
+                    else if (fileExtension == ".taskie")
+                    {
+                        await ProcessTaskieFile(file);
+                    }
+                }
+            }
+        }
+
+        private async Task ProcessTaskieFile(StorageFile taskieFile)
+        {
+            using (var zipStream = await taskieFile.OpenStreamForReadAsync())
+            {
+                using (var archive = new System.IO.Compression.ZipArchive(zipStream, System.IO.Compression.ZipArchiveMode.Read))
+                {
+                    foreach (var entry in archive.Entries)
+                    {
+                        if (Path.GetExtension(entry.FullName).ToLower() == ".json")
+                        {
+                            using (var entryStream = entry.Open())
+                            {
+                                var memoryStream = new MemoryStream();
+                                await entryStream.CopyToAsync(memoryStream);
+                                memoryStream.Position = 0;
+
+                                // Create a temporary file in memory and call ImportFile on it
+                                var unzippedFile = await CreateStorageFileFromStreamAsync(entry.FullName, memoryStream);
+                                Tools.ImportFile(unzippedFile);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private async Task<StorageFile> CreateStorageFileFromStreamAsync(string fileName, Stream stream)
+        {
+            var tempFolder = ApplicationData.Current.TemporaryFolder;
+            var tempFile = await tempFolder.CreateFileAsync(fileName, CreationCollisionOption.GenerateUniqueName);
+
+            using (var fileStream = await tempFile.OpenStreamForWriteAsync())
+            {
+                await stream.CopyToAsync(fileStream);
+            }
+
+            return tempFile;
+        }
+
+
+        private async void RestartButton_Click(object sender, RoutedEventArgs e)
+        {
+            var result = await CoreApplication.RequestRestartAsync("After import");
         }
     }
 }

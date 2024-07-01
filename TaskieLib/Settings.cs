@@ -46,21 +46,5 @@ namespace TaskieLib
                 savedSettings["auth"] = value ? "1" : "0";
             }
         }
-
-        public static bool isDataEncrypted
-        {
-            get
-            {
-                if (savedSettings.ContainsKey("encrypt") && (string)savedSettings["encrypt"] == "1")
-                {
-                    return true;
-                }
-                return false;
-            }
-            set
-            {
-                savedSettings["encrypt"] = value ? "1" : "0";
-            }
-        }
     }
 }

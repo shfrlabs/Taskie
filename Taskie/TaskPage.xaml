@@ -44,6 +44,7 @@
                     <MenuFlyout Placement="BottomEdgeAlignedRight">
                         <MenuFlyoutItem Icon="Rename" Click="RenameList_Click" x:Uid="RenameList"></MenuFlyoutItem>
                         <MenuFlyoutItem Icon="Delete" Click="DeleteList_Click" x:Uid="DeleteList"></MenuFlyoutItem>
+                        <MenuFlyoutItem Icon="Save" Click="ExportList_Click" x:Uid="ExportList"></MenuFlyoutItem>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>

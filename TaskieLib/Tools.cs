@@ -7,6 +7,8 @@ using System.IO.Compression;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.UI.Xaml.Documents;
 
 namespace TaskieLib
 {
@@ -137,7 +139,7 @@ namespace TaskieLib
             return Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{listName}.json");
         }
 
-        private static string GetTaskFileContent(string listName)
+        public static string GetTaskFileContent(string listName)
         {
             string filePath = GetFilePath(listName);
             if (File.Exists(filePath))
@@ -145,6 +147,39 @@ namespace TaskieLib
                 return File.ReadAllText(filePath);
             }
             return null;
+        }
+
+        public static async void ImportFile(StorageFile file)
+        {
+            try
+            {
+                StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+                bool fileExists = false;
+                string uniqueName = null;
+                try
+                {
+                    await localFolder.GetFileAsync(file.Name);
+                    fileExists = true;
+                }
+                catch (FileNotFoundException)
+                {
+                    fileExists = false;
+                }
+                if (fileExists)
+                {
+                    uniqueName = GenerateUniqueListName(file.Name.Replace(".json", null));
+                }
+                if (uniqueName == null)
+                {
+                    await file.CopyAsync(localFolder);
+                }
+                else
+                {
+                    Debug.WriteLine($"Import file {uniqueName}");
+                    await file.CopyAsync(localFolder, uniqueName + ".json");
+                }
+            }
+            catch { }
         }
 
         public static async Task<StorageFile> ExportedLists()

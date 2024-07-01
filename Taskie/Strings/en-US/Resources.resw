@@ -145,7 +145,13 @@
     <value>App theme</value>
   </data>
   <data name="AuthDescription.Text" xml:space="preserve">
-    <value>Make the app ask you for your credentials or biometrics through Windows Hello before opening.</value>
+    <value>Make the app ask you for your credentials or biometrics through Windows Hello before opening. This option may not be avialable if your computer isn't secured with a password + fingerprint/face/PIN.</value>
+  </data>
+  <data name="AuthDisabledDescription" xml:space="preserve">
+    <value>You removed your biometric method, PIN or password, your device administrator has disabled the option or something else happened. Check Windows Settings &gt; Accounts &gt; Login options.</value>
+  </data>
+  <data name="AuthDisabledTitle" xml:space="preserve">
+    <value>Authentication was disabled.</value>
   </data>
   <data name="AuthText.Text" xml:space="preserve">
     <value>Use authentication</value>
@@ -165,9 +171,6 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="ChangeThemeWarning.Text" xml:space="preserve">
-    <value>Changing the theme requires restarting the app.</value>
-  </data>
   <data name="DarkThemeRadio.Content" xml:space="preserve">
     <value>Dark</value>
   </data>
@@ -180,13 +183,10 @@
   <data name="DonateLink.Content" xml:space="preserve">
     <value>Donate</value>
   </data>
-  <data name="EncryptionDescription.Text" xml:space="preserve">
-    <value>Store app data more securely. May impact performance. Requires "Use authentication" to be on.</value>
-  </data>
-  <data name="EncryptionText.Text" xml:space="preserve">
-    <value>Encryption</value>
-  </data>
   <data name="ExportButton.Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ExportList.Text" xml:space="preserve">
     <value>Export</value>
   </data>
   <data name="GitHubLink.Content" xml:space="preserve">
@@ -200,6 +200,9 @@
   </data>
   <data name="ListName" xml:space="preserve">
     <value>List name</value>
+  </data>
+  <data name="LoginMessage" xml:space="preserve">
+    <value>Log in with Windows Hello to enter Taskie. You can disable this in Settings.</value>
   </data>
   <data name="NewList" xml:space="preserve">
     <value>New list</value>
@@ -215,6 +218,9 @@
   </data>
   <data name="RestartButton.Text" xml:space="preserve">
     <value>Restart</value>
+  </data>
+  <data name="RestartWarning.Text" xml:space="preserve">
+    <value>This requires restarting the app.</value>
   </data>
   <data name="RestoreHeader.Text" xml:space="preserve">
     <value>Restore</value>

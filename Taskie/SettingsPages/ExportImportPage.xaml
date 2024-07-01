@@ -26,10 +26,17 @@
                 <NavigationViewItemSeparator Margin="0,0,0,20"/>
                 <TextBlock x:Uid="RestoreHeader" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="1,0,0,10"/>
                 <TextBlock x:Uid="RestoreText" FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10"/>
-                <Button x:Name="import" Style="{StaticResource AccentButtonStyle}" IsEnabled="False" Margin="1,0,0,20">
+                <Button x:Name="import" Style="{StaticResource AccentButtonStyle}" Click="import_Click" Margin="1,0,0,20">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <FontIcon Margin="0,0,10,0" Glyph="&#xEDE2;" FontSize="15"/>
                         <TextBlock x:Uid="ImportButton"/>
+                    </StackPanel>
+                </Button>
+                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,10,5,10" x:Uid="RestartWarning"/>
+                <Button x:Name="RestartButton" Click="RestartButton_Click">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
+                        <FontIcon Glyph="&#xE895;" Margin="0,0,20,0"/>
+                        <TextBlock x:Uid="RestartButton"/>
                     </StackPanel>
                 </Button>
             </StackPanel>

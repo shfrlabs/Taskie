@@ -22,6 +22,10 @@ using Windows.UI;
 using System.Reflection;
 using Windows.ApplicationModel.Resources;
 using System.Diagnostics;
+using Windows.ApplicationModel.VoiceCommands;
+using Windows.Storage.Pickers;
+using Windows.Storage.Provider;
+using Windows.Storage;
 
 namespace Taskie
 {
@@ -31,7 +35,7 @@ namespace Taskie
         {
             this.InitializeComponent();
             ActualThemeChanged += TaskPage_ActualThemeChanged;
-            
+
         }
 
         private void TaskPage_ActualThemeChanged(FrameworkElement sender, object args)
@@ -47,7 +51,8 @@ namespace Taskie
                     var rootGrid = FindVisualChild<Grid>(container, "rootGrid");
                     if (rootGrid != null)
                     {
-                        rootGrid.Background = bg;                      ;
+                        rootGrid.Background = bg;
+                        ;
                     }
                 }
             }
@@ -169,6 +174,45 @@ namespace Taskie
             }
         }
 
+        private async void ExportList_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                {
+                    FileSavePicker savePicker = new FileSavePicker
+                    {
+                        DefaultFileExtension = ".json",
+                        SuggestedStartLocation = PickerLocationId.Desktop,
+                        SuggestedFileName = listname
+                    };
+                    savePicker.FileTypeChoices.Add("JSON", new List<string>() { ".json" });
+
+                    StorageFile file = await savePicker.PickSaveFileAsync();
+                    if (file != null)
+                    {
+                        CachedFileManager.DeferUpdates(file);
+                        string content = Tools.GetTaskFileContent(listname);
+                        await FileIO.WriteTextAsync(file, content);
+
+                        FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                        if (status != FileUpdateStatus.Complete)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Status: " + status);
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Cancelled");
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception: " + ex.Message);
+            }
+        }
+
         private void DeleteList_Click(object sender, RoutedEventArgs e)
         {
             Tools.DeleteList(listname);
@@ -189,7 +233,7 @@ namespace Taskie
                 }
             }
             catch { }
-            
+
         }
 
         private void NameBox_SizeChanged(object sender, SizeChangedEventArgs e)

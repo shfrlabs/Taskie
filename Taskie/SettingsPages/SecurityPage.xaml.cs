@@ -13,6 +13,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using TaskieLib;
+using Windows.Security.Credentials.UI;
 
 namespace Taskie.SettingsPages
 {
@@ -22,6 +23,18 @@ namespace Taskie.SettingsPages
         {
             this.InitializeComponent();
             SetSettings();
+            CheckSecurity();
+        }
+
+        private async void CheckSecurity()
+        {
+            UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
+            if (availability != UserConsentVerifierAvailability.Available)
+            {
+                AuthToggle.IsOn = false;
+                AuthToggle.IsEnabled = false;
+                Settings.isAuthUsed = false;
+            }
         }
 
         private void SetSettings()
@@ -30,10 +43,6 @@ namespace Taskie.SettingsPages
             { AuthToggle.IsOn = true; }
             else
             { AuthToggle.IsOn = false; }
-            if (Settings.isDataEncrypted)
-            { EncryptionToggle.IsOn = true; }
-            else
-            { EncryptionToggle.IsOn = false; }
         }
 
         private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
@@ -41,10 +50,6 @@ namespace Taskie.SettingsPages
             if ((sender as ToggleSwitch)?.Tag?.ToString() == "Auth")
             {
                 Settings.isAuthUsed = (sender as ToggleSwitch).IsOn;
-            }
-            else if ((sender as ToggleSwitch)?.Tag?.ToString() == "Encryption")
-            {
-                Settings.isDataEncrypted = (sender as ToggleSwitch).IsOn;
             }
         }
     }
