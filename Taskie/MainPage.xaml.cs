@@ -281,20 +281,10 @@ namespace Taskie
             await dialog.ShowAsync();
         }
 
-        private void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             // DEBUG UPGRADE OPTION!
-            Flyout flyout = new Flyout();
-            PasswordBox txtbox = new PasswordBox();
-            txtbox.PasswordChanged += PasswordChanged;
-            txtbox.PlaceholderText = "Enter super secret upgrade test password";
-            flyout.Content = txtbox;
-            flyout.ShowAt(TTB);
-        }
-
-        private async void PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            if ((sender as PasswordBox).Password == "uwpcfreakyboykissers")
+            if (Settings.isPro)
             {
                 ToastContentBuilder builder = new ToastContentBuilder()
                     .AddText("You have entered the correct password.")
@@ -303,7 +293,7 @@ namespace Taskie
                 Settings.isPro = true;
                 await CoreApplication.RequestRestartAsync("Pro status changed.");
             }
-            else if ((sender as PasswordBox).Password == "cancelprem")
+            else
             {
                 ToastContentBuilder builder = new ToastContentBuilder()
                     .AddText("You have entered the cancel password.")
