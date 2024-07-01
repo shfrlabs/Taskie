@@ -10,7 +10,7 @@
 
     <Page.Resources>
         <DataTemplate x:Key="TaskItemTemplate">
-            <Grid HorizontalAlignment="Stretch" Height="Auto" x:Name="rootGrid" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,0,5" CornerRadius="8" BorderThickness="1">
+            <Grid HorizontalAlignment="Stretch" Height="Auto" x:Name="rootGrid" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,0,5" CornerRadius="8" BorderThickness="1" Loaded="TaskAdded_Grid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="32"/>
                     <ColumnDefinition Width="*"/>

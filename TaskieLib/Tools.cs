@@ -135,7 +135,6 @@ namespace TaskieLib
         }
         private static string GetFilePath(string listName)
         {
-            Debug.WriteLine(ApplicationData.Current.LocalFolder.Path);
             return Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{listName}.json");
         }
 
@@ -175,7 +174,6 @@ namespace TaskieLib
                 }
                 else
                 {
-                    Debug.WriteLine($"Import file {uniqueName}");
                     await file.CopyAsync(localFolder, uniqueName + ".json");
                 }
             }

@@ -196,21 +196,12 @@ namespace Taskie
                         await FileIO.WriteTextAsync(file, content);
 
                         FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
-                        if (status != FileUpdateStatus.Complete)
-                        {
-                            System.Diagnostics.Debug.WriteLine("Status: " + status);
-                        }
                     }
                     else
-                    {
-                        System.Diagnostics.Debug.WriteLine("Cancelled");
-                    }
+                    { }
                 });
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Exception: " + ex.Message);
-            }
+            catch { }
         }
 
         private void DeleteList_Click(object sender, RoutedEventArgs e)
@@ -243,7 +234,6 @@ namespace Taskie
 
         private void ChangeWidth(object sender)
         {
-            System.Diagnostics.Debug.WriteLine((sender as Rectangle).ActualWidth);
             foreach (ListTask task in taskListView.Items)
             {
                 var item = taskListView.ContainerFromItem(task) as ListViewItem;
@@ -309,6 +299,11 @@ namespace Taskie
                 taskListView.Items.Add(task);
                 Tools.SaveList(listname, tasks);
             }
+        }
+
+        private void TaskAdded_Grid(object sender, RoutedEventArgs e)
+        {
+            ChangeWidth(NameBox);
         }
     }
 }

@@ -142,7 +142,8 @@ namespace Taskie
 
         private void AddRightClickMenu()
         {
-            foreach (ListViewItem item in Navigation.Items) {
+            foreach (ListViewItem item in Navigation.Items)
+            {
                 item.RightTapped += OpenRightClickList;
             }
         }
@@ -182,28 +183,16 @@ namespace Taskie
                         await FileIO.WriteTextAsync(file, content);
 
                         FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
-                        if (status != FileUpdateStatus.Complete)
-                        {
-                            System.Diagnostics.Debug.WriteLine("Status: " + status);
-                        }
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine("Cancelled");
                     }
                 });
             }
-            catch (Exception ex)
-            {
-                // Handle or log the exception
-                System.Diagnostics.Debug.WriteLine("Exception: " + ex.Message);
-            }
+            catch { }
         }
 
 
         private async void RenameList_Click(object sender, RoutedEventArgs e)
         {
-            string listname = (sender as  MenuFlyoutItem).Tag as string;
+            string listname = (sender as MenuFlyoutItem).Tag as string;
             TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("ListName"), Text = listname };
             ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameList/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
             ContentDialogResult result = await dialog.ShowAsync();
@@ -234,7 +223,8 @@ namespace Taskie
             UpdateLists(resourceLoader.GetString("NewList"));
             foreach (ListViewItem item in Navigation.Items)
             {
-                if (item.Tag.ToString().Contains(listName)) { Navigation.SelectedItem = item; break; }
+                if (item.Tag.ToString().Contains(listName))
+                { Navigation.SelectedItem = item; break; }
             }
         }
 
@@ -293,6 +283,7 @@ namespace Taskie
 
         private void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            // DEBUG UPGRADE OPTION!
             Flyout flyout = new Flyout();
             PasswordBox txtbox = new PasswordBox();
             txtbox.PasswordChanged += PasswordChanged;
@@ -331,21 +322,24 @@ namespace Taskie
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             sender.ItemsSource = Array.FindAll<string>(Tools.GetLists(), s => s.Contains(sender.Text));
-            if (sender.Text == null) { sender.IsSuggestionListOpen = false; }
+            if (sender.Text == null || sender.Text == "" || string.IsNullOrEmpty(sender.Text))
+            { sender.IsSuggestionListOpen = false; sender.ItemsSource = new List<string>(); }
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            contentFrame.Navigate(typeof(TaskPage), Array.FindAll<string>(Tools.GetLists(), s => s.Contains(sender.Text))[0]);
-            foreach (ListViewItem item in Navigation.Items)
+            try
             {
-                Debug.WriteLine(item.Tag.ToString());
-                Debug.WriteLine(sender.Text);
-                if (item.Tag.ToString().Contains(sender.Text)) { Navigation.SelectedItem = item; break; }
+                contentFrame.Navigate(typeof(TaskPage), Array.FindAll<string>(Tools.GetLists(), s => s.Contains(sender.Text))[0]);
+                foreach (ListViewItem item in Navigation.Items)
+                {
+                    if (item.Tag.ToString().Contains(sender.Text))
+                    { Navigation.SelectedItem = item; break; }
+                }
+                sender.Text = "";
+                searchbox.ItemsSource = new List<string>();
             }
-            sender.Text = "";
-            searchbox.ItemsSource = null;
-
+            catch { }
         }
     }
 }
