@@ -35,7 +35,17 @@ namespace Taskie
         {
             this.InitializeComponent();
             ActualThemeChanged += TaskPage_ActualThemeChanged;
+            Tools.ListRenamedEvent += ListRenamed;
 
+        }
+
+        private void ListRenamed(string oldname, string newname)
+        {
+            if (listname == oldname)
+            {
+                listname = newname;
+                testname.Text = newname;
+            };
         }
 
         private void TaskPage_ActualThemeChanged(FrameworkElement sender, object args)
