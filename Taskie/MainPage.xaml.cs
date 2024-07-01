@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Shapes;
 using System.Reflection;
 using System.Linq;
 using Windows.UI.WindowManagement;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Windows.UI.Xaml.Hosting;
 using System.Collections.Generic;
 using Windows.Media.Protection.PlayReady;
@@ -42,6 +43,8 @@ namespace Taskie
             Tools.ListDeletedEvent += ListDeleted;
             Tools.ListRenamedEvent += ListRenamed;
             ActualThemeChanged += MainPage_ActualThemeChanged;
+            if (Settings.isPro)
+            { proText.Visibility = Visibility.Visible; }
         }
 
         public async void CheckSecurity()
@@ -275,9 +278,49 @@ namespace Taskie
             }
         }
 
-        private void UpgradeButton_Click(object sender, RoutedEventArgs e)
+        private async void UpgradeButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: make btn work, add all free limits
+            ContentDialog dialog = new ContentDialog();
+            Frame frame = new Frame();
+            frame.Navigate(typeof(UpgradeDialogContentPage));
+            dialog.Content = frame;
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            dialog.PrimaryButtonText = resourceLoader.GetString("UpgradeText/Text");
+            dialog.PrimaryButtonClick += Dialog_UpgradeAction;
+            dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
+            await dialog.ShowAsync();
+        }
+
+        private void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            Flyout flyout = new Flyout();
+            PasswordBox txtbox = new PasswordBox();
+            txtbox.PasswordChanged += PasswordChanged;
+            txtbox.PlaceholderText = "Enter super secret upgrade test password";
+            flyout.Content = txtbox;
+            flyout.ShowAt(TTB);
+        }
+
+        private async void PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if ((sender as PasswordBox).Password == "uwpcfreakyboykissers")
+            {
+                ToastContentBuilder builder = new ToastContentBuilder()
+                    .AddText("You have entered the correct password.")
+                    .AddText("Taskie Pro Preview has been unlocked.");
+                builder.Show();
+                Settings.isPro = true;
+                await CoreApplication.RequestRestartAsync("Pro status changed.");
+            }
+            else if ((sender as PasswordBox).Password == "cancelprem")
+            {
+                ToastContentBuilder builder = new ToastContentBuilder()
+                    .AddText("You have entered the cancel password.")
+                    .AddText("Taskie Pro Preview has been relocked.");
+                builder.Show();
+                Settings.isPro = false;
+                await CoreApplication.RequestRestartAsync("Pro status changed.");
+            }
         }
 
         private void rectlist_SizeChanged(object sender, SizeChangedEventArgs e)

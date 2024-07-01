@@ -46,5 +46,21 @@ namespace TaskieLib
                 savedSettings["auth"] = value ? "1" : "0";
             }
         }
+
+        public static bool isPro
+        {
+            get
+            {
+                if (savedSettings.ContainsKey("pro") && (string)savedSettings["pro"] == "1")
+                {
+                    return true;
+                }
+                return false;
+            }
+            set
+            {
+                savedSettings["pro"] = value ? "1" : "0";
+            }
+        }
     }
 }
