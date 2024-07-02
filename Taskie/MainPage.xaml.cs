@@ -321,25 +321,44 @@ namespace Taskie
 
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            sender.ItemsSource = Array.FindAll<string>(Tools.GetLists(), s => s.Contains(sender.Text));
-            if (sender.Text == null || sender.Text == "" || string.IsNullOrEmpty(sender.Text))
+            if (string.IsNullOrWhiteSpace(sender.Text))
             { sender.IsSuggestionListOpen = false; sender.ItemsSource = new List<string>(); }
+            else
+            {
+                sender.ItemsSource = Array.FindAll<string>(Tools.GetLists(), s => s.ToLower().Contains(sender.Text.ToLower()));
+            }
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            try
+            if (!string.IsNullOrWhiteSpace(sender.Text))
             {
-                contentFrame.Navigate(typeof(TaskPage), Array.FindAll<string>(Tools.GetLists(), s => s.Contains(sender.Text))[0]);
-                foreach (ListViewItem item in Navigation.Items)
+                try
                 {
-                    if (item.Tag.ToString().Contains(sender.Text))
-                    { Navigation.SelectedItem = item; break; }
+                    string foundItem = "";
+                    foreach (ListViewItem item in Navigation.Items)
+                    {
+                        if (item.Tag.ToString().ToLower() == sender.Text.ToLower())
+                        { Navigation.SelectedItem = item; foundItem = item.Tag.ToString(); break; }
+                    }
+                    if (string.IsNullOrEmpty(foundItem))
+                    {
+                        foreach (ListViewItem item in Navigation.Items)
+                        {
+                            if (item.Tag.ToString().ToLower().Contains(sender.Text.ToLower()))
+                            { Navigation.SelectedItem = item; foundItem = item.Tag.ToString(); break; }
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(foundItem))
+                    {
+                        contentFrame.Navigate(typeof(TaskPage), foundItem);
+                    }
+
+                    sender.Text = "";
+                    searchbox.ItemsSource = new List<string>();
                 }
-                sender.Text = "";
-                searchbox.ItemsSource = new List<string>();
+                catch { }
             }
-            catch { }
         }
 
         internal int hovercount = 0;
