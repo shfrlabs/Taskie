@@ -1,24 +1,12 @@
 ﻿using System;
-using Microsoft.UI.Xaml.Controls;
-using Windows.ApplicationModel.Core;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml;
-using Windows.UI;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
-using TaskieLib;
-using Windows.Networking;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Media;
-using System.Diagnostics;
-using Windows.UI.Xaml.Shapes;
-using System.Reflection;
+using System.Collections.Generic;
 using System.Linq;
 using Taskie.SettingsPages;
-using System.Collections.Generic;
 using Windows.ApplicationModel.Resources;
-using Windows.Foundation;
+using Windows.UI;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace Taskie
 {

@@ -1,9 +1,8 @@
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
+using System;
 using TaskieLib;
 using Windows.ApplicationModel.Core;
-using System;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace Taskie.SettingsPages
 {
