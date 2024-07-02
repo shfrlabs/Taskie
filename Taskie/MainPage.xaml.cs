@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaskieLib;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
@@ -32,20 +33,45 @@ namespace Taskie
             Tools.ListDeletedEvent += ListDeleted;
             Tools.ListRenamedEvent += ListRenamed;
             ActualThemeChanged += MainPage_ActualThemeChanged;
+            DeterminePro();
+        }
+
+        public void DeterminePro()
+        {
             if (Settings.isPro)
-            { proText.Visibility = Visibility.Visible; }
+            { 
+                proText.Visibility = Visibility.Visible;
+                BottomRow.Height = new GridLength(65);
+                UpdateButton.Visibility = Visibility.Collapsed;
+            }
+            if (!Settings.isPro && Tools.GetLists().Count() > 2)
+            {
+                AddItemBtn.IsEnabled = false;
+                NewListBtnIcon.Foreground = new SolidColorBrush(Colors.White);
+                NewListBtnIcon.Opacity = 0.7;
+                NewListBtnText.Foreground = new SolidColorBrush(Colors.White);
+                NewListBtnText.Opacity = 0.7;
+            }
+            else
+            {
+                AddItemBtn.IsEnabled = true;
+                NewListBtnIcon.Foreground = new SolidColorBrush(Colors.Black);
+                NewListBtnText.Foreground = new SolidColorBrush(Colors.Black);
+                NewListBtnText.Opacity = 1;
+                NewListBtnIcon.Opacity = 1;
+            }
         }
 
         public async void CheckSecurity()
         {
             UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
-            if (availability != UserConsentVerifierAvailability.Available && Settings.isAuthUsed)
+            if ((availability != UserConsentVerifierAvailability.Available && Settings.isAuthUsed) || (Settings.isAuthUsed && !Settings.isPro))
             {
                 Settings.isAuthUsed = false;
                 ContentDialog contentDialog = new ContentDialog() { Title = resourceLoader.GetString("AuthDisabledTitle"), Content = resourceLoader.GetString("AuthDisabledDescription"), PrimaryButtonText = "OK" };
                 await contentDialog.ShowAsync();
             }
-            if (Settings.isAuthUsed)
+            else if (Settings.isAuthUsed)
             {
                 Navigation.Visibility = Visibility.Collapsed;
                 UserConsentVerificationResult consent = await UserConsentVerifier.RequestVerificationAsync(resourceLoader.GetString("LoginMessage"));
@@ -103,6 +129,7 @@ namespace Taskie
                     }
                 }
             }
+            DeterminePro();
         }
 
         private void SetupTitleBar()
@@ -127,6 +154,7 @@ namespace Taskie
                 Navigation.Items.Add(new ListViewItem() { Tag = listName, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
                 AddRightClickMenu();
             }
+            DeterminePro();
         }
 
         private void AddRightClickMenu()
@@ -197,6 +225,7 @@ namespace Taskie
         {
             string listname = (sender as MenuFlyoutItem).Tag as string;
             Tools.DeleteList(listname);
+            DeterminePro();
         }
 
         private void UpdateLists(string name)
@@ -204,6 +233,7 @@ namespace Taskie
             Navigation.Items.Clear();
             SetupNavigationMenu();
             contentFrame.Content = null;
+            DeterminePro();
         }
 
         private void AddList(object sender, RoutedEventArgs e)
@@ -273,22 +303,13 @@ namespace Taskie
         private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             // DEBUG UPGRADE OPTION!
-            if (Settings.isPro)
+            if (!Settings.isPro)
             {
                 ToastContentBuilder builder = new ToastContentBuilder()
-                    .AddText("You have entered the correct password.")
+                    .AddText("You just successfully upgraded!")
                     .AddText("Taskie Pro Preview has been unlocked.");
                 builder.Show();
                 Settings.isPro = true;
-                await CoreApplication.RequestRestartAsync("Pro status changed.");
-            }
-            else
-            {
-                ToastContentBuilder builder = new ToastContentBuilder()
-                    .AddText("You have entered the cancel password.")
-                    .AddText("Taskie Pro Preview has been relocked.");
-                builder.Show();
-                Settings.isPro = false;
                 await CoreApplication.RequestRestartAsync("Pro status changed.");
             }
         }
@@ -319,6 +340,23 @@ namespace Taskie
                 searchbox.ItemsSource = new List<string>();
             }
             catch { }
+        }
+
+        internal int hovercount = 0;
+
+        private async void proText_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            hovercount++;
+            if (Settings.isPro && hovercount == 10)
+            {
+                hovercount = 0;
+                ToastContentBuilder builder = new ToastContentBuilder()
+                    .AddText("You cancelled Pro.")
+                    .AddText("Taskie Pro Preview has been relocked.");
+                builder.Show();
+                Settings.isPro = false;
+                await CoreApplication.RequestRestartAsync("Pro status changed.");
+            }
         }
     }
 }

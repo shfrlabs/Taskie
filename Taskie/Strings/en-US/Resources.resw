@@ -145,10 +145,10 @@
     <value>App theme</value>
   </data>
   <data name="AuthDescription.Text" xml:space="preserve">
-    <value>Make the app ask you for your credentials or biometrics through Windows Hello before opening. This option may not be avialable if your computer isn't secured with a password + fingerprint/face/PIN.</value>
+    <value>Make the app ask you for your credentials or biometrics through Windows Hello before opening. This option may not be avialable if your computer isn't secured with a password + fingerprint/face/PIN or you haven't purchased Taskie Pro.</value>
   </data>
   <data name="AuthDisabledDescription" xml:space="preserve">
-    <value>You removed your biometric method, PIN or password, your device administrator has disabled the option or something else happened. Check Windows Settings &gt; Accounts &gt; Login options.</value>
+    <value>You removed your biometric method, PIN or password, your device administrator has disabled the option, you refunded your Pro purchase or something else happened. Check Windows Settings &gt; Accounts &gt; Login options or the Microsoft Store.</value>
   </data>
   <data name="AuthDisabledTitle" xml:space="preserve">
     <value>Authentication was disabled.</value>
