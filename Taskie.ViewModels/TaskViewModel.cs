@@ -8,7 +8,7 @@ public partial class TaskViewModel : ObservableObject
     /// <summary>
     /// The task's creation timestamp.
     /// </summary>
-    public DateTime CreationDate { get; }
+    public DateTime CreationDate { get; init; }
 
     /// <summary>
     /// The task's name.
