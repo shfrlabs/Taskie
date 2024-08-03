@@ -17,6 +17,11 @@ namespace Taskie.Views.UWP.Services
             return default;
         }
 
+        public void Set<T>(string key, T value)
+        {
+            // TODO: Implement
+        }
+
         public event EventHandler<string> Changed;
     }
 }
