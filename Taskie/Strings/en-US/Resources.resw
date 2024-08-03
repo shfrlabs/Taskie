@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutApp.Text" xml:space="preserve">
-    <value>Thank you so much for supporting me. Taskie is one of my first projects, which I've poured a lot of love into. I hope you enjoy! You can purchase Taskie Pro for $2 lifetime to support my future work.</value>
+    <value>Thank you so much for supporting REFRACT. Taskie is one our first projects, which we've poured a lot of love into. I hope you enjoy! You can purchase Taskie Pro for $2 lifetime to support our future work and check out other projects on GitHub.</value>
   </data>
   <data name="AboutCategory" xml:space="preserve">
     <value>About</value>
