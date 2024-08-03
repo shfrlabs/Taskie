@@ -19,9 +19,7 @@
                 <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="13" Opacity=".7" x:Uid="AdvertUWPTag"/>
                 <TextBlock TextWrapping="Wrap" Margin="0,20,0,0" HorizontalAlignment="Center" TextAlignment="Center" x:Uid="AboutApp"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
-                    <HyperlinkButton NavigateUri="https://ko-fi.com/shef3r" Margin="5" x:Uid="DonateLink"/>
-                    <HyperlinkButton NavigateUri="https://x.com/lidlomiks" Margin="5" x:Uid="TwitterLink"/>
-                    <HyperlinkButton NavigateUri="https://github.com/shef3r" Margin="5" x:Uid="GitHubLink"/>
+                    <HyperlinkButton NavigateUri="https://github.com/TheRefractCo" Margin="5" x:Uid="GitHubLink"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
