@@ -120,13 +120,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TaskListPage.xaml.cs">
+    <Compile Include="Pages\TaskListPage.xaml.cs">
       <DependentUpon>TaskListPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TaskListPlaceholderPage.xaml.cs">
+    <Compile Include="Pages\TaskListPlaceholderPage.xaml.cs">
       <DependentUpon>TaskListPlaceholderPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Messages.cs" />
@@ -205,15 +205,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainPage.xaml">
+    <Page Include="Pages\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TaskListPage.xaml">
+    <Page Include="Pages\TaskListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TaskListPlaceholderPage.xaml">
+    <Page Include="Pages\TaskListPlaceholderPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -240,9 +240,6 @@
       <Project>{a7543169-ed45-45ea-ba35-c8adfdcd9862}</Project>
       <Name>Taskie.ViewModels</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\" />
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="Strings\en-US\Resources.resw" />

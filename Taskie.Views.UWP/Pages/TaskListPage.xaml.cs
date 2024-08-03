@@ -6,6 +6,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using CommunityToolkit.Mvvm.Messaging;
 using Taskie.ViewModels;
@@ -86,6 +87,23 @@ namespace Taskie.Views.UWP
             catch
             {
                 // ignored
+            }
+        }
+
+        private void AutoSuggestBox_OnQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            TaskListViewModel.TaskViewModels.Insert(0, new TaskViewModel
+            {
+                CreationDate = DateTime.Now,
+                Name = sender.Text,
+            });
+        }
+
+        private void AutoSuggestBox_OnKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter && sender is AutoSuggestBox autoSuggestBox)
+            {
+                AutoSuggestBox_OnQuerySubmitted(autoSuggestBox, null);
             }
         }
     }
