@@ -33,10 +33,10 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Margin="20">
-        <Grid HorizontalAlignment="Stretch">
-            <TextBlock x:Name="testname" FontWeight="SemiBold" FontSize="28" FontFamily="Segoe UI Variable" Margin="0,0,120,0" TextTrimming="CharacterEllipsis"></TextBlock>
-            <Button Background="Transparent" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Right" Canvas.ZIndex="999" Margin="0, 15, 14, 0">
+    <Grid Margin="20,25,20,20">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <TextBlock x:Name="testname" FontWeight="SemiBold" FontSize="28" FontFamily="Segoe UI Variable"  TextTrimming="CharacterEllipsis"></TextBlock>
+            <Button Margin="0,0,14,0" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right" Canvas.ZIndex="999">
                 <Button.Content>
                     <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE712;" FontSize="14"/>
                 </Button.Content>
