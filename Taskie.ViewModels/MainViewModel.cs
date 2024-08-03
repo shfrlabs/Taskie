@@ -32,8 +32,14 @@ public partial class MainViewModel : ObservableObject
         _fileSystem = fileSystem;
         _settingsService = settingsService;
 
-        _settingsService.Changed += (sender, s) => OnPropertyChanged(nameof(CanCreateList));
-        TaskListViewModels.CollectionChanged += (sender, args) => OnPropertyChanged(nameof(CanCreateList));
+        void OnListChanged(object _, object __)
+        {
+            OnPropertyChanged(nameof(CanCreateList));
+            CreateListCommand.NotifyCanExecuteChanged();
+        }
+
+        _settingsService.Changed += OnListChanged;
+        TaskListViewModels.CollectionChanged += OnListChanged;
     }
 
     #region Commands
