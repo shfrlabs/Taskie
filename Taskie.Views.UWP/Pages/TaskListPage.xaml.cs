@@ -106,5 +106,39 @@ namespace Taskie.Views.UWP
                 AutoSuggestBox_OnQuerySubmitted(autoSuggestBox, null);
             }
         }
+
+        private void DeleteTask_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuFlyoutItem { DataContext: TaskViewModel taskViewModel })
+            {
+                TaskListViewModel.TaskViewModels.Remove(taskViewModel);
+            }
+        }
+
+        private async void RenameTask_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is not MenuFlyoutItem { DataContext: TaskViewModel taskViewModel }) return;
+
+            TextBox input = new()
+            {
+                PlaceholderText = _resourceLoader.GetString("TaskName"),
+                Text = taskViewModel.Name
+            };
+            ContentDialog dialog = new()
+            {
+                Title = _resourceLoader.GetString("RenameTask/Text"),
+                PrimaryButtonText = _resourceLoader.GetString("OK   "),
+                SecondaryButtonText = _resourceLoader.GetString("Cancel"),
+                Content = input
+            };
+            ContentDialogResult result = await dialog.ShowAsync();
+
+            if (result != ContentDialogResult.Primary)
+            {
+                return;
+            }
+
+            taskViewModel.Name = input.Text;
+        }
     }
 }

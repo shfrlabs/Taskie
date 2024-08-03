@@ -33,7 +33,7 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="34" />
                             </Grid.ColumnDefinitions>
-                            <CheckBox Grid.Column="0" IsChecked="{Binding IsDone}" />
+                            <CheckBox Grid.Column="0" IsChecked="{Binding IsDone, Mode=TwoWay}" />
                             <Grid Grid.Column="1">
                                 <TextBlock Text="{Binding Name}" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="TaskNameText"/>
                             </Grid>
@@ -41,8 +41,8 @@
                                 <FontIcon FontSize="14" Glyph="&#xE10C;" />
                                 <Button.Flyout>
                                     <MenuFlyout>
-                                        <MenuFlyoutItem Icon="Delete" x:Uid="DeleteTask" />
-                                        <MenuFlyoutItem Icon="Rename" x:Uid="RenameTask" />
+                                        <MenuFlyoutItem Icon="Delete" x:Uid="DeleteTask" Click="DeleteTask_OnClick" />
+                                        <MenuFlyoutItem Icon="Rename" x:Uid="RenameTask" Click="RenameTask_OnClick" />
                                     </MenuFlyout>
                                 </Button.Flyout>
                             </Button>
