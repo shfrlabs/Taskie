@@ -168,6 +168,9 @@
   <data name="BackupText.Text" xml:space="preserve">
     <value>Export all your lists with one click below. To backup an individual list, right-click on it and select "Share" to generate a file that you can use to restore the list back into the app.</value>
   </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
