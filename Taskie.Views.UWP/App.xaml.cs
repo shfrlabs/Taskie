@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Taskie.ViewModels;
+using Taskie.Views.UWP.Services;
 
 namespace Taskie.Views.UWP
 {
@@ -47,7 +49,10 @@ namespace Taskie.Views.UWP
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
-
+                
+                // TODO: Inject StorageFile-backed IFileSystem
+                rootFrame.DataContext = new MainViewModel(null, SettingsService.Instance);
+                
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)

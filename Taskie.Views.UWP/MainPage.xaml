@@ -5,10 +5,86 @@
     xmlns:local="using:Taskie.Views.UWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:viewModels="using:Taskie.ViewModels"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
+
+    <!-- TODO: Move this into Pages directory -->
 
     <Grid>
-
+        <Grid Background="Transparent" x:Name="TitleBarGrid" VerticalAlignment="Top" Height="36" Canvas.ZIndex="9999">
+            <Image Source="Assets\Logo.png" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0" />
+            <TextBlock Margin="45,0,0,0" VerticalAlignment="Center" FontSize="12">Taskie</TextBlock>
+            <!-- TODO: Add pro cancelling functionality -->
+            <TextBlock Margin="85,1,0,0" VerticalAlignment="Center" FontSize="10" Opacity=".7" x:Name="proText" Visibility="Collapsed">PRO</TextBlock>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Frame x:Name="ContentFrame" Grid.Column="1" Margin="-20, 0, 0, 0" />
+            <Grid Grid.Column="0" Margin="0, 38, 20, 10" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="110" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="135" x:Name="BottomRow" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Bottom">
+                    <Button Background="{StaticResource SystemAccentColorLight2}" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 , 10">
+                        <Button.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.ThemeDictionaries>
+                                    <ResourceDictionary x:Key="Dark">
+                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{StaticResource SystemAccentColorLight3}" />
+                                        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{StaticResource SystemAccentColorLight3}" />
+                                    </ResourceDictionary>
+                                    <ResourceDictionary x:Key="Light">
+                                        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{StaticResource SystemAccentColorLight3}" />
+                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{StaticResource SystemAccentColorLight3}" />
+                                    </ResourceDictionary>
+                                </ResourceDictionary.ThemeDictionaries>
+                            </ResourceDictionary>
+                        </Button.Resources>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon Glyph="&#xE710;" FontSize="18" Margin="11,0,10,0" Foreground="Black" x:Name="NewListBtnIcon" />
+                            <TextBlock FontSize="15" Foreground="Black" x:Uid="NewListBtn" />
+                        </StackPanel>
+                    </Button>
+                    <AutoSuggestBox Margin="10,0,10,2" Style="{StaticResource SearchStyle}" x:Uid="SearchBox" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" FontSize="15" VerticalAlignment="Bottom" x:Name="searchbox">
+                        <AutoSuggestBox.QueryIcon>
+                            <FontIcon Glyph="&#xE721;" FontSize="18" Opacity=".7" />
+                        </AutoSuggestBox.QueryIcon>
+                    </AutoSuggestBox>
+                </StackPanel>
+                <Rectangle Grid.Row="1" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="7,23,7,0" SizeChanged="rectlist_SizeChanged" />
+                <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Stretch">
+                    <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
+                    <ListView Margin="7,2,7,0" SelectionMode="Single" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="2">
+                    <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
+                    <Button x:Name="UpdateButton" Click="UpgradeButton_Click" HorizontalContentAlignment="Left" Margin="10, 3, 10 ,10" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" BorderThickness="2" BorderBrush="{StaticResource SystemAccentColorLight2}">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon Glyph="&#xE74A;" FontSize="18" Margin="10,0,10,0" />
+                            <TextBlock FontSize="15" x:Uid="UpgradeText"></TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="SettingsButton" Click="SettingsButton_Click" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 ,0">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon Glyph="&#xE713;" FontSize="18" Margin="11,0,10,0" />
+                            <TextBlock FontSize="15" x:Uid="SettingsText" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.RowSpan="3" Margin="-20,-50,-50,-50" Canvas.ZIndex="-10" Grid.ColumnSpan="2" x:Name="rect1">
+                <Rectangle.Fill>
+                    <AcrylicBrush TintColor="{StaticResource SystemAltHighColor}" TintOpacity=".9" BackgroundSource="HostBackdrop" FallbackColor="{StaticResource SystemAltLowColor}" />
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle VerticalAlignment="Stretch" Margin="-20" Grid.Column="0" Grid.RowSpan="4" Fill="{StaticResource SystemAltLowColor}" Canvas.ZIndex="-10" Opacity="1" Width="180" HorizontalAlignment="Left" x:Name="rect2" />
+        </Grid>
     </Grid>
 </Page>
