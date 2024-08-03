@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
 
 namespace Taskie.ViewModels;
 
@@ -20,4 +21,12 @@ public partial class TaskListViewModel : ObservableObject
     /// The tasks contained in the list.
     /// </summary>
     public ObservableCollection<TaskViewModel> TaskViewModels { get; } = [];
+
+    /// <summary>
+    /// Serializes the <see cref="TaskListViewModel"/>.
+    /// </summary>
+    public string Serialize()
+    {
+        return JsonConvert.SerializeObject(this);
+    }
 }

@@ -18,7 +18,7 @@
                     <MenuFlyout Placement="BottomEdgeAlignedRight">
                         <MenuFlyoutItem Icon="Rename" x:Uid="RenameList" Click="Rename_OnClick"></MenuFlyoutItem>
                         <MenuFlyoutItem Icon="Delete" x:Uid="DeleteList" Click="Remove_OnClick"></MenuFlyoutItem>
-                        <MenuFlyoutItem Icon="Save" x:Uid="ExportList"></MenuFlyoutItem>
+                        <MenuFlyoutItem Icon="Save" x:Uid="ExportList" Click="Export_OnClick"></MenuFlyoutItem>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>

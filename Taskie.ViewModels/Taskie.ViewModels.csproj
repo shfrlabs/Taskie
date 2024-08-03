@@ -13,6 +13,9 @@
     <PackageReference Include="CommunityToolkit.Mvvm">
       <Version>8.2.2</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageReference>
     <PackageReference Include="PolySharp">
       <Version>1.14.1</Version>
       <PrivateAssets>all</PrivateAssets>
