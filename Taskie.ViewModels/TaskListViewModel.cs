@@ -29,4 +29,9 @@ public partial class TaskListViewModel : ObservableObject
     {
         return JsonConvert.SerializeObject(this);
     }
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

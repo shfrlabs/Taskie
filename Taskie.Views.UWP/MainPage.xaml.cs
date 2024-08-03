@@ -40,7 +40,7 @@ namespace Taskie.Views.UWP
         {
             UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
 
-            var authUsed = true;
+            var authUsed = SettingsService.Instance.Get<bool>(SettingsKeys.IsAuthUsed);
             var isPro = SettingsService.Instance.Get<bool>(SettingsKeys.IsPro);
 
             if (!authUsed)
@@ -98,12 +98,18 @@ namespace Taskie.Views.UWP
                 return;
             }
 
-            sender.ItemsSource = MainViewModel.TaskListViewModels.Select(x => x.Name.Contains(sender.Text, StringComparison.InvariantCultureIgnoreCase));
+            sender.ItemsSource = MainViewModel.TaskListViewModels
+                .Where(x => x.Name.Contains(sender.Text, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            // TODO: Implement
+            if (args.ChosenSuggestion is TaskListViewModel taskListViewModel)
+            {
+                sender.Text = "";
+                searchbox.ItemsSource = new List<string>();
+                TaskListListView.SelectedItem = taskListViewModel;
+            }
         }
 
         private void Navigation_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
