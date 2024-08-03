@@ -43,7 +43,15 @@ namespace Taskie.Views.UWP
             var authUsed = SettingsService.Instance.Get<bool>(SettingsKeys.IsAuthUsed);
             var isPro = SettingsService.Instance.Get<bool>(SettingsKeys.IsPro);
 
-            if ((availability != UserConsentVerifierAvailability.Available && authUsed) || (authUsed && !isPro))
+            if (!authUsed)
+            {
+                TaskListListView.Visibility = Visibility.Visible;
+                return;
+            }
+
+            var denied = availability != UserConsentVerifierAvailability.Available && authUsed;
+
+            if (!isPro || denied)
             {
                 SettingsService.Instance.Set(SettingsKeys.IsAuthUsed, false);
 
@@ -54,19 +62,16 @@ namespace Taskie.Views.UWP
                     PrimaryButtonText = _resourceLoader.GetString("OK")
                 };
                 await contentDialog.ShowAsync();
+                return;
             }
-            else if (authUsed)
+
+            UserConsentVerificationResult consent = await UserConsentVerifier.RequestVerificationAsync(_resourceLoader.GetString("LoginMessage"));
+            if (consent != UserConsentVerificationResult.Verified)
             {
-                TaskListListView.Visibility = Visibility.Collapsed;
-
-                UserConsentVerificationResult consent = await UserConsentVerifier.RequestVerificationAsync(_resourceLoader.GetString("LoginMessage"));
-                if (consent != UserConsentVerificationResult.Verified)
-                {
-                    Application.Current.Exit();
-                }
-
-                TaskListListView.Visibility = Visibility.Visible;
+                Application.Current.Exit();
             }
+
+            TaskListListView.Visibility = Visibility.Visible;
         }
 
 
