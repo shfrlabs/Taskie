@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Taskie.Views.UWP.TaskPage"
+    x:Class="Taskie.Views.UWP.TaskListPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Taskie.Views.UWP"
@@ -12,7 +12,7 @@
 
     <Grid Margin="20,25,20,20">
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
-            <TextBlock FontWeight="SemiBold" FontSize="28" FontFamily="Segoe UI Variable" TextTrimming="CharacterEllipsis"></TextBlock>
+            <TextBlock FontWeight="SemiBold" FontSize="28" FontFamily="Segoe UI Variable" TextTrimming="CharacterEllipsis" Text="{Binding Name}"/>
             <Button Margin="0,0,14,0" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right" Canvas.ZIndex="999">
                 <Button.Content>
                     <FontIcon Glyph="&#xE712;" FontSize="14" />

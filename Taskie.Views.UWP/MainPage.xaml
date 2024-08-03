@@ -8,6 +8,7 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:viewModels="using:Taskie.ViewModels"
     mc:Ignorable="d"
+    d:DataContext="{viewModels:MainViewModel}"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
 
     <!-- TODO: Move this into Pages directory -->
@@ -32,7 +33,7 @@
                     <RowDefinition Height="135" x:Name="BottomRow" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Bottom">
-                    <Button Background="{StaticResource SystemAccentColorLight2}" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 , 10">
+                    <Button Margin="10, 0, 10 , 10" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Background="{StaticResource SystemAccentColorLight2}" Command="{Binding CreateListCommand}">
                         <Button.Resources>
                             <ResourceDictionary>
                                 <ResourceDictionary.ThemeDictionaries>
@@ -61,7 +62,16 @@
                 <Rectangle Grid.Row="1" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="7,23,7,0" SizeChanged="rectlist_SizeChanged" />
                 <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Stretch">
                     <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
-                    <ListView Margin="7,2,7,0" SelectionMode="Single" />
+                    <ListView Margin="7,2,7,0" SelectionMode="Single" ItemsSource="{x:Bind MainViewModel.TaskListViewModels}" SelectionChanged="TaskListListView_OnSelectionChanged">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontSize="14" FontFamily="Segoe UI Emoji" Text="📄"/>
+                                    <TextBlock Margin="12 0 0 0" TextTrimming="CharacterEllipsis" MaxLines="2" Text="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="2">
                     <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>

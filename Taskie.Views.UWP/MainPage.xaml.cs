@@ -72,5 +72,20 @@ namespace Taskie.Views.UWP
         {
             // TODO: Implement
         }
+
+        private void TaskListListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is not ListView listView)
+            {
+                return;
+            }
+
+            if (listView.SelectedItem is not TaskListViewModel taskListViewModel)
+            {
+                return;
+            }
+
+            ContentFrame.Navigate(typeof(TaskListPage), taskListViewModel);
+        }
     }
 }
