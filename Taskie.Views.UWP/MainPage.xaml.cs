@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using Windows.ApplicationModel.Core;
+using Windows.ApplicationModel.Resources;
+using Windows.Security.Credentials.UI;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using CommunityToolkit.Mvvm.Messaging;
+using Taskie.Services.Shared;
 using Taskie.ViewModels;
+using Taskie.Views.UWP.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -20,15 +24,51 @@ namespace Taskie.Views.UWP
     public sealed partial class MainPage : Page, IRecipient<RemovingTaskListViewModelMessage>
     {
         private MainViewModel MainViewModel => (MainViewModel)DataContext;
+        private readonly ResourceLoader _resourceLoader = ResourceLoader.GetForCurrentView();
 
         public MainPage()
         {
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Windows.Foundation.Size(600, 500));
             InitializeComponent();
             InitializeTitleBar();
-            
+            CheckSecurity();
+
             WeakReferenceMessenger.Default.RegisterAll(this);
         }
+
+        private async void CheckSecurity()
+        {
+            UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
+
+            var authUsed = SettingsService.Instance.Get<bool>(SettingsKeys.IsAuthUsed);
+            var isPro = SettingsService.Instance.Get<bool>(SettingsKeys.IsPro);
+
+            if ((availability != UserConsentVerifierAvailability.Available && authUsed) || (authUsed && !isPro))
+            {
+                SettingsService.Instance.Set(SettingsKeys.IsAuthUsed, false);
+
+                ContentDialog contentDialog = new()
+                {
+                    Title = _resourceLoader.GetString("AuthDisabledTitle"),
+                    Content = _resourceLoader.GetString("AuthDisabledDescription"),
+                    PrimaryButtonText = _resourceLoader.GetString("OK")
+                };
+                await contentDialog.ShowAsync();
+            }
+            else if (authUsed)
+            {
+                TaskListListView.Visibility = Visibility.Collapsed;
+
+                UserConsentVerificationResult consent = await UserConsentVerifier.RequestVerificationAsync(_resourceLoader.GetString("LoginMessage"));
+                if (consent != UserConsentVerificationResult.Verified)
+                {
+                    Application.Current.Exit();
+                }
+
+                TaskListListView.Visibility = Visibility.Visible;
+            }
+        }
+
 
         private void InitializeTitleBar()
         {
@@ -83,7 +123,7 @@ namespace Taskie.Views.UWP
             {
                 return;
             }
-            
+
             if (listView.SelectedItem is not TaskListViewModel taskListViewModel)
             {
                 ContentFrame.Navigate(typeof(TaskListPlaceholderPage), null, new DrillInNavigationTransitionInfo());
