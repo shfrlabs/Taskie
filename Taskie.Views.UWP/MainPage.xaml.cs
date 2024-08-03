@@ -40,7 +40,7 @@ namespace Taskie.Views.UWP
         {
             UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
 
-            var authUsed = SettingsService.Instance.Get<bool>(SettingsKeys.IsAuthUsed);
+            var authUsed = true;
             var isPro = SettingsService.Instance.Get<bool>(SettingsKeys.IsPro);
 
             if (!authUsed)
@@ -61,7 +61,11 @@ namespace Taskie.Views.UWP
                     Content = _resourceLoader.GetString("AuthDisabledDescription"),
                     PrimaryButtonText = _resourceLoader.GetString("OK")
                 };
+
                 await contentDialog.ShowAsync();
+
+                TaskListListView.Visibility = Visibility.Visible;
+
                 return;
             }
 
