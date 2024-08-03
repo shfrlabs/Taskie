@@ -25,7 +25,7 @@
                             <Setter Property="BorderBrush" Value="{ThemeResource ControlElevationBorderBrush}"/>
                             <Setter Property="QueryIcon">
                                 <Setter.Value>
-                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE721;" />
+                                    <FontIcon Glyph="&#xE721;" />
                                 </Setter.Value>
                             </Setter>
                         </Style.Setters>
