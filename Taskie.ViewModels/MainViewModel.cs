@@ -3,11 +3,12 @@ using System.Collections.ObjectModel;
 using System.IO.Abstractions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Taskie.Services;
 
 namespace Taskie.ViewModels;
 
-public partial class MainViewModel : ObservableObject
+public partial class MainViewModel : ObservableObject, IRecipient<RemoveTaskListViewModelMessage>
 {
     private readonly IFileSystem _fileSystem;
     private readonly ISettingsService _settingsService;
@@ -40,6 +41,8 @@ public partial class MainViewModel : ObservableObject
 
         _settingsService.Changed += OnListChanged;
         TaskListViewModels.CollectionChanged += OnListChanged;
+        
+        WeakReferenceMessenger.Default.RegisterAll(this);
     }
 
     #region Commands
@@ -68,6 +71,15 @@ public partial class MainViewModel : ObservableObject
     private string GenerateUniqueListName()
     {
         return $"New List ({TaskListViewModels.Count})";
+    }
+
+    #endregion
+
+    #region Messages
+
+    public void Receive(RemoveTaskListViewModelMessage message)
+    {
+        TaskListViewModels.Remove(message.Value);
     }
 
     #endregion

@@ -255,4 +255,7 @@
   <data name="UpgradeText.Text" xml:space="preserve">
     <value>Upgrade</value>
   </data>
+  <data name="TaskListPlaceholderText.Text" xml:space="preserve">
+      <value>There doesn't seem to be anything here.</value>
+  </data>
 </root>

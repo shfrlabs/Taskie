@@ -6,6 +6,8 @@ using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
+using CommunityToolkit.Mvvm.Messaging;
 using Taskie.ViewModels;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -15,7 +17,7 @@ namespace Taskie.Views.UWP
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Page, IRecipient<RemovingTaskListViewModelMessage>
     {
         private MainViewModel MainViewModel => (MainViewModel)DataContext;
 
@@ -24,6 +26,8 @@ namespace Taskie.Views.UWP
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Windows.Foundation.Size(600, 500));
             InitializeComponent();
             InitializeTitleBar();
+            
+            WeakReferenceMessenger.Default.RegisterAll(this);
         }
 
         private void InitializeTitleBar()
@@ -79,13 +83,29 @@ namespace Taskie.Views.UWP
             {
                 return;
             }
-
+            
             if (listView.SelectedItem is not TaskListViewModel taskListViewModel)
             {
+                ContentFrame.Navigate(typeof(TaskListPlaceholderPage), null, new DrillInNavigationTransitionInfo());
                 return;
             }
 
+            // TODO: Play sliding animation in up/down direction depending on relative index change
             ContentFrame.Navigate(typeof(TaskListPage), taskListViewModel);
+        }
+
+        public void Receive(RemovingTaskListViewModelMessage message)
+        {
+            var index = MainViewModel.TaskListViewModels.IndexOf(message.Value);
+            var desiredIndex = Math.Clamp(index + 1, 0, MainViewModel.TaskListViewModels.Count - 1);
+
+            if (MainViewModel.TaskListViewModels.Count == 0)
+            {
+                TaskListListView.SelectedIndex = -1;
+                return;
+            }
+
+            TaskListListView.SelectedIndex = desiredIndex;
         }
     }
 }

@@ -3,6 +3,7 @@ using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using CommunityToolkit.Mvvm.Messaging;
 using Taskie.ViewModels;
 
 namespace Taskie.Views.UWP
@@ -48,6 +49,12 @@ namespace Taskie.Views.UWP
             if (result != ContentDialogResult.Primary) return;
 
             TaskListViewModel.Name = input.Text;
+        }
+
+        private void Remove_OnClick(object sender, RoutedEventArgs e)
+        {
+            WeakReferenceMessenger.Default.Send(new RemovingTaskListViewModelMessage(TaskListViewModel));
+            WeakReferenceMessenger.Default.Send(new RemoveTaskListViewModelMessage(TaskListViewModel));
         }
     }
 }
