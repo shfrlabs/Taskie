@@ -22,7 +22,7 @@
     </Page.Resources>
     <Grid>
         <Grid Background="Transparent" x:Name="TitleBarGrid" VerticalAlignment="Top" Height="36" Canvas.ZIndex="9999">
-            <Image Source="Assets\Logo.png" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0" />
+            <Image Source="..\Assets\Logo.png" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0" />
             <TextBlock Margin="45,0,0,0" VerticalAlignment="Center" FontSize="12">Taskie</TextBlock>
             <!-- TODO: Add pro cancelling functionality -->
             <TextBlock Margin="85,1,0,0" VerticalAlignment="Center" FontSize="10" Opacity=".7" x:Name="proText" Visibility="Collapsed">PRO</TextBlock>

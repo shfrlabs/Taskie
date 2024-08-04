@@ -9,7 +9,7 @@
     Background="Transparent" Width="300">
 
     <Grid>
-        <Image Source="Assets\banner.png" Margin="-30,-25,-30,0" VerticalAlignment="Top" />
+        <Image Source="..\Assets\banner.png" Margin="-30,-25,-30,0" VerticalAlignment="Top" />
         <StackPanel Orientation="Vertical" Margin="0,130,0,15" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="✅ " FontSize="20" Margin="0,0,5,0" />
