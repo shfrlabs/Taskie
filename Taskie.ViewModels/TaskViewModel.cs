@@ -6,6 +6,11 @@ namespace Taskie.ViewModels;
 public partial class TaskViewModel : ObservableObject
 {
     /// <summary>
+    /// The task's unique identifier.
+    /// </summary>
+    public Guid Guid { get; init; }
+    
+    /// <summary>
     /// The task's creation timestamp.
     /// </summary>
     public DateTime CreationDate { get; init; }

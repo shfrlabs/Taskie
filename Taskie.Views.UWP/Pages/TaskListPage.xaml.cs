@@ -92,11 +92,7 @@ namespace Taskie.Views.UWP
 
         private void AutoSuggestBox_OnQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            TaskListViewModel.TaskViewModels.Insert(0, new TaskViewModel
-            {
-                CreationDate = DateTime.Now,
-                Name = sender.Text,
-            });
+            TaskListViewModel.CreateCommand.Execute(sender.Text);
         }
 
         private void AutoSuggestBox_OnKeyDown(object sender, KeyRoutedEventArgs e)
@@ -127,7 +123,7 @@ namespace Taskie.Views.UWP
             ContentDialog dialog = new()
             {
                 Title = _resourceLoader.GetString("RenameTask/Text"),
-                PrimaryButtonText = _resourceLoader.GetString("OK   "),
+                PrimaryButtonText = _resourceLoader.GetString("OK"),
                 SecondaryButtonText = _resourceLoader.GetString("Cancel"),
                 Content = input
             };

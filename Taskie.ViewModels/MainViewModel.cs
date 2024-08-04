@@ -55,6 +55,7 @@ public partial class MainViewModel : ObservableObject, IRecipient<RemoveTaskList
     {
         var taskListViewModel = new TaskListViewModel
         {
+            Guid = Guid.NewGuid(),
             CreationDate = DateTime.Now,
             Name = GenerateUniqueListName(),
         };
