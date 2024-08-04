@@ -32,8 +32,21 @@ namespace Taskie
             Tools.ListCreatedEvent += UpdateLists;
             Tools.ListDeletedEvent += ListDeleted;
             Tools.ListRenamedEvent += ListRenamed;
+            Tools.AWOpenEvent += Tools_AWOpenEvent;
+            Tools.AWClosedEvent += Tools_AWClosedEvent;
             ActualThemeChanged += MainPage_ActualThemeChanged;
             DeterminePro();
+        }
+
+        private void Tools_AWClosedEvent()
+        {
+            Navigation.Visibility = Visibility.Visible;
+            Navigation.SelectedItem = null;
+        }
+
+        private void Tools_AWOpenEvent()
+        {
+            Navigation.Visibility = Visibility.Collapsed;
         }
 
         public void DeterminePro()

@@ -36,7 +36,7 @@
     <Grid Margin="20,25,20,20">
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <TextBlock x:Name="testname" FontWeight="SemiBold" FontSize="28" FontFamily="Segoe UI Variable"  TextTrimming="CharacterEllipsis"></TextBlock>
-            <Button Margin="0,0,14,0" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right" Canvas.ZIndex="999">
+            <Button Margin="0,0,14,0" x:Name="topoptions" Loaded="topoptions_Loaded" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right" Canvas.ZIndex="999">
                 <Button.Content>
                     <FontIcon Glyph="&#xE712;" FontSize="14"/>
                 </Button.Content>
@@ -45,6 +45,11 @@
                         <MenuFlyoutItem Icon="Rename" Click="RenameList_Click" x:Uid="RenameList"></MenuFlyoutItem>
                         <MenuFlyoutItem Icon="Delete" Click="DeleteList_Click" x:Uid="DeleteList"></MenuFlyoutItem>
                         <MenuFlyoutItem Icon="Save" Click="ExportList_Click" x:Uid="ExportList"></MenuFlyoutItem>
+                        <MenuFlyoutItem x:Uid="CompactOverlayButton" Click="CompactOverlay_Click" x:Name="cobtn">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xEE49;"/>
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>

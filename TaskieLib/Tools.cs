@@ -14,6 +14,19 @@ namespace TaskieLib
 {
     public class Tools
     {
+        private static bool _isawopen;
+        public static bool isAWOpen
+        {
+            get => _isawopen;
+            set { if (!value) { AWClosedEvent.Invoke(); } else { AWOpenEvent.Invoke(); } _isawopen = value; }
+        }
+
+        public delegate void AWClosed();
+        public static event AWClosed AWClosedEvent;
+
+        public delegate void AWOpen();
+        public static event AWOpen AWOpenEvent;
+
         public delegate void ListCreated(string name);
         public static event ListCreated ListCreatedEvent;
 

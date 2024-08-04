@@ -5,8 +5,11 @@ using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
+using Windows.System;
+using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -21,7 +24,6 @@ namespace Taskie
             this.InitializeComponent();
             ActualThemeChanged += TaskPage_ActualThemeChanged;
             Tools.ListRenamedEvent += ListRenamed;
-
         }
 
         private void ListRenamed(string oldname, string newname)
@@ -298,6 +300,37 @@ namespace Taskie
         private void TaskAdded_Grid(object sender, RoutedEventArgs e)
         {
             ChangeWidth(NameBox);
+        }
+
+        private async void CompactOverlay_Click(object sender, RoutedEventArgs e)
+        {
+            AppWindow window = await AppWindow.TryCreateAsync();
+            window.Closed += AWClosed;
+            Frame frame = new Frame();
+            frame.Navigate(typeof(TaskPage), listname);
+            Tools.isAWOpen = true;
+            ElementCompositionPreview.SetAppWindowContent(window, frame);
+            window.Presenter.RequestPresentation(AppWindowPresentationKind.CompactOverlay);
+            await window.TryShowAsync();
+            IList<AppDiagnosticInfo> infos = await AppDiagnosticInfo.RequestInfoForAppAsync();
+            IList<AppResourceGroupInfo> resourceInfos = infos[0].GetResourceGroups();
+            await resourceInfos[0].StartSuspendAsync();
+            cobtn.Visibility = Visibility.Collapsed;
+            this.Frame.Navigate(typeof(COClosePage));
+        }
+
+        private void AWClosed(AppWindow sender, AppWindowClosedEventArgs args)
+        {
+            Tools.isAWOpen = false;
+            cobtn.Visibility = Visibility.Visible;
+        }
+
+        private void topoptions_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Tools.isAWOpen)
+            {
+                topoptions.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }
