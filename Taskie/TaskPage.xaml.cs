@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaskieLib;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -37,6 +39,32 @@ namespace Taskie
 
         private void TaskPage_ActualThemeChanged(FrameworkElement sender, object args)
         {
+            if (Tools.isAWOpen)
+            {
+                if (Settings.Theme == "System")
+                {
+                    if (Application.Current.RequestedTheme == ApplicationTheme.Dark)
+                    {
+                        TPage.Background = new SolidColorBrush { Color = Color.FromArgb(255, 33, 33, 33) };
+                    }
+                    else if (Application.Current.RequestedTheme == ApplicationTheme.Light)
+                    {
+                        TPage.Background = new SolidColorBrush { Color = Colors.White };
+                    }
+                }
+                else
+                {
+                    if (Settings.Theme == "Dark")
+                    {
+                        TPage.Background = new SolidColorBrush { Color = Color.FromArgb(255, 33, 33, 33) };
+                    }
+                    else if (Settings.Theme == "Light")
+                    {
+                        TPage.Background = new SolidColorBrush { Color = Colors.White };
+                    }
+                }
+            }
+
             Brush bg = Application.Current.Resources["LayerFillColorDefaultBrush"] as Brush;
             addTaskRect.Fill = bg;
 
@@ -305,12 +333,23 @@ namespace Taskie
         private async void CompactOverlay_Click(object sender, RoutedEventArgs e)
         {
             AppWindow window = await AppWindow.TryCreateAsync();
+            window.TitleBar.ButtonBackgroundColor = Colors.Transparent;
+            window.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            if (Settings.Theme == "Dark")
+            {
+                window.TitleBar.ButtonForegroundColor = Colors.White;
+            }
+            else if (Settings.Theme == "Light")
+            {
+                window.TitleBar.ButtonForegroundColor = Colors.Black;
+            }
             window.Closed += AWClosed;
             Frame frame = new Frame();
             frame.Navigate(typeof(TaskPage), listname);
             Tools.isAWOpen = true;
             ElementCompositionPreview.SetAppWindowContent(window, frame);
             window.Presenter.RequestPresentation(AppWindowPresentationKind.CompactOverlay);
+            window.TitleBar.ExtendsContentIntoTitleBar = true;
             await window.TryShowAsync();
             IList<AppDiagnosticInfo> infos = await AppDiagnosticInfo.RequestInfoForAppAsync();
             IList<AppResourceGroupInfo> resourceInfos = infos[0].GetResourceGroups();
@@ -329,6 +368,28 @@ namespace Taskie
         {
             if (Tools.isAWOpen)
             {
+                if (Settings.Theme == "System")
+                {
+                    if (Application.Current.RequestedTheme == ApplicationTheme.Dark)
+                    {
+                        TPage.Background = new SolidColorBrush { Color = Color.FromArgb(255, 33, 33, 33) };
+                    }
+                    else if (Application.Current.RequestedTheme == ApplicationTheme.Light)
+                    {
+                        TPage.Background = new SolidColorBrush { Color = Colors.White };
+                    }
+                }
+                else
+                {
+                    if (Settings.Theme == "Dark")
+                    {
+                        TPage.Background = new SolidColorBrush { Color = Color.FromArgb(255, 33, 33, 33) };
+                    }
+                    else if (Settings.Theme == "Light")
+                    {
+                        TPage.Background = new SolidColorBrush { Color = Colors.White };
+                    }
+                }
                 topoptions.Visibility = Visibility.Collapsed;
             }
         }

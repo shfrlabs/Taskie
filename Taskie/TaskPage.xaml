@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    mc:Ignorable="d">
+    mc:Ignorable="d" x:Name="TPage">
 
     <Page.Resources>
         <DataTemplate x:Key="TaskItemTemplate">
@@ -33,7 +33,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Margin="20,25,20,20">
+    <Grid Margin="20,25,20,20" x:Name="maingrid">
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <TextBlock x:Name="testname" FontWeight="SemiBold" FontSize="28" FontFamily="Segoe UI Variable"  TextTrimming="CharacterEllipsis"></TextBlock>
             <Button Margin="0,0,14,0" x:Name="topoptions" Loaded="topoptions_Loaded" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right" Canvas.ZIndex="999">
