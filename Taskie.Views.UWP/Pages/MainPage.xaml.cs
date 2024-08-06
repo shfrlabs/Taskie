@@ -33,9 +33,18 @@ namespace Taskie.Views.UWP.Pages
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Windows.Foundation.Size(600, 500));
             InitializeComponent();
             InitializeTitleBar();
+            UpdateProView();
             CheckSecurity();
 
             WeakReferenceMessenger.Default.RegisterAll(this);
+        }
+
+        private void UpdateProView()
+        {
+            if (!SettingsService.Instance.IsPro) return;
+            
+            proText.Visibility = Visibility.Visible;
+            UpdateButton.Visibility = Visibility.Collapsed;
         }
 
         private async void CheckSecurity()
