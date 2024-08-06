@@ -52,7 +52,7 @@ namespace Taskie.Views.UWP.Pages
                 return;
             }
 
-            var denied = availability != UserConsentVerifierAvailability.Available && authUsed;
+            var denied = availability != UserConsentVerifierAvailability.Available;
 
             if (!isPro || denied)
             {
@@ -115,11 +115,6 @@ namespace Taskie.Views.UWP.Pages
             }
         }
 
-        private void Navigation_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
-            // TODO: Implement
-        }
-
         private async void UpgradeButton_Click(object sender, RoutedEventArgs e)
         {
             ContentDialog dialog = new();
@@ -152,11 +147,6 @@ namespace Taskie.Views.UWP.Pages
 
         private void SettingsWindowOnClosed(AppWindow sender, AppWindowClosedEventArgs args)
         {
-        }
-
-        private void rectlist_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            // TODO: Implement
         }
 
         private void TaskListListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
