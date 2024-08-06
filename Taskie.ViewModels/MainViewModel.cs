@@ -26,7 +26,7 @@ public partial class MainViewModel : ObservableObject, IRecipient<RemoveTaskList
     /// <summary>
     /// Whether a new list can be created.
     /// </summary>
-    public bool CanCreateList => _settingsService.Get<bool>(Services.Shared.SettingsKeys.IsPro) || TaskListViewModels.Count < MaxNonProListCount;
+    public bool CanCreateList => _settingsService.IsPro || TaskListViewModels.Count < MaxNonProListCount;
 
     public MainViewModel(IFileSystem fileSystem, ISettingsService settingsService)
     {

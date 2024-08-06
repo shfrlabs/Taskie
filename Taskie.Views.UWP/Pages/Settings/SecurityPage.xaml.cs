@@ -2,7 +2,6 @@ using System;
 using Windows.Security.Credentials.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Taskie.Services.Shared;
 using Taskie.Views.UWP.Services;
 
 namespace Taskie.Views.UWP.Pages.Settings
@@ -19,26 +18,24 @@ namespace Taskie.Views.UWP.Pages.Settings
         private async void CheckSecurity()
         {
             UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
-
-            var isPro = SettingsService.Instance.Get<bool>(SettingsKeys.IsPro);
-
-            if (!(availability != UserConsentVerifierAvailability.Available | !isPro)) return;
+            
+            if (!(availability != UserConsentVerifierAvailability.Available | !SettingsService.Instance.IsPro)) return;
 
             AuthToggle.IsOn = false;
             AuthToggle.IsEnabled = false;
-            SettingsService.Instance.Set(SettingsKeys.IsAuthUsed, false);
+            SettingsService.Instance.AuthUsed = false;
         }
 
         private void SetSettings()
         {
-            AuthToggle.IsOn = SettingsService.Instance.Get<bool>(SettingsKeys.IsAuthUsed);
+            AuthToggle.IsOn = SettingsService.Instance.AuthUsed;
         }
 
         private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             if (sender is ToggleSwitch toggleSwitch && toggleSwitch.Tag.ToString() == "Auth")
             {
-                SettingsService.Instance.Set(SettingsKeys.IsAuthUsed, toggleSwitch.IsOn);
+                SettingsService.Instance.AuthUsed = toggleSwitch.IsOn;
             }
         }
     }

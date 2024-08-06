@@ -1,5 +1,4 @@
 using System;
-using Taskie.Services.Shared;
 
 namespace Taskie.Services;
 
@@ -9,20 +8,14 @@ namespace Taskie.Services;
 public interface ISettingsService
 {
     /// <summary>
-    /// Gets the value for the specified key.
+    /// Whether authentication is required to access saved task lists.
     /// </summary>
-    /// <typeparam name="T">The value's type.</typeparam>
-    /// <param name="key">The key, as specified in <see cref="SettingsKeys"/>.</param>
-    /// <returns>The value for the specified key.</returns>
-    T Get<T>(string key);
-
+    public bool AuthUsed { get; set; }
+    
     /// <summary>
-    /// Sets the value for the specified key.
+    /// Whether the pro mode is activated.
     /// </summary>
-    /// <param name="key">The key, as specified in <see cref="SettingsKeys"/>.</param>
-    /// <param name="value">The new value.</param>
-    /// <typeparam name="T">The value's type.</typeparam>
-    void Set<T>(string key, T value);
+    public bool IsPro { get; set; }
     
     /// <summary>
     /// An event which is raised when a setting changes.

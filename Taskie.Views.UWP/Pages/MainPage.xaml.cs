@@ -13,7 +13,6 @@ using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media.Animation;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Toolkit.Uwp.Notifications;
-using Taskie.Services.Shared;
 using Taskie.ViewModels;
 using Taskie.Views.UWP.Services;
 
@@ -42,11 +41,8 @@ namespace Taskie.Views.UWP.Pages
         private async void CheckSecurity()
         {
             UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
-
-            var authUsed = SettingsService.Instance.Get<bool>(SettingsKeys.IsAuthUsed);
-            var isPro = SettingsService.Instance.Get<bool>(SettingsKeys.IsPro);
-
-            if (!authUsed)
+            
+            if (!SettingsService.Instance.AuthUsed)
             {
                 TaskListListView.Visibility = Visibility.Visible;
                 return;
@@ -54,9 +50,9 @@ namespace Taskie.Views.UWP.Pages
 
             var denied = availability != UserConsentVerifierAvailability.Available;
 
-            if (!isPro || denied)
+            if (!SettingsService.Instance.IsPro || denied)
             {
-                SettingsService.Instance.Set(SettingsKeys.IsAuthUsed, false);
+                SettingsService.Instance.AuthUsed = false;
 
                 ContentDialog contentDialog = new()
                 {
@@ -182,14 +178,12 @@ namespace Taskie.Views.UWP.Pages
 
         private async void UpgradeToPro(object _, object __)
         {
-            var isPro = SettingsService.Instance.Get<bool>(SettingsKeys.IsPro);
-
             var builder = new ToastContentBuilder()
-                .AddText(isPro ? "Pro status revoked." : "Pro status granted.");
+                .AddText(SettingsService.Instance.IsPro ? "Pro status revoked." : "Pro status granted.");
             builder.Show();
-
-            SettingsService.Instance.Set(SettingsKeys.IsPro, !isPro);
-
+            
+            SettingsService.Instance.IsPro ^= true;
+            
             await CoreApplication.RequestRestartAsync("Pro status changed.");
         }
     }

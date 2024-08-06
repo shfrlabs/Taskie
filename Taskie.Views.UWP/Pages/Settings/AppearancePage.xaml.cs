@@ -2,7 +2,6 @@ using System;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Taskie.Services.Shared;
 using Taskie.Views.UWP.Services;
 
 namespace Taskie.Views.UWP.Pages.Settings
@@ -20,22 +19,20 @@ namespace Taskie.Views.UWP.Pages.Settings
         private void SetSettings()
         {
             isUpdating = true;
-
-            var theme = SettingsService.Instance.Get<string>(SettingsKeys.Theme);
-
-            if (theme == "System")
+            
+            if (SettingsService.Instance.Theme == "System")
             {
                 SystemRadio.IsChecked = true;
                 DarkRadio.IsChecked = false;
                 LightRadio.IsChecked = false;
             }
-            else if (theme == "Light")
+            else if (SettingsService.Instance.Theme == "Light")
             {
                 SystemRadio.IsChecked = false;
                 DarkRadio.IsChecked = false;
                 LightRadio.IsChecked = true;
             }
-            else if (theme == "Dark")
+            else if (SettingsService.Instance.Theme == "Dark")
             {
                 SystemRadio.IsChecked = false;
                 DarkRadio.IsChecked = true;
@@ -59,7 +56,7 @@ namespace Taskie.Views.UWP.Pages.Settings
             if (radioButton.IsChecked == true)
             {
                 isUpdating = true;
-                SettingsService.Instance.Set(SettingsKeys.Theme, selectedTheme);
+                SettingsService.Instance.Theme = selectedTheme;
                 isUpdating = false;
             }
         }
