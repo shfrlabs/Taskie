@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Windows.Foundation.Collections;
@@ -8,7 +9,7 @@ using Taskie.Services;
 
 namespace Taskie.Views.UWP.Services
 {
-    public class SettingsService : ISettingsService
+    public class SettingsService : ISettingsService, INotifyPropertyChanged
     {
         private SettingsService()
         {
@@ -58,6 +59,7 @@ namespace Taskie.Views.UWP.Services
 
             _localSettings[key] = value;
             Changed?.Invoke(this, key);
+            OnPropertyChanged(key);
         }
 
         public event EventHandler<string> Changed;
@@ -83,5 +85,20 @@ namespace Taskie.Views.UWP.Services
         }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
     }
 }
