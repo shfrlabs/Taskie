@@ -20,7 +20,7 @@
             <FontIcon Width="20" Height="20" HorizontalAlignment="Left" FontSize="16" Glyph="&#xE713;" Margin="16,0,0,0"/>
             <TextBlock Margin="45,0,0,0" VerticalAlignment="Center" FontSize="12" x:Uid="SettingsText"/>
         </Grid>
-        <ListView Width="160" SelectionMode="Single" Margin="0,40,0,0" ItemsSource="{Binding SettingCategories}" SelectionChanged="PageList_SelectionChanged">
+        <ListView Width="160" SelectionMode="Single" Margin="0,40,0,0" ItemsSource="{Binding SettingCategories}" SelectedIndex="0" SelectionChanged="PageList_SelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
