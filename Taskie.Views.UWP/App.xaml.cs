@@ -37,24 +37,7 @@ namespace Taskie.Views.UWP
             this.Suspending += OnSuspending;
         }
 
-        /// <summary>
-        /// Applies the default app settings for the non-present keys.
-        /// </summary>
-        private void ApplyDefaultSettings()
-        {
-            var localSettings = ApplicationData.Current.LocalSettings.Values;
-
-            var defaultSettings = new Dictionary<string, object>
-            {
-                { SettingsKeys.IsAuthUsed, false },
-                { SettingsKeys.IsPro, false },
-            };
-
-            foreach (var pair in defaultSettings.Where(pair => !localSettings.ContainsKey(pair.Key)))
-            {
-                localSettings[pair.Key] = pair.Value;
-            }
-        }
+        
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -63,7 +46,7 @@ namespace Taskie.Views.UWP
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            ApplyDefaultSettings();
+            SettingsService.Instance.SetDefaults();
             
             Frame rootFrame = Window.Current.Content as Frame;
 

@@ -66,7 +66,7 @@
                         </AutoSuggestBox.QueryIcon>
                     </AutoSuggestBox>
                 </StackPanel>
-                <Rectangle Grid.Row="1" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="7,23,7,0" SizeChanged="rectlist_SizeChanged" />
+                <Rectangle Grid.Row="1" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="7,23,7,0" />
                 <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Stretch">
                     <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
                     <ListView Margin="7,2,7,0" SelectionMode="Single" x:Name="TaskListListView" ItemsSource="{x:Bind MainViewModel.TaskListViewModels}" SelectionChanged="TaskListListView_OnSelectionChanged" Visibility="Collapsed" ItemTemplate="{StaticResource TaskListSmallDataTemplate}"/>
