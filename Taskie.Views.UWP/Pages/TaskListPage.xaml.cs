@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.Storage.Provider;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -11,7 +9,7 @@ using Windows.UI.Xaml.Navigation;
 using CommunityToolkit.Mvvm.Messaging;
 using Taskie.ViewModels;
 
-namespace Taskie.Views.UWP
+namespace Taskie.Views.UWP.Pages
 {
     public sealed partial class TaskListPage : Page
     {

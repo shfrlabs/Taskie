@@ -1,0 +1,32 @@
+<Page
+    x:Class="Taskie.Views.UWP.Pages.Settings.AppearancePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0" x:Uid="AppearanceText"/>
+        <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Visible" Grid.Row="1">
+            <StackPanel Orientation="Vertical" Margin="1,0,0,0">
+                <TextBlock x:Uid="AppThemeText" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
+                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10" x:Uid="AppThemeSubText"/>
+                <RadioButton x:Uid="LightThemeRadio" x:Name="LightRadio" Tag="Light" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"/>
+                <RadioButton x:Uid="DarkThemeRadio" x:Name="DarkRadio" Tag="Dark" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"/>
+                <RadioButton x:Uid="SystemThemeRadio" x:Name="SystemRadio" Tag="System" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"></RadioButton>
+                <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,10,5,10" x:Uid="RestartWarning"/>
+                <Button x:Name="RestartButton" Click="RestartButton_Click">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
+                        <FontIcon Glyph="&#xE895;" Margin="0,0,20,0"/>
+                        <TextBlock x:Uid="RestartButton"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

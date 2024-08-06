@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
 using Windows.Security.Credentials.UI;
 using Windows.UI;
 using Windows.UI.ViewManagement;
+using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media.Animation;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Taskie.Services.Shared;
 using Taskie.ViewModels;
-using Taskie.Views.UWP.Pages;
 using Taskie.Views.UWP.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace Taskie.Views.UWP
+namespace Taskie.Views.UWP.Pages
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -133,9 +133,25 @@ namespace Taskie.Views.UWP
             await dialog.ShowAsync();
         }
 
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement
+            // FIXME: This should probably be a content dialog...
+            var window = await AppWindow.TryCreateAsync();
+            window.Title = _resourceLoader.GetString("SettingsText/Text");
+            
+            Frame settingsContent = new();
+            settingsContent.Navigate(typeof(SettingsPage));
+            window.TitleBar.ExtendsContentIntoTitleBar = true;
+            window.TitleBar.ButtonBackgroundColor = Colors.Transparent;
+            
+            ElementCompositionPreview.SetAppWindowContent(window, settingsContent);
+            window.Closed += SettingsWindowOnClosed;
+            
+            await window.TryShowAsync();
+        }
+
+        private void SettingsWindowOnClosed(AppWindow sender, AppWindowClosedEventArgs args)
+        {
         }
 
         private void rectlist_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -181,9 +197,9 @@ namespace Taskie.Views.UWP
             var builder = new ToastContentBuilder()
                 .AddText(isPro ? "Pro status revoked." : "Pro status granted.");
             builder.Show();
-            
+
             SettingsService.Instance.Set(SettingsKeys.IsPro, !isPro);
-            
+
             await CoreApplication.RequestRestartAsync("Pro status changed.");
         }
     }

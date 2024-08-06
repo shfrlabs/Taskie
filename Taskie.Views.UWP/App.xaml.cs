@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Taskie.Services.Shared;
 using Taskie.ViewModels;
+using Taskie.Views.UWP.Pages;
 using Taskie.Views.UWP.Services;
 
 namespace Taskie.Views.UWP

@@ -6,6 +6,13 @@ namespace Taskie.Services.Shared;
 public static class SettingsKeys
 {
     /// <summary>
+    /// The user's preferred theme.
+    /// <br/>
+    /// Legal values include: <c>System</c>, <c>Light</c>, <c>Dark</c>.
+    /// </summary>
+    public const string Theme = "theme";
+
+    /// <summary>
     /// Whether the user should be prompted to authenticate prior to viewing tasks.
     /// </summary>
     public const string IsAuthUsed = "auth";

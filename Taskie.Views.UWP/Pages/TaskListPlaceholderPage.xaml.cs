@@ -1,12 +1,6 @@
-﻿using System;
-using Windows.ApplicationModel.Resources;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
-using CommunityToolkit.Mvvm.Messaging;
-using Taskie.ViewModels;
+﻿using Windows.UI.Xaml.Controls;
 
-namespace Taskie.Views.UWP
+namespace Taskie.Views.UWP.Pages
 {
     public sealed partial class TaskListPlaceholderPage : Page
     {
