@@ -8,62 +8,61 @@ namespace Taskie.Views.UWP.Pages.Settings
 {
     public sealed partial class AppearancePage : Page
     {
-        private bool isUpdating = false;
+        private bool _isUpdating;
 
         public AppearancePage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             SetSettings();
         }
 
         private void SetSettings()
         {
-            isUpdating = true;
-            
-            if (SettingsService.Instance.Theme == "System")
+            _isUpdating = true;
+
+            switch (SettingsService.Instance.Theme)
             {
-                SystemRadio.IsChecked = true;
-                DarkRadio.IsChecked = false;
-                LightRadio.IsChecked = false;
-            }
-            else if (SettingsService.Instance.Theme == "Light")
-            {
-                SystemRadio.IsChecked = false;
-                DarkRadio.IsChecked = false;
-                LightRadio.IsChecked = true;
-            }
-            else if (SettingsService.Instance.Theme == "Dark")
-            {
-                SystemRadio.IsChecked = false;
-                DarkRadio.IsChecked = true;
-                LightRadio.IsChecked = false;
+                case "System":
+                    SystemRadio.IsChecked = true;
+                    DarkRadio.IsChecked = false;
+                    LightRadio.IsChecked = false;
+                    break;
+                case "Light":
+                    SystemRadio.IsChecked = false;
+                    DarkRadio.IsChecked = false;
+                    LightRadio.IsChecked = true;
+                    break;
+                case "Dark":
+                    SystemRadio.IsChecked = false;
+                    DarkRadio.IsChecked = true;
+                    LightRadio.IsChecked = false;
+                    break;
             }
 
-            isUpdating = false;
+            _isUpdating = false;
         }
 
         private void RadioButton_StateChanged(object sender, RoutedEventArgs e)
         {
-            if (isUpdating)
+            if (_isUpdating)
                 return;
 
-            var radioButton = sender as RadioButton;
-            if (radioButton == null)
+            if (sender is not RadioButton radioButton)
                 return;
 
             string selectedTheme = radioButton.Tag?.ToString();
 
             if (radioButton.IsChecked == true)
             {
-                isUpdating = true;
+                _isUpdating = true;
                 SettingsService.Instance.Theme = selectedTheme;
-                isUpdating = false;
+                _isUpdating = false;
             }
         }
 
         private async void RestartButton_Click(object sender, RoutedEventArgs e)
         {
-            var result = await CoreApplication.RequestRestartAsync("Theme has been changed");
+            await CoreApplication.RequestRestartAsync("Theme has been changed.");
         }
     }
 }
