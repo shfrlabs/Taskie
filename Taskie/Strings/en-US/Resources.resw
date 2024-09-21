@@ -255,4 +255,19 @@
   <data name="UpgradeText.Text" xml:space="preserve">
     <value>Upgrade</value>
   </data>
+  <data name="PromoBannerText.Text" xml:space="preserve">
+    <value>Remove all promotion banners</value>
+  </data>
+  <data name="ListLimitText.Text" xml:space="preserve">
+    <value>Remove 3 list limit</value>
+  </data>
+  <data name="PrioritySupportText.Text" xml:space="preserve">
+    <value>Priority support</value>
+  </data>
+  <data name="WinHelloText.Text" xml:space="preserve">
+    <value>Secure login with Windows Hello</value>
+  </data>
+  <data name="IndicatorText.Text" xml:space="preserve">
+    <value>Pro indicator</value>
+  </data>
 </root>

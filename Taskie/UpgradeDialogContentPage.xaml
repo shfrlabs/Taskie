@@ -14,19 +14,23 @@
         <StackPanel Orientation="Vertical" Margin="0,130,0,15" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="✅ " FontSize="20" Margin="0,0,5,0"/>
-                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center">Remove all promotion banners</TextBlock>
+                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center" x:Uid="PromoBannerText"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="✅ " FontSize="20" Margin="0,0,5,0"/>
-                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center">Remove 3 list limit</TextBlock>
+                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center" x:Uid="PrioritySupportText"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="✅ " FontSize="20" Margin="0,0,5,0"/>
-                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center">Pro indicator</TextBlock>
+                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center" x:Uid="ListLimitText"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="✅ " FontSize="20" Margin="0,0,5,0"/>
-                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center">Secure Windows Hello login</TextBlock>
+                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center" x:Uid="IndicatorText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="✅ " FontSize="20" Margin="0,0,5,0"/>
+                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center" x:Uid="WinHelloText"/>
             </StackPanel>
         </StackPanel>
     </Grid>

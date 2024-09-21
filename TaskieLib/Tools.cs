@@ -119,20 +119,26 @@ namespace TaskieLib
         }
         public static void RenameList(string oldListName, string newListName)
         {
-            try
-            {
-                string oldFilePath = GetFilePath(oldListName);
-                string newFilePath = GetFilePath(newListName);
-
-                if (File.Exists(oldFilePath))
+            if (!File.Exists(GetFilePath(newListName))) {
+                try
                 {
-                    File.Move(oldFilePath, newFilePath);
-                    ListRenamedEvent.Invoke(oldListName, newListName);
+                    string oldFilePath = GetFilePath(oldListName);
+                    string newFilePath = GetFilePath(newListName);
+
+                    if (File.Exists(oldFilePath))
+                    {
+                        File.Move(oldFilePath, newFilePath);
+                        ListRenamedEvent.Invoke(oldListName, newListName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error renaming list: {ex.Message}");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Error renaming list: {ex.Message}");
+                throw new ArgumentException();
             }
         }
 

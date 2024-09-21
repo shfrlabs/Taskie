@@ -47,6 +47,22 @@ namespace TaskieLib
             }
         }
 
+        public static bool Launched
+        {
+            get
+            {
+                if (savedSettings.ContainsKey("launched") && (string)savedSettings["launched"] == "1")
+                {
+                    return true;
+                }
+                return false;
+            }
+            set
+            {
+                savedSettings["launched"] = value ? "1" : "0";
+            }
+        }
+
         public static bool isPro
         {
             get

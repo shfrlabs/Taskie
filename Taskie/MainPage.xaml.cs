@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,9 @@ namespace Taskie
             SetupTitleBar();
             SetupNavigationMenu();
             CheckSecurity();
+            DeterminePro();
+            CheckOnboarding();
+            ProFlyout();
             Navigation.Height = rectlist.ActualHeight;
             Tools.ListCreatedEvent += UpdateLists;
             Tools.ListDeletedEvent += ListDeleted;
@@ -35,7 +39,25 @@ namespace Taskie
             Tools.AWOpenEvent += Tools_AWOpenEvent;
             Tools.AWClosedEvent += Tools_AWClosedEvent;
             ActualThemeChanged += MainPage_ActualThemeChanged;
-            DeterminePro();
+        }
+
+        private void ProFlyout()
+        {
+            if (!Settings.isPro && (new Random()).Next(1, 5) == 1)
+            {
+                protip.Target = UpdateButton;
+                protip.IsOpen = true;
+            }
+        }
+
+        private void CheckOnboarding()
+        {
+            if (!Settings.Launched)
+            {
+                tip1.Target = AddItemBtn;
+                tip1.IsOpen = true;
+            }
+            Settings.Launched = true;
         }
 
         private void Tools_AWClosedEvent()
@@ -229,7 +251,15 @@ namespace Taskie
             if (result == ContentDialogResult.Primary)
             {
                 string text = input.Text;
-                Tools.RenameList(listname, text);
+                try
+                {
+                    Tools.RenameList(listname, text);
+                }
+                catch (ArgumentException) {
+                    tipwrongname.Target = Navigation;
+                    tipwrongname.PreferredPlacement = TeachingTipPlacementMode.TopRight;
+                    tipwrongname.IsOpen = true;
+                }
                 listname = text;
             }
         }

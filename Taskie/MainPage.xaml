@@ -81,5 +81,8 @@
             </Rectangle>
             <Rectangle VerticalAlignment="Stretch" Margin="-20" Grid.Column="0" Grid.RowSpan="4" Fill="{StaticResource SystemAltLowColor}" Canvas.ZIndex="-10" Opacity="1" Width="180" HorizontalAlignment="Left" x:Name="rect2"/>
         </Grid>
+        <muxc:TeachingTip Subtitle="Upgrade for a small fee to remove limits and distractions." Title="Enjoying Taskie?" x:Name="protip" IsOpen="False"/>
+        <muxc:TeachingTip Subtitle="Add your first list here." Title="Let's get started!" x:Name="tip1" IsOpen="False"/>
+        <muxc:TeachingTip Title="You can't do that!" Subtitle="A list with this name already exists." x:Name="tipwrongname" IsOpen="False"/>
     </Grid>
 </Page>

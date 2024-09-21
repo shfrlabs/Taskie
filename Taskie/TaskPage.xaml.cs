@@ -123,23 +123,25 @@ namespace Taskie
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            List<ListTask> tasks = new List<ListTask>();
-            if (Tools.ReadList(listname) != null && (Tools.ReadList(listname)).Count > 0)
-            {
-                foreach (ListTask task2add in Tools.ReadList(listname))
+            if (!string.IsNullOrEmpty(args.QueryText)) {
+                List<ListTask> tasks = new List<ListTask>();
+                if (Tools.ReadList(listname) != null && (Tools.ReadList(listname)).Count > 0)
                 {
-                    tasks.Add(task2add);
-                }
-            };
-            ListTask task = new ListTask()
-            {
-                Name = args.QueryText,
-                CreationDate = DateTime.Now,
-                IsDone = false
-            };
-            tasks.Add(task);
-            taskListView.Items.Add(task);
-            Tools.SaveList(listname, tasks);
+                    foreach (ListTask task2add in Tools.ReadList(listname))
+                    {
+                        tasks.Add(task2add);
+                    }
+                };
+                ListTask task = new ListTask()
+                {
+                    Name = args.QueryText,
+                    CreationDate = DateTime.Now,
+                    IsDone = false
+                };
+                tasks.Add(task);
+                taskListView.Items.Add(task);
+                Tools.SaveList(listname, tasks);
+            }
         }
 
         public ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
@@ -303,7 +305,7 @@ namespace Taskie
 
         private void AutoSuggestBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if (e.Key == Windows.System.VirtualKey.Enter)
+            if (e.Key == Windows.System.VirtualKey.Enter && !string.IsNullOrEmpty((sender as AutoSuggestBox).Text))
             {
                 List<ListTask> tasks = new List<ListTask>();
                 if (Tools.ReadList(listname) != null && (Tools.ReadList(listname)).Count > 0)
