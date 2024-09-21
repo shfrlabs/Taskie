@@ -27,7 +27,7 @@
                     <RowDefinition Height="135" x:Name="BottomRow"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Bottom">
-                    <Button Background="{StaticResource SystemAccentColorLight2}" x:Name="AddItemBtn" Click="AddList" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 , 10">
+                    <Button Background="{StaticResource SystemAccentColorLight2}" x:Name="AddItemBtn" Click="AddList" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 , 10">
                         <Button.Resources>
                             <ResourceDictionary>
                                 <ResourceDictionary.ThemeDictionaries>
@@ -43,7 +43,7 @@
                             </ResourceDictionary>
                         </Button.Resources>
                         <StackPanel Orientation="Horizontal">
-                            <FontIcon Glyph="&#xE710;" FontSize="18" Margin="11,0,10,0" Foreground="Black" x:Name="NewListBtnIcon"/>
+                            <FontIcon Glyph="&#xE710;" FontSize="18" Margin="0,0,10,0" Foreground="Black" x:Name="NewListBtnIcon"/>
                             <TextBlock FontSize="15" x:Uid="NewListBtn" x:Name="NewListBtnText"/>
                         </StackPanel>
                     </Button>
@@ -60,15 +60,15 @@
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="2">
                     <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
-                    <Button x:Name="UpdateButton" Click="UpgradeButton_Click" HorizontalContentAlignment="Left" Margin="10, 3, 10 ,10" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" BorderThickness="2" BorderBrush="{StaticResource SystemAccentColorLight2}">
+                    <Button x:Name="UpdateButton" Click="UpgradeButton_Click" HorizontalContentAlignment="Center" Margin="10, 3, 10 ,10" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" BorderThickness="2" BorderBrush="{StaticResource SystemAccentColorLight2}">
                         <StackPanel Orientation="Horizontal">
-                            <FontIcon Glyph="&#xE74A;" FontSize="18" Margin="10,0,10,0"/>
+                            <FontIcon Glyph="&#xE74A;" FontSize="18" Margin="0,0,10,0"/>
                             <TextBlock FontSize="15" x:Uid="UpgradeText"></TextBlock>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="SettingsButton" Click="SettingsButton_Click" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 ,0">
+                    <Button x:Name="SettingsButton" Click="SettingsButton_Click" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 ,0">
                         <StackPanel Orientation="Horizontal">
-                            <FontIcon Glyph="&#xE713;" FontSize="18" Margin="11,0,10,0"/>
+                            <FontIcon Glyph="&#xE713;" FontSize="18" Margin="0,0,10,0"/>
                             <TextBlock FontSize="15" x:Uid="SettingsText"/>
                         </StackPanel>
                     </Button>
