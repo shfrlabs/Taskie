@@ -8,5 +8,5 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <TextBlock Text="Close the compact overlay to work in this window." HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <TextBlock x:Uid="CloseCO" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 </Page>

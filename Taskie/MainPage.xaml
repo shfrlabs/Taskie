@@ -12,7 +12,7 @@
         <Grid Background="Transparent" x:Name="TTB" VerticalAlignment="Top" Height="36" Canvas.ZIndex="9999">
             <Image Source="Assets\Logo.png" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0"/>
             <TextBlock Margin="45,0,0,0" VerticalAlignment="Center" FontSize="12">Taskie</TextBlock>
-            <TextBlock Margin="85,1,0,0" VerticalAlignment="Center" FontSize="10" Opacity=".7" x:Name="proText" Visibility="Collapsed" PointerEntered="proText_PointerEntered">PRO</TextBlock>
+            <TextBlock Margin="85,1,0,0" VerticalAlignment="Center" FontSize="10" Opacity=".7" x:Name="proText" Visibility="Collapsed" PointerEntered="proText_PointerEntered">PRO</TextBlock> <!-- debug, used to turn off pro -->
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -81,8 +81,8 @@
             </Rectangle>
             <Rectangle VerticalAlignment="Stretch" Margin="-20" Grid.Column="0" Grid.RowSpan="4" Fill="{StaticResource SystemAltLowColor}" Canvas.ZIndex="-10" Opacity="1" Width="180" HorizontalAlignment="Left" x:Name="rect2"/>
         </Grid>
-        <muxc:TeachingTip Subtitle="Upgrade for a small fee to remove limits and distractions." Title="Enjoying Taskie?" x:Name="protip" IsOpen="False"/>
-        <muxc:TeachingTip Subtitle="Add your first list here." Title="Let's get started!" x:Name="tip1" IsOpen="False"/>
-        <muxc:TeachingTip Title="You can't do that!" Subtitle="A list with this name already exists." x:Name="tipwrongname" IsOpen="False"/>
+        <muxc:TeachingTip x:Uid="protip" x:Name="protip" IsOpen="False"/>
+        <muxc:TeachingTip x:Uid="tip1" x:Name="tip1" IsOpen="False"/>
+        <muxc:TeachingTip x:Uid="tipwrongname" x:Name="tipwrongname" IsOpen="False"/>
     </Grid>
 </Page>

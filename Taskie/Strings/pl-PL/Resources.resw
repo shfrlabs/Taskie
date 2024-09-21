@@ -124,10 +124,10 @@
     <value>O aplikacji</value>
   </data>
   <data name="AddTaskBox.PlaceholderText" xml:space="preserve">
-    <value> Dodaj zadanie...</value>
+    <value>Dodaj zadanie...</value>
   </data>
   <data name="AdvertTag.Text" xml:space="preserve">
-    <value>Twój szybki i prywatny towarzysz do zadań.</value>
+    <value> Twój szybki i prywatny towarzysz do zadań.</value>
   </data>
   <data name="AdvertUWPTag.Text" xml:space="preserve">
     <value>Stworzony przy użyciu UWP.</value>
@@ -136,7 +136,7 @@
     <value>Wygląd</value>
   </data>
   <data name="AppearanceText.Text" xml:space="preserve">
-    <value>Wygląd</value>
+    <value>Appearance</value>
   </data>
   <data name="AppThemeSubText.Text" xml:space="preserve">
     <value>Zmień motyw aplikacji.</value>

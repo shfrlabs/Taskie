@@ -349,8 +349,8 @@ namespace Taskie
             if (!Settings.isPro)
             {
                 ToastContentBuilder builder = new ToastContentBuilder()
-                    .AddText("You just successfully upgraded!")
-                    .AddText("Taskie Pro has been unlocked.");
+                    .AddText(resourceLoader.GetString("successfulUpgrade"))
+                    .AddText(resourceLoader.GetString("successfulUpgradeSub"));
                 builder.Show();
                 Settings.isPro = true;
                 await CoreApplication.RequestRestartAsync("Pro status changed.");
@@ -413,8 +413,8 @@ namespace Taskie
             {
                 hovercount = 0;
                 ToastContentBuilder builder = new ToastContentBuilder()
-                    .AddText("You cancelled Pro.")
-                    .AddText("Taskie Pro Preview has been relocked.");
+                    .AddText(resourceLoader.GetString("ProCancelled"))
+                    .AddText(resourceLoader.GetString("ProCancelledSub"));
                 builder.Show();
                 Settings.isPro = false;
                 await CoreApplication.RequestRestartAsync("Pro status changed.");
