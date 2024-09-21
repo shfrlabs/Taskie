@@ -345,12 +345,12 @@ namespace Taskie
 
         private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            // DEBUG UPGRADE OPTION!
+            // DEBUG UPGRADE OPTION! peri add store stuff here idk
             if (!Settings.isPro)
             {
                 ToastContentBuilder builder = new ToastContentBuilder()
                     .AddText("You just successfully upgraded!")
-                    .AddText("Taskie Pro Preview has been unlocked.");
+                    .AddText("Taskie Pro has been unlocked.");
                 builder.Show();
                 Settings.isPro = true;
                 await CoreApplication.RequestRestartAsync("Pro status changed.");
