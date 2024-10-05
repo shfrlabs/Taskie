@@ -300,4 +300,16 @@
   <data name="ProCancelledSub" xml:space="preserve">
     <value>Taskie Pro zostało zablokowane.</value>
   </data>
+  <data name="ConnectToListBtn.Text" xml:space="preserve">
+    <value>Połącz się</value>
+  </data>
+  <data name="ConnectToList" xml:space="preserve">
+    <value>Połącz się z listą przy użyciu kodu</value>
+  </data>
+  <data name="ListCode" xml:space="preserve">
+    <value>Kod listy</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Połącz</value>
+  </data>
 </root>
