@@ -1,23 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.DataTransfer;
 
 public class ServerCommunication
 {
-    private readonly HttpClient _httpClient;
-    private readonly string _baseUri = "http://localhost:5283/";
-
-    public ServerCommunication()
-    {
-        _httpClient = new HttpClient();
-    }
+    private static readonly HttpClient _httpClient = new HttpClient();
+    private static readonly string _baseUri = "http://localhost:5283/";
 
     // Check if connected to the network
-    public async Task<bool> IsConnected()
+    public static async Task<bool> IsConnected()
     {
         try
         {
@@ -31,12 +29,18 @@ public class ServerCommunication
     }
 
     // Get the task list from the server
-    public async Task<List<ListTask>> GetList(string code)
+    public static async Task<List<ListTask>> GetList(string code)
     {
         var response = await _httpClient.GetAsync($"{_baseUri}getList?code={code}");
         if (response.IsSuccessStatusCode)
         {
-            var content = await response.Content.ReadAsStringAsync();
+            var content = Regex.Unescape(await response.Content.ReadAsStringAsync());
+            // Remove the surrounding quotes if necessary
+            if (content.StartsWith("\"") && content.EndsWith("\""))
+            {
+                content = content.Remove(content.Length - 1);
+                content = content.Remove(0, 1);
+            }
             return JsonSerializer.Deserialize<List<ListTask>>(content) ?? new List<ListTask>();
         }
 
@@ -44,7 +48,7 @@ public class ServerCommunication
     }
 
     // Add a task to the list
-    public async Task<ListTask> AddTask(string code, string taskName)
+    public static async Task<ListTask> AddTask(string code, string taskName)
     {
         var newTask = new ListTask
         {
@@ -65,9 +69,9 @@ public class ServerCommunication
     }
 
     // Rename a task in the list
-    public async Task<ListTask> RenameTask(string code, DateTime creationDate, string newName)
+    public static async Task<ListTask> RenameTask(string code, DateTime creationDate, string newName)
     {
-        var response = await _httpClient.PutAsync($"{_baseUri}renameTask?code={code}&creationDate={creationDate}&newName={newName}", null);
+        var response = await _httpClient.PutAsync($"{_baseUri}renameTask?code={code}&creationDate={creationDate.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK")}&newName={newName}", null);
 
         if (response.IsSuccessStatusCode)
         {
@@ -79,7 +83,7 @@ public class ServerCommunication
     }
 
     // Delete a task from the list
-    public async Task DeleteTask(string code, DateTime creationDate)
+    public static async Task DeleteTask(string code, DateTime creationDate)
     {
         var response = await _httpClient.DeleteAsync($"{_baseUri}deleteTask?code={code}&creationDate={creationDate}");
 
@@ -89,8 +93,19 @@ public class ServerCommunication
         }
     }
 
+    // Toggle a task from the list
+    public static async Task ToggleTask(string code, DateTime creationDate)
+    {
+        var response = await _httpClient.DeleteAsync($"{_baseUri}toggleTask?code={code}&creationDate={creationDate}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(await response.Content.ReadAsStringAsync());
+        }
+    }
+
     // Delete a list
-    public async Task DeleteList(string code)
+    public static async Task DeleteList(string code)
     {
         var response = await _httpClient.DeleteAsync($"{_baseUri}deleteList?code={code}");
 
@@ -101,7 +116,7 @@ public class ServerCommunication
     }
 
     // Rename a list
-    public async Task RenameList(string code, string newName)
+    public static async Task RenameList(string code, string newName)
     {
         var response = await _httpClient.PutAsync($"{_baseUri}renameList?code={code}&newName={newName}", null);
 
@@ -112,30 +127,40 @@ public class ServerCommunication
     }
 
     // Compare the list hashes
-    public async Task<bool> CompareListHash(string code, List<ListTask> localTasks)
+    public static async Task<bool> CompareListHash(string code, List<ListTask> localTasks)
     {
         var hashResponse = await _httpClient.GetAsync($"{_baseUri}getListHash?code={code}");
 
         if (hashResponse.IsSuccessStatusCode)
         {
             var hashResult = await hashResponse.Content.ReadAsStringAsync();
-            var serverHash = JsonSerializer.Deserialize<dynamic>(hashResult).Hash;
 
             var localHash = GetListHash(localTasks);
-            return localHash == serverHash;
+            return localHash == hashResult;
         }
 
         throw new Exception(await hashResponse.Content.ReadAsStringAsync());
     }
 
     // Compute the hash for the local list
-    private string GetListHash(List<ListTask> list)
+    private static string GetListHash(List<ListTask> list)
     {
         var json = JsonSerializer.Serialize(list);
         using (var sha256 = SHA256.Create())
         {
             byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(json));
             return Convert.ToBase64String(bytes);
+        }
+    }
+
+    // Save a list on the server
+    public static async Task SaveList(string code, string listContent)
+    {
+        var response = await _httpClient.PostAsync($"{_baseUri}saveList?code={code}", new StringContent(listContent));
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(await response.Content.ReadAsStringAsync());
         }
     }
 }

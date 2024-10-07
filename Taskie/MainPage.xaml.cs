@@ -428,6 +428,7 @@ namespace Taskie
 
         private async void proText_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
+            // DEBUG LMAO
             hovercount++;
             if (Settings.isPro && hovercount == 10)
             {

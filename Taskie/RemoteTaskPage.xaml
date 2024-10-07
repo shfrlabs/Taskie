@@ -55,7 +55,7 @@
             </Button>
         </Grid>
         <ScrollViewer HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-12, 50, 0, 48">
-            <ListView x:Name="taskListView" Margin="0,0,-13,0" SelectionMode="None" ItemTemplate="{StaticResource TaskItemTemplate}">
+            <ListView Loaded="taskListView_Loaded" x:Name="taskListView" Margin="0,0,-13,0" SelectionMode="None" ItemTemplate="{StaticResource TaskItemTemplate}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />

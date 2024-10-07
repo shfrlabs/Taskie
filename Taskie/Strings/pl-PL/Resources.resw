@@ -312,4 +312,25 @@
   <data name="Connect" xml:space="preserve">
     <value>Połącz</value>
   </data>
+  <data name="ShareListRealTime.Text" xml:space="preserve">
+    <value>Udostępnij listę w czasie rzeczywistym</value>
+  </data>
+  <data name="Oops" xml:space="preserve">
+    <value>Ups!</value>
+  </data>
+  <data name="ConnectionProblem" xml:space="preserve">
+    <value>Nastąpił problem z połączeniem z serwerem lub lista nie istnieje.</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Zamknij</value>
+  </data>
+  <data name="ConnectionSaveProblem" xml:space="preserve">
+    <value>Nastąpił problem z połączeniem z serwerem lub wystąpił błąd. Spróbuj udostępnić ponownie.</value>
+  </data>
+  <data name="successfulSave" xml:space="preserve">
+    <value>Udostępniono listę!</value>
+  </data>
+  <data name="shareCodeCopied" xml:space="preserve">
+    <value>Kod udostępnienia został skopiowany. Zobacz udostępnioną listę, klikając "Połącz się".</value>
+  </data>
 </root>

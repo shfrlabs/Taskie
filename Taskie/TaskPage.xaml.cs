@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaskieLib;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -393,6 +395,26 @@ namespace Taskie
                     }
                 }
                 topoptions.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private async void ShareListRealTime_Click(object sender, RoutedEventArgs e)
+        {
+            string code = (new Random()).Next(11111, 999999).ToString();
+            try
+            {
+                await ServerCommunication.SaveList(code, Tools.GetTaskFileContent(listname));
+                ToastContentBuilder builder = new ToastContentBuilder()
+                   .AddText(resourceLoader.GetString("successfulSave"))
+                   .AddText(resourceLoader.GetString("shareCodeCopied"));
+                builder.Show();
+                DataPackage pkg = new DataPackage();
+                pkg.SetText(code);
+                Clipboard.SetContent(pkg);
+            }
+            catch
+            {
+                await (new ContentDialog() { Title = resourceLoader.GetString("Oops"), Content = resourceLoader.GetString("ConnectionSaveProblem"), PrimaryButtonText = resourceLoader.GetString("Close") }).ShowAsync();
             }
         }
     }
