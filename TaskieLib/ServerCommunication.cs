@@ -31,6 +31,7 @@ public class ServerCommunication
     // Get the task list from the server
     public static async Task<List<ListTask>> GetList(string code)
     {
+        Debug.WriteLine("Tried getting list");
         var response = await _httpClient.GetAsync($"{_baseUri}getList?code={code}");
         if (response.IsSuccessStatusCode)
         {

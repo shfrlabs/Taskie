@@ -1,8 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using TaskieLib;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
@@ -357,7 +361,11 @@ namespace Taskie
             {
                 currentTask = await ServerCommunication.GetList(listcode);
                 taskListView.ItemsSource = currentTask;
-                new Timer(refreshList, null, 0, 7000);
+                while (true)
+                {
+                    refreshList(null);
+                    await Task.Delay(5000);
+                }
             }
             catch
             {
@@ -367,20 +375,72 @@ namespace Taskie
         }
 
         private async void refreshList(object state)
-        {
+        { // ily chatgpt i could never write allat
             try
             {
+                var currentTask = await ServerCommunication.GetList(listcode);
+                Debug.WriteLine(currentTask);
+
                 var dispatcher = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;
                 await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
-                    taskListView.ItemsSource = currentTask;
+                    var existingTasks = taskListView.ItemsSource as ObservableCollection<ListTask>;
+
+                    if (existingTasks != null)
+                    {
+                        var existingTasksDict = existingTasks.ToDictionary(task => task.CreationDate);
+
+                        foreach (var newTask in currentTask)
+                        {
+                            if (existingTasksDict.TryGetValue(newTask.CreationDate, out var existingTask))
+                            {
+                                if (existingTask.Name != newTask.Name)
+                                {
+                                    existingTask.Name = newTask.Name;
+                                }
+                            }
+                            else
+                            {
+                                int index = existingTasks.ToList().FindIndex(t => t.CreationDate > newTask.CreationDate);
+                                if (index < 0)
+                                {
+                                    existingTasks.Add(newTask);
+                                }
+                                else
+                                {
+                                    existingTasks.Insert(index, newTask);
+                                }
+                            }
+                        }
+
+                        var currentTaskDates = new HashSet<DateTime>(currentTask.Select(t => t.CreationDate));
+                        var tasksToRemove = existingTasks.Where(t => !currentTaskDates.Contains(t.CreationDate)).ToList();
+                        foreach (var task in tasksToRemove)
+                        {
+                            existingTasks.Remove(task);
+                        }
+                    }
+                    else
+                    {
+                        taskListView.ItemsSource = new ObservableCollection<ListTask>(currentTask);
+                    }
                 });
             }
             catch
             {
-                await (new ContentDialog() { Title = resourceLoader.GetString("Oops"), Content = resourceLoader.GetString("ConnectionProblem"), PrimaryButtonText = resourceLoader.GetString("Close") }).ShowAsync();
+                try
+                {
+                    await (new ContentDialog()
+                    {
+                        Title = resourceLoader.GetString("Oops"),
+                        Content = resourceLoader.GetString("ConnectionProblem"),
+                        PrimaryButtonText = resourceLoader.GetString("Close")
+                    }).ShowAsync();
+                }
+                catch { }
                 this.Frame.Content = null;
             }
+
         }
     }
 }
