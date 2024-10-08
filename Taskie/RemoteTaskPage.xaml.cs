@@ -1,9 +1,14 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using TaskieLib;
-using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -21,22 +26,13 @@ using Windows.UI.Xaml.Shapes;
 
 namespace Taskie
 {
-    public sealed partial class TaskPage : Page
+    public sealed partial class RemoteTaskPage : Page
     {
-        public TaskPage()
+        public List<ListTask> currentTask = new List<ListTask>();
+        public RemoteTaskPage()
         {
             this.InitializeComponent();
             ActualThemeChanged += TaskPage_ActualThemeChanged;
-            Tools.ListRenamedEvent += ListRenamed;
-        }
-
-        private void ListRenamed(string oldname, string newname)
-        {
-            if (listname == oldname)
-            {
-                listname = newname;
-                testname.Text = newname;
-            };
         }
 
         private void TaskPage_ActualThemeChanged(FrameworkElement sender, object args)
@@ -84,7 +80,7 @@ namespace Taskie
             }
         }
 
-        public string listname { get; set; }
+        public string listcode { get; set; }
 
         private T FindVisualChild<T>(DependencyObject obj, string name) where T : DependencyObject
         {
@@ -110,39 +106,23 @@ namespace Taskie
             if (e.Parameter != null)
             {
                 testname.Text = e.Parameter.ToString();
-                listname = e.Parameter.ToString();
+                listcode = e.Parameter.ToString();
             }
             base.OnNavigatedTo(e);
 
-            if (Tools.ReadList(listname) != null)
+            refreshList(null);
+            foreach (ListTask task in currentTask)
             {
-                foreach (ListTask task in Tools.ReadList(listname))
-                {
-                    taskListView.Items.Add(task);
-                }
+                taskListView.Items.Add(task);
             }
         }
 
-        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private async void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            if (!string.IsNullOrEmpty(args.QueryText)) {
-                List<ListTask> tasks = new List<ListTask>();
-                if (Tools.ReadList(listname) != null && (Tools.ReadList(listname)).Count > 0)
-                {
-                    foreach (ListTask task2add in Tools.ReadList(listname))
-                    {
-                        tasks.Add(task2add);
-                    }
-                };
-                ListTask task = new ListTask()
-                {
-                    Name = args.QueryText,
-                    CreationDate = DateTime.Now,
-                    IsDone = false
-                };
-                tasks.Add(task);
-                taskListView.Items.Add(task);
-                Tools.SaveList(listname, tasks);
+            if (!string.IsNullOrEmpty(args.QueryText))
+            {
+                await ServerCommunication.AddTask(listcode, args.QueryText);
+                refreshList(null);
             }
         }
 
@@ -150,6 +130,7 @@ namespace Taskie
 
         private async void RenameTask_Click(object sender, RoutedEventArgs e)
         {
+            var currentTask = await ServerCommunication.GetList(listcode);
             MenuFlyoutItem menuFlyoutItem = (MenuFlyoutItem)sender;
             var note = menuFlyoutItem.DataContext as ListTask;
             TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("TaskName"), Text = note.Name };
@@ -159,46 +140,40 @@ namespace Taskie
             {
                 string text = input.Text;
                 note.Name = text;
-                List<ListTask> tasks = new List<ListTask>();
-                if (Tools.ReadList(listname) != null && (Tools.ReadList(listname)).Count > 0)
-                {
-                    foreach (ListTask task2add in Tools.ReadList(listname))
-                    {
-                        tasks.Add(task2add);
-                    }
-                };
-                int index = tasks.FindIndex(task => task.CreationDate == note.CreationDate);
-                tasks[index] = note;
-                Tools.SaveList(listname, tasks);
+                await ServerCommunication.RenameTask(listcode, note.CreationDate, text);
+                (taskListView.ItemsSource as ObservableCollection<ListTask>).FirstOrDefault(t => t.CreationDate == note.CreationDate).Name = text;
             }
         }
 
-        private void DeleteTask_Click(object sender, RoutedEventArgs e)
+        private async void DeleteTask_Click(object sender, RoutedEventArgs e)
         {
+            var currentTask = await ServerCommunication.GetList(listcode);
             ListTask taskToDelete = (sender as MenuFlyoutItem).DataContext as ListTask;
-            List<ListTask> tasks = Tools.ReadList(listname);
-            int index = tasks.FindIndex(task => task.CreationDate == taskToDelete.CreationDate);
-            if (index != -1)
+            List<ListTask> tasks = currentTask;
+            try
             {
-                tasks.RemoveAt(index);
-                Tools.SaveList(listname, tasks);
-                taskListView.Items.Remove(taskToDelete);
-            }
-            Tools.SaveList(listname, tasks);
+                int index = tasks.FindIndex(task => task.CreationDate == taskToDelete.CreationDate);
+                if (index != -1)
+                {
+                    (taskListView.ItemsSource as ObservableCollection<ListTask>).Remove(taskToDelete);
+                    await ServerCommunication.DeleteTask(listcode, taskToDelete.CreationDate);
+                    refreshList(null);
+                }
+            } catch { }
+            
         }
 
         private async void RenameList_Click(object sender, RoutedEventArgs e)
         {
-            TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("ListName"), Text = listname };
+            TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("listcode"), Text = listcode };
             string renamelisttext = resourceLoader.GetString("RenameList/Text");
             ContentDialog dialog = new ContentDialog() { Title = renamelisttext, PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
                 string text = input.Text;
-                Tools.RenameList(listname, text);
-                listname = text;
-                testname.Text = listname;
+                await ServerCommunication.RenameList(listcode, text);
+                testname.Text = text;
             }
         }
 
@@ -212,7 +187,7 @@ namespace Taskie
                     {
                         DefaultFileExtension = ".json",
                         SuggestedStartLocation = PickerLocationId.Desktop,
-                        SuggestedFileName = listname
+                        SuggestedFileName = listcode
                     };
                     savePicker.FileTypeChoices.Add("JSON", new List<string>() { ".json" });
 
@@ -220,7 +195,7 @@ namespace Taskie
                     if (file != null)
                     {
                         CachedFileManager.DeferUpdates(file);
-                        string content = Tools.GetTaskFileContent(listname);
+                        string content = JsonConvert.SerializeObject(ServerCommunication.GetList(listcode));
                         await FileIO.WriteTextAsync(file, content);
 
                         FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
@@ -232,23 +207,28 @@ namespace Taskie
             catch { }
         }
 
-        private void DeleteList_Click(object sender, RoutedEventArgs e)
+        private async void DeleteList_Click(object sender, RoutedEventArgs e)
         {
-            Tools.DeleteList(listname);
+            await ServerCommunication.DeleteList(listcode);
+            this.Frame.Content = null;
+            shouldRun = false;
+
         }
 
-        private void TaskStateChanged(object sender, RoutedEventArgs e)
+        private async void TaskStateChanged(object sender, RoutedEventArgs e)
         {
+            var currentTask = await ServerCommunication.GetList(listcode);
+            Debug.WriteLine("tried to toggle?");
             ListTask tasktoChange = (sender as CheckBox).DataContext as ListTask;
-            List<ListTask> tasks = Tools.ReadList(listname);
+            List<ListTask> tasks = currentTask;
             try
             {
                 int index = tasks.FindIndex(task => task.CreationDate == tasktoChange.CreationDate);
                 if (index != -1)
                 {
                     tasktoChange.IsDone = (bool)(sender as CheckBox).IsChecked;
-                    tasks[index] = tasktoChange;
-                    Tools.SaveList(listname, tasks);
+                    (taskListView.ItemsSource as ObservableCollection<ListTask>).FirstOrDefault(t => t.CreationDate == tasktoChange.CreationDate).IsDone = (bool)(sender as CheckBox).IsChecked;
+                    await ServerCommunication.ToggleTask(listcode, tasktoChange.CreationDate);
                 }
             }
             catch { }
@@ -305,27 +285,18 @@ namespace Taskie
             ChangeWidth(sender);
         }
 
-        private void AutoSuggestBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        private async void AutoSuggestBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter && !string.IsNullOrEmpty((sender as AutoSuggestBox).Text))
             {
-                List<ListTask> tasks = new List<ListTask>();
-                if (Tools.ReadList(listname) != null && (Tools.ReadList(listname)).Count > 0)
-                {
-                    foreach (ListTask task2add in Tools.ReadList(listname))
-                    {
-                        tasks.Add(task2add);
-                    }
-                };
                 ListTask task = new ListTask()
                 {
                     Name = (sender as AutoSuggestBox).Text,
                     CreationDate = DateTime.Now,
                     IsDone = false
                 };
-                tasks.Add(task);
                 taskListView.Items.Add(task);
-                Tools.SaveList(listname, tasks);
+                await ServerCommunication.AddTask(listcode, (sender as AutoSuggestBox).Text);
             }
         }
 
@@ -349,7 +320,7 @@ namespace Taskie
             }
             window.Closed += AWClosed;
             Frame frame = new Frame();
-            frame.Navigate(typeof(TaskPage), listname);
+            frame.Navigate(typeof(TaskPage), listcode);
             Tools.isAWOpen = true;
             ElementCompositionPreview.SetAppWindowContent(window, frame);
             window.Presenter.RequestPresentation(AppWindowPresentationKind.CompactOverlay);
@@ -398,24 +369,102 @@ namespace Taskie
             }
         }
 
-        private async void ShareListRealTime_Click(object sender, RoutedEventArgs e)
+        public bool shouldRun = true;
+
+        private async void taskListView_Loaded(object sender, RoutedEventArgs e)
         {
-            string code = (new Random()).Next(11111, 999999).ToString();
             try
             {
-                await ServerCommunication.SaveList(code, Tools.GetTaskFileContent(listname));
-                ToastContentBuilder builder = new ToastContentBuilder()
-                   .AddText(resourceLoader.GetString("successfulSave"))
-                   .AddText(resourceLoader.GetString("shareCodeCopied"));
-                builder.Show();
-                DataPackage pkg = new DataPackage();
-                pkg.SetText(code);
-                Clipboard.SetContent(pkg);
+                currentTask = await ServerCommunication.GetList(listcode);
+                taskListView.ItemsSource = currentTask;
+                while (shouldRun)
+                {
+                    refreshList(null);
+                    await Task.Delay(5000);
+                }
             }
             catch
             {
-                await (new ContentDialog() { Title = resourceLoader.GetString("Oops"), Content = resourceLoader.GetString("ConnectionSaveProblem"), PrimaryButtonText = resourceLoader.GetString("Close") }).ShowAsync();
+                this.Frame.Content = null;
+                shouldRun = false;
+            }
+
+        }
+
+        private async void refreshList(object state)
+        {
+            try
+            {
+                var currentTask = await ServerCommunication.GetList(listcode);
+                Debug.WriteLine(currentTask);
+
+                var dispatcher = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;
+                await dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    var existingTasks = taskListView.ItemsSource as ObservableCollection<ListTask>;
+
+                    if (existingTasks != null)
+                    {
+                        var existingTasksDict = existingTasks.ToDictionary(task => task.CreationDate);
+
+                        foreach (var newTask in currentTask)
+                        {
+                            if (existingTasksDict.TryGetValue(newTask.CreationDate, out var existingTask))
+                            {
+                                // Update the Name if it has changed
+                                if (existingTask.Name != newTask.Name)
+                                {
+                                    existingTask.Name = newTask.Name;
+                                }
+
+                                // Update the IsDone state if it has changed
+                                if (existingTask.IsDone != newTask.IsDone)
+                                {
+                                    existingTask.IsDone = newTask.IsDone;
+                                }
+                            }
+                            else
+                            {
+                                int index = existingTasks.ToList().FindIndex(t => t.CreationDate > newTask.CreationDate);
+                                if (index < 0)
+                                {
+                                    existingTasks.Add(newTask);
+                                }
+                                else
+                                {
+                                    existingTasks.Insert(index, newTask);
+                                }
+                            }
+                        }
+
+                        var currentTaskDates = new HashSet<DateTime>(currentTask.Select(t => t.CreationDate));
+                        var tasksToRemove = existingTasks.Where(t => !currentTaskDates.Contains(t.CreationDate)).ToList();
+                        foreach (var task in tasksToRemove)
+                        {
+                            existingTasks.Remove(task);
+                        }
+                    }
+                    else
+                    {
+                        taskListView.ItemsSource = new ObservableCollection<ListTask>(currentTask);
+                    }
+                });
+            }
+            catch
+            {
+                try
+                {
+                    await (new ContentDialog()
+                    {
+                        Title = resourceLoader.GetString("Oops"),
+                        Content = resourceLoader.GetString("ConnectionProblem"),
+                        PrimaryButtonText = resourceLoader.GetString("Close")
+                    }).ShowAsync();
+                }
+                catch { }
+                this.Frame.Content = null;
             }
         }
+
     }
 }

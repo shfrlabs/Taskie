@@ -118,186 +118,219 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutApp.Text" xml:space="preserve">
-    <value>Dziękujemy za wsparcie REFRACT. Taskie to jeden z naszych pierwszych projektów, w który włożyliśmy dużo miłości. Możesz sprawdzić nasze inne projekty na GitHubie. Mamy nadzieję, że Taskie ci się spodoba! Pozdrowienia od założycieli z Polski!</value>
+    <value>Thanks for supporting me. Taskie is one of my first projects, which I poured a lot of love into. You can check out my other projects on GitHub. I hope you like Taskie. Best wishes from Poland!</value>
   </data>
   <data name="AboutCategory" xml:space="preserve">
-    <value>O aplikacji</value>
+    <value>About</value>
   </data>
   <data name="AddTaskBox.PlaceholderText" xml:space="preserve">
-    <value> Dodaj zadanie...</value>
+    <value>Add task...</value>
   </data>
   <data name="AdvertTag.Text" xml:space="preserve">
-    <value>Twój szybki i prywatny towarzysz do zadań.</value>
+    <value>Your quick and private task companion.</value>
   </data>
   <data name="AdvertUWPTag.Text" xml:space="preserve">
-    <value>Stworzony przy użyciu UWP.</value>
+    <value>Made with UWP and ASP.NET.</value>
   </data>
   <data name="AppearanceCategory" xml:space="preserve">
-    <value>Wygląd</value>
+    <value>Appearance</value>
   </data>
   <data name="AppearanceText.Text" xml:space="preserve">
-    <value>Wygląd</value>
+    <value>Appearance</value>
   </data>
   <data name="AppThemeSubText.Text" xml:space="preserve">
-    <value>Zmień motyw aplikacji.</value>
+    <value>Change app theme</value>
   </data>
   <data name="AppThemeText.Text" xml:space="preserve">
-    <value>Motyw</value>
+    <value>Theme</value>
   </data>
   <data name="AuthDescription.Text" xml:space="preserve">
-    <value>Spraw, by aplikacja prosiła o hasło lub biometrię przez Windows Hello. Ta opcja może nie być dostępna, jeżeli ten komputer nie jest zabezpieczony hasłem i biometrią/PINem lub jeżeli nie zakupiono Taskie Pro.</value>
+    <value>Make the app ask for your password/pin/biometrics via Windows Hello. This option may not be avialable if your computer doesn't have a password or you haven't purchased Taskie Pro.</value>
   </data>
   <data name="AuthDisabledDescription" xml:space="preserve">
-    <value>Usunięto metodę biometrii, PIN lub hasło, administrator systemu wyłączył tę opcję, zwrócono pieniądze za Taskie Pro lub stało się coś innego. Sprawdź Ustawienia Windows &gt; Konta &gt; Opcje logowania lub sklep Microsoft Store.</value>
+    <value>Removed biometrics or password, your administrator removed the option, you refunded Taskie Pro or something else happened. Check Windows Settings or the Microsoft Store.</value>
   </data>
   <data name="AuthDisabledTitle" xml:space="preserve">
-    <value>Uwierzytelnianie zostało wyłączone.</value>
+    <value>Authentication has been turned off.</value>
   </data>
   <data name="AuthText.Text" xml:space="preserve">
-    <value>Użyj uwierzytelniania</value>
+    <value>Use authentication</value>
   </data>
   <data name="BackupHeader.Text" xml:space="preserve">
-    <value>Kopia zapasowa</value>
+    <value>Back up</value>
   </data>
   <data name="BackupsCategory" xml:space="preserve">
-    <value>Kopie zapasowe</value>
+    <value>Backups</value>
   </data>
   <data name="BackupsText.Text" xml:space="preserve">
-    <value>Kopie zapasowe</value>
+    <value>Backups</value>
   </data>
   <data name="BackupText.Text" xml:space="preserve">
-    <value>Wyeksportuj wszystkie listy jednym kliknięciem poniżej. By wyeksportować jedną listę, kliknij na nią prawym przyciskiem myszy, i wybierz "Eksportuj" by wygenerować plik, którego możesz użyć, by przywrócić listę do aplikacji.</value>
+    <value>Export all lists with one click below. To export one list, right-click it and choose Export or use the three-dot menu after opening it.</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Anuluj</value>
+    <value>Cancel</value>
   </data>
   <data name="CompactOverlayButton.Text" xml:space="preserve">
-    <value>Włącz Taskie Mini</value>
+    <value>Open Taskie Mini</value>
   </data>
   <data name="DarkThemeRadio.Content" xml:space="preserve">
-    <value>Ciemny</value>
+    <value>Dark</value>
   </data>
   <data name="DeleteList.Text" xml:space="preserve">
-    <value>Usuń listę</value>
+    <value>Delete list</value>
   </data>
   <data name="DeleteTask.Text" xml:space="preserve">
-    <value>Usuń zadanie</value>
+    <value>Delete task</value>
   </data>
   <data name="ExportButton.Text" xml:space="preserve">
-    <value>Eksportuj</value>
+    <value>Export</value>
   </data>
   <data name="ExportList.Text" xml:space="preserve">
-    <value>Eksportuj</value>
+    <value>Export</value>
   </data>
   <data name="GitHubLink.Content" xml:space="preserve">
     <value>GitHub</value>
   </data>
   <data name="ImportButton.Text" xml:space="preserve">
-    <value>Importuj</value>
+    <value>Import</value>
   </data>
   <data name="LightThemeRadio.Content" xml:space="preserve">
-    <value>Jasny</value>
+    <value>Light</value>
   </data>
   <data name="ListName" xml:space="preserve">
-    <value>Nazwa listy</value>
+    <value>List name</value>
   </data>
   <data name="LoginMessage" xml:space="preserve">
-    <value>Zaloguj się do Taskie przy użyciu Windows Hello. Możesz wyłączyć tę funkcję w Ustawieniach.</value>
+    <value>Log into Taskie with Windows Hello. You can turn this off in Settings.</value>
   </data>
   <data name="NewList" xml:space="preserve">
-    <value>Nowa lista</value>
+    <value>New list</value>
   </data>
   <data name="NewListBtn.Text" xml:space="preserve">
-    <value>Nowa lista</value>
+    <value>New list</value>
   </data>
   <data name="RenameList.Text" xml:space="preserve">
-    <value>Zmień nazwę listy</value>
+    <value>Rename list</value>
   </data>
   <data name="RenameTask.Text" xml:space="preserve">
-    <value>Zmień nazwę</value>
+    <value>Rename</value>
   </data>
   <data name="RestartButton.Text" xml:space="preserve">
-    <value>Restartuj</value>
+    <value>Restart</value>
   </data>
   <data name="RestartWarning.Text" xml:space="preserve">
-    <value>To wymaga restartu aplikacji.</value>
+    <value>This requires restarting the app.</value>
   </data>
   <data name="RestoreHeader.Text" xml:space="preserve">
-    <value>Przywróć</value>
+    <value>Restore</value>
   </data>
   <data name="RestoreText.Text" xml:space="preserve">
-    <value>Zaimportuj kopię pojedynczej listy (*.json) lub pełną kopię zapasową (*.taskie) by przywrócić je do aplikacji. Jeżeli lista o danej nazwie już istnieje, zaimportowana lista będzie miała dodane (2) na koniec nazwy.</value>
+    <value>Import one list (*.json) or a full backup (*.taskie) into the app here. If a list exists, it'll be imported with a (2) next to its name.</value>
   </data>
   <data name="SearchBox.PlaceholderText" xml:space="preserve">
-    <value>Szukaj</value>
+    <value>Search</value>
   </data>
   <data name="SecurityCategory" xml:space="preserve">
-    <value>Bezpieczeństwo</value>
+    <value>Security</value>
   </data>
   <data name="SecurityHeader.Text" xml:space="preserve">
-    <value>Bezpieczeństwo</value>
+    <value>Security</value>
   </data>
   <data name="SettingsText.Text" xml:space="preserve">
-    <value>Ustawienia</value>
+    <value>Settings</value>
   </data>
   <data name="SystemThemeRadio.Content" xml:space="preserve">
-    <value>Motyw systemu</value>
+    <value>System theme</value>
   </data>
   <data name="TaskName" xml:space="preserve">
-    <value>Nazwa zadania</value>
+    <value>Task name</value>
   </data>
   <data name="TwitterLink.Content" xml:space="preserve">
     <value>Twitter</value>
   </data>
   <data name="UpgradeText.Text" xml:space="preserve">
-    <value>Ulepsz</value>
+    <value>Upgrade</value>
   </data>
   <data name="PromoBannerText.Text" xml:space="preserve">
-    <value>Usuń banery promocyjne</value>
+    <value>Remove promotional banners</value>
   </data>
   <data name="ListLimitText.Text" xml:space="preserve">
-    <value>Usuń limit 3 list</value>
+    <value>Remove 3 list limit</value>
   </data>
   <data name="PrioritySupportText.Text" xml:space="preserve">
-    <value>Wsparcie priorytetowe</value>
+    <value>Priority support</value>
   </data>
   <data name="WinHelloText.Text" xml:space="preserve">
-    <value>Bezpieczne logowanie z Windows Hello</value>
+    <value>Secure login with Windows Hello</value>
   </data>
   <data name="IndicatorText.Text" xml:space="preserve">
-    <value>Znaczek Pro</value>
+    <value>Pro indicator</value>
   </data>
   <data name="CloseCO.Text" xml:space="preserve">
-    <value>Zamknij okno nakładki by pracować w tym oknie.</value>
+    <value>Close the compact overlay to work in this window.</value>
   </data>
   <data name="protip.Subtitle" xml:space="preserve">
-    <value>Ulepsz aplikację małą transkacją by usunąć limity i rozposzenia.</value>
+    <value>Upgrade the app with a small purchase to support me and remove all limits.</value>
   </data>
   <data name="protip.Title" xml:space="preserve">
-    <value>Podoba Ci się Taskie?</value>
+    <value>Liking Taskie?</value>
   </data>
   <data name="tip1.Subtitle" xml:space="preserve">
-    <value>Dodaj pierwszą listę tutaj.</value>
+    <value>Add your first list here.</value>
   </data>
   <data name="tip1.Title" xml:space="preserve">
-    <value>Zacznijmy!</value>
+    <value>Let's start!</value>
   </data>
   <data name="tipwrongname.Title" xml:space="preserve">
-    <value>Nie możesz tego zrobić!</value>
+    <value>You can't do that!</value>
   </data>
   <data name="tipwrongname.Subtitle" xml:space="preserve">
-    <value>Lista z tą nazwą już istnieje.</value>
+    <value>A list with this name already exists.</value>
   </data>
   <data name="successfulUpgrade" xml:space="preserve">
-    <value>Pomyślnie ulepszono aplikację!</value>
+    <value>Successfully upgraded!</value>
   </data>
   <data name="SuccessfulUpgradeSub" xml:space="preserve">
-    <value>Taskie Pro zostało odblokowane.</value>
+    <value>Taskie Pro was unlocked.</value>
   </data>
   <data name="ProCancelled" xml:space="preserve">
-    <value>Cofnięto zakup Pro.</value>
+    <value>You refunded Pro.</value>
   </data>
   <data name="ProCancelledSub" xml:space="preserve">
-    <value>Taskie Pro zostało zablokowane.</value>
+    <value>Pro features were blocked.</value>
+  </data>
+  <data name="ConnectToListBtn.Text" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="ConnectToList" xml:space="preserve">
+    <value>Connect to a task list using a code</value>
+  </data>
+  <data name="ListCode" xml:space="preserve">
+    <value>List code</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="ShareListRealTime.Text" xml:space="preserve">
+    <value>Share list in real-time</value>
+  </data>
+  <data name="Oops" xml:space="preserve">
+    <value>Oops!</value>
+  </data>
+  <data name="ConnectionProblem" xml:space="preserve">
+    <value>There was a connection problem or the list doesn't exist.</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ConnectionSaveProblem" xml:space="preserve">
+    <value>There was a problem with connecting to the server. Try sharing your list again</value>
+  </data>
+  <data name="successfulSave" xml:space="preserve">
+    <value>Shared list!</value>
+  </data>
+  <data name="shareCodeCopied" xml:space="preserve">
+    <value>Share code was copied. To see your shared list, use the "Connect" button.</value>
   </data>
 </root>

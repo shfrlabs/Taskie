@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Taskie.TaskPage"
+    x:Class="Taskie.RemoteTaskPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Taskie"
@@ -42,21 +42,14 @@
                 </Button.Content>
                 <Button.Flyout>
                     <MenuFlyout Placement="BottomEdgeAlignedRight">
-                        <MenuFlyoutItem Icon="Rename" Click="RenameList_Click" x:Uid="RenameList"></MenuFlyoutItem>
                         <MenuFlyoutItem Icon="Delete" Click="DeleteList_Click" x:Uid="DeleteList"></MenuFlyoutItem>
                         <MenuFlyoutItem Icon="Save" Click="ExportList_Click" x:Uid="ExportList"></MenuFlyoutItem>
-                        <MenuFlyoutItem Icon="Share" Click="ShareListRealTime_Click" x:Uid="ShareListRealTime"></MenuFlyoutItem>
-                        <MenuFlyoutItem x:Uid="CompactOverlayButton" Click="CompactOverlay_Click" x:Name="cobtn">
-                            <MenuFlyoutItem.Icon>
-                                <FontIcon Glyph="&#xEE49;"/>
-                            </MenuFlyoutItem.Icon>
-                        </MenuFlyoutItem>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
         </Grid>
         <ScrollViewer HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-12, 50, 0, 48">
-            <ListView x:Name="taskListView" Margin="0,0,-13,0" SelectionMode="None" ItemTemplate="{StaticResource TaskItemTemplate}">
+            <ListView Loaded="taskListView_Loaded" x:Name="taskListView" Margin="0,0,-13,0" SelectionMode="None" ItemTemplate="{StaticResource TaskItemTemplate}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
