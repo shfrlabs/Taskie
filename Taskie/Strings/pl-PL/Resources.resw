@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutApp.Text" xml:space="preserve">
-    <value>Dziękujemy za wsparcie REFRACT. Taskie to jeden z naszych pierwszych projektów, w który włożyliśmy dużo miłości. Możesz sprawdzić nasze inne projekty na GitHubie. Mamy nadzieję, że Taskie ci się spodoba! Pozdrowienia od założycieli z Polski!</value>
+    <value>Dziękuję za wsparcie. Taskie to jeden z mych pierwszych projektów, w który włożyłem dużo miłości. Możesz sprawdzić moje inne projekty na GitHubie. Mam nadzieję, że Taskie ci się spodoba! Pozdrowienia z Polski!</value>
   </data>
   <data name="AboutCategory" xml:space="preserve">
     <value>O aplikacji</value>
@@ -127,7 +127,7 @@
     <value>Dodaj zadanie...</value>
   </data>
   <data name="AdvertTag.Text" xml:space="preserve">
-    <value> Twój szybki i prywatny towarzysz do zadań.</value>
+    <value>Twój szybki i prywatny towarzysz do zadań.</value>
   </data>
   <data name="AdvertUWPTag.Text" xml:space="preserve">
     <value>Stworzony przy użyciu UWP.</value>
@@ -271,7 +271,7 @@
     <value>Zamknij okno nakładki by pracować w tym oknie.</value>
   </data>
   <data name="protip.Subtitle" xml:space="preserve">
-    <value>Ulepsz aplikację małą transkacją by usunąć limity i rozposzenia.</value>
+    <value>Ulepsz aplikację małą transakcją by usunąć limity i rozposzenia.</value>
   </data>
   <data name="protip.Title" xml:space="preserve">
     <value>Podoba Ci się Taskie?</value>
