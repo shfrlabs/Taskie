@@ -14,21 +14,6 @@ public class ServerCommunication
     private static readonly HttpClient _httpClient = new HttpClient();
     private static readonly string _baseUri = "http://localhost:5283/";
 
-    // Check if connected to the network
-    public static async Task<bool> IsConnected()
-    {
-        try
-        {
-            var response = await _httpClient.GetAsync(_baseUri);
-            return response.IsSuccessStatusCode;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-    // Get the task list from the server
     public static async Task<List<ListTask>> GetList(string code)
     {
         Debug.WriteLine("Tried getting list");
@@ -36,7 +21,6 @@ public class ServerCommunication
         if (response.IsSuccessStatusCode)
         {
             var content = Regex.Unescape(await response.Content.ReadAsStringAsync());
-            // Remove the surrounding quotes if necessary
             if (content.StartsWith("\"") && content.EndsWith("\""))
             {
                 content = content.Remove(content.Length - 1);
@@ -48,7 +32,6 @@ public class ServerCommunication
         throw new Exception(await response.Content.ReadAsStringAsync());
     }
 
-    // Add a task to the list
     public static async Task<ListTask> AddTask(string code, string taskName)
     {
         var newTask = new ListTask
@@ -66,7 +49,6 @@ public class ServerCommunication
         return null;
     }
 
-    // Rename a task in the list
     public static async Task<ListTask> RenameTask(string code, DateTime creationDate, string newName)
     {
         var response = await _httpClient.PutAsync($"{_baseUri}renameTask?code={code}&creationDate={creationDate.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK")}&newName={newName}", null);
@@ -80,7 +62,6 @@ public class ServerCommunication
         throw new Exception(await response.Content.ReadAsStringAsync());
     }
 
-    // Delete a task from the list
     public static async Task DeleteTask(string code, DateTime creationDate)
     {
         var response = await _httpClient.DeleteAsync($"{_baseUri}deleteTask?code={code}&creationDate={creationDate.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK")}");
@@ -91,7 +72,6 @@ public class ServerCommunication
         }
     }
 
-    // Toggle a task from the list
     public static async Task ToggleTask(string code, DateTime creationDate)
     {
         var response = await _httpClient.GetAsync($"{_baseUri}toggleTask?code={code}&creationDate={creationDate.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK")}");
@@ -106,7 +86,6 @@ public class ServerCommunication
         }
     }
 
-    // Delete a list
     public static async Task DeleteList(string code)
     {
         var response = await _httpClient.DeleteAsync($"{_baseUri}deleteList?code={code}");
@@ -114,44 +93,6 @@ public class ServerCommunication
         if (!response.IsSuccessStatusCode)
         {
             throw new Exception(await response.Content.ReadAsStringAsync());
-        }
-    }
-
-    // Rename a list
-    public static async Task RenameList(string code, string newName)
-    {
-        var response = await _httpClient.PutAsync($"{_baseUri}renameList?code={code}&newName={newName}", null);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception(await response.Content.ReadAsStringAsync());
-        }
-    }
-
-    // Compare the list hashes
-    public static async Task<bool> CompareListHash(string code, List<ListTask> localTasks)
-    {
-        var hashResponse = await _httpClient.GetAsync($"{_baseUri}getListHash?code={code}");
-
-        if (hashResponse.IsSuccessStatusCode)
-        {
-            var hashResult = await hashResponse.Content.ReadAsStringAsync();
-
-            var localHash = GetListHash(localTasks);
-            return localHash == hashResult;
-        }
-
-        throw new Exception(await hashResponse.Content.ReadAsStringAsync());
-    }
-
-    // Compute the hash for the local list
-    private static string GetListHash(List<ListTask> list)
-    {
-        var json = JsonSerializer.Serialize(list);
-        using (var sha256 = SHA256.Create())
-        {
-            byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(json));
-            return Convert.ToBase64String(bytes);
         }
     }
 
