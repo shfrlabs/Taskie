@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -129,6 +130,7 @@ namespace Taskie
 
         private async void RenameTask_Click(object sender, RoutedEventArgs e)
         {
+            var currentTask = await ServerCommunication.GetList(listcode);
             MenuFlyoutItem menuFlyoutItem = (MenuFlyoutItem)sender;
             var note = menuFlyoutItem.DataContext as ListTask;
             TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("TaskName"), Text = note.Name };
@@ -139,20 +141,26 @@ namespace Taskie
                 string text = input.Text;
                 note.Name = text;
                 await ServerCommunication.RenameTask(listcode, note.CreationDate, text);
+                (taskListView.ItemsSource as ObservableCollection<ListTask>).FirstOrDefault(t => t.CreationDate == note.CreationDate).Name = text;
             }
         }
 
         private async void DeleteTask_Click(object sender, RoutedEventArgs e)
         {
+            var currentTask = await ServerCommunication.GetList(listcode);
             ListTask taskToDelete = (sender as MenuFlyoutItem).DataContext as ListTask;
-            List<ListTask> tasks = Tools.ReadList(listcode);
-            int index = tasks.FindIndex(task => task.CreationDate == taskToDelete.CreationDate);
-            if (index != -1)
+            List<ListTask> tasks = currentTask;
+            try
             {
-                taskListView.Items.Remove(taskToDelete);
-                await ServerCommunication.DeleteTask(listcode, taskToDelete.CreationDate);
-                refreshList(null);
-            }
+                int index = tasks.FindIndex(task => task.CreationDate == taskToDelete.CreationDate);
+                if (index != -1)
+                {
+                    (taskListView.ItemsSource as ObservableCollection<ListTask>).Remove(taskToDelete);
+                    await ServerCommunication.DeleteTask(listcode, taskToDelete.CreationDate);
+                    refreshList(null);
+                }
+            } catch { }
+            
         }
 
         private async void RenameList_Click(object sender, RoutedEventArgs e)
@@ -199,21 +207,27 @@ namespace Taskie
             catch { }
         }
 
-        private void DeleteList_Click(object sender, RoutedEventArgs e)
+        private async void DeleteList_Click(object sender, RoutedEventArgs e)
         {
-            Tools.DeleteList(listcode);
+            await ServerCommunication.DeleteList(listcode);
+            this.Frame.Content = null;
+            shouldRun = false;
+
         }
 
         private async void TaskStateChanged(object sender, RoutedEventArgs e)
         {
+            var currentTask = await ServerCommunication.GetList(listcode);
+            Debug.WriteLine("tried to toggle?");
             ListTask tasktoChange = (sender as CheckBox).DataContext as ListTask;
-            List<ListTask> tasks = Tools.ReadList(listcode);
+            List<ListTask> tasks = currentTask;
             try
             {
                 int index = tasks.FindIndex(task => task.CreationDate == tasktoChange.CreationDate);
                 if (index != -1)
                 {
                     tasktoChange.IsDone = (bool)(sender as CheckBox).IsChecked;
+                    (taskListView.ItemsSource as ObservableCollection<ListTask>).FirstOrDefault(t => t.CreationDate == tasktoChange.CreationDate).IsDone = (bool)(sender as CheckBox).IsChecked;
                     await ServerCommunication.ToggleTask(listcode, tasktoChange.CreationDate);
                 }
             }
@@ -355,13 +369,15 @@ namespace Taskie
             }
         }
 
+        public bool shouldRun = true;
+
         private async void taskListView_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
                 currentTask = await ServerCommunication.GetList(listcode);
                 taskListView.ItemsSource = currentTask;
-                while (true)
+                while (shouldRun)
                 {
                     refreshList(null);
                     await Task.Delay(5000);
@@ -370,12 +386,13 @@ namespace Taskie
             catch
             {
                 this.Frame.Content = null;
+                shouldRun = false;
             }
 
         }
 
         private async void refreshList(object state)
-        { // ily chatgpt i could never write allat
+        {
             try
             {
                 var currentTask = await ServerCommunication.GetList(listcode);
@@ -394,9 +411,16 @@ namespace Taskie
                         {
                             if (existingTasksDict.TryGetValue(newTask.CreationDate, out var existingTask))
                             {
+                                // Update the Name if it has changed
                                 if (existingTask.Name != newTask.Name)
                                 {
                                     existingTask.Name = newTask.Name;
+                                }
+
+                                // Update the IsDone state if it has changed
+                                if (existingTask.IsDone != newTask.IsDone)
+                                {
+                                    existingTask.IsDone = newTask.IsDone;
                                 }
                             }
                             else
@@ -440,7 +464,7 @@ namespace Taskie
                 catch { }
                 this.Frame.Content = null;
             }
-
         }
+
     }
 }

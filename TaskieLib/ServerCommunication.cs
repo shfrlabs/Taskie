@@ -57,16 +57,13 @@ public class ServerCommunication
             Name = taskName,
             IsDone = false
         };
-
-        var content = new StringContent(JsonSerializer.Serialize(newTask), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync($"{_baseUri}addTask?code={code}&taskName={taskName}", content);
+        var response = await _httpClient.PostAsync($"{_baseUri}addTask?code={code}&taskName={taskName}", null);
 
         if (response.IsSuccessStatusCode)
         {
             return newTask;
         }
-
-        throw new Exception(await response.Content.ReadAsStringAsync());
+        return null;
     }
 
     // Rename a task in the list
@@ -86,7 +83,7 @@ public class ServerCommunication
     // Delete a task from the list
     public static async Task DeleteTask(string code, DateTime creationDate)
     {
-        var response = await _httpClient.DeleteAsync($"{_baseUri}deleteTask?code={code}&creationDate={creationDate}");
+        var response = await _httpClient.DeleteAsync($"{_baseUri}deleteTask?code={code}&creationDate={creationDate.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK")}");
 
         if (!response.IsSuccessStatusCode)
         {
@@ -97,11 +94,15 @@ public class ServerCommunication
     // Toggle a task from the list
     public static async Task ToggleTask(string code, DateTime creationDate)
     {
-        var response = await _httpClient.DeleteAsync($"{_baseUri}toggleTask?code={code}&creationDate={creationDate}");
-
+        var response = await _httpClient.GetAsync($"{_baseUri}toggleTask?code={code}&creationDate={creationDate.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK")}");
+        Debug.WriteLine(await response.Content.ReadAsStringAsync());
         if (!response.IsSuccessStatusCode)
         {
             throw new Exception(await response.Content.ReadAsStringAsync());
+        }
+        else
+        {
+            Debug.WriteLine("Toggled");
         }
     }
 
