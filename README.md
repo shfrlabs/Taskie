@@ -20,3 +20,6 @@ Taskie stores your lists as JSON files in the app's local folder. You can export
   }
 ]
 ```
+
+### Credits
+Thanks to Aurumaker72 for MVVM refactor efforts.
