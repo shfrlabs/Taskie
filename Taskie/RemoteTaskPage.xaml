@@ -10,7 +10,7 @@
 
     <Page.Resources>
         <DataTemplate x:Key="TaskItemTemplate">
-            <Grid HorizontalAlignment="Stretch" Height="Auto" x:Name="rootGrid" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,0,5" CornerRadius="8" BorderThickness="1" Loaded="TaskAdded_Grid">
+            <Grid HorizontalAlignment="Stretch" Height="Auto" x:Name="rootGrid" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,0,5" CornerRadius="8" BorderThickness="1" Loaded="rootGrid_Loaded">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="32"/>
                     <ColumnDefinition Width="*"/>
@@ -36,7 +36,7 @@
     <Grid Margin="20,25,20,20" x:Name="maingrid">
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <TextBlock x:Name="testname" FontWeight="SemiBold" FontSize="28" FontFamily="Segoe UI Variable"  TextTrimming="CharacterEllipsis"></TextBlock>
-            <Button Margin="0,0,14,0" x:Name="topoptions" Loaded="topoptions_Loaded" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right" Canvas.ZIndex="999">
+            <Button Margin="0,0,14,0" x:Name="topoptions" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right" Canvas.ZIndex="999">
                 <Button.Content>
                     <FontIcon Glyph="&#xE712;" FontSize="14"/>
                 </Button.Content>
@@ -49,7 +49,7 @@
             </Button>
         </Grid>
         <ScrollViewer HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-12, 50, 0, 48">
-            <ListView Loaded="taskListView_Loaded" x:Name="taskListView" Margin="0,0,-13,0" SelectionMode="None" ItemTemplate="{StaticResource TaskItemTemplate}">
+            <ListView x:Name="taskListView" Margin="0,0,-13,0" SelectionMode="None" ItemTemplate="{StaticResource TaskItemTemplate}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />

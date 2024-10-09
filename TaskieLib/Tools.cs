@@ -1,14 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Windows.Storage.Pickers;
-using Windows.UI.Xaml.Documents;
 
 namespace TaskieLib
 {
@@ -40,7 +36,7 @@ namespace TaskieLib
             try
             {
                 string filePath = GetFilePath(listName);
-                File.WriteAllText(filePath, JsonConvert.SerializeObject(list));
+                File.WriteAllText(filePath, JsonSerializer.Serialize(list));
             }
             catch (Exception ex)
             {
@@ -75,7 +71,7 @@ namespace TaskieLib
                 string taskFileContent = GetTaskFileContent(listName);
                 if (taskFileContent != null)
                 {
-                    return JsonConvert.DeserializeObject<List<ListTask>>(taskFileContent);
+                    return JsonSerializer.Deserialize<List<ListTask>>(taskFileContent);
                 }
             }
             catch (Exception ex)
