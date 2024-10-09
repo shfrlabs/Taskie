@@ -2,34 +2,61 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.DataTransfer;
+using Microsoft.AspNetCore.SignalR.Client;
 
 public class ServerCommunication
 {
     private static readonly HttpClient _httpClient = new HttpClient();
     private static readonly string _baseUri = "http://localhost:5283/";
+    private static HubConnection _connection;
+    public static event Action<ListTask> TaskAdded;
+    public static event Action<ListTask> TaskRenamed;
+    public static event Action<string> TaskDeleted;
+    public static event Action<ListTask> TaskToggled;
 
-    public static async Task<List<ListTask>> GetList(string code)
-    {
-        Debug.WriteLine("Tried getting list");
-        var response = await _httpClient.GetAsync($"{_baseUri}getList?code={code}");
-        if (response.IsSuccessStatusCode)
+        public static async Task InitializeSignalRConnection(string listcode)
         {
-            var content = Regex.Unescape(await response.Content.ReadAsStringAsync());
-            if (content.StartsWith("\"") && content.EndsWith("\""))
-            {
-                content = content.Remove(content.Length - 1);
-                content = content.Remove(0, 1);
-            }
-            return JsonSerializer.Deserialize<List<ListTask>>(content) ?? new List<ListTask>();
+            _connection = new HubConnectionBuilder()
+                .WithUrl("http://localhost:5283/taskHub")
+                .Build();
+
+            _connection.On<ListTask>("TaskAdded", (task) => TaskAdded?.Invoke(task));
+            _connection.On<ListTask>("TaskRenamed", (task) => TaskRenamed?.Invoke(task));
+            _connection.On<string>("TaskDeleted", (taskId) => TaskDeleted?.Invoke(taskId));
+            _connection.On<ListTask>("TaskToggled", (task) => TaskToggled?.Invoke(task));
+
+
+            await _connection.StartAsync();
         }
 
-        throw new Exception(await response.Content.ReadAsStringAsync());
+        public static async Task StopSignalRConnection(string listcode)
+        {
+            await _connection.StopAsync();
+            await _connection.DisposeAsync();
+        }
+
+        public static async Task<List<ListTask>> GetList(string code)
+    {
+        Debug.WriteLine("Tried getting list");
+        try
+        {
+            var response = await _httpClient.GetAsync($"{_baseUri}getList?code={code}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = Regex.Unescape(await response.Content.ReadAsStringAsync());
+                if (content.StartsWith("\"") && content.EndsWith("\""))
+                {
+                    content = content.Remove(content.Length - 1);
+                    content = content.Remove(0, 1);
+                }
+                return JsonSerializer.Deserialize<List<ListTask>>(content) ?? new List<ListTask>();
+            }
+        } catch { }
+        return null;
     }
 
     public static async Task<ListTask> AddTask(string code, string taskName)
@@ -40,6 +67,7 @@ public class ServerCommunication
             Name = taskName,
             IsDone = false
         };
+        var content = new StringContent(JsonSerializer.Serialize(newTask), Encoding.UTF8, "application/json");
         var response = await _httpClient.PostAsync($"{_baseUri}addTask?code={code}&taskName={taskName}", null);
 
         if (response.IsSuccessStatusCode)
@@ -99,7 +127,7 @@ public class ServerCommunication
     // Save a list on the server
     public static async Task SaveList(string code, string listContent)
     {
-        var response = await _httpClient.PostAsync($"{_baseUri}saveList?code={code}", new StringContent(listContent));
+        var response = await _httpClient.PostAsync($"{_baseUri}saveList?code={code}", new StringContent(listContent, Encoding.UTF8, "application/json"));
 
         if (!response.IsSuccessStatusCode)
         {
