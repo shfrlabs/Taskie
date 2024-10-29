@@ -11,8 +11,8 @@
     <Grid>
         <Grid Background="Transparent" x:Name="TTB" VerticalAlignment="Top" Height="36" Canvas.ZIndex="9999">
             <Image Source="Assets\Logo.png" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0"/>
-            <TextBlock Margin="45,0,0,0" VerticalAlignment="Center" FontSize="12">Taskie CLONE</TextBlock>
-            <TextBlock Margin="122,1,0,0" VerticalAlignment="Center" FontSize="10" Opacity=".7" x:Name="proText" Visibility="Collapsed" PointerEntered="proText_PointerEntered">PRO</TextBlock> <!-- debug, used to turn off pro -->
+            <TextBlock Margin="45,0,0,0" VerticalAlignment="Center" FontSize="12">Taskie</TextBlock>
+            <TextBlock Margin="85,1,0,0" VerticalAlignment="Center" FontSize="10" Opacity=".7" x:Name="proText" Visibility="Collapsed" PointerEntered="proText_PointerEntered">PRO</TextBlock> <!-- debug, used to turn off pro -->
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -22,7 +22,7 @@
             <Frame x:Name="contentFrame" Grid.Column="1" Margin="-20, 0, 0, 0"/>
             <Grid Grid.Column="0" Margin="0, 38, 20, 10" VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="165"/>
+                    <RowDefinition Height="110"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="135" x:Name="BottomRow"/>
                 </Grid.RowDefinitions>
@@ -45,12 +45,6 @@
                         <StackPanel Orientation="Horizontal">
                             <FontIcon Glyph="&#xE710;" FontSize="18" Margin="0,0,10,0" Foreground="Black" x:Name="NewListBtnIcon"/>
                             <TextBlock FontSize="15" x:Uid="NewListBtn" x:Name="NewListBtnText"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="ConnectBtn" Click="ConnectToList" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 , 10">
-                        <StackPanel Orientation="Horizontal">
-                            <FontIcon Glyph="&#xE71B;" FontSize="18" Margin="0,0,10,0"/>
-                            <TextBlock FontSize="15" x:Uid="ConnectToListBtn"/>
                         </StackPanel>
                     </Button>
                     <AutoSuggestBox TextChanged="AutoSuggestBox_TextChanged" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="10,0,10,2" Style="{StaticResource SearchStyle}" x:Uid="SearchBox" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" FontSize="15" VerticalAlignment="Bottom" x:Name="searchbox">

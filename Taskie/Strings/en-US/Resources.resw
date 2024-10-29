@@ -130,7 +130,7 @@
     <value>Your quick and private task companion.</value>
   </data>
   <data name="AdvertUWPTag.Text" xml:space="preserve">
-    <value>Made with UWP and ASP.NET.</value>
+    <value>Made with UWP.</value>
   </data>
   <data name="AppearanceCategory" xml:space="preserve">
     <value>Appearance</value>
@@ -300,37 +300,10 @@
   <data name="ProCancelledSub" xml:space="preserve">
     <value>Pro features were blocked.</value>
   </data>
-  <data name="ConnectToListBtn.Text" xml:space="preserve">
-    <value>Connect</value>
-  </data>
-  <data name="ConnectToList" xml:space="preserve">
-    <value>Connect to a task list using a code</value>
-  </data>
-  <data name="ListCode" xml:space="preserve">
-    <value>List code</value>
-  </data>
-  <data name="Connect" xml:space="preserve">
-    <value>Connect</value>
-  </data>
-  <data name="ShareListRealTime.Text" xml:space="preserve">
-    <value>Share list in real-time</value>
-  </data>
   <data name="Oops" xml:space="preserve">
     <value>Oops!</value>
   </data>
-  <data name="ConnectionProblem" xml:space="preserve">
-    <value>There was a connection problem or the list doesn't exist.</value>
-  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
-  </data>
-  <data name="ConnectionSaveProblem" xml:space="preserve">
-    <value>There was a problem with connecting to the server. Try sharing your list again</value>
-  </data>
-  <data name="successfulSave" xml:space="preserve">
-    <value>Shared list!</value>
-  </data>
-  <data name="shareCodeCopied" xml:space="preserve">
-    <value>Share code was copied. To see your shared list, use the "Connect" button.</value>
   </data>
 </root>

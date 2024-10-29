@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutApp.Text" xml:space="preserve">
-    <value>Dziękuję za wsparcie. Taskie to jeden z mych pierwszych projektów, w który włożyłem dużo miłości. Możesz sprawdzić moje inne projekty na GitHubie. Mam nadzieję, że Taskie ci się spodoba! Pozdrowienia z Polski!</value>
+    <value>Dziękuję za wsparcie. Taskie to jeden z mych pierwszych projektów, któremu poświęciłem dużo czasu. Możesz sprawdzić moje inne projekty na GitHubie. Mam nadzieję, że Taskie ci się spodoba! Pozdrowienia z Polski!</value>
   </data>
   <data name="AboutCategory" xml:space="preserve">
     <value>O aplikacji</value>
@@ -127,7 +127,7 @@
     <value>Dodaj zadanie...</value>
   </data>
   <data name="AdvertTag.Text" xml:space="preserve">
-    <value>Twój szybki i prywatny towarzysz do zadań.</value>
+    <value> Twój szybki i prywatny towarzysz do zadań.</value>
   </data>
   <data name="AdvertUWPTag.Text" xml:space="preserve">
     <value>Stworzony przy użyciu UWP.</value>
@@ -271,7 +271,7 @@
     <value>Zamknij okno nakładki by pracować w tym oknie.</value>
   </data>
   <data name="protip.Subtitle" xml:space="preserve">
-    <value>Ulepsz aplikację małą transakcją by usunąć limity i rozposzenia.</value>
+    <value>Ulepsz aplikację małą transkacją by usunąć limity i rozposzenia.</value>
   </data>
   <data name="protip.Title" xml:space="preserve">
     <value>Podoba Ci się Taskie?</value>
@@ -299,38 +299,5 @@
   </data>
   <data name="ProCancelledSub" xml:space="preserve">
     <value>Taskie Pro zostało zablokowane.</value>
-  </data>
-  <data name="ConnectToListBtn.Text" xml:space="preserve">
-    <value>Połącz się</value>
-  </data>
-  <data name="ConnectToList" xml:space="preserve">
-    <value>Połącz się z listą przy użyciu kodu</value>
-  </data>
-  <data name="ListCode" xml:space="preserve">
-    <value>Kod listy</value>
-  </data>
-  <data name="Connect" xml:space="preserve">
-    <value>Połącz</value>
-  </data>
-  <data name="ShareListRealTime.Text" xml:space="preserve">
-    <value>Udostępnij listę w czasie rzeczywistym</value>
-  </data>
-  <data name="Oops" xml:space="preserve">
-    <value>Ups!</value>
-  </data>
-  <data name="ConnectionProblem" xml:space="preserve">
-    <value>Nastąpił problem z połączeniem z serwerem lub lista nie istnieje.</value>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>Zamknij</value>
-  </data>
-  <data name="ConnectionSaveProblem" xml:space="preserve">
-    <value>Nastąpił problem z połączeniem z serwerem lub wystąpił błąd. Spróbuj udostępnić ponownie.</value>
-  </data>
-  <data name="successfulSave" xml:space="preserve">
-    <value>Udostępniono listę!</value>
-  </data>
-  <data name="shareCodeCopied" xml:space="preserve">
-    <value>Kod udostępnienia został skopiowany. Zobacz udostępnioną listę, klikając "Połącz się".</value>
   </data>
 </root>

@@ -290,26 +290,6 @@ namespace Taskie
             }
         }
 
-        private async void ConnectToList(object sender, RoutedEventArgs e)
-        {
-            string code = null;
-            ContentDialog connectDialog = new ContentDialog() { Title = resourceLoader.GetString("ConnectToList") };
-            TextBox box = new TextBox() { PlaceholderText = resourceLoader.GetString("ListCode") };
-            connectDialog.Content = box;
-            box.TextChanged += (sender, e) => {
-                code = box.Text;
-            };
-            connectDialog.PrimaryButtonText = resourceLoader.GetString("Connect");
-            connectDialog.PrimaryButtonClick += (sender, e) => { 
-                if (code != null)
-                {
-                    contentFrame.Navigate(typeof(RemoteTaskPage), code);
-                }
-            };
-            connectDialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
-            await connectDialog.ShowAsync();
-        }
-
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             AppWindow window = await AppWindow.TryCreateAsync();
@@ -428,7 +408,6 @@ namespace Taskie
 
         private async void proText_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            // DEBUG LMAO
             hovercount++;
             if (Settings.isPro && hovercount == 10)
             {

@@ -7,14 +7,14 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="Taskie.TaskieClone"
+    Name="c1a3fbcd-a258-4641-a1c6-7b5727fd3760"
     Publisher="CN=TheRefractCo (test)"
-    Version="1.0.4.0" />
+    Version="1.0.3.0" />
 
   <mp:PhoneIdentity PhoneProductId="c1a3fbcd-a258-4641-a1c6-7b5727fd3760" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Taskie CLONE</DisplayName>
+    <DisplayName>Taskie</DisplayName>
     <PublisherDisplayName>Bruno</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -30,12 +30,12 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="shef3r.TaskProject.TaskieClone">
+      EntryPoint="shef3r.TaskProject.Taskie">
       <uap:VisualElements
-        DisplayName="Taskie CLONE"
+        DisplayName="Taskie"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="TaskieClone"
+        Description="Taskie"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
