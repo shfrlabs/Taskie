@@ -27,7 +27,7 @@
                     <RowDefinition Height="135" x:Name="BottomRow"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Bottom">
-                    <Button Background="{StaticResource SystemAccentColorLight2}" x:Name="AddItemBtn" Click="AddList" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 , 10">
+                    <Button Background="{StaticResource SystemAccentColorLight2}" x:Name="AddItemBtn" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 , 10">
                         <Button.Resources>
                             <ResourceDictionary>
                                 <ResourceDictionary.ThemeDictionaries>
@@ -46,6 +46,12 @@
                             <FontIcon Glyph="&#xE710;" FontSize="18" Margin="0,0,10,0" Foreground="Black" x:Name="NewListBtnIcon"/>
                             <TextBlock FontSize="15" x:Uid="NewListBtn" x:Name="NewListBtnText"/>
                         </StackPanel>
+                        <Button.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Icon="List" x:Uid="List" Click="AddList"/>
+                                <MenuFlyoutItem Icon="Folder" x:Uid="Folder" Click="AddFolder"/>
+                            </MenuFlyout>
+                        </Button.Flyout>
                     </Button>
                     <AutoSuggestBox TextChanged="AutoSuggestBox_TextChanged" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="10,0,10,2" Style="{StaticResource SearchStyle}" x:Uid="SearchBox" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" FontSize="15" VerticalAlignment="Bottom" x:Name="searchbox">
                         <AutoSuggestBox.QueryIcon>

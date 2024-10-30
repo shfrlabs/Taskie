@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Documents;
+using Windows.UI.Xaml.Media;
 
 namespace TaskieLib
 {
@@ -35,6 +36,15 @@ namespace TaskieLib
 
         public delegate void ListRenamed(string oldname, string newname);
         public static event ListRenamed ListRenamedEvent;
+
+        public delegate void FolderCreated(string name);
+        public static event FolderCreated FolderCreatedEvent;
+
+        public delegate void FolderDeleted(string name);
+        public static event FolderDeleted FolderDeletedEvent;
+
+        public delegate void FolderRenamed(string oldname, string newname);
+        public static event FolderRenamed FolderRenamedEvent;
         public static void SaveList(string listName, List<ListTask> list)
         {
             try
@@ -65,6 +75,96 @@ namespace TaskieLib
             {
                 Console.WriteLine($"Error getting lists: {ex.Message}");
                 return new string[0];
+            }
+        }
+
+        public static Brush GetColorBrush(string folderName)
+        {
+            foreach (Folder folder in Settings.folders) {
+                if (folder.Name.Equals(folderName))
+                {
+                    return new SolidColorBrush(folder.IconColor);
+                }
+            }
+            return null;
+        }
+
+        public static string[] GetFolders()
+        {
+            try
+            {
+                string localFolderPath = ApplicationData.Current.LocalFolder.Path;
+                DirectoryInfo info = new DirectoryInfo(localFolderPath);
+                DirectoryInfo[] folders = info.GetDirectories();
+                List<string> lists = new List<string>();
+                foreach (DirectoryInfo file in folders)
+                {
+                    lists.Add(file.Name);
+                }
+                return lists.ToArray();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting folders: {ex.Message}");
+                return new string[0];
+            }
+        }
+
+        public static void CreateFolder(string folderName, Windows.UI.Color iconColor)
+        {
+            if (Directory.Exists(GetFilePath(folderName))) {
+                Settings.folders.Add(new Folder() { IconColor = iconColor, Name = GenerateUniqueListName(folderName) });
+                FolderCreatedEvent?.Invoke(GenerateUniqueListName(folderName));
+                Directory.CreateDirectory(GetFolderPath(GenerateUniqueListName(folderName)));
+            }
+            else
+            {
+                List<Folder> temp = Settings.folders;
+                temp.Add(new Folder() { IconColor = iconColor, Name = folderName });
+                Settings.folders = temp;
+                FolderCreatedEvent?.Invoke(folderName);
+                Directory.CreateDirectory(GetFolderPath(folderName));
+            }
+        }
+        public static void DeleteFolder(string folderName)
+        {
+            try
+            {
+                string filePath = GetFolderPath(folderName);
+                if (Directory.Exists(filePath))
+                {
+                    Directory.Delete(filePath);
+                    FolderDeletedEvent.Invoke(folderName);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting folder: {ex.Message}");
+            }
+        }
+        public static void RenameFolder(string oldFolderName, string newFolderName)
+        {
+            if (!File.Exists(GetFolderPath(newFolderName)))
+            {
+                try
+                {
+                    string oldFolderPath = GetFolderPath(oldFolderName);
+                    string newFolderPath = GetFilePath(newFolderName);
+
+                    if (Directory.Exists(oldFolderPath))
+                    {
+                        Directory.Move(oldFolderPath, newFolderPath);
+                        FolderRenamedEvent?.Invoke(oldFolderPath, newFolderPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error renaming folder: {ex.Message}");
+                }
+            }
+            else
+            {
+                throw new ArgumentException();
             }
         }
 
@@ -155,6 +255,11 @@ namespace TaskieLib
         private static string GetFilePath(string listName)
         {
             return Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{listName}.json");
+        }
+
+        private static string GetFolderPath(string listName)
+        {
+            return Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{listName}");
         }
 
         public static string GetTaskFileContent(string listName)

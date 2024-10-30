@@ -208,7 +208,7 @@
     <value>Nowa lista</value>
   </data>
   <data name="NewListBtn.Text" xml:space="preserve">
-    <value>Nowa lista</value>
+    <value>Utwórz</value>
   </data>
   <data name="RenameList.Text" xml:space="preserve">
     <value>Zmień nazwę listy</value>
@@ -299,5 +299,11 @@
   </data>
   <data name="ProCancelledSub" xml:space="preserve">
     <value>Taskie Pro zostało zablokowane.</value>
+  </data>
+  <data name="Folder.Text" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="List.Text" xml:space="preserve">
+    <value>Lista</value>
   </data>
 </root>

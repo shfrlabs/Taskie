@@ -17,6 +17,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
+using ColorPicker = Windows.UI.Xaml.Controls.ColorPicker;
 
 namespace Taskie
 {
@@ -179,6 +180,16 @@ namespace Taskie
 
         private void SetupNavigationMenu()
         {
+            foreach (string folderName in TaskieLib.Tools.GetFolders())
+            {
+                StackPanel content = new StackPanel();
+                content.Orientation = Orientation.Horizontal;
+                content.VerticalAlignment = VerticalAlignment.Center;
+                content.Children.Add(new FontIcon() { Glyph = "", FontSize = 14, Foreground = Tools.GetColorBrush(folderName) });
+                content.Children.Add(new TextBlock { Text = folderName, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 2, Width = 80 });
+                Navigation.Items.Add(new ListViewItem() { Tag = folderName, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
+                AddRightClickMenu();
+            }
             foreach (string listName in TaskieLib.Tools.GetLists())
             {
                 StackPanel content = new StackPanel();
@@ -288,6 +299,37 @@ namespace Taskie
                 if (item.Tag.ToString().Contains(listName))
                 { Navigation.SelectedItem = item; break; }
             }
+        }
+        private string folderName = "";
+        private async void AddFolder(object sender, RoutedEventArgs e) { 
+            ContentDialog dialog = new ContentDialog();
+            dialog.Title = "New folder";
+            dialog.PrimaryButtonText = "Create";
+            dialog.IsPrimaryButtonEnabled = false;
+            dialog.SecondaryButtonText = "Cancel";
+            StackPanel stackPanel = new StackPanel();
+            ColorPicker colorPicker = new ColorPicker();
+            stackPanel.Children.Add(colorPicker);
+            TextBox textBox = new TextBox() { PlaceholderText = "List name", Margin = new Thickness(0, 20, 0, 0) };
+            textBox.TextChanged += (sender, e) =>
+            {
+                folderName = textBox.Text;
+                if (!string.IsNullOrEmpty(folderName)) {
+                    dialog.IsPrimaryButtonEnabled = true;
+                }
+                else
+                {
+                    dialog.IsPrimaryButtonEnabled = false;
+                }
+            };
+            dialog.PrimaryButtonClick += (sender, e) =>
+            {
+                Tools.CreateFolder(folderName, colorPicker.Color);
+            };
+            stackPanel.Children.Add(textBox);
+            stackPanel.Orientation = Orientation.Vertical;
+            dialog.Content = stackPanel;
+            await dialog.ShowAsync();
         }
 
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)

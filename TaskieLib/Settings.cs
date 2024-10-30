@@ -1,6 +1,8 @@
 ﻿using System;
 using Windows.Storage;
 using Windows.Foundation.Collections;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace TaskieLib
 {
@@ -8,6 +10,26 @@ namespace TaskieLib
     {
         private static IPropertySet savedSettings = ApplicationData.Current.LocalSettings.Values;
 
+        public static List<Folder> folders
+        {
+            get
+            {
+                if (savedSettings.ContainsKey("folderData"))
+                {
+                    return JsonConvert.DeserializeObject<List<Folder>>((string)savedSettings["folderData"]);
+                }
+                
+                else
+                {
+                    savedSettings["folderData"] = "[]";
+                    return new List<Folder>();
+                }
+            }
+            set
+            {
+                savedSettings["folderData"] = JsonConvert.SerializeObject(value);
+            }
+        }
         public static string Theme
         {
             get
