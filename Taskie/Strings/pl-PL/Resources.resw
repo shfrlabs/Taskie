@@ -306,4 +306,13 @@
   <data name="List.Text" xml:space="preserve">
     <value>Lista</value>
   </data>
+  <data name="RenameFolder.Text" xml:space="preserve">
+    <value>Zmień nazwę folderu</value>
+  </data>
+  <data name="DeleteFolder.Text" xml:space="preserve">
+    <value>Usuń folder</value>
+  </data>
+  <data name="FolderName" xml:space="preserve">
+    <value>Nazwa folderu</value>
+  </data>
 </root>

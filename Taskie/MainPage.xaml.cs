@@ -214,13 +214,50 @@ namespace Taskie
         private void OpenRightClickList(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
         {
             MenuFlyout flyout = new MenuFlyout();
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = resourceLoader.GetString("RenameList/Text"), Tag = (sender as ListViewItem).Tag });
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag });
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = (sender as ListViewItem).Tag });
-            (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
-            (flyout.Items[1] as MenuFlyoutItem).Click += DeleteList_Click;
-            (flyout.Items[2] as MenuFlyoutItem).Click += ExportList_Click;
+            if (Tools.GetLists().Contains((sender as ListViewItem).Tag as string))
+            {
+                flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = resourceLoader.GetString("RenameList/Text"), Tag = (sender as ListViewItem).Tag });
+                flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag });
+                flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = (sender as ListViewItem).Tag });
+                (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
+                (flyout.Items[1] as MenuFlyoutItem).Click += DeleteList_Click;
+                (flyout.Items[2] as MenuFlyoutItem).Click += ExportList_Click;
+            }
+            else
+            {
+                flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = resourceLoader.GetString("RenameFolder/Text"), Tag = (sender as ListViewItem).Tag });
+                flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteFolder/Text"), Tag = (sender as ListViewItem).Tag });
+                (flyout.Items[0] as MenuFlyoutItem).Click += RenameFolder_Click;
+                (flyout.Items[1] as MenuFlyoutItem).Click += DeleteFolder_Click;
+            }
             flyout.ShowAt(sender as ListViewItem);
+        }
+
+        private void DeleteFolder_Click(object sender, RoutedEventArgs e)
+        {
+            Tools.DeleteFolder((sender as MenuFlyoutItem).Tag as string);
+        }
+
+        private async void RenameFolder_Click(object sender, RoutedEventArgs e)
+        {
+            string foldername = (sender as MenuFlyoutItem).Tag as string;
+            TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("FolderName"), Text = foldername };
+            ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameFolder/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
+            ContentDialogResult result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                string text = input.Text;
+                try
+                {
+                    Tools.RenameFolder(foldername, text);
+                }
+                catch (ArgumentException)
+                {
+                    tipwrongname.Target = Navigation;
+                    tipwrongname.PreferredPlacement = TeachingTipPlacementMode.TopRight;
+                    tipwrongname.IsOpen = true;
+                }
+            }
         }
 
         private async void ExportList_Click(object sender, RoutedEventArgs e)
@@ -310,7 +347,7 @@ namespace Taskie
             StackPanel stackPanel = new StackPanel();
             ColorPicker colorPicker = new ColorPicker();
             stackPanel.Children.Add(colorPicker);
-            TextBox textBox = new TextBox() { PlaceholderText = "List name", Margin = new Thickness(0, 20, 0, 0) };
+            TextBox textBox = new TextBox() { PlaceholderText = "Folder name", Margin = new Thickness(0, 20, 0, 0) };
             textBox.TextChanged += (sender, e) =>
             {
                 folderName = textBox.Text;
@@ -368,7 +405,21 @@ namespace Taskie
             var selectedItem = NavList.SelectedItem as ListViewItem;
             if (selectedItem != null && selectedItem.Tag is string tag)
             {
-                contentFrame.Navigate(typeof(TaskPage), tag);
+                if (Tools.GetLists().Contains(tag))
+                {
+                    contentFrame.Navigate(typeof(TaskPage), tag);
+                }
+                else
+                {
+                    Flyout flyout = new Flyout();
+                    flyout.Content = new TextBlock() { Text = "hi girl im a FOLDER 💜" };
+                    flyout.ShowAt(selectedItem);
+                    flyout.Closed += (sender, e) =>
+                    {
+                        contentFrame.Content = null;
+                        NavList.SelectedItem = null;
+                    };
+                }
             }
         }
 
