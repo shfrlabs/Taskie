@@ -37,9 +37,49 @@ namespace Taskie
             Tools.ListCreatedEvent += UpdateLists;
             Tools.ListDeletedEvent += ListDeleted;
             Tools.ListRenamedEvent += ListRenamed;
+            Tools.FolderCreatedEvent += FolderCreated;
+            Tools.FolderDeletedEvent += FolderDeleted;
+            Tools.FolderRenamedEvent += FolderRenamed;
             Tools.AWOpenEvent += Tools_AWOpenEvent;
             Tools.AWClosedEvent += Tools_AWClosedEvent;
             ActualThemeChanged += MainPage_ActualThemeChanged;
+        }
+
+        private void FolderRenamed(string oldname, string newname)
+        {
+            foreach (ListViewItem listViewItem in Navigation.Items) {
+                if ((string)listViewItem.Tag == oldname) {
+                    listViewItem.DataContext = newname;
+                    StackPanel content = new StackPanel();
+                    content.Orientation = Orientation.Horizontal;
+                    content.VerticalAlignment = VerticalAlignment.Center;
+                    content.Children.Add(new FontIcon() { Glyph = "", FontSize = 14 });
+                    content.Children.Add(new TextBlock { Text = newname, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 2, Width = 80 });
+                    listViewItem.Content = content;
+                }
+            }
+        }
+
+        private void FolderDeleted(string name)
+        {
+            foreach (ListViewItem listViewItem in Navigation.Items)
+            {
+                if ((string)listViewItem.Tag == name)
+                {
+                    Navigation.Items.Remove(listViewItem);
+                }
+            }
+        }
+
+        private void FolderCreated(string name)
+        {
+            StackPanel content = new StackPanel();
+            content.Orientation = Orientation.Horizontal;
+            content.VerticalAlignment = VerticalAlignment.Center;
+            content.Children.Add(new FontIcon() { Glyph = "", FontSize = 14 });
+            content.Children.Add(new TextBlock { Text = name, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 2, Width = 80 });
+            Navigation.Items.Add(new ListViewItem() { Tag = name, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
+            AddRightClickMenu();
         }
 
         private void ProFlyout()
@@ -185,7 +225,7 @@ namespace Taskie
                 StackPanel content = new StackPanel();
                 content.Orientation = Orientation.Horizontal;
                 content.VerticalAlignment = VerticalAlignment.Center;
-                content.Children.Add(new FontIcon() { Glyph = "", FontSize = 14, Foreground = Tools.GetColorBrush(folderName) });
+                content.Children.Add(new FontIcon() { Glyph = "", FontSize = 14 });
                 content.Children.Add(new TextBlock { Text = folderName, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 2, Width = 80 });
                 Navigation.Items.Add(new ListViewItem() { Tag = folderName, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
                 AddRightClickMenu();
@@ -345,8 +385,6 @@ namespace Taskie
             dialog.IsPrimaryButtonEnabled = false;
             dialog.SecondaryButtonText = "Cancel";
             StackPanel stackPanel = new StackPanel();
-            ColorPicker colorPicker = new ColorPicker();
-            stackPanel.Children.Add(colorPicker);
             TextBox textBox = new TextBox() { PlaceholderText = "Folder name", Margin = new Thickness(0, 20, 0, 0) };
             textBox.TextChanged += (sender, e) =>
             {
@@ -361,7 +399,7 @@ namespace Taskie
             };
             dialog.PrimaryButtonClick += (sender, e) =>
             {
-                Tools.CreateFolder(folderName, colorPicker.Color);
+                Tools.CreateFolder(folderName);
             };
             stackPanel.Children.Add(textBox);
             stackPanel.Orientation = Orientation.Vertical;

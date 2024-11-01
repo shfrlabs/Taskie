@@ -78,17 +78,6 @@ namespace TaskieLib
             }
         }
 
-        public static Brush GetColorBrush(string folderName)
-        {
-            foreach (Folder folder in Settings.folders) {
-                if (folder.Name.Equals(folderName))
-                {
-                    return new SolidColorBrush(folder.IconColor);
-                }
-            }
-            return null;
-        }
-
         public static string[] GetFolders()
         {
             try
@@ -110,20 +99,16 @@ namespace TaskieLib
             }
         }
 
-        public static void CreateFolder(string folderName, Windows.UI.Color iconColor)
+        public static void CreateFolder(string folderName)
         {
-            if (Directory.Exists(GetFilePath(folderName))) {
-                Settings.folders.Add(new Folder() { IconColor = iconColor, Name = GenerateUniqueListName(folderName) });
+            if (Directory.Exists(GetFolderPath(folderName))) {
                 FolderCreatedEvent?.Invoke(GenerateUniqueListName(folderName));
                 Directory.CreateDirectory(GetFolderPath(GenerateUniqueListName(folderName)));
             }
             else
             {
-                List<Folder> temp = Settings.folders;
-                temp.Add(new Folder() { IconColor = iconColor, Name = folderName });
-                Settings.folders = temp;
-                FolderCreatedEvent?.Invoke(folderName);
                 Directory.CreateDirectory(GetFolderPath(folderName));
+                FolderCreatedEvent?.Invoke(folderName);
             }
         }
         public static void DeleteFolder(string folderName)
@@ -149,12 +134,12 @@ namespace TaskieLib
                 try
                 {
                     string oldFolderPath = GetFolderPath(oldFolderName);
-                    string newFolderPath = GetFilePath(newFolderName);
+                    string newFolderPath = GetFolderPath(newFolderName);
 
                     if (Directory.Exists(oldFolderPath))
                     {
                         Directory.Move(oldFolderPath, newFolderPath);
-                        FolderRenamedEvent?.Invoke(oldFolderPath, newFolderPath);
+                        FolderRenamedEvent?.Invoke(oldFolderName, newFolderName);
                     }
                 }
                 catch (Exception ex)
