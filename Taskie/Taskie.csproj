@@ -287,8 +287,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PRIResource Include="Strings\en-US\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
     <PRIResource Include="Strings\pl-PL\Resources.resw" />
+    <PRIResource Include="Strings\en-IN\Resources.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
     <None Include="Taskie_TemporaryKey.pfx" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
