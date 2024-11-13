@@ -118,195 +118,96 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutApp.Text" xml:space="preserve">
-    <value>Thanks for supporting me. Taskie is one of my first projects, which I poured a lot of love into. You can check out my other projects on GitHub. I hope you like Taskie. Best wishes from Poland!</value>
-  </data>
-  <data name="AboutCategory" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="AddTaskBox.PlaceholderText" xml:space="preserve">
-    <value>Add task...</value>
+    <value>Thanks for supporting me. Taskie is one of my first projects, which I poar'd a lot of luv into. You can check out my udher projects on GitHub. I hope you like Taskie. Best wishes from Poland!</value>
   </data>
   <data name="AdvertTag.Text" xml:space="preserve">
-    <value>Your quick and private task companion.</value>
-  </data>
-  <data name="AdvertUWPTag.Text" xml:space="preserve">
-    <value>Made with UWP.</value>
+    <value>Your quick and privat task compänion.</value>
   </data>
   <data name="AppearanceCategory" xml:space="preserve">
-    <value>Appearance</value>
+    <value>Apearance</value>
   </data>
   <data name="AppearanceText.Text" xml:space="preserve">
-    <value>Appearance</value>
+    <value>Apearance</value>
   </data>
   <data name="AppThemeSubText.Text" xml:space="preserve">
-    <value>Change app theme</value>
-  </data>
-  <data name="AppThemeText.Text" xml:space="preserve">
-    <value>Theme</value>
+    <value>Chainj app theme</value>
   </data>
   <data name="AuthDescription.Text" xml:space="preserve">
-    <value>Make the app ask for your password/pin/biometrics via Windows Hello. This option may not be available if your computer doesn't have a password or you haven't purchased Taskie Pro.</value>
+    <value>Make the app ask for your passwerd/pin/biomëtrics via Windows Hello. This option may not be available if your computer dusn't have a passwerd or you haven't pürchuss'd Taskie Pro.</value>
   </data>
   <data name="AuthDisabledDescription" xml:space="preserve">
-    <value>Removed biometrics or password, your administrator removed the option, you refunded Taskie Pro or something else happened. Check Windows Settings or the Microsoft Store.</value>
+    <value>Remoov'd biomëtrics or passwerd, your ädministrater remoov'd the option, you refünded Taskie Pro or something else happen'd. Check Windows Settings or the Microsoft Store.</value>
   </data>
   <data name="AuthDisabledTitle" xml:space="preserve">
-    <value>Authentication has been turned off.</value>
+    <value>Authëntication has been turn'd off.</value>
   </data>
   <data name="AuthText.Text" xml:space="preserve">
-    <value>Use authentication</value>
-  </data>
-  <data name="BackupHeader.Text" xml:space="preserve">
-    <value>Back up</value>
-  </data>
-  <data name="BackupsCategory" xml:space="preserve">
-    <value>Backups</value>
-  </data>
-  <data name="BackupsText.Text" xml:space="preserve">
-    <value>Backups</value>
+    <value>Uze authëntication</value>
   </data>
   <data name="BackupText.Text" xml:space="preserve">
-    <value>Export all lists with one click below. To export one list, right-click it and choose Export or use the three-dot menu after opening it.</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="CompactOverlayButton.Text" xml:space="preserve">
-    <value>Open Taskie Mini</value>
-  </data>
-  <data name="DarkThemeRadio.Content" xml:space="preserve">
-    <value>Dark</value>
-  </data>
-  <data name="DeleteList.Text" xml:space="preserve">
-    <value>Delete list</value>
-  </data>
-  <data name="DeleteTask.Text" xml:space="preserve">
-    <value>Delete task</value>
-  </data>
-  <data name="ExportButton.Text" xml:space="preserve">
-    <value>Export</value>
-  </data>
-  <data name="ExportList.Text" xml:space="preserve">
-    <value>Export</value>
-  </data>
-  <data name="GitHubLink.Content" xml:space="preserve">
-    <value>GitHub</value>
-  </data>
-  <data name="ImportButton.Text" xml:space="preserve">
-    <value>Import</value>
-  </data>
-  <data name="LightThemeRadio.Content" xml:space="preserve">
-    <value>Light</value>
-  </data>
-  <data name="ListName" xml:space="preserve">
-    <value>List name</value>
-  </data>
-  <data name="LoginMessage" xml:space="preserve">
-    <value>Log into Taskie with Windows Hello. You can turn this off in Settings.</value>
-  </data>
-  <data name="NewList" xml:space="preserve">
-    <value>New list</value>
-  </data>
-  <data name="NewListBtn.Text" xml:space="preserve">
-    <value>New list</value>
-  </data>
-  <data name="RenameList.Text" xml:space="preserve">
-    <value>Rename list</value>
-  </data>
-  <data name="RenameTask.Text" xml:space="preserve">
-    <value>Rename</value>
-  </data>
-  <data name="RestartButton.Text" xml:space="preserve">
-    <value>Restart</value>
-  </data>
-  <data name="RestartWarning.Text" xml:space="preserve">
-    <value>This requires restarting the app.</value>
-  </data>
-  <data name="RestoreHeader.Text" xml:space="preserve">
-    <value>Restore</value>
-  </data>
-  <data name="RestoreText.Text" xml:space="preserve">
-    <value>Import one list (*.json) or a full backup (*.taskie) into the app here. If a list exists, it'll be imported with a (2) next to its name.</value>
-  </data>
-  <data name="SearchBox.PlaceholderText" xml:space="preserve">
-    <value>Search</value>
-  </data>
-  <data name="SecurityCategory" xml:space="preserve">
-    <value>Security</value>
-  </data>
-  <data name="SecurityHeader.Text" xml:space="preserve">
-    <value>Security</value>
-  </data>
-  <data name="SettingsText.Text" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="SystemThemeRadio.Content" xml:space="preserve">
-    <value>System theme</value>
-  </data>
-  <data name="TaskName" xml:space="preserve">
-    <value>Task name</value>
-  </data>
-  <data name="TwitterLink.Content" xml:space="preserve">
-    <value>Twitter</value>
-  </data>
-  <data name="UpgradeText.Text" xml:space="preserve">
-    <value>Upgrade</value>
-  </data>
-  <data name="PromoBannerText.Text" xml:space="preserve">
-    <value>Remove promotional banners</value>
-  </data>
-  <data name="ListLimitText.Text" xml:space="preserve">
-    <value>Remove 3 list limit</value>
-  </data>
-  <data name="PrioritySupportText.Text" xml:space="preserve">
-    <value>Priority support</value>
-  </data>
-  <data name="WinHelloText.Text" xml:space="preserve">
-    <value>Secure login with Windows Hello</value>
-  </data>
-  <data name="IndicatorText.Text" xml:space="preserve">
-    <value>Pro indicator</value>
+    <value>Expört all lists with one click belouw. To expört one list, rite-click it and chooze Expört or uze the three-dot menu after opening it.</value>
   </data>
   <data name="CloseCO.Text" xml:space="preserve">
-    <value>Close the compact overlay to work in this window.</value>
+    <value>Cloze the compact overlay to werk in this windouw.</value>
+  </data>
+  <data name="ExportButton.Text" xml:space="preserve">
+    <value>Expört</value>
+  </data>
+  <data name="ExportList.Text" xml:space="preserve">
+    <value>Expört</value>
+  </data>
+  <data name="ImportButton.Text" xml:space="preserve">
+    <value>Impört</value>
+  </data>
+  <data name="LightThemeRadio.Content" xml:space="preserve">
+    <value>Lite</value>
+  </data>
+  <data name="ListLimitText.Text" xml:space="preserve">
+    <value>Remoov 3 list limit</value>
+  </data>
+  <data name="PrioritySupportText.Text" xml:space="preserve">
+    <value>Pryority settings</value>
+  </data>
+  <data name="ProCancelled" xml:space="preserve">
+    <value>You refünded Pro.</value>
+  </data>
+  <data name="ProCancelledSub" xml:space="preserve">
+    <value>Pro feechers wer block'd.</value>
+  </data>
+  <data name="PromoBannerText.Text" xml:space="preserve">
+    <value>Remoov promotional banners</value>
   </data>
   <data name="protip.Subtitle" xml:space="preserve">
-    <value>Upgrade the app with a small purchase to support me and remove all limits.</value>
+    <value>Upgrade the app with a smaul pürchuss to suppört me and remoov all limits.</value>
   </data>
-  <data name="protip.Title" xml:space="preserve">
-    <value>Liking Taskie?</value>
+  <data name="RestartButton.Text" xml:space="preserve">
+    <value>Reestärt</value>
   </data>
-  <data name="tip1.Subtitle" xml:space="preserve">
-    <value>Add your first list here.</value>
+  <data name="RestartWarning.Text" xml:space="preserve">
+    <value>This requires reestärting the app.</value>
+  </data>
+  <data name="RestoreText.Text" xml:space="preserve">
+    <value>Impört one list (*.json) or a full backup (*.taskie) into the app here. If a list exists, it'll be impört'd with a (2) next to its name.</value>
+  </data>
+  <data name="SearchBox.PlaceholderText" xml:space="preserve">
+    <value>Serch</value>
+  </data>
+  <data name="successfulUpgrade" xml:space="preserve">
+    <value>Suxcessfully upgraded!</value>
+  </data>
+  <data name="SuccessfulUpgradeSub" xml:space="preserve">
+    <value>Taskie Pro wos unlock'd.</value>
+  </data>
+  <data name="SystemThemeRadio.Content" xml:space="preserve">
+    <value>Sistem theme</value>
   </data>
   <data name="tip1.Title" xml:space="preserve">
     <value>Let's start!</value>
   </data>
-  <data name="tipwrongname.Title" xml:space="preserve">
-    <value>You can't do that!</value>
-  </data>
   <data name="tipwrongname.Subtitle" xml:space="preserve">
-    <value>A list with this name already exists.</value>
-  </data>
-  <data name="successfulUpgrade" xml:space="preserve">
-    <value>Successfully upgraded!</value>
-  </data>
-  <data name="SuccessfulUpgradeSub" xml:space="preserve">
-    <value>Taskie Pro was unlocked.</value>
-  </data>
-  <data name="ProCancelled" xml:space="preserve">
-    <value>You refunded Pro.</value>
-  </data>
-  <data name="ProCancelledSub" xml:space="preserve">
-    <value>Pro features were blocked.</value>
-  </data>
-  <data name="Oops" xml:space="preserve">
-    <value>Oops!</value>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>A list with this name alleddy exists.</value>
   </data>
   <data name="WindowsDefault" xml:space="preserve">
-    <value>Windows default</value>
+    <value>Windows deefault</value>
   </data>
 </root>
