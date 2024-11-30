@@ -331,7 +331,7 @@ namespace Taskie
         {
             ChangeWidth(NameBox);
         }
-        // TODO: Taskie Mini changes don't save
+        // TODO: Taskie Mini changes don't save, but, like, rarely?? what??
         private async void CompactOverlay_Click(object sender, RoutedEventArgs e)
         {
             AppWindow window = await AppWindow.TryCreateAsync();

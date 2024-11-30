@@ -14,6 +14,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.UI;
 using Windows.UI.ViewManagement;
+using Windows.UI.ViewManagement.Core;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -38,6 +39,7 @@ namespace Taskie
             Tools.ListCreatedEvent += UpdateLists;
             Tools.ListDeletedEvent += ListDeleted;
             Tools.ListRenamedEvent += ListRenamed;
+            Tools.ListEmojiChangedEvent += ListEmojiChanged;
             Tools.AWOpenEvent += Tools_AWOpenEvent;
             Tools.AWClosedEvent += Tools_AWClosedEvent;
             ActualThemeChanged += MainPage_ActualThemeChanged;
@@ -152,6 +154,29 @@ namespace Taskie
             }
         }
 
+
+        private void ListEmojiChanged(string listID, string emoji)
+        {
+            Debug.WriteLine("List emoji changed:" + listID);
+            foreach (var item in Navigation.Items)
+            {
+                if (item is ListViewItem navigationItem)
+                {
+                    if (navigationItem.Tag.ToString().Replace(".json", null) == listID)
+                    {
+                        ListMetadata metadata = Tools.ReadList(listID).Metadata;
+                        StackPanel content = new StackPanel();
+                        content.Orientation = Orientation.Horizontal;
+                        content.VerticalAlignment = VerticalAlignment.Center;
+                        content.Children.Add(new FontIcon() { Glyph = emoji, FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
+                        content.Children.Add(new TextBlock() { Text = metadata.Name, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 2 });
+                        navigationItem.Content = content;
+                        break;
+                    }
+                }
+            }
+        }
+
         private void ListDeleted(string listID)
         {
             Debug.WriteLine("List deleted: " + listID);
@@ -192,17 +217,14 @@ namespace Taskie
                 content.Children.Add(new FontIcon() { Glyph = metadata.Emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
                 content.Children.Add(new TextBlock { Text = listName, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 2, Width = 80 });
                 Navigation.Items.Add(new ListViewItem() { Tag = listID, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
-                AddRightClickMenu();
+                AddRightClickMenu(Navigation.Items.Last() as ListViewItem);
             }
             DeterminePro();
         }
 
-        private void AddRightClickMenu()
+        private void AddRightClickMenu(ListViewItem item)
         {
-            foreach (ListViewItem item in Navigation.Items)
-            {
-                item.RightTapped += OpenRightClickList;
-            }
+            item.RightTapped += OpenRightClickList;
         }
 
         private void OpenRightClickList(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
@@ -211,10 +233,44 @@ namespace Taskie
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = resourceLoader.GetString("RenameList/Text"), Tag = (sender as ListViewItem).Tag });
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag });
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = (sender as ListViewItem).Tag });
+            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Emoji), Text = resourceLoader.GetString("ChangeEmoji"), Tag = (sender as ListViewItem).Tag });
             (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
             (flyout.Items[1] as MenuFlyoutItem).Click += DeleteList_Click;
             (flyout.Items[2] as MenuFlyoutItem).Click += ExportList_Click;
+            (flyout.Items[3] as MenuFlyoutItem).Click += ChangeEmoji_Click;
             flyout.ShowAt(sender as ListViewItem);
+        }
+
+        public Flyout emojiflyout = new Flyout();
+        private void ChangeEmoji_Click(object sender, RoutedEventArgs e)
+        {
+            temptag = (((sender as MenuFlyoutItem).Tag.ToString().Replace(".json", null)));
+            TextBox box = new TextBox();
+            emojiflyout.Content = box;
+            box.TextChanged += Box_TextChanged;
+            emojiflyout.Content.Opacity = 0;
+            emojiflyout.FlyoutPresenterStyle = new Style()
+            {
+                TargetType = typeof(FlyoutPresenter),
+                Setters =
+                {
+                    new Setter(FlyoutPresenter.OpacityProperty, 0)
+                }
+            };
+            emojiflyout.ShowAt(NewListBtnIcon);
+            box.Focus(FocusState.Keyboard);
+            CoreInputView.GetForCurrentView().TryShow(CoreInputViewKind.Emoji);
+        }
+        public string temptag = "";
+        public string tempemoji = "";
+        private void Box_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            tempemoji = (sender as TextBox).Text;
+            CoreInputView.GetForCurrentView().TryHide();
+            emojiflyout.Hide();
+            if (temptag != null && tempemoji != null) {
+                Tools.ChangeListEmoji(temptag, tempemoji);
+            }
         }
 
         private async void ExportList_Click(object sender, RoutedEventArgs e)
@@ -352,7 +408,7 @@ namespace Taskie
 
         private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            // DEBUG UPGRADE OPTION! peri add store stuff here idk
+            // DEBUG UPGRADE OPTION
             if (!Settings.isPro)
             {
                 ToastContentBuilder builder = new ToastContentBuilder()

@@ -306,4 +306,7 @@
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="ChangeEmoji" xml:space="preserve">
+    <value>Change emoji</value>
+  </data>
 </root>

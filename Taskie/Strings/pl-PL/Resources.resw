@@ -300,4 +300,7 @@
   <data name="ProCancelledSub" xml:space="preserve">
     <value>Taskie Pro zostało zablokowane.</value>
   </data>
+  <data name="ChangeEmoji" xml:space="preserve">
+    <value>Zmień emoji</value>
+  </data>
 </root>

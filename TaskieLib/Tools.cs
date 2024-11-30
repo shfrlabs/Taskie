@@ -34,6 +34,9 @@ namespace TaskieLib
         public delegate void ListRenamed(string listID, string newname);
         public static event ListRenamed ListRenamedEvent;
 
+        public delegate void ListEmojiChanged(string listID, string emoji);
+        public static event ListEmojiChanged ListEmojiChangedEvent;
+
         public static void SaveList(string listId, List<ListTask> tasks, ListMetadata metadata)
         {
             Debug.WriteLine("Saving " + listId);
@@ -165,6 +168,23 @@ namespace TaskieLib
                 Console.WriteLine($"Error renaming list: {ex.Message}");
             }
         }
+
+        public static void ChangeListEmoji(string listId, string newEmoji)
+        {
+            try
+            {
+                var (metadata, tasks) = ReadList(listId);
+                metadata.Emoji = newEmoji;
+                SaveList(listId, tasks, metadata);
+                ListEmojiChangedEvent?.Invoke(listId, newEmoji);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error changing list emoji: {ex.Message}");
+            }
+        }
+
+
 
         private static string GetFilePath(string listId)
         {
