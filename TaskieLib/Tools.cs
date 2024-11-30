@@ -4,11 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Windows.Storage.Pickers;
-using Windows.UI.Xaml.Documents;
 
 namespace TaskieLib
 {
@@ -27,55 +25,68 @@ namespace TaskieLib
         public delegate void AWOpen();
         public static event AWOpen AWOpenEvent;
 
-        public delegate void ListCreated(string name);
+        public delegate void ListCreated(string listID, string name);
         public static event ListCreated ListCreatedEvent;
 
-        public delegate void ListDeleted(string name);
+        public delegate void ListDeleted(string listID);
         public static event ListDeleted ListDeletedEvent;
 
-        public delegate void ListRenamed(string oldname, string newname);
+        public delegate void ListRenamed(string listID, string newname);
         public static event ListRenamed ListRenamedEvent;
-        public static void SaveList(string listName, List<ListTask> list)
+
+        public static void SaveList(string listId, List<ListTask> tasks, ListMetadata metadata)
         {
+            Debug.WriteLine("Saving " + listId);
             try
             {
-                string filePath = GetFilePath(listName);
-                File.WriteAllText(filePath, JsonConvert.SerializeObject(list));
+                string filePath = GetFilePath(listId);
+                var listData = new
+                {
+                    listmetadata = metadata,
+                    tasks = tasks
+                };
+                File.WriteAllText(filePath, JsonConvert.SerializeObject(listData));
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving list: {ex.Message}");
             }
         }
-        public static string[] GetLists()
+
+        public static (string name, string id)[] GetLists()
         {
             try
             {
                 string localFolderPath = ApplicationData.Current.LocalFolder.Path;
                 DirectoryInfo info = new DirectoryInfo(localFolderPath);
                 FileInfo[] files = info.GetFiles("*.json");
-                List<string> lists = new List<string>();
+                List<(string name, string id)> lists = new List<(string name, string id)>();
                 foreach (FileInfo file in files)
                 {
-                    lists.Add(file.Name.Replace(".json", ""));
+                    var content = File.ReadAllText(file.FullName);
+                    var metadata = JsonConvert.DeserializeObject<dynamic>(content).listmetadata;
+                    lists.Add((metadata?.Name.ToString(), file.Name));
                 }
                 return lists.ToArray();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error getting lists: {ex.Message}");
-                return new string[0];
+                return new (string name, string id)[0];
             }
         }
 
-        public static List<ListTask> ReadList(string listName)
+        public static (ListMetadata Metadata, List<ListTask> Tasks) ReadList(string listId)
         {
             try
             {
-                string taskFileContent = GetTaskFileContent(listName);
+                string taskFileContent = GetTaskFileContent(listId);
                 if (taskFileContent != null)
                 {
-                    return JsonConvert.DeserializeObject<List<ListTask>>(taskFileContent);
+                    dynamic listData = JsonConvert.DeserializeObject<dynamic>(taskFileContent);
+                    var metadata = JsonConvert.DeserializeObject<ListMetadata>(listData.listmetadata.ToString());
+                    var tasks = JsonConvert.DeserializeObject<List<ListTask>>(listData.tasks.ToString());
+                    return (metadata, tasks);
                 }
             }
             catch (Exception ex)
@@ -83,17 +94,24 @@ namespace TaskieLib
                 Console.WriteLine($"Error reading list: {ex.Message}");
             }
 
-            return new List<ListTask>();
+            return (new ListMetadata(), new List<ListTask>());
         }
-        public static string CreateList(string listName)
+
+        public static string CreateList(string listName, int? groupId = 0, string emoji = "📋")
         {
             try
             {
-                string newName = GenerateUniqueListName(listName);
-                string filePath = GetFilePath(newName);
-                File.Create(filePath).Close();
-                ListCreatedEvent?.Invoke(newName);
-                return newName;
+                string listId = Guid.NewGuid().ToString();
+                var metadata = new ListMetadata
+                {
+                    CreationDate = DateTime.UtcNow,
+                    Name = GenerateUniqueListName(listName),
+                    Emoji = emoji,
+                    GroupID = groupId
+                };
+                SaveList(listId, new List<ListTask>(), metadata);
+                ListCreatedEvent?.Invoke(listId, listName);
+                return listId;
             }
             catch (Exception ex)
             {
@@ -101,15 +119,29 @@ namespace TaskieLib
                 return null;
             }
         }
-        public static void DeleteList(string listName)
+
+        private static string GenerateUniqueListName(string listName)
         {
+            string uniqueName = listName;
+            int count = 2;
+            while (GetLists().Select(t => t.name).Contains(uniqueName))
+            {
+                uniqueName = $"{listName} ({count++})";
+            }
+            return uniqueName;
+        }
+
+        public static void DeleteList(string listId)
+        {
+            Debug.WriteLine("Deleted list:" + listId);
             try
             {
-                string filePath = GetFilePath(listName);
+                string filePath = GetFilePath(listId);
                 if (File.Exists(filePath))
                 {
+                    string listName = ReadList(listId).Metadata.Name;
                     File.Delete(filePath);
-                    ListDeletedEvent.Invoke(listName);
+                    ListDeletedEvent?.Invoke(listId);
                 }
             }
             catch (Exception ex)
@@ -117,86 +149,36 @@ namespace TaskieLib
                 Console.WriteLine($"Error deleting list: {ex.Message}");
             }
         }
-        public static void RenameList(string oldListName, string newListName)
-        {
-            if (!File.Exists(GetFilePath(newListName))) {
-                try
-                {
-                    string oldFilePath = GetFilePath(oldListName);
-                    string newFilePath = GetFilePath(newListName);
 
-                    if (File.Exists(oldFilePath))
-                    {
-                        File.Move(oldFilePath, newFilePath);
-                        ListRenamedEvent.Invoke(oldListName, newListName);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error renaming list: {ex.Message}");
-                }
-            }
-            else
+        public static void RenameList(string listId, string newListName)
+        {
+            try
             {
-                throw new ArgumentException();
+                var (metadata, tasks) = ReadList(listId);
+                string oldName = metadata.Name;
+                metadata.Name = newListName;
+                SaveList(listId, tasks, metadata);
+                ListRenamedEvent.Invoke(listId, newListName);
             }
-        }
-
-        private static string GenerateUniqueListName(string listName)
-        {
-            string uniqueName = listName;
-            int count = 2;
-            while (File.Exists(GetFilePath(uniqueName)))
+            catch (Exception ex)
             {
-                uniqueName = $"{listName} ({count++})";
+                Console.WriteLine($"Error renaming list: {ex.Message}");
             }
-            return uniqueName;
-        }
-        private static string GetFilePath(string listName)
-        {
-            return Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{listName}.json");
         }
 
-        public static string GetTaskFileContent(string listName)
+        private static string GetFilePath(string listId)
         {
-            string filePath = GetFilePath(listName);
+            return Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{listId}.json");
+        }
+
+        public static string GetTaskFileContent(string listId)
+        {
+            string filePath = GetFilePath(listId);
             if (File.Exists(filePath))
             {
                 return File.ReadAllText(filePath);
             }
             return null;
-        }
-
-        public static async void ImportFile(StorageFile file)
-        {
-            try
-            {
-                StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-                bool fileExists = false;
-                string uniqueName = null;
-                try
-                {
-                    await localFolder.GetFileAsync(file.Name);
-                    fileExists = true;
-                }
-                catch (FileNotFoundException)
-                {
-                    fileExists = false;
-                }
-                if (fileExists)
-                {
-                    uniqueName = GenerateUniqueListName(file.Name.Replace(".json", null));
-                }
-                if (uniqueName == null)
-                {
-                    await file.CopyAsync(localFolder);
-                }
-                else
-                {
-                    await file.CopyAsync(localFolder, uniqueName + ".json");
-                }
-            }
-            catch { }
         }
 
         public static async Task<StorageFile> ExportedLists()
@@ -208,5 +190,32 @@ namespace TaskieLib
             await exportedFile.MoveAsync(localFolder, "Export.taskie", NameCollisionOption.ReplaceExisting);
             return exportedFile;
         }
+
+        public static async void ImportFile(StorageFile file)
+        {
+            try
+            {
+                string content = await FileIO.ReadTextAsync(file);
+                dynamic listData = JsonConvert.DeserializeObject<dynamic>(content);
+
+                ListMetadata metadata = JsonConvert.DeserializeObject<ListMetadata>(listData.listmetadata.ToString());
+                var tasks = JsonConvert.DeserializeObject<List<ListTask>>(listData.tasks.ToString());
+
+                metadata.Name = GenerateUniqueListName(metadata.Name);
+
+                string newListId;
+                do
+                {
+                    newListId = Guid.NewGuid().ToString();
+                }
+                while (File.Exists(GetFilePath(newListId)));
+                SaveList(newListId, tasks, metadata);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error importing file: {ex.Message}");
+            }
+        }
+
     }
 }

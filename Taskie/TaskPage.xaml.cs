@@ -30,11 +30,7 @@ namespace Taskie
 
         private void ListRenamed(string oldname, string newname)
         {
-            if (listname == oldname)
-            {
-                listname = newname;
-                testname.Text = newname;
-            };
+          testname.Text = newname;
         }
 
         private void TaskPage_ActualThemeChanged(FrameworkElement sender, object args)
@@ -83,6 +79,7 @@ namespace Taskie
         }
 
         public string listname { get; set; }
+        public string listId { get; set; }
 
         private T FindVisualChild<T>(DependencyObject obj, string name) where T : DependencyObject
         {
@@ -105,16 +102,17 @@ namespace Taskie
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            listId = e.Parameter.ToString();
             if (e.Parameter != null)
             {
-                testname.Text = e.Parameter.ToString();
-                listname = e.Parameter.ToString();
+                testname.Text = Tools.ReadList(listId).Metadata.Name;
+                listname = Tools.ReadList(listId).Metadata.Name;
             }
             base.OnNavigatedTo(e);
 
-            if (Tools.ReadList(listname) != null)
+            if (!(Tools.ReadList(listId).Tasks == null || Tools.ReadList(listId).Metadata == null))
             {
-                foreach (ListTask task in Tools.ReadList(listname))
+                foreach (ListTask task in Tools.ReadList(listId).Tasks)
                 {
                     taskListView.Items.Add(task);
                 }
@@ -124,10 +122,11 @@ namespace Taskie
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrEmpty(args.QueryText)) {
+                ListMetadata metadata = Tools.ReadList(listId).Metadata;
                 List<ListTask> tasks = new List<ListTask>();
-                if (Tools.ReadList(listname) != null && (Tools.ReadList(listname)).Count > 0)
+                if (Tools.ReadList(listId).Tasks.Count > 0)
                 {
-                    foreach (ListTask task2add in Tools.ReadList(listname))
+                    foreach (ListTask task2add in Tools.ReadList(listId).Tasks)
                     {
                         tasks.Add(task2add);
                     }
@@ -140,7 +139,7 @@ namespace Taskie
                 };
                 tasks.Add(task);
                 taskListView.Items.Add(task);
-                Tools.SaveList(listname, tasks);
+                Tools.SaveList(listId, tasks, metadata);
             }
         }
 
@@ -158,31 +157,31 @@ namespace Taskie
                 string text = input.Text;
                 note.Name = text;
                 List<ListTask> tasks = new List<ListTask>();
-                if (Tools.ReadList(listname) != null && (Tools.ReadList(listname)).Count > 0)
+                if (!(Tools.ReadList(listId).Tasks == null || Tools.ReadList(listId).Metadata == null))
                 {
-                    foreach (ListTask task2add in Tools.ReadList(listname))
+                    foreach (ListTask task2add in Tools.ReadList(listId).Tasks)
                     {
                         tasks.Add(task2add);
                     }
                 };
                 int index = tasks.FindIndex(task => task.CreationDate == note.CreationDate);
                 tasks[index] = note;
-                Tools.SaveList(listname, tasks);
+                Tools.SaveList(listId, tasks, Tools.ReadList(listId).Metadata);
             }
         }
 
         private void DeleteTask_Click(object sender, RoutedEventArgs e)
         {
             ListTask taskToDelete = (sender as MenuFlyoutItem).DataContext as ListTask;
-            List<ListTask> tasks = Tools.ReadList(listname);
+            List<ListTask> tasks = Tools.ReadList(listId).Tasks;
             int index = tasks.FindIndex(task => task.CreationDate == taskToDelete.CreationDate);
             if (index != -1)
             {
                 tasks.RemoveAt(index);
-                Tools.SaveList(listname, tasks);
+                Tools.SaveList(listId, tasks, Tools.ReadList(listId).Metadata);
                 taskListView.Items.Remove(taskToDelete);
             }
-            Tools.SaveList(listname, tasks);
+            Tools.SaveList(listId, tasks, Tools.ReadList(listId).Metadata);
         }
 
         private async void RenameList_Click(object sender, RoutedEventArgs e)
@@ -194,7 +193,7 @@ namespace Taskie
             if (result == ContentDialogResult.Primary)
             {
                 string text = input.Text;
-                Tools.RenameList(listname, text);
+                Tools.RenameList(listId, text);
                 listname = text;
                 testname.Text = listname;
             }
@@ -218,7 +217,7 @@ namespace Taskie
                     if (file != null)
                     {
                         CachedFileManager.DeferUpdates(file);
-                        string content = Tools.GetTaskFileContent(listname);
+                        string content = Tools.GetTaskFileContent(listId);
                         await FileIO.WriteTextAsync(file, content);
 
                         FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
@@ -232,13 +231,13 @@ namespace Taskie
 
         private void DeleteList_Click(object sender, RoutedEventArgs e)
         {
-            Tools.DeleteList(listname);
+            Tools.DeleteList(listId);
         }
 
         private void TaskStateChanged(object sender, RoutedEventArgs e)
         {
             ListTask tasktoChange = (sender as CheckBox).DataContext as ListTask;
-            List<ListTask> tasks = Tools.ReadList(listname);
+            List<ListTask> tasks = Tools.ReadList(listId).Tasks;
             try
             {
                 int index = tasks.FindIndex(task => task.CreationDate == tasktoChange.CreationDate);
@@ -246,7 +245,7 @@ namespace Taskie
                 {
                     tasktoChange.IsDone = (bool)(sender as CheckBox).IsChecked;
                     tasks[index] = tasktoChange;
-                    Tools.SaveList(listname, tasks);
+                    Tools.SaveList(listId, tasks, Tools.ReadList(listId).Metadata);
                 }
             }
             catch { }
@@ -308,13 +307,14 @@ namespace Taskie
             if (e.Key == Windows.System.VirtualKey.Enter && !string.IsNullOrEmpty((sender as AutoSuggestBox).Text))
             {
                 List<ListTask> tasks = new List<ListTask>();
-                if (Tools.ReadList(listname) != null && (Tools.ReadList(listname)).Count > 0)
+                if (!(Tools.ReadList(listId).Tasks == null || Tools.ReadList(listId).Metadata == null))
                 {
-                    foreach (ListTask task2add in Tools.ReadList(listname))
+                    foreach (ListTask task2add in Tools.ReadList(listId).Tasks)
                     {
                         tasks.Add(task2add);
                     }
                 };
+                ListMetadata metadata = Tools.ReadList(listId).Metadata;
                 ListTask task = new ListTask()
                 {
                     Name = (sender as AutoSuggestBox).Text,
@@ -323,7 +323,7 @@ namespace Taskie
                 };
                 tasks.Add(task);
                 taskListView.Items.Add(task);
-                Tools.SaveList(listname, tasks);
+                Tools.SaveList(listId, tasks, metadata);
             }
         }
 
@@ -331,7 +331,7 @@ namespace Taskie
         {
             ChangeWidth(NameBox);
         }
-
+        // TODO: Taskie Mini changes don't save
         private async void CompactOverlay_Click(object sender, RoutedEventArgs e)
         {
             AppWindow window = await AppWindow.TryCreateAsync();
@@ -347,7 +347,7 @@ namespace Taskie
             }
             window.Closed += AWClosed;
             Frame frame = new Frame();
-            frame.Navigate(typeof(TaskPage), listname);
+            frame.Navigate(typeof(TaskPage), listId.Replace(".json", null));
             Tools.isAWOpen = true;
             ElementCompositionPreview.SetAppWindowContent(window, frame);
             window.Presenter.RequestPresentation(AppWindowPresentationKind.CompactOverlay);

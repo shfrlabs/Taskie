@@ -2,10 +2,12 @@
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using TaskieLib;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
+using Windows.Networking;
 using Windows.Security.Credentials.UI;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -128,19 +130,20 @@ namespace Taskie
 
         public ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
 
-        private void ListRenamed(string oldname, string newname)
+        private void ListRenamed(string listID, string newname)
         {
+            Debug.WriteLine("List got renamed:" + listID);
             foreach (var item in Navigation.Items)
             {
                 if (item is ListViewItem navigationItem)
                 {
-                    if (navigationItem.Tag.ToString() == oldname)
+                    if (navigationItem.Tag.ToString().Replace(".json", null) == listID)
                     {
-                        navigationItem.Tag = newname;
+                        ListMetadata metadata = Tools.ReadList(listID).Metadata;
                         StackPanel content = new StackPanel();
                         content.Orientation = Orientation.Horizontal;
                         content.VerticalAlignment = VerticalAlignment.Center;
-                        content.Children.Add(new FontIcon() { Glyph = "📄", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
+                        content.Children.Add(new FontIcon() { Glyph = metadata.Emoji, FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
                         content.Children.Add(new TextBlock() { Text = newname, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 2 });
                         navigationItem.Content = content;
                         break;
@@ -149,15 +152,16 @@ namespace Taskie
             }
         }
 
-        private void ListDeleted(string name)
+        private void ListDeleted(string listID)
         {
+            Debug.WriteLine("List deleted: " + listID);
             contentFrame.Content = new StackPanel();
             Navigation.SelectedItem = null;
             foreach (var item in Navigation.Items)
             {
                 if (item is ListViewItem navigationItem)
                 {
-                    if (navigationItem.Tag.ToString() == name)
+                    if (navigationItem.Tag.ToString().Replace(".json", null) == listID)
                     {
                         Navigation.Items.Remove(item);
                         break;
@@ -179,14 +183,15 @@ namespace Taskie
 
         private void SetupNavigationMenu()
         {
-            foreach (string listName in TaskieLib.Tools.GetLists())
+            foreach ((string listName, string listID) in TaskieLib.Tools.GetLists())
             {
+                ListMetadata metadata = Tools.ReadList(listID).Metadata;
                 StackPanel content = new StackPanel();
                 content.Orientation = Orientation.Horizontal;
                 content.VerticalAlignment = VerticalAlignment.Center;
-                content.Children.Add(new FontIcon() { Glyph = "📄", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
+                content.Children.Add(new FontIcon() { Glyph = metadata.Emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
                 content.Children.Add(new TextBlock { Text = listName, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 2, Width = 80 });
-                Navigation.Items.Add(new ListViewItem() { Tag = listName, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
+                Navigation.Items.Add(new ListViewItem() { Tag = listID, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
                 AddRightClickMenu();
             }
             DeterminePro();
@@ -244,7 +249,7 @@ namespace Taskie
 
         private async void RenameList_Click(object sender, RoutedEventArgs e)
         {
-            string listname = (sender as MenuFlyoutItem).Tag as string;
+            string listname = Tools.ReadList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null)).Metadata.Name;
             TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("ListName"), Text = listname };
             ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameList/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
             ContentDialogResult result = await dialog.ShowAsync();
@@ -253,7 +258,7 @@ namespace Taskie
                 string text = input.Text;
                 try
                 {
-                    Tools.RenameList(listname, text);
+                    Tools.RenameList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null), text);
                 }
                 catch (ArgumentException) {
                     tipwrongname.Target = Navigation;
@@ -261,17 +266,19 @@ namespace Taskie
                     tipwrongname.IsOpen = true;
                 }
                 listname = text;
+                ListRenamed(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null), text);
             }
         }
 
         private void DeleteList_Click(object sender, RoutedEventArgs e)
         {
             string listname = (sender as MenuFlyoutItem).Tag as string;
-            Tools.DeleteList(listname);
+            Tools.DeleteList(listname.Replace(".json", null));
+            ListDeleted(((sender as MenuFlyoutItem).Tag.ToString().Replace(".json", null)));
             DeterminePro();
         }
 
-        private void UpdateLists(string name)
+        private void UpdateLists(string listID, string listName)
         {
             Navigation.Items.Clear();
             SetupNavigationMenu();
@@ -282,7 +289,7 @@ namespace Taskie
         private void AddList(object sender, RoutedEventArgs e)
         {
             string listName = Tools.CreateList(resourceLoader.GetString("NewList"));
-            UpdateLists(resourceLoader.GetString("NewList"));
+            UpdateLists(null, resourceLoader.GetString("NewList"));
             foreach (ListViewItem item in Navigation.Items)
             {
                 if (item.Tag.ToString().Contains(listName))
@@ -326,7 +333,7 @@ namespace Taskie
             var selectedItem = NavList.SelectedItem as ListViewItem;
             if (selectedItem != null && selectedItem.Tag is string tag)
             {
-                contentFrame.Navigate(typeof(TaskPage), tag);
+                contentFrame.Navigate(typeof(TaskPage), tag.Replace(".json", null));
             }
         }
 
@@ -368,41 +375,14 @@ namespace Taskie
             { sender.IsSuggestionListOpen = false; sender.ItemsSource = new List<string>(); }
             else
             {
-                sender.ItemsSource = Array.FindAll<string>(Tools.GetLists(), s => s.ToLower().Contains(sender.Text.ToLower()));
+                sender.ItemsSource = Array.FindAll<(string, string)>(Tools.GetLists(), s => s.Item1.ToLower().Contains(sender.Text.ToLower())).Select(t => t.Item1).ToArray();
             }
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            if (!string.IsNullOrWhiteSpace(sender.Text))
-            {
-                try
-                {
-                    string foundItem = "";
-                    foreach (ListViewItem item in Navigation.Items)
-                    {
-                        if (item.Tag.ToString().ToLower() == sender.Text.ToLower())
-                        { Navigation.SelectedItem = item; foundItem = item.Tag.ToString(); break; }
-                    }
-                    if (string.IsNullOrEmpty(foundItem))
-                    {
-                        foreach (ListViewItem item in Navigation.Items)
-                        {
-                            if (item.Tag.ToString().ToLower().Contains(sender.Text.ToLower()))
-                            { Navigation.SelectedItem = item; foundItem = item.Tag.ToString(); break; }
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(foundItem))
-                    {
-                        contentFrame.Navigate(typeof(TaskPage), foundItem);
-                    }
-
-                    sender.Text = "";
-                    searchbox.ItemsSource = new List<string>();
-                }
-                catch { }
-            }
-        }
+            sender.IsSuggestionListOpen = true;
+        } // TODO: make this.. well.. better
 
         internal int hovercount = 0;
 
@@ -419,6 +399,34 @@ namespace Taskie
                 Settings.isPro = false;
                 await CoreApplication.RequestRestartAsync("Pro status changed.");
             }
+        }
+
+        private void searchbox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            try
+            {
+                string foundItem = "";
+                foreach ((string name, string id) item in Tools.GetLists())
+                {
+                    if (args.SelectedItem.ToString() == item.name)
+                    {
+                        foundItem = item.id.Replace(".json", null);
+                    }
+                }
+                if (!string.IsNullOrEmpty(foundItem))
+                {
+                    contentFrame.Navigate(typeof(TaskPage), foundItem.Replace(".json", null));
+                    foreach (ListViewItem item in Navigation.Items) {
+                        if (item.Tag.ToString().Replace(".json", null) == foundItem) {
+                            Navigation.SelectedItem = item;
+                        }
+                    }
+                }
+
+                sender.Text = "";
+                searchbox.ItemsSource = new List<string>();
+            }
+            catch { }
         }
     }
 }
