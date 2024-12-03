@@ -1,25 +1,28 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.UI.Xaml.Controls;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using TaskieLib;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
-using Windows.Networking;
 using Windows.Security.Credentials.UI;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.UI;
 using Windows.UI.ViewManagement;
-using Windows.UI.ViewManagement.Core;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
+using Windows.Foundation;
 
 namespace Taskie
 {
@@ -210,7 +213,8 @@ namespace Taskie
         {
             foreach ((string listName, string listID) in TaskieLib.Tools.GetLists())
             {
-                ListMetadata metadata = Tools.ReadList(listID).Metadata;
+                ListMetadata metadata = Tools.ReadList(listID.Replace(".json", null)).Metadata;
+                Debug.WriteLine(JsonConvert.SerializeObject(metadata));
                 StackPanel content = new StackPanel();
                 content.Orientation = Orientation.Horizontal;
                 content.VerticalAlignment = VerticalAlignment.Center;
@@ -241,37 +245,72 @@ namespace Taskie
             flyout.ShowAt(sender as ListViewItem);
         }
 
-        public Flyout emojiflyout = new Flyout();
-        private void ChangeEmoji_Click(object sender, RoutedEventArgs e)
+        public class IncrementalEmojiSource : ObservableCollection<string>, ISupportIncrementalLoading
         {
-            temptag = (((sender as MenuFlyoutItem).Tag.ToString().Replace(".json", null)));
-            TextBox box = new TextBox();
-            emojiflyout.Content = box;
-            box.TextChanged += Box_TextChanged;
-            emojiflyout.Content.Opacity = 0;
-            emojiflyout.FlyoutPresenterStyle = new Style()
+            private readonly string[] allEmojis;
+            private int currentIndex = 0;
+            private const int BatchSize = 50;
+
+            public IncrementalEmojiSource(string[] emojis)
             {
-                TargetType = typeof(FlyoutPresenter),
-                Setters =
+                allEmojis = emojis;
+            }
+
+            public bool HasMoreItems => currentIndex < allEmojis.Length;
+
+            public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
+            {
+                return InternalLoadMoreItemsAsync(count).AsAsyncOperation();
+            }
+
+            private async Task<LoadMoreItemsResult> InternalLoadMoreItemsAsync(uint count)
+            {
+                await Task.Delay(50); // Simulate slight delay for loading
+
+                int itemsToLoad = Math.Min(BatchSize, allEmojis.Length - currentIndex);
+                for (int i = 0; i < itemsToLoad; i++)
                 {
-                    new Setter(FlyoutPresenter.OpacityProperty, 0)
+                    Add(allEmojis[currentIndex++]);
                 }
-            };
-            emojiflyout.ShowAt(NewListBtnIcon);
-            box.Focus(FocusState.Keyboard);
-            CoreInputView.GetForCurrentView().TryShow(CoreInputViewKind.Emoji);
-        }
-        public string temptag = "";
-        public string tempemoji = "";
-        private void Box_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            tempemoji = (sender as TextBox).Text;
-            CoreInputView.GetForCurrentView().TryHide();
-            emojiflyout.Hide();
-            if (temptag != null && tempemoji != null) {
-                Tools.ChangeListEmoji(temptag, tempemoji);
+
+                return new LoadMoreItemsResult { Count = (uint)itemsToLoad };
             }
         }
+
+        private void ChangeEmoji_Click(object sender, RoutedEventArgs e)
+        {
+            var emojiSource = new IncrementalEmojiSource(Tools.GetSystemEmojis());
+
+            GridView content = new GridView
+            {
+                Tag = (sender as MenuFlyoutItem).Tag,
+                ItemsSource = emojiSource,
+                ItemTemplate = (DataTemplate)Resources["EmojiBlock"],
+                SelectionMode = ListViewSelectionMode.Single,
+                Width = 250,
+                Height = 300,
+            };
+            
+
+            content.ItemsPanel = (ItemsPanelTemplate)Resources["WrapGridPanel"];
+
+            Flyout flyout = new Flyout
+            {
+                Content = content
+            };
+
+            flyout.ShowAt(AddItemBtn);
+
+
+            content.SelectionChanged += (sender, args) => {
+                if ((sender as GridView).Tag.ToString().Replace(".json", null) != null && (sender as GridView).SelectedItem != null)
+                {
+                    Tools.ChangeListEmoji((sender as GridView).Tag.ToString().Replace(".json", null), (sender as GridView).SelectedItem.ToString());
+                }
+                flyout.Hide();
+            };
+        }
+
 
         private async void ExportList_Click(object sender, RoutedEventArgs e)
         {
