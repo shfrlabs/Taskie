@@ -71,10 +71,14 @@ namespace Taskie
         {
             Navigation.Visibility = Visibility.Visible;
             Navigation.SelectedItem = null;
+            AddItemBtn.Visibility = Visibility.Visible;
+            searchbox.IsEnabled = true;
         }
 
         private void Tools_AWOpenEvent()
         {
+            AddItemBtn.Visibility = Visibility.Collapsed;
+            searchbox.IsEnabled = false;
             Navigation.Visibility = Visibility.Collapsed;
         }
 
@@ -265,7 +269,7 @@ namespace Taskie
 
             private async Task<LoadMoreItemsResult> InternalLoadMoreItemsAsync(uint count)
             {
-                await Task.Delay(50); // Simulate slight delay for loading
+                await Task.Delay(50);
 
                 int itemsToLoad = Math.Min(BatchSize, allEmojis.Length - currentIndex);
                 for (int i = 0; i < itemsToLoad; i++)
@@ -477,7 +481,7 @@ namespace Taskie
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             sender.IsSuggestionListOpen = true;
-        } // TODO: make this.. well.. better
+        }
 
         internal int hovercount = 0;
 

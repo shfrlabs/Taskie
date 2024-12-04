@@ -64,7 +64,7 @@ namespace TaskieLib
         }
 
         public static bool isPro
-        { // peri use a store getter here pls
+        {
             get
             {
                 if (savedSettings.ContainsKey("pro") && (string)savedSettings["pro"] == "1")

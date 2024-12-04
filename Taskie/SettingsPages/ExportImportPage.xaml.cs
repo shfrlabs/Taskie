@@ -78,8 +78,6 @@ namespace Taskie.SettingsPages
                                 var memoryStream = new MemoryStream();
                                 await entryStream.CopyToAsync(memoryStream);
                                 memoryStream.Position = 0;
-
-                                // Create a temporary file in memory and call ImportFile on it
                                 var unzippedFile = await CreateStorageFileFromStreamAsync(entry.FullName, memoryStream);
                                 Tools.ImportFile(unzippedFile);
                             }

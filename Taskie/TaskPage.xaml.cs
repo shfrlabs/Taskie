@@ -151,23 +151,26 @@ namespace Taskie
             MenuFlyoutItem menuFlyoutItem = (MenuFlyoutItem)sender;
             var note = menuFlyoutItem.DataContext as ListTask;
             TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("TaskName"), Text = note.Name };
-            ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameTask/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
-            ContentDialogResult result = await dialog.ShowAsync();
-            if (result == ContentDialogResult.Primary)
+            if (!Tools.isAWOpen)
             {
-                string text = input.Text;
-                note.Name = text;
-                List<ListTask> tasks = new List<ListTask>();
-                if (!(Tools.ReadList(listId).Tasks == null || Tools.ReadList(listId).Metadata == null))
+                ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameTask/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
+                ContentDialogResult result = await dialog.ShowAsync();
+                if (result == ContentDialogResult.Primary)
                 {
-                    foreach (ListTask task2add in Tools.ReadList(listId).Tasks)
+                    string text = input.Text;
+                    note.Name = text;
+                    List<ListTask> tasks = new List<ListTask>();
+                    if (!(Tools.ReadList(listId).Tasks == null || Tools.ReadList(listId).Metadata == null))
                     {
-                        tasks.Add(task2add);
-                    }
-                };
-                int index = tasks.FindIndex(task => task.CreationDate == note.CreationDate);
-                tasks[index] = note;
-                Tools.SaveList(listId, tasks, Tools.ReadList(listId).Metadata);
+                        foreach (ListTask task2add in Tools.ReadList(listId).Tasks)
+                        {
+                            tasks.Add(task2add);
+                        }
+                    };
+                    int index = tasks.FindIndex(task => task.CreationDate == note.CreationDate);
+                    tasks[index] = note;
+                    Tools.SaveList(listId, tasks, Tools.ReadList(listId).Metadata);
+                }
             }
         }
 
@@ -332,7 +335,6 @@ namespace Taskie
         {
             ChangeWidth(NameBox);
         }
-        // TODO: Taskie Mini changes don't save, but, like, rarely?? what??
         private async void CompactOverlay_Click(object sender, RoutedEventArgs e)
         {
             AppWindow window = await AppWindow.TryCreateAsync();
@@ -417,6 +419,14 @@ namespace Taskie
                 }
                 flyout.Items.Add(item);
                 flyout.ShowAt(testname);
+            }
+        }
+
+        private void MenuFlyoutItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Tools.isAWOpen)
+            {
+                (sender as MenuFlyoutItem).Visibility = Visibility.Collapsed;
             }
         }
     }
