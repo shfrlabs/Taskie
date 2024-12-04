@@ -303,4 +303,7 @@
   <data name="ChangeEmoji" xml:space="preserve">
     <value>Zmień emoji</value>
   </data>
+  <data name="ChangeFont" xml:space="preserve">
+    <value>Zmień czcionkę</value>
+  </data>
 </root>

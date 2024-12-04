@@ -274,5 +274,19 @@ namespace TaskieLib
             }
         }
 
+        public static void ChangeListFont(string listId, string font)
+        {
+            try
+            {
+                var (metadata, tasks) = ReadList(listId);
+                ListMetadata newData = metadata;
+                newData.TitleFont = font;
+                SaveList(listId, tasks, newData);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error changing list font: {ex.Message}");
+            }
+        }
     }
 }

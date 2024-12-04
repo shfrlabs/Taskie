@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using Windows.UI.Xaml.Media;
 
 public class ListMetadata : INotifyPropertyChanged
 {
@@ -9,6 +10,16 @@ public class ListMetadata : INotifyPropertyChanged
     private string _name;
     private string _emoji;
     private int? _groupID;
+    private string _titlefont;
+
+    public string TitleFont
+    {
+        get { if (_titlefont != null) { return _titlefont; } else { return "Segoe UI Variable"; }; }
+        set
+        {
+            _titlefont = value;
+        }
+    }
 
     public DateTime CreationDate
     {

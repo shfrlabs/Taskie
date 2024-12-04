@@ -309,4 +309,7 @@
   <data name="ChangeEmoji" xml:space="preserve">
     <value>Change emoji</value>
   </data>
+  <data name="ChangeFont" xml:space="preserve">
+    <value>Change font</value>
+  </data>
 </root>

@@ -26,6 +26,7 @@ namespace Taskie
             this.InitializeComponent();
             ActualThemeChanged += TaskPage_ActualThemeChanged;
             Tools.ListRenamedEvent += ListRenamed;
+            testname.FontFamily = Tools.ReadList(listId).Metadata.TitleFont != null ? new FontFamily(Tools.ReadList(listId).Metadata.TitleFont) : new FontFamily("Segoe UI Variable");
         }
 
         private void ListRenamed(string oldname, string newname)
@@ -393,6 +394,29 @@ namespace Taskie
                     }
                 }
                 topoptions.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void testname_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            if (Settings.isPro)
+            {
+                MenuFlyout flyout = new MenuFlyout();
+                MenuFlyoutSubItem item = new MenuFlyoutSubItem();
+                item.Icon = new SymbolIcon(Symbol.Font);
+                item.Text = resourceLoader.GetString("ChangeFont");
+                foreach (string font in Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies())
+                {
+                    MenuFlyoutItem subfont = new MenuFlyoutItem() { Tag = font, Text = font, FontFamily = new FontFamily(font) };
+                    subfont.Click += (sender, args) => {
+                        System.Diagnostics.Debug.WriteLine(listId);
+                        Tools.ChangeListFont(listId, (sender as MenuFlyoutItem).Tag.ToString());
+                        testname.FontFamily = new FontFamily(font);
+                    };
+                    item.Items.Add(subfont);
+                }
+                flyout.Items.Add(item);
+                flyout.ShowAt(testname);
             }
         }
     }
