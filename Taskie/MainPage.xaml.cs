@@ -48,9 +48,10 @@ namespace Taskie
             ActualThemeChanged += MainPage_ActualThemeChanged;
         }
 
+        // nagging users to buy Pro
         private void ProFlyout()
         {
-            if (!Settings.isPro && (new Random()).Next(1, 5) == 1)
+            if (!Settings.isPro && (new Random()).Next(1, 25) == 16)
             {
                 protip.Target = UpdateButton;
                 protip.IsOpen = true;
@@ -67,7 +68,7 @@ namespace Taskie
             Settings.Launched = true;
         }
 
-        private void Tools_AWClosedEvent()
+        private void Tools_AWClosedEvent() // Executes when Taskie Mini is closed.
         {
             Navigation.Visibility = Visibility.Visible;
             Navigation.SelectedItem = null;
@@ -75,14 +76,14 @@ namespace Taskie
             searchbox.IsEnabled = true;
         }
 
-        private void Tools_AWOpenEvent()
+        private void Tools_AWOpenEvent() // Executes when Taskie Mini is opened.
         {
             AddItemBtn.Visibility = Visibility.Collapsed;
             searchbox.IsEnabled = false;
             Navigation.Visibility = Visibility.Collapsed;
         }
 
-        public void DeterminePro()
+        public void DeterminePro() // Locks down features for free users.
         {
             if (Settings.isPro)
             { 
@@ -108,7 +109,7 @@ namespace Taskie
             }
         }
 
-        public async void CheckSecurity()
+        public async void CheckSecurity() // checks if it's possible to ask for Windows Hello authentication
         {
             UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
             if ((availability != UserConsentVerifierAvailability.Available && Settings.isAuthUsed) || (Settings.isAuthUsed && !Settings.isPro))
@@ -249,7 +250,7 @@ namespace Taskie
             flyout.ShowAt(sender as ListViewItem);
         }
 
-        public class IncrementalEmojiSource : ObservableCollection<string>, ISupportIncrementalLoading
+        public class IncrementalEmojiSource : ObservableCollection<string>, ISupportIncrementalLoading // source for emojis in the "Change emoji" dialog
         {
             private readonly string[] allEmojis;
             private int currentIndex = 0;
@@ -294,7 +295,6 @@ namespace Taskie
                 Width = 250,
                 Height = 300,
             };
-            
 
             content.ItemsPanel = (ItemsPanelTemplate)Resources["WrapGridPanel"];
 
@@ -383,7 +383,7 @@ namespace Taskie
             SetupNavigationMenu();
             contentFrame.Content = null;
             DeterminePro();
-        }
+        } // Resets the main view
 
         private void AddList(object sender, RoutedEventArgs e)
         {
@@ -424,10 +424,10 @@ namespace Taskie
         private void SettingsWindowClosed(AppWindow sender, AppWindowClosedEventArgs args)
         {
             SettingsButton.IsEnabled = true;
-        }
+        } // disallows for >1 settings window at a time
 
         private void Navigation_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
+        { // opens a list
             ListView NavList = sender as ListView;
             var selectedItem = NavList.SelectedItem as ListViewItem;
             if (selectedItem != null && selectedItem.Tag is string tag)
@@ -483,23 +483,6 @@ namespace Taskie
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             sender.IsSuggestionListOpen = true;
-        }
-
-        internal int hovercount = 0;
-
-        private async void proText_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            hovercount++;
-            if (Settings.isPro && hovercount == 10)
-            {
-                hovercount = 0;
-                ToastContentBuilder builder = new ToastContentBuilder()
-                    .AddText(resourceLoader.GetString("ProCancelled"))
-                    .AddText(resourceLoader.GetString("ProCancelledSub"));
-                builder.Show();
-                Settings.isPro = false;
-                await CoreApplication.RequestRestartAsync("Pro status changed.");
-            }
         }
 
         private void searchbox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
