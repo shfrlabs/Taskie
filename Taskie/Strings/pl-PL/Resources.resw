@@ -306,4 +306,8 @@
   <data name="ChangeFont" xml:space="preserve">
     <value>Zmień czcionkę</value>
   </data>
+  <data name="UpgradeFor" xml:space="preserve">
+    <value>Ulepsz za {0}</value>
+    <comment>Shown in upgrade dialog</comment>
+  </data>
 </root>

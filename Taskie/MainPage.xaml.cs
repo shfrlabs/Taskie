@@ -440,10 +440,12 @@ namespace Taskie
         {
             ContentDialog dialog = new ContentDialog();
             Frame frame = new Frame();
+            dialog.BorderBrush = Application.Current.Resources["ProBG"] as LinearGradientBrush;
+            dialog.BorderThickness = new Thickness(5);
             frame.Navigate(typeof(UpgradeDialogContentPage));
             dialog.Content = frame;
             dialog.DefaultButton = ContentDialogButton.Primary;
-            dialog.PrimaryButtonText = resourceLoader.GetString("UpgradeText/Text");
+            dialog.PrimaryButtonText = string.Format(resourceLoader.GetString("UpgradeFor"), "$0.99"); // placeholder
             dialog.PrimaryButtonClick += Dialog_UpgradeAction;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             await dialog.ShowAsync();

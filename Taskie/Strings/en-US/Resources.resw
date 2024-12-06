@@ -312,4 +312,8 @@
   <data name="ChangeFont" xml:space="preserve">
     <value>Change font</value>
   </data>
+  <data name="UpgradeFor" xml:space="preserve">
+    <value>Upgrade for {0}</value>
+    <comment>Shown in upgrade dialog</comment>
+  </data>
 </root>

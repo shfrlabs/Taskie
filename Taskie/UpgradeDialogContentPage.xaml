@@ -6,32 +6,26 @@
     xmlns:local="using:Taskie"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="Transparent" Width="300">
-
-    <Grid>
+    mc:Ignorable="d" Width="300">
+    <StackPanel Orientation="Vertical">
         <Image Source="Assets\banner.png" Margin="-30,-25,-30,0" VerticalAlignment="Top"/>
-        <StackPanel Orientation="Vertical" Margin="0,130,0,15" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="✅ " FontSize="20" Margin="0,0,5,0"/>
-                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center" x:Uid="PromoBannerText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="✅ " FontSize="20" Margin="0,0,5,0"/>
-                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center" x:Uid="PrioritySupportText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="✅ " FontSize="20" Margin="0,0,5,0"/>
-                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center" x:Uid="ListLimitText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="✅ " FontSize="20" Margin="0,0,5,0"/>
-                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center" x:Uid="IndicatorText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="✅ " FontSize="20" Margin="0,0,5,0"/>
-                <TextBlock Opacity=".8" FontSize="15" FontFamily="Segoe UI Variable" VerticalAlignment="Center" x:Uid="WinHelloText"/>
-            </StackPanel>
-        </StackPanel>
-    </Grid>
+        <Grid Margin="20,0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Opacity="0.8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"/>
+            <TextBlock Grid.Row="1" Margin="0,5,0,0" FontSize="16">• Priority support</TextBlock>
+            <TextBlock Grid.Row="2" Margin="0,5,0,0" FontSize="16">• Advanced customization</TextBlock>
+            <TextBlock Grid.Row="3" Margin="0,5,0,0" FontSize="16">• Group-specific kanban view</TextBlock>
+            <TextBlock Grid.Row="4" Margin="0,5,0,0" FontSize="16">• Repetitive lists (untick on interval)</TextBlock>
+            <TextBlock Grid.Row="5" Margin="0,5,0,0" FontSize="16">• Attach files to tasks</TextBlock>
+            <TextBlock Grid.Row="6" Margin="0,5,0,0" FontSize="16">• Unlimited reminders</TextBlock>
+        </Grid>
+    </StackPanel>
 </Page>
