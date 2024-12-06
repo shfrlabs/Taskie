@@ -20,7 +20,7 @@ namespace Taskie.SettingsPages
 
         private async void export_Click(object sender, RoutedEventArgs e)
         {
-            StorageFile exportFile = await Tools.ExportedLists();
+            StorageFile exportFile = await ListTools.ExportedLists();
             FileSavePicker savePicker = new FileSavePicker
             {
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary
@@ -53,7 +53,7 @@ namespace Taskie.SettingsPages
                     string fileExtension = Path.GetExtension(file.Name).ToLower();
                     if (fileExtension == ".json")
                     {
-                        Tools.ImportFile(file);
+                        ListTools.ImportFile(file);
                     }
                     else if (fileExtension == ".taskie")
                     {
@@ -79,7 +79,7 @@ namespace Taskie.SettingsPages
                                 await entryStream.CopyToAsync(memoryStream);
                                 memoryStream.Position = 0;
                                 var unzippedFile = await CreateStorageFileFromStreamAsync(entry.FullName, memoryStream);
-                                Tools.ImportFile(unzippedFile);
+                                ListTools.ImportFile(unzippedFile);
                             }
                         }
                     }

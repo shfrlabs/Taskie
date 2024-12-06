@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using Windows.UI.Xaml.Media;
 
+// Object used for list metadata in a list's JSON
 public class ListMetadata : INotifyPropertyChanged
 {
     private DateTime _creationDate;
@@ -12,7 +13,7 @@ public class ListMetadata : INotifyPropertyChanged
     private int? _groupID;
     private string _titlefont;
 
-    public string TitleFont
+    public string TitleFont // Pro only.
     {
         get { if (_titlefont != null) { return _titlefont; } else { return "Segoe UI Variable"; }; }
         set
@@ -60,7 +61,7 @@ public class ListMetadata : INotifyPropertyChanged
         }
     }
 
-    public int? GroupID
+    public int? GroupID // grouping lists (coming soon)
     {
         get { return _groupID; }
         set

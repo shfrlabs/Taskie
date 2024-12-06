@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 
+// Object of a task inside a list
 public class ListTask : INotifyPropertyChanged
 {
     private DateTime _creationDate;

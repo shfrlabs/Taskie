@@ -25,7 +25,7 @@ namespace Taskie
         public COClosePage()
         {
             this.InitializeComponent();
-            Tools.AWClosedEvent += Tools_AWClosedEvent;
+            ListTools.AWClosedEvent += Tools_AWClosedEvent;
         }
 
         private void Tools_AWClosedEvent()

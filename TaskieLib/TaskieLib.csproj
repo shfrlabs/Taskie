@@ -124,6 +124,7 @@
     <Compile Include="Models\ListTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="ListTools.cs" />
     <Compile Include="Tools.cs" />
     <EmbeddedResource Include="Properties\TaskieLib.rd.xml" />
   </ItemGroup>

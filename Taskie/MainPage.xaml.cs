@@ -39,12 +39,12 @@ namespace Taskie
             CheckOnboarding();
             ProFlyout();
             Navigation.Height = rectlist.ActualHeight;
-            Tools.ListCreatedEvent += UpdateLists;
-            Tools.ListDeletedEvent += ListDeleted;
-            Tools.ListRenamedEvent += ListRenamed;
-            Tools.ListEmojiChangedEvent += ListEmojiChanged;
-            Tools.AWOpenEvent += Tools_AWOpenEvent;
-            Tools.AWClosedEvent += Tools_AWClosedEvent;
+            ListTools.ListCreatedEvent += UpdateLists;
+            ListTools.ListDeletedEvent += ListDeleted;
+            ListTools.ListRenamedEvent += ListRenamed;
+            ListTools.ListEmojiChangedEvent += ListEmojiChanged;
+            ListTools.AWOpenEvent += Tools_AWOpenEvent;
+            ListTools.AWClosedEvent += Tools_AWClosedEvent;
             ActualThemeChanged += MainPage_ActualThemeChanged;
         }
 
@@ -90,7 +90,7 @@ namespace Taskie
                 BottomRow.Height = new GridLength(65);
                 UpdateButton.Visibility = Visibility.Collapsed;
             }
-            if (!Settings.isPro && Tools.GetLists().Count() > 2)
+            if (!Settings.isPro && ListTools.GetLists().Count() > 2)
             {
                 AddItemBtn.IsEnabled = false;
                 NewListBtnIcon.Foreground = new SolidColorBrush(Colors.White);
@@ -148,7 +148,7 @@ namespace Taskie
                 {
                     if (navigationItem.Tag.ToString().Replace(".json", null) == listID)
                     {
-                        ListMetadata metadata = Tools.ReadList(listID).Metadata;
+                        ListMetadata metadata = ListTools.ReadList(listID).Metadata;
                         StackPanel content = new StackPanel();
                         content.Orientation = Orientation.Horizontal;
                         content.VerticalAlignment = VerticalAlignment.Center;
@@ -171,7 +171,7 @@ namespace Taskie
                 {
                     if (navigationItem.Tag.ToString().Replace(".json", null) == listID)
                     {
-                        ListMetadata metadata = Tools.ReadList(listID).Metadata;
+                        ListMetadata metadata = ListTools.ReadList(listID).Metadata;
                         StackPanel content = new StackPanel();
                         content.Orientation = Orientation.Horizontal;
                         content.VerticalAlignment = VerticalAlignment.Center;
@@ -215,9 +215,9 @@ namespace Taskie
 
         private void SetupNavigationMenu()
         {
-            foreach ((string listName, string listID) in TaskieLib.Tools.GetLists())
+            foreach ((string listName, string listID) in TaskieLib.ListTools.GetLists())
             {
-                ListMetadata metadata = Tools.ReadList(listID.Replace(".json", null)).Metadata;
+                ListMetadata metadata = ListTools.ReadList(listID.Replace(".json", null)).Metadata;
                 Debug.WriteLine(JsonConvert.SerializeObject(metadata));
                 StackPanel content = new StackPanel();
                 content.Orientation = Orientation.Horizontal;
@@ -309,7 +309,7 @@ namespace Taskie
             content.SelectionChanged += (sender, args) => {
                 if ((sender as GridView).Tag.ToString().Replace(".json", null) != null && (sender as GridView).SelectedItem != null)
                 {
-                    Tools.ChangeListEmoji((sender as GridView).Tag.ToString().Replace(".json", null), (sender as GridView).SelectedItem.ToString());
+                    ListTools.ChangeListEmoji((sender as GridView).Tag.ToString().Replace(".json", null), (sender as GridView).SelectedItem.ToString());
                 }
                 flyout.Hide();
             };
@@ -335,7 +335,7 @@ namespace Taskie
                     {
                         CachedFileManager.DeferUpdates(file);
 
-                        string content = Tools.GetTaskFileContent((sender as MenuFlyoutItem)?.Tag?.ToString() ?? string.Empty);
+                        string content = ListTools.GetTaskFileContent((sender as MenuFlyoutItem)?.Tag?.ToString() ?? string.Empty);
                         await FileIO.WriteTextAsync(file, content);
 
                         FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
@@ -348,7 +348,7 @@ namespace Taskie
 
         private async void RenameList_Click(object sender, RoutedEventArgs e)
         {
-            string listname = Tools.ReadList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null)).Metadata.Name;
+            string listname = ListTools.ReadList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null)).Metadata.Name;
             TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("ListName"), Text = listname };
             ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameList/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
             ContentDialogResult result = await dialog.ShowAsync();
@@ -357,7 +357,7 @@ namespace Taskie
                 string text = input.Text;
                 try
                 {
-                    Tools.RenameList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null), text);
+                    ListTools.RenameList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null), text);
                 }
                 catch (ArgumentException) {
                     tipwrongname.Target = Navigation;
@@ -372,7 +372,7 @@ namespace Taskie
         private void DeleteList_Click(object sender, RoutedEventArgs e)
         {
             string listname = (sender as MenuFlyoutItem).Tag as string;
-            Tools.DeleteList(listname.Replace(".json", null));
+            ListTools.DeleteList(listname.Replace(".json", null));
             ListDeleted(((sender as MenuFlyoutItem).Tag.ToString().Replace(".json", null)));
             DeterminePro();
         }
@@ -387,7 +387,7 @@ namespace Taskie
 
         private void AddList(object sender, RoutedEventArgs e)
         {
-            string listName = Tools.CreateList(resourceLoader.GetString("NewList"));
+            string listName = ListTools.CreateList(resourceLoader.GetString("NewList"));
             UpdateLists(null, resourceLoader.GetString("NewList"));
             foreach (ListViewItem item in Navigation.Items)
             {
@@ -474,7 +474,7 @@ namespace Taskie
             { sender.IsSuggestionListOpen = false; sender.ItemsSource = new List<string>(); }
             else
             {
-                sender.ItemsSource = Array.FindAll<(string, string)>(Tools.GetLists(), s => s.Item1.ToLower().Contains(sender.Text.ToLower())).Select(t => t.Item1).ToArray();
+                sender.ItemsSource = Array.FindAll<(string, string)>(ListTools.GetLists(), s => s.Item1.ToLower().Contains(sender.Text.ToLower())).Select(t => t.Item1).ToArray();
             }
         }
 
@@ -505,7 +505,7 @@ namespace Taskie
             try
             {
                 string foundItem = "";
-                foreach ((string name, string id) item in Tools.GetLists())
+                foreach ((string name, string id) item in ListTools.GetLists())
                 {
                     if (args.SelectedItem.ToString() == item.name)
                     {

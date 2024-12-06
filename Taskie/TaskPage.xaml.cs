@@ -25,8 +25,8 @@ namespace Taskie
         {
             this.InitializeComponent();
             ActualThemeChanged += TaskPage_ActualThemeChanged;
-            Tools.ListRenamedEvent += ListRenamed;
-            testname.FontFamily = Tools.ReadList(listId).Metadata.TitleFont != null ? new FontFamily(Tools.ReadList(listId).Metadata.TitleFont) : new FontFamily("Segoe UI Variable");
+            ListTools.ListRenamedEvent += ListRenamed;
+            testname.FontFamily = ListTools.ReadList(listId).Metadata.TitleFont != null ? new FontFamily(ListTools.ReadList(listId).Metadata.TitleFont) : new FontFamily("Segoe UI Variable");
         }
 
         private void ListRenamed(string oldname, string newname)
@@ -36,7 +36,7 @@ namespace Taskie
 
         private void TaskPage_ActualThemeChanged(FrameworkElement sender, object args)
         {
-            if (Tools.isAWOpen)
+            if (ListTools.isAWOpen)
             {
                 if (Settings.Theme == "System")
                 {
@@ -106,14 +106,14 @@ namespace Taskie
             listId = e.Parameter.ToString();
             if (e.Parameter != null)
             {
-                testname.Text = Tools.ReadList(listId).Metadata.Name;
-                listname = Tools.ReadList(listId).Metadata.Name;
+                testname.Text = ListTools.ReadList(listId).Metadata.Name;
+                listname = ListTools.ReadList(listId).Metadata.Name;
             }
             base.OnNavigatedTo(e);
 
-            if (!(Tools.ReadList(listId).Tasks == null || Tools.ReadList(listId).Metadata == null))
+            if (!(ListTools.ReadList(listId).Tasks == null || ListTools.ReadList(listId).Metadata == null))
             {
-                foreach (ListTask task in Tools.ReadList(listId).Tasks)
+                foreach (ListTask task in ListTools.ReadList(listId).Tasks)
                 {
                     taskListView.Items.Add(task);
                 }
@@ -123,11 +123,11 @@ namespace Taskie
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrEmpty(args.QueryText)) {
-                ListMetadata metadata = Tools.ReadList(listId).Metadata;
+                ListMetadata metadata = ListTools.ReadList(listId).Metadata;
                 List<ListTask> tasks = new List<ListTask>();
-                if (Tools.ReadList(listId).Tasks.Count > 0)
+                if (ListTools.ReadList(listId).Tasks.Count > 0)
                 {
-                    foreach (ListTask task2add in Tools.ReadList(listId).Tasks)
+                    foreach (ListTask task2add in ListTools.ReadList(listId).Tasks)
                     {
                         tasks.Add(task2add);
                     }
@@ -140,7 +140,7 @@ namespace Taskie
                 };
                 tasks.Add(task);
                 taskListView.Items.Add(task);
-                Tools.SaveList(listId, tasks, metadata);
+                ListTools.SaveList(listId, tasks, metadata);
             }
         }
 
@@ -151,7 +151,7 @@ namespace Taskie
             MenuFlyoutItem menuFlyoutItem = (MenuFlyoutItem)sender;
             var note = menuFlyoutItem.DataContext as ListTask;
             TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("TaskName"), Text = note.Name };
-            if (!Tools.isAWOpen)
+            if (!ListTools.isAWOpen)
             {
                 ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameTask/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
                 ContentDialogResult result = await dialog.ShowAsync();
@@ -160,16 +160,16 @@ namespace Taskie
                     string text = input.Text;
                     note.Name = text;
                     List<ListTask> tasks = new List<ListTask>();
-                    if (!(Tools.ReadList(listId).Tasks == null || Tools.ReadList(listId).Metadata == null))
+                    if (!(ListTools.ReadList(listId).Tasks == null || ListTools.ReadList(listId).Metadata == null))
                     {
-                        foreach (ListTask task2add in Tools.ReadList(listId).Tasks)
+                        foreach (ListTask task2add in ListTools.ReadList(listId).Tasks)
                         {
                             tasks.Add(task2add);
                         }
                     };
                     int index = tasks.FindIndex(task => task.CreationDate == note.CreationDate);
                     tasks[index] = note;
-                    Tools.SaveList(listId, tasks, Tools.ReadList(listId).Metadata);
+                    ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
                 }
             }
         }
@@ -177,15 +177,15 @@ namespace Taskie
         private void DeleteTask_Click(object sender, RoutedEventArgs e)
         {
             ListTask taskToDelete = (sender as MenuFlyoutItem).DataContext as ListTask;
-            List<ListTask> tasks = Tools.ReadList(listId).Tasks;
+            List<ListTask> tasks = ListTools.ReadList(listId).Tasks;
             int index = tasks.FindIndex(task => task.CreationDate == taskToDelete.CreationDate);
             if (index != -1)
             {
                 tasks.RemoveAt(index);
-                Tools.SaveList(listId, tasks, Tools.ReadList(listId).Metadata);
+                ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
                 taskListView.Items.Remove(taskToDelete);
             }
-            Tools.SaveList(listId, tasks, Tools.ReadList(listId).Metadata);
+            ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
         }
 
         private async void RenameList_Click(object sender, RoutedEventArgs e)
@@ -197,7 +197,7 @@ namespace Taskie
             if (result == ContentDialogResult.Primary)
             {
                 string text = input.Text;
-                Tools.RenameList(listId, text);
+                ListTools.RenameList(listId, text);
                 listname = text;
                 testname.Text = listname;
             }
@@ -221,7 +221,7 @@ namespace Taskie
                     if (file != null)
                     {
                         CachedFileManager.DeferUpdates(file);
-                        string content = Tools.GetTaskFileContent(listId);
+                        string content = ListTools.GetTaskFileContent(listId);
                         await FileIO.WriteTextAsync(file, content);
 
                         FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
@@ -235,13 +235,13 @@ namespace Taskie
 
         private void DeleteList_Click(object sender, RoutedEventArgs e)
         {
-            Tools.DeleteList(listId);
+            ListTools.DeleteList(listId);
         }
 
         private void TaskStateChanged(object sender, RoutedEventArgs e)
         {
             ListTask tasktoChange = (sender as CheckBox).DataContext as ListTask;
-            List<ListTask> tasks = Tools.ReadList(listId).Tasks;
+            List<ListTask> tasks = ListTools.ReadList(listId).Tasks;
             try
             {
                 int index = tasks.FindIndex(task => task.CreationDate == tasktoChange.CreationDate);
@@ -249,7 +249,7 @@ namespace Taskie
                 {
                     tasktoChange.IsDone = (bool)(sender as CheckBox).IsChecked;
                     tasks[index] = tasktoChange;
-                    Tools.SaveList(listId, tasks, Tools.ReadList(listId).Metadata);
+                    ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
                 }
             }
             catch { }
@@ -311,14 +311,14 @@ namespace Taskie
             if (e.Key == Windows.System.VirtualKey.Enter && !string.IsNullOrEmpty((sender as AutoSuggestBox).Text))
             {
                 List<ListTask> tasks = new List<ListTask>();
-                if (!(Tools.ReadList(listId).Tasks == null || Tools.ReadList(listId).Metadata == null))
+                if (!(ListTools.ReadList(listId).Tasks == null || ListTools.ReadList(listId).Metadata == null))
                 {
-                    foreach (ListTask task2add in Tools.ReadList(listId).Tasks)
+                    foreach (ListTask task2add in ListTools.ReadList(listId).Tasks)
                     {
                         tasks.Add(task2add);
                     }
                 };
-                ListMetadata metadata = Tools.ReadList(listId).Metadata;
+                ListMetadata metadata = ListTools.ReadList(listId).Metadata;
                 ListTask task = new ListTask()
                 {
                     Name = (sender as AutoSuggestBox).Text,
@@ -327,7 +327,7 @@ namespace Taskie
                 };
                 tasks.Add(task);
                 taskListView.Items.Add(task);
-                Tools.SaveList(listId, tasks, metadata);
+                ListTools.SaveList(listId, tasks, metadata);
             }
         }
 
@@ -351,7 +351,7 @@ namespace Taskie
             window.Closed += AWClosed;
             Frame frame = new Frame();
             frame.Navigate(typeof(TaskPage), listId.Replace(".json", null));
-            Tools.isAWOpen = true;
+            ListTools.isAWOpen = true;
             ElementCompositionPreview.SetAppWindowContent(window, frame);
             window.Presenter.RequestPresentation(AppWindowPresentationKind.CompactOverlay);
             window.TitleBar.ExtendsContentIntoTitleBar = true;
@@ -365,13 +365,13 @@ namespace Taskie
 
         private void AWClosed(AppWindow sender, AppWindowClosedEventArgs args)
         {
-            Tools.isAWOpen = false;
+            ListTools.isAWOpen = false;
             cobtn.Visibility = Visibility.Visible;
         }
 
         private void topoptions_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Tools.isAWOpen)
+            if (ListTools.isAWOpen)
             {
                 if (Settings.Theme == "System")
                 {
@@ -412,7 +412,7 @@ namespace Taskie
                     MenuFlyoutItem subfont = new MenuFlyoutItem() { Tag = font, Text = font, FontFamily = new FontFamily(font) };
                     subfont.Click += (sender, args) => {
                         System.Diagnostics.Debug.WriteLine(listId);
-                        Tools.ChangeListFont(listId, (sender as MenuFlyoutItem).Tag.ToString());
+                        ListTools.ChangeListFont(listId, (sender as MenuFlyoutItem).Tag.ToString());
                         testname.FontFamily = new FontFamily(font);
                     };
                     item.Items.Add(subfont);
@@ -424,7 +424,7 @@ namespace Taskie
 
         private void MenuFlyoutItem_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Tools.isAWOpen)
+            if (ListTools.isAWOpen)
             {
                 (sender as MenuFlyoutItem).Visibility = Visibility.Collapsed;
             }

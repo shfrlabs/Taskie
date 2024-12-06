@@ -8,6 +8,7 @@ namespace TaskieLib
     {
         private static IPropertySet savedSettings = ApplicationData.Current.LocalSettings.Values;
 
+        // Application theme (light/dark)
         public static string Theme
         {
             get
@@ -31,6 +32,7 @@ namespace TaskieLib
             }
         }
 
+        // Autentication via Windows Hello (Pro only)
         public static bool isAuthUsed
         {
             get
@@ -47,6 +49,7 @@ namespace TaskieLib
             }
         }
 
+        // Gets/sets whether the app has been launched, used for the OOBE and tips.
         public static bool Launched
         {
             get
@@ -62,7 +65,7 @@ namespace TaskieLib
                 savedSettings["launched"] = value ? "1" : "0";
             }
         }
-
+        // value for testing Pro, will be replaced with Store identification when that rolls around
         public static bool isPro
         {
             get
