@@ -276,12 +276,6 @@
   <data name="protip.Title" xml:space="preserve">
     <value>Liking Taskie?</value>
   </data>
-  <data name="tip1.Subtitle" xml:space="preserve">
-    <value>Add your first list here.</value>
-  </data>
-  <data name="tip1.Title" xml:space="preserve">
-    <value>Let's start!</value>
-  </data>
   <data name="tipwrongname.Title" xml:space="preserve">
     <value>You can't do that!</value>
   </data>
@@ -315,5 +309,11 @@
   <data name="UpgradeFor" xml:space="preserve">
     <value>Upgrade for {0}</value>
     <comment>Shown in upgrade dialog</comment>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit app</value>
+  </data>
+  <data name="GetStarted" xml:space="preserve">
+    <value>Get started</value>
   </data>
 </root>

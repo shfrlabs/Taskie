@@ -90,7 +90,6 @@
             <Rectangle VerticalAlignment="Stretch" Margin="-20" Grid.Column="0" Grid.RowSpan="4" Fill="{StaticResource SystemAltLowColor}" Canvas.ZIndex="-10" Opacity="1" Width="180" HorizontalAlignment="Left" x:Name="rect2"/>
         </Grid>
         <muxc:TeachingTip x:Uid="protip" x:Name="protip" IsOpen="False"/>
-        <muxc:TeachingTip x:Uid="tip1" x:Name="tip1" IsOpen="False"/>
         <muxc:TeachingTip x:Uid="tipwrongname" x:Name="tipwrongname" IsOpen="False"/>
     </Grid>
 </Page>

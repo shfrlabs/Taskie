@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" Width="300">
     <StackPanel Orientation="Vertical">
-        <Image Source="Assets\banner.png" Margin="-30,-25,-30,0" VerticalAlignment="Top"/>
+        <Image Source="Assets\banner.png" Margin="-30,-25,-30,0" VerticalAlignment="Top" AutomationProperties.Name="Taskie Pro"/>
         <Grid Margin="20,0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Opacity="0.8">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>

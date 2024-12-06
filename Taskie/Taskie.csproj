@@ -134,6 +134,9 @@
     <Compile Include="COClosePage.xaml.cs">
       <DependentUpon>COClosePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="OOBEDialogPage.xaml.cs">
+      <DependentUpon>OOBEDialogPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingsPages\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
@@ -233,6 +236,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="COClosePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OOBEDialogPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

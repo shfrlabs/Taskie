@@ -58,12 +58,27 @@ namespace Taskie
             }
         }
 
-        private void CheckOnboarding()
+#if DEBUG
+        public bool shouldShowOOBE = true;
+#else
+        public bool shouldShowOOBE = true;
+#endif
+        private async void CheckOnboarding()
         {
-            if (!Settings.Launched)
+            if (!Settings.Launched && shouldShowOOBE)
             {
-                tip1.Target = AddItemBtn;
-                tip1.IsOpen = true;
+                ContentDialog dialog = new ContentDialog();
+                Frame frame = new Frame();
+                dialog.BorderBrush = Application.Current.Resources["ProBG"] as LinearGradientBrush;
+                dialog.BorderThickness = new Thickness(2);
+                frame.Navigate(typeof(OOBEDialogPage));
+                dialog.Content = frame;
+                dialog.DefaultButton = ContentDialogButton.Primary;
+                dialog.PrimaryButtonText = resourceLoader.GetString("GetStarted");
+                dialog.PrimaryButtonClick += (sender, args) => { };
+                dialog.SecondaryButtonText = resourceLoader.GetString("Exit");
+                dialog.SecondaryButtonClick += (sender, args) => { Application.Current.Exit(); };
+                await dialog.ShowAsync();
             }
             Settings.Launched = true;
         }
@@ -441,7 +456,7 @@ namespace Taskie
             ContentDialog dialog = new ContentDialog();
             Frame frame = new Frame();
             dialog.BorderBrush = Application.Current.Resources["ProBG"] as LinearGradientBrush;
-            dialog.BorderThickness = new Thickness(5);
+            dialog.BorderThickness = new Thickness(2);
             frame.Navigate(typeof(UpgradeDialogContentPage));
             dialog.Content = frame;
             dialog.DefaultButton = ContentDialogButton.Primary;
