@@ -432,5 +432,10 @@ namespace Taskie
                 (sender as MenuFlyoutItem).Visibility = Visibility.Collapsed;
             }
         }
+
+        private void AddSubTask_Click(object sender, RoutedEventArgs e)
+        {
+            // placeholder
+        }
     }
 }

@@ -325,4 +325,13 @@
   <data name="RemoveBannersUpgrade.Text" xml:space="preserve">
     <value>• Remove Pro advertising (button, tips)</value>
   </data>
+  <data name="AddSubTaskBox.PlaceholderText" xml:space="preserve">
+    <value>Add subtask...</value>
+  </data>
+  <data name="DeleteSubTask.Text" xml:space="preserve">
+    <value>Delete subtask</value>
+  </data>
+  <data name="AddSubTask.Text" xml:space="preserve">
+    <value>Add subtask</value>
+  </data>
 </root>

@@ -1,26 +1,17 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.ComponentModel;
+using System.Drawing;
+using Windows.UI.Xaml.Media;
 
-// Object of a task inside a list
-public class ListTask : INotifyPropertyChanged
+// Object used for group metadata in LocalSettings
+public class GroupMetadata : INotifyPropertyChanged
 {
     private DateTime _creationDate;
     private string _name;
-    private bool _isDone;
-    private List<ListTask> _subTasks;
+    private Color _color;
+    private int? _ID;
 
-    public List<ListTask> SubTasks
-    {
-        get { return _subTasks; }
-        set
-        {
-            if (_subTasks != value) {
-                _subTasks = value;
-                OnPropertyChanged(nameof(CreationDate));
-            }
-        }
-    }
     public DateTime CreationDate
     {
         get { return _creationDate; }
@@ -47,15 +38,28 @@ public class ListTask : INotifyPropertyChanged
         }
     }
 
-    public bool IsDone
+    public Color GColor
     {
-        get { return _isDone; }
+        get { return _color; }
         set
         {
-            if (_isDone != value)
+            if (_color != value)
             {
-                _isDone = value;
-                OnPropertyChanged(nameof(IsDone));
+                _color = value;
+                OnPropertyChanged(nameof(GColor));
+            }
+        }
+    }
+
+    public int? ID
+    {
+        get { return _ID; }
+        set
+        {
+            if (value != _ID)
+            {
+                _ID = value;
+                OnPropertyChanged(nameof(ID));
             }
         }
     }

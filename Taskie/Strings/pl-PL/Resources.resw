@@ -331,4 +331,13 @@
   <data name="UnlimitedRemindersUpgrade.Text" xml:space="preserve">
     <value>• Nielimitowane przypomnienia</value>
   </data>
+  <data name="DeleteSubTask.Text" xml:space="preserve">
+    <value>Usuń podzadanie</value>
+  </data>
+  <data name="AddSubTaskBox.PlaceholderText" xml:space="preserve">
+    <value>Dodaj podzadanie...</value>
+  </data>
+  <data name="AddSubTask.Text" xml:space="preserve">
+    <value>Dodaj podzadanie</value>
+  </data>
 </root>
