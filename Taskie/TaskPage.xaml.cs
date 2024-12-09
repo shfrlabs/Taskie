@@ -197,9 +197,12 @@ namespace Taskie
             if (result == ContentDialogResult.Primary)
             {
                 string text = input.Text;
-                ListTools.RenameList(listId, text);
-                listname = text;
-                testname.Text = listname;
+                if (!string.IsNullOrEmpty(text))
+                {
+                    ListTools.RenameList(listId, text);
+                    listname = text;
+                    testname.Text = listname;
+                }
             }
         }
 

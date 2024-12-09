@@ -372,9 +372,14 @@ namespace Taskie
                 string text = input.Text;
                 try
                 {
-                    ListTools.RenameList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null), text);
+                    if (string.IsNullOrEmpty(text)) {
+                        throw new Exception("No list name");
+                    }
+                    else {
+                        ListTools.RenameList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null), text);
+                    }
                 }
-                catch (ArgumentException) {
+                catch {
                     tipwrongname.Target = Navigation;
                     tipwrongname.PreferredPlacement = TeachingTipPlacementMode.TopRight;
                     tipwrongname.IsOpen = true;
