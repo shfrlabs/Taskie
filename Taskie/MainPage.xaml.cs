@@ -59,7 +59,7 @@ namespace Taskie
         }
 
 #if DEBUG
-        public bool shouldShowOOBE = true;
+        public bool shouldShowOOBE = false;
 #else
         public bool shouldShowOOBE = true;
 #endif

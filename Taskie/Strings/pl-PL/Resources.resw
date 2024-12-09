@@ -310,4 +310,25 @@
   <data name="GetStarted" xml:space="preserve">
     <value>Rozpocznij</value>
   </data>
+  <data name="AdvancedCustomizationUpgrade.Text" xml:space="preserve">
+    <value>• Zaawansowana personalizacja</value>
+  </data>
+  <data name="FileAttachmentUpgrade.Text" xml:space="preserve">
+    <value>• Dołącz pliki do zadania</value>
+  </data>
+  <data name="GroupSpecificKanbanUpgrade.Text" xml:space="preserve">
+    <value>• Widok kanban dla pojedynczej grupy</value>
+  </data>
+  <data name="PrioritySupportUpgrade.Text" xml:space="preserve">
+    <value>• Priorytetowe wsparcie</value>
+  </data>
+  <data name="RemoveBannersUpgrade.Text" xml:space="preserve">
+    <value>• Usuń reklamy Pro (przycisk, wskazówka)</value>
+  </data>
+  <data name="RepetitiveListsUpgrade.Text" xml:space="preserve">
+    <value>• Powtarzane listy (odznaczanie w danym okresie)</value>
+  </data>
+  <data name="UnlimitedRemindersUpgrade.Text" xml:space="preserve">
+    <value>• Nielimitowane przypomnienia</value>
+  </data>
 </root>
