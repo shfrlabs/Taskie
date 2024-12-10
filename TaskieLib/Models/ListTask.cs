@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 // Object of a task inside a list
 public class ListTask : INotifyPropertyChanged
@@ -8,9 +9,10 @@ public class ListTask : INotifyPropertyChanged
     private DateTime _creationDate;
     private string _name;
     private bool _isDone;
-    private List<ListTask> _subTasks;
+    private ObservableCollection<ListTask> _subTasks = new ObservableCollection<ListTask>();
 
-    public List<ListTask> SubTasks
+
+    public ObservableCollection<ListTask> SubTasks
     {
         get { return _subTasks; }
         set

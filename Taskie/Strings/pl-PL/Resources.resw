@@ -340,4 +340,7 @@
   <data name="AddSubTask.Text" xml:space="preserve">
     <value>Dodaj podzadanie</value>
   </data>
+  <data name="RenameSubTask.Text" xml:space="preserve">
+    <value>Zmień nazwę podzadania</value>
+  </data>
 </root>

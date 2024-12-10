@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.UI.Xaml.Controls;
 using TaskieLib;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
@@ -435,7 +438,56 @@ namespace Taskie
 
         private void AddSubTask_Click(object sender, RoutedEventArgs e)
         {
-            // placeholder
+            (ListMetadata meta, List<ListTask> tasklist) = ListTools.ReadList(listId);
+            ListTask parent = (sender as MenuFlyoutItem).DataContext as ListTask;
+            int index = tasklist.IndexOf(parent);
+            if (parent != null)
+            {
+                ListTask task2add = new ListTask
+                {
+                    CreationDate = DateTime.Now,
+                    IsDone = false,
+                    Name = "Subtask",
+                    SubTasks = new ObservableCollection<ListTask>()
+                };
+                parent.SubTasks.Add(task2add);
+            }
+            if (index > 0)
+            {
+                tasklist[index] = parent;
+                ListTools.SaveList(listId, tasklist, meta);
+            }
+        }
+
+
+        private void SubTaskStateChanged(object sender, RoutedEventArgs e)
+        {
+            ListTask tasktoChange = (sender as CheckBox).DataContext as ListTask;
+            List<ListTask> tasks = ListTools.ReadList(listId).Tasks;
+            try
+            {
+                foreach (ListTask task in tasks)
+                {
+                    foreach (ListTask subTask in task.SubTasks)
+                    {
+                        if (subTask.CreationDate == tasktoChange.CreationDate) {
+                            subTask.IsDone = !subTask.IsDone;
+                        }
+                    }
+                }
+                ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
+            }
+            catch { }
+        }
+
+        private void DeleteSubTask_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RenameSubTask_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
