@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Controls;
 using TaskieLib;
@@ -447,38 +449,58 @@ namespace Taskie
                 {
                     CreationDate = DateTime.Now,
                     IsDone = false,
-                    Name = "Subtask",
+                    Name = "DEBUG subtask",
                     SubTasks = new ObservableCollection<ListTask>()
                 };
                 parent.SubTasks.Add(task2add);
             }
-            if (index > 0)
+            if (index > -1)
             {
                 tasklist[index] = parent;
                 ListTools.SaveList(listId, tasklist, meta);
             }
         }
 
+        // no, i dont know what a sephamore is this isnt my first language
+        // a very special someone helped me here
+        private static SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
 
-        private void SubTaskStateChanged(object sender, RoutedEventArgs e)
+        private async void SubTaskStateChanged(object sender, RoutedEventArgs e)
         {
-            ListTask tasktoChange = (sender as CheckBox).DataContext as ListTask;
-            List<ListTask> tasks = ListTools.ReadList(listId).Tasks;
+            var checkBox = sender as CheckBox;
+            if (checkBox == null) return;
+
+            var taskToChange = checkBox.DataContext as ListTask;
+            if (taskToChange == null) return;
+
             try
             {
-                foreach (ListTask task in tasks)
+                await _updateSemaphore.WaitAsync();
+
+                var currentList = ListTools.ReadList(listId);
+                var tasks = currentList.Tasks;
+
+                foreach (var task in tasks)
                 {
-                    foreach (ListTask subTask in task.SubTasks)
+                    var subTask = task.SubTasks.FirstOrDefault(st => st.CreationDate == taskToChange.CreationDate);
+                    if (subTask != null)
                     {
-                        if (subTask.CreationDate == tasktoChange.CreationDate) {
-                            subTask.IsDone = !subTask.IsDone;
-                        }
+                        subTask.IsDone = checkBox.IsChecked ?? false;
+                        break;
                     }
                 }
-                ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
+                ListTools.SaveList(listId, tasks, currentList.Metadata);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error updating subtask state: {ex.Message}");
+            }
+            finally
+            {
+                _updateSemaphore.Release();
+            }
         }
+
 
         private void DeleteSubTask_Click(object sender, RoutedEventArgs e)
         {
