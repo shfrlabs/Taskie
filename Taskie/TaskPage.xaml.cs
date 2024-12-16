@@ -16,6 +16,7 @@ using Windows.UI;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -195,11 +196,32 @@ namespace Taskie
 
         private async void RenameList_Click(object sender, RoutedEventArgs e)
         {
-            TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("ListName"), Text = listname };
-            string renamelisttext = resourceLoader.GetString("RenameList/Text");
-            ContentDialog dialog = new ContentDialog() { Title = renamelisttext, PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
-            ContentDialogResult result = await dialog.ShowAsync();
-            if (result == ContentDialogResult.Primary)
+            TextBox input = new TextBox()
+            {
+                PlaceholderText = resourceLoader.GetString("ListName"),
+                Text = listname,
+                Width = 200
+            };
+            Button okButton = new Button()
+            {
+                Content = "OK",
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 50,
+                Margin = new Thickness(0, 10, 0, 0)
+            };
+            Flyout flyout = new Flyout()
+            {
+                Content = new StackPanel()
+                {
+                    Children =
+            {
+                input,
+                okButton
+            }
+                }
+            };
+            okButton.Click += (s, args) =>
             {
                 string text = input.Text;
                 if (!string.IsNullOrEmpty(text))
@@ -208,8 +230,11 @@ namespace Taskie
                     listname = text;
                     testname.Text = listname;
                 }
-            }
+                flyout.Hide();
+            };
+            flyout.ShowAt(topoptions);
         }
+
 
         private async void ExportList_Click(object sender, RoutedEventArgs e)
         {
