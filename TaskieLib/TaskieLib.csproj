@@ -120,6 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="EmptyCollectionVisibilityConverter.cs" />
     <Compile Include="Models\GroupMetadata.cs" />
     <Compile Include="Models\ListMetadata.cs" />
     <Compile Include="Models\ListTask.cs" />

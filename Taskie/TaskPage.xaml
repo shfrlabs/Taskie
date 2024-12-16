@@ -3,12 +3,14 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Taskie"
+    xmlns:lib="using:TaskieLib"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d" x:Name="TPage">
 
     <Page.Resources>
+        <lib:EmptyCollectionVisibilityConverter x:Key="VisConverter"/>
         <DataTemplate x:Key="TaskItemTemplate">
             <muxc:Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="Auto" x:Name="rootGrid" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,0,5" CornerRadius="8" BorderThickness="1" Loaded="TaskAdded_Grid">
                 <muxc:Expander.Header>
@@ -35,13 +37,21 @@
                     </Grid>
                 </muxc:Expander.Header>
                 <muxc:Expander.Content>
-                    <ListView Margin="0,0,-13,0" SelectionMode="None" HorizontalAlignment="Stretch" ItemTemplate="{StaticResource TaskSubItemTemplate}" ItemsSource="{Binding SubTasks}">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </ListView>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock x:Uid="NoSubTasks"
+                                   TextWrapping="Wrap"
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center" Opacity="0.6"
+                                   TextTrimming="CharacterEllipsis"
+                                   Visibility="{Binding SubTasks.Count, Converter={StaticResource VisConverter}}" />
+                        <ListView Margin="0,0,-13,0" SelectionMode="None" HorizontalAlignment="Stretch" ItemTemplate="{StaticResource TaskSubItemTemplate}" ItemsSource="{Binding SubTasks}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </StackPanel>
                 </muxc:Expander.Content>
             </muxc:Expander>
         </DataTemplate>

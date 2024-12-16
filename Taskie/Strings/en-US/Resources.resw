@@ -337,4 +337,7 @@
   <data name="RenameSubTask.Text" xml:space="preserve">
     <value>Rename subtask</value>
   </data>
+  <data name="NoSubTasks.Text" xml:space="preserve">
+    <value>No subtasks avialable.</value>
+  </data>
 </root>
