@@ -346,4 +346,10 @@
   <data name="NoSubTasks.Text" xml:space="preserve">
     <value>Brak dostępnych podzadań.</value>
   </data>
+  <data name="RenameSubTaskTitle" xml:space="preserve">
+    <value>Zmień nazwę podzadania</value>
+  </data>
+  <data name="NewSubTaskTitle" xml:space="preserve">
+    <value>Nowe podzadanie</value>
+  </data>
 </root>
