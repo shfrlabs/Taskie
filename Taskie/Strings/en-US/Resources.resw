@@ -334,4 +334,28 @@
   <data name="AddSubTask.Text" xml:space="preserve">
     <value>Add subtask</value>
   </data>
+  <data name="RenameSubTask.Text" xml:space="preserve">
+    <value>Rename subtask</value>
+  </data>
+  <data name="NoSubTasks.Text" xml:space="preserve">
+    <value>No subtasks avialable.</value>
+  </data>
+  <data name="RenameSubTaskTitle" xml:space="preserve">
+    <value>Rename subtask</value>
+  </data>
+  <data name="IndicatorText.Text" xml:space="preserve">
+    <value>Pro indicator</value>
+  </data>
+  <data name="WinHelloText.Text" xml:space="preserve">
+    <value>Secure login with Windows Hello</value>
+  </data>
+  <data name="PrioritySupport.Text" xml:space="preserve">
+    <value>Priority support</value>
+  </data>
+  <data name="PromoBanner.Text" xml:space="preserve">
+    <value>Promo banner</value>
+  </data>
+  <data name="NewSubTaskTitle" xml:space="preserve">
+    <value>New subtask</value>
+  </data>
 </root>

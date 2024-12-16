@@ -3,20 +3,66 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Taskie"
+    xmlns:lib="using:TaskieLib"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d" x:Name="TPage">
 
     <Page.Resources>
+        <lib:EmptyCollectionVisibilityConverter x:Key="VisConverter"/>
         <DataTemplate x:Key="TaskItemTemplate">
-            <Grid HorizontalAlignment="Stretch" Height="Auto" x:Name="rootGrid" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,0,5" CornerRadius="8" BorderThickness="1" Loaded="TaskAdded_Grid">
+            <muxc:Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="Auto" x:Name="rootGrid" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,0,5" CornerRadius="8" BorderThickness="1" Loaded="TaskAdded_Grid">
+                <muxc:Expander.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="32"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="34"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Grid.Column="0" Checked="TaskStateChanged" Unchecked="TaskStateChanged" IsChecked="{Binding IsDone}"/>
+                        <Grid Grid.Column="1">
+                            <TextBlock Text="{Binding Name}" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="TaskNameText"/>
+                        </Grid>
+                        <Button Background="Transparent" Height="32" BorderThickness="0" Width="34" Padding="0" Grid.Column="2">
+                            <FontIcon FontSize="14" Glyph="&#xE10C;" />
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Icon="Delete" Click="DeleteTask_Click" x:Uid="DeleteTask"/>
+                                    <MenuFlyoutItem Icon="Add" Click="AddSubTask_Click" x:Uid="AddSubTask"/>
+                                    <MenuFlyoutItem Icon="Rename" Click="RenameTask_Click" x:Uid="RenameTask" Loaded="MenuFlyoutItem_Loaded"/>
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </Button>
+                    </Grid>
+                </muxc:Expander.Header>
+                <muxc:Expander.Content>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock x:Uid="NoSubTasks"
+                                   TextWrapping="Wrap"
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center" Opacity="0.6"
+                                   TextTrimming="CharacterEllipsis"
+                                   Visibility="{Binding SubTasks.Count, Converter={StaticResource VisConverter}}" />
+                        <ListView Margin="0,0,-13,0" SelectionMode="None" HorizontalAlignment="Stretch" ItemTemplate="{StaticResource TaskSubItemTemplate}" ItemsSource="{Binding SubTasks}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </StackPanel>
+                </muxc:Expander.Content>
+            </muxc:Expander>
+        </DataTemplate>
+        <DataTemplate x:Key="TaskSubItemTemplate">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="32"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="34"/>
                 </Grid.ColumnDefinitions>
-                <CheckBox Grid.Column="0" Checked="TaskStateChanged" Unchecked="TaskStateChanged" IsChecked="{Binding IsDone}"/>
+                <CheckBox Grid.Column="0" Checked="SubTaskStateChanged" Unchecked="SubTaskStateChanged" IsChecked="{Binding IsDone}"/>
                 <Grid Grid.Column="1">
                     <TextBlock Text="{Binding Name}" ToolTipService.ToolTip="{Binding Name}" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="TaskNameText"/>
                 </Grid>
@@ -24,9 +70,8 @@
                     <FontIcon FontSize="14" Glyph="&#xE10C;" />
                     <Button.Flyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem Icon="Delete" Click="DeleteTask_Click" x:Uid="DeleteTask"/>
-                            <MenuFlyoutItem Icon="Add" Click="AddSubTask_Click" x:Uid="AddSubTask"/>
-                            <MenuFlyoutItem Icon="Rename" Click="RenameTask_Click" x:Uid="RenameTask" Loaded="MenuFlyoutItem_Loaded"/>
+                            <MenuFlyoutItem Icon="Delete" Click="DeleteSubTask_Click" x:Uid="DeleteSubTask"/>
+                            <MenuFlyoutItem Icon="Rename" Click="RenameSubTask_Click" x:Uid="RenameSubTask"/>
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>

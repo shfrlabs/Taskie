@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.UI.Xaml.Controls;
 using TaskieLib;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
@@ -433,9 +438,158 @@ namespace Taskie
             }
         }
 
-        private void AddSubTask_Click(object sender, RoutedEventArgs e)
+        private async void AddSubTask_Click(object sender, RoutedEventArgs e)
         {
-            // placeholder
+            (ListMetadata meta, List<ListTask> tasklist) = ListTools.ReadList(listId);
+            ListTask parent = (sender as MenuFlyoutItem).DataContext as ListTask;
+            int index = tasklist.FindIndex(task => task.CreationDate == parent?.CreationDate);
+            if (parent != null)
+            {
+                ContentDialog dialog = new ContentDialog();
+                dialog.Title = resourceLoader.GetString("NewSubTaskTitle");
+                TextBox box = new TextBox();
+                dialog.Content = box;
+                dialog.PrimaryButtonText = "OK";
+                dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
+
+                ContentDialogResult result = await dialog.ShowAsync();
+
+                if (result == ContentDialogResult.Primary && !string.IsNullOrEmpty(box.Text))
+                {
+                    ListTask task2add = new ListTask
+                    {
+                        CreationDate = DateTime.Now,
+                        ParentCreationDate = parent.CreationDate,
+                        IsDone = false,
+                        Name = box.Text,
+                        SubTasks = new ObservableCollection<ListTask>()
+                    };
+                    parent.SubTasks.Add(task2add);
+                }
+            }
+            Debug.WriteLine(index);
+            if (index > -1)
+            {
+                tasklist[index] = parent;
+                ListTools.SaveList(listId, tasklist, meta);
+            }
+        }
+
+        // no, i dont know what a sephamore is this isnt my first language
+        // a very special someone helped me here
+        private static SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
+
+        private async void SubTaskStateChanged(object sender, RoutedEventArgs e)
+        {
+            var checkBox = sender as CheckBox;
+            if (checkBox == null) return;
+
+            var taskToChange = checkBox.DataContext as ListTask;
+            if (taskToChange == null) return;
+
+            try
+            {
+                await _updateSemaphore.WaitAsync();
+
+                var currentList = ListTools.ReadList(listId);
+                var tasks = currentList.Tasks;
+
+                foreach (var task in tasks)
+                {
+                    var subTask = task.SubTasks.FirstOrDefault(st => st.CreationDate == taskToChange.CreationDate);
+                    if (subTask != null)
+                    {
+                        subTask.IsDone = checkBox.IsChecked ?? false;
+                        break;
+                    }
+                }
+                ListTools.SaveList(listId, tasks, currentList.Metadata);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error updating subtask state: {ex.Message}");
+            }
+            finally
+            {
+                _updateSemaphore.Release();
+            }
+        }
+
+
+        private void DeleteSubTask_Click(object sender, RoutedEventArgs e)
+        {
+            ListTask subTask = (sender as MenuFlyoutItem)?.DataContext as ListTask;
+            if (subTask == null)
+            {
+                return;
+            }
+
+            (ListMetadata meta, List<ListTask> tasks) = ListTools.ReadList(listId);
+
+            int index = tasks.FindIndex(task => task.CreationDate == subTask?.ParentCreationDate);
+            if (index > -1)
+            {
+                ListTask parentTask = tasks[index];
+
+                ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
+                if (taskToRemove != null)
+                {
+                    parentTask.SubTasks.Remove(taskToRemove);
+                    tasks[index] = parentTask;
+                    taskListView.Items[index] = parentTask; // TODO: this is baaddd
+                }
+                else
+                {
+                }
+            }
+            else
+            {
+            }
+            ListTools.SaveList(listId, tasks, meta);
+        }
+
+
+        private async void RenameSubTask_Click(object sender, RoutedEventArgs e)
+        {
+            ListTask subTask = (sender as MenuFlyoutItem)?.DataContext as ListTask;
+            if (subTask == null)
+            {
+                return;
+            }
+            (ListMetadata meta, List<ListTask> tasks) = ListTools.ReadList(listId);
+
+            ContentDialog dialog = new ContentDialog();
+            dialog.Title = resourceLoader.GetString("RenameSubTaskTitle");
+            TextBox box = new TextBox() { Text = subTask.Name};
+            dialog.Content = box;
+            dialog.PrimaryButtonText = "OK";
+            dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
+
+            ContentDialogResult result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary && !string.IsNullOrEmpty(box.Text))
+            {
+                int index = tasks.FindIndex(task => task.CreationDate == subTask?.ParentCreationDate);
+                if (index > -1)
+                {
+                    ListTask parentTask = tasks[index];
+
+                    ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
+                    if (taskToRemove != null)
+                    {
+                        parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = box.Text;
+                        tasks[index] = parentTask;
+                        taskListView.Items[index] = parentTask; // TODO: this is baaddd
+                    }
+                    else
+                    {
+                    }
+                }
+                else
+                {
+                }
+                ListTools.SaveList(listId, tasks, meta);
+            }
         }
     }
 }

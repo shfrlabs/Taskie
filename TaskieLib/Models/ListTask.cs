@@ -1,26 +1,37 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System;
 
-// Object of a task inside a list
 public class ListTask : INotifyPropertyChanged
 {
     private DateTime _creationDate;
+    private DateTime? _parentCreationDate;
     private string _name;
     private bool _isDone;
-    private List<ListTask> _subTasks;
+    private ObservableCollection<ListTask> _subTasks;
 
-    public List<ListTask> SubTasks
+    public ListTask()
+    {
+        _subTasks = new ObservableCollection<ListTask>();
+        _subTasks.CollectionChanged += (s, e) =>
+        {
+            System.Diagnostics.Debug.WriteLine($"SubTasks changed: {e.Action}");
+        };
+    }
+
+    public ObservableCollection<ListTask> SubTasks
     {
         get { return _subTasks; }
         set
         {
-            if (_subTasks != value) {
+            if (_subTasks != value)
+            {
                 _subTasks = value;
-                OnPropertyChanged(nameof(CreationDate));
+                OnPropertyChanged(nameof(SubTasks));
             }
         }
     }
+
     public DateTime CreationDate
     {
         get { return _creationDate; }
@@ -31,6 +42,19 @@ public class ListTask : INotifyPropertyChanged
                 _creationDate = value;
                 OnPropertyChanged(nameof(CreationDate));
             }
+        }
+    }
+
+    public DateTime? ParentCreationDate
+    {
+        get { return _parentCreationDate; }
+        set
+        {
+            if (_parentCreationDate != value)
+            {
+                _parentCreationDate = value;
+                OnPropertyChanged(nameof(ParentCreationDate));
+            };
         }
     }
 
