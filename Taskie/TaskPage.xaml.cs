@@ -442,18 +442,20 @@ namespace Taskie
         {
             (ListMetadata meta, List<ListTask> tasklist) = ListTools.ReadList(listId);
             ListTask parent = (sender as MenuFlyoutItem).DataContext as ListTask;
-            int index = tasklist.IndexOf(parent);
+            int index = tasklist.FindIndex(task => task.CreationDate == parent?.CreationDate);
             if (parent != null)
             {
                 ListTask task2add = new ListTask
                 {
                     CreationDate = DateTime.Now,
+                    ParentCreationDate = parent.CreationDate,
                     IsDone = false,
                     Name = "DEBUG subtask",
                     SubTasks = new ObservableCollection<ListTask>()
                 };
                 parent.SubTasks.Add(task2add);
             }
+            Debug.WriteLine(index);
             if (index > -1)
             {
                 tasklist[index] = parent;
@@ -504,8 +506,55 @@ namespace Taskie
 
         private void DeleteSubTask_Click(object sender, RoutedEventArgs e)
         {
+            // Retrieve the subtask to be deleted
+            ListTask subTask = (sender as MenuFlyoutItem)?.DataContext as ListTask;
+            if (subTask == null)
+            {
+                Debug.WriteLine("SubTask is null. Aborting deletion.");
+                return;
+            }
+            Debug.WriteLine($"Attempting to delete SubTask: {subTask.Name}, CreationDate: {subTask.CreationDate}, ParentCreationDate: {subTask.ParentCreationDate}");
 
+            // Read the list from storage
+            (ListMetadata meta, List<ListTask> tasks) = ListTools.ReadList(listId);
+            Debug.WriteLine($"Read list with ID: {listId}. Total tasks in list: {tasks.Count}");
+
+            // Find the parent task using the ParentCreationDate of the subtask
+            int index = tasks.FindIndex(task => task.CreationDate == subTask?.ParentCreationDate);
+            if (index > -1)
+            {
+                // Parent task found
+                ListTask parentTask = tasks[index];
+                Debug.WriteLine($"Found parent task: {parentTask.Name}, CreationDate: {parentTask.CreationDate}. SubTasks Count: {parentTask.SubTasks.Count}");
+
+                // Find the subtask in the parent's SubTasks collection by CreationDate
+                ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
+                if (taskToRemove != null)
+                {
+                    Debug.WriteLine($"Found SubTask to remove: {taskToRemove.Name}, CreationDate: {taskToRemove.CreationDate}");
+
+                    // Remove the subtask from the parent's SubTasks collection
+                    parentTask.SubTasks.Remove(taskToRemove);
+                    Debug.WriteLine($"Removed SubTask: {taskToRemove.Name}. SubTasks Count after removal: {parentTask.SubTasks.Count}");
+
+                    // Update the parent task in the tasks list
+                    tasks[index] = parentTask;
+                }
+                else
+                {
+                    Debug.WriteLine($"SubTask with CreationDate: {subTask.CreationDate} not found in parent task's SubTasks.");
+                }
+            }
+            else
+            {
+                Debug.WriteLine($"Parent task with CreationDate: {subTask?.ParentCreationDate} not found in the main task list.");
+            }
+
+            // Save the updated task list back to storage
+            ListTools.SaveList(listId, tasks, meta);
+            Debug.WriteLine($"Task list with ID: {listId} saved successfully.");
         }
+
 
         private void RenameSubTask_Click(object sender, RoutedEventArgs e)
         {

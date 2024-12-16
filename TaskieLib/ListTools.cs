@@ -48,7 +48,6 @@ namespace TaskieLib
                     listmetadata = metadata,
                     tasks = tasks
                 };
-                Debug.WriteLine(metadata.Emoji);
                 File.WriteAllText(filePath, JsonConvert.SerializeObject(listData));
             }
             catch (Exception ex)
