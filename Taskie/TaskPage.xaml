@@ -18,7 +18,7 @@
                 </Grid.ColumnDefinitions>
                 <CheckBox Grid.Column="0" Checked="TaskStateChanged" Unchecked="TaskStateChanged" IsChecked="{Binding IsDone}"/>
                 <Grid Grid.Column="1">
-                    <TextBlock Text="{Binding Name}" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="TaskNameText"/>
+                    <TextBlock Text="{Binding Name}" ToolTipService.ToolTip="{Binding Name}" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="TaskNameText"/>
                 </Grid>
                 <Button Background="Transparent" Height="32" BorderThickness="0" Width="34" Padding="0" Grid.Column="2">
                     <FontIcon FontSize="14" Glyph="&#xE10C;" />
