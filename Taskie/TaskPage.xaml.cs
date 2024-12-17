@@ -583,37 +583,40 @@ namespace Taskie
             }
             (ListMetadata meta, List<ListTask> tasks) = ListTools.ReadList(listId);
 
-            ContentDialog dialog = new ContentDialog();
-            dialog.Title = resourceLoader.GetString("RenameSubTaskTitle");
-            TextBox box = new TextBox() { Text = subTask.Name};
-            dialog.Content = box;
-            dialog.PrimaryButtonText = "OK";
-            dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
-
-            ContentDialogResult result = await dialog.ShowAsync();
-
-            if (result == ContentDialogResult.Primary && !string.IsNullOrEmpty(box.Text))
+            if (!ListTools.isAWOpen)
             {
-                int index = tasks.FindIndex(task => task.CreationDate == subTask?.ParentCreationDate);
-                if (index > -1)
-                {
-                    ListTask parentTask = tasks[index];
+                ContentDialog dialog = new ContentDialog();
+                dialog.Title = resourceLoader.GetString("RenameSubTaskTitle");
+                TextBox box = new TextBox() { Text = subTask.Name };
+                dialog.Content = box;
+                dialog.PrimaryButtonText = "OK";
+                dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
 
-                    ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
-                    if (taskToRemove != null)
+                ContentDialogResult result = await dialog.ShowAsync();
+
+                if (result == ContentDialogResult.Primary && !string.IsNullOrEmpty(box.Text))
+                {
+                    int index = tasks.FindIndex(task => task.CreationDate == subTask?.ParentCreationDate);
+                    if (index > -1)
                     {
-                        parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = box.Text;
-                        tasks[index] = parentTask;
-                        taskListView.Items[index] = parentTask; // TODO: this is baaddd
+                        ListTask parentTask = tasks[index];
+
+                        ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
+                        if (taskToRemove != null)
+                        {
+                            parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = box.Text;
+                            tasks[index] = parentTask;
+                            taskListView.Items[index] = parentTask; // TODO: this is baaddd
+                        }
+                        else
+                        {
+                        }
                     }
                     else
                     {
                     }
+                    ListTools.SaveList(listId, tasks, meta);
                 }
-                else
-                {
-                }
-                ListTools.SaveList(listId, tasks, meta);
             }
         }
     }

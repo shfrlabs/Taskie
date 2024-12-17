@@ -29,7 +29,7 @@
                             <Button.Flyout>
                                 <MenuFlyout>
                                     <MenuFlyoutItem Icon="Delete" Click="DeleteTask_Click" x:Uid="DeleteTask"/>
-                                    <MenuFlyoutItem Icon="Add" Click="AddSubTask_Click" x:Uid="AddSubTask"/>
+                                    <MenuFlyoutItem Icon="Add" Click="AddSubTask_Click" x:Uid="AddSubTask" Loaded="MenuFlyoutItem_Loaded"/>
                                     <MenuFlyoutItem Icon="Rename" Click="RenameTask_Click" x:Uid="RenameTask" Loaded="MenuFlyoutItem_Loaded"/>
                                 </MenuFlyout>
                             </Button.Flyout>
@@ -71,7 +71,7 @@
                     <Button.Flyout>
                         <MenuFlyout>
                             <MenuFlyoutItem Icon="Delete" Click="DeleteSubTask_Click" x:Uid="DeleteSubTask"/>
-                            <MenuFlyoutItem Icon="Rename" Click="RenameSubTask_Click" x:Uid="RenameSubTask"/>
+                            <MenuFlyoutItem Icon="Rename" Click="RenameSubTask_Click" x:Uid="RenameSubTask" Loaded="MenuFlyoutItem_Loaded"/>
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>
