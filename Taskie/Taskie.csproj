@@ -30,6 +30,7 @@
     <LangVersion>8.0</LangVersion>
     <PackageCertificateKeyFile>
     </PackageCertificateKeyFile>
+    <AppxPackageDir>C:\Users\bruno\Desktop\</AppxPackageDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>

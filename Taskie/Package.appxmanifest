@@ -9,7 +9,7 @@
   <Identity
     Name="c1a3fbcd-a258-4641-a1c6-7b5727fd3760"
     Publisher="CN=shefer (BETA)"
-    Version="1.1.0.0" />
+    Version="1.2.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="c1a3fbcd-a258-4641-a1c6-7b5727fd3760" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
