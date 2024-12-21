@@ -6,6 +6,7 @@ public class ListTask : INotifyPropertyChanged
 {
     private DateTime _creationDate;
     private DateTime? _parentCreationDate;
+    private DateTime? _reminderDateTime;
     private string _name;
     private bool _isDone;
     private ObservableCollection<ListTask> _subTasks;
@@ -13,10 +14,29 @@ public class ListTask : INotifyPropertyChanged
     public ListTask()
     {
         _subTasks = new ObservableCollection<ListTask>();
-        _subTasks.CollectionChanged += (s, e) =>
+    }
+
+    public DateTime? ReminderDateTime
+    {
+        get
         {
-            System.Diagnostics.Debug.WriteLine($"SubTasks changed: {e.Action}");
-        };
+            if (_reminderDateTime < DateTime.Now) {
+                this.ReminderDateTime = null;
+                return null;
+            }
+            else
+            {
+                return _reminderDateTime;
+            }
+        }
+        set
+        {
+            if (_reminderDateTime != value)
+            {
+                _reminderDateTime = value;
+                OnPropertyChanged(nameof(ReminderDateTime));
+            }
+        }
     }
 
     public ObservableCollection<ListTask> SubTasks
