@@ -18,7 +18,7 @@ public class ListTask : INotifyPropertyChanged
     }
 
     // Method to add a reminder (toast notification)
-    public void AddReminder(DateTime reminderDateTime)
+    public void AddReminder(DateTimeOffset reminderDateTime)
     {
         // Schedule the toast notification
         ScheduleToastNotification(reminderDateTime);
@@ -39,14 +39,14 @@ public class ListTask : INotifyPropertyChanged
     }
 
     // Helper method to schedule a toast notification
-    private void ScheduleToastNotification(DateTime reminderDateTime)
+    private void ScheduleToastNotification(DateTimeOffset reminderDateTime)
     {
         var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
         var stringElements = toastXml.GetElementsByTagName("text");
         stringElements[0].AppendChild(toastXml.CreateTextNode("Reminder"));
         stringElements[1].AppendChild(toastXml.CreateTextNode($"Task: {Name}"));
 
-        var toast = new ScheduledToastNotification(toastXml, new DateTimeOffset(reminderDateTime))
+        var toast = new ScheduledToastNotification(toastXml, reminderDateTime)
         {
             Id = GetToastId()
         };

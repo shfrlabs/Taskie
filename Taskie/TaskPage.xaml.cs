@@ -622,22 +622,21 @@ namespace Taskie
 
         private void UpdateFlyoutMenu(MenuFlyout flyout, ListTask task)
         {
-            // Remove existing "Reminder" item if any
             flyout.Items.Remove(flyout.Items.FirstOrDefault(item => (item as MenuFlyoutItem)?.Tag?.ToString() == "Reminder"));
 
             if (!task.HasReminder())
             {
                 var addReminderItem = new MenuFlyoutItem
                 {
-                    Icon = new SymbolIcon(Symbol.Add),
+                    Icon = new SymbolIcon(Symbol.CalendarDay),
                     Text = resourceLoader.GetString("AddReminder/Text"),
                     Tag = "Reminder"
                 };
 
                 addReminderItem.Click += (s, args) =>
                 {
-                    task.AddReminder(DateTime.Now.AddSeconds(5));
-                    UpdateFlyoutMenu(flyout, task); // Update the flyout menu
+                    task.AddReminder(DateTime.Now.AddSeconds(15));
+                    UpdateFlyoutMenu(flyout, task);
                 };
 
                 flyout.Items.Add(addReminderItem);
@@ -654,7 +653,7 @@ namespace Taskie
                 removeReminderItem.Click += (s, args) =>
                 {
                     task.RemoveReminder();
-                    UpdateFlyoutMenu(flyout, task); // Update the flyout menu
+                    UpdateFlyoutMenu(flyout, task);
                 };
 
                 flyout.Items.Add(removeReminderItem);
@@ -674,61 +673,7 @@ namespace Taskie
             }
 
             MenuFlyout flyout = button.Flyout as MenuFlyout;
-            UpdateFlyoutMenu(flyout, task); // Use the helper method to update the menu
-        }
-
-
-        private void Flyout_Opening(object sender, object e)
-        {
-            MenuFlyout flyout = sender as MenuFlyout;
-            if (flyout == null) return;
-
-            Button button = flyout.Target as Button;
-            ListTask boundTask = button?.DataContext as ListTask;
-
-            if (boundTask == null) return;
-
-            var taskList = ListTools.ReadList(listId).Tasks;
-            var task = taskList.FirstOrDefault(t => t.CreationDate == boundTask.CreationDate);
-
-            if (task == null) return;
-
-            flyout.Items.Remove(flyout.Items.FirstOrDefault(item => (item as MenuFlyoutItem)?.Tag?.ToString() == "Reminder"));
-
-            if (task.HasReminder())
-            {
-                var addReminderItem = new MenuFlyoutItem
-                {
-                    Icon = new SymbolIcon(Symbol.Add),
-                    Text = resourceLoader.GetString("AddReminder/Text"),
-                    Tag = "Reminder"
-                };
-
-                addReminderItem.Click += (s, args) =>
-                {
-                    task.AddReminder(DateTime.Now.AddSeconds(5)); // Add reminder
-                    ListTools.SaveList(listId, taskList, ListTools.ReadList(listId).Metadata); // Save the updated list
-                };
-
-                flyout.Items.Add(addReminderItem);
-            }
-            else
-            {
-                var removeReminderItem = new MenuFlyoutItem
-                {
-                    Icon = new SymbolIcon(Symbol.Delete),
-                    Text = resourceLoader.GetString("RemoveReminder/Text"),
-                    Tag = "Reminder"
-                };
-
-                removeReminderItem.Click += (s, args) =>
-                {
-                    task.RemoveReminder(); // Remove reminder
-                    ListTools.SaveList(listId, taskList, ListTools.ReadList(listId).Metadata); // Save the updated list
-                };
-
-                flyout.Items.Add(removeReminderItem);
-            }
+            UpdateFlyoutMenu(flyout, task);
         }
 
     }
