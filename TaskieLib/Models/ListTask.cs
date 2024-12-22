@@ -1,12 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System;
+using Windows.UI.Notifications;
+using System.Linq;
 
 public class ListTask : INotifyPropertyChanged
 {
     private DateTime _creationDate;
     private DateTime? _parentCreationDate;
-    private DateTime? _reminderDateTime;
     private string _name;
     private bool _isDone;
     private ObservableCollection<ListTask> _subTasks;
@@ -16,27 +17,90 @@ public class ListTask : INotifyPropertyChanged
         _subTasks = new ObservableCollection<ListTask>();
     }
 
-    public DateTime? ReminderDateTime
+    // Method to add a reminder (toast notification)
+    public void AddReminder(DateTime reminderDateTime)
     {
-        get
+        // Schedule the toast notification
+        ScheduleToastNotification(reminderDateTime);
+    }
+
+    // Method to remove a reminder (toast notification)
+    public void RemoveReminder()
+    {
+        // Remove the scheduled toast notification
+        RemoveToastNotification();
+    }
+
+    // Method to check if a reminder exists
+    public bool HasReminder()
+    {
+        // Check if a scheduled toast notification exists and if the reminder time is in the future
+        return CheckIfReminderExists() && IsReminderInTheFuture();
+    }
+
+    // Helper method to schedule a toast notification
+    private void ScheduleToastNotification(DateTime reminderDateTime)
+    {
+        var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
+        var stringElements = toastXml.GetElementsByTagName("text");
+        stringElements[0].AppendChild(toastXml.CreateTextNode("Reminder"));
+        stringElements[1].AppendChild(toastXml.CreateTextNode($"Task: {Name}"));
+
+        var toast = new ScheduledToastNotification(toastXml, new DateTimeOffset(reminderDateTime))
         {
-            if (_reminderDateTime < DateTime.Now) {
-                this.ReminderDateTime = null;
-                return null;
-            }
-            else
+            Id = GetToastId()
+        };
+
+        ToastNotificationManager.CreateToastNotifier().AddToSchedule(toast);
+    }
+
+    // Helper method to remove a toast notification
+    private void RemoveToastNotification()
+    {
+        var notifier = ToastNotificationManager.CreateToastNotifier();
+        var scheduledToasts = notifier.GetScheduledToastNotifications();
+
+        // Iterate through all scheduled notifications and remove those with matching IDs
+        foreach (var toast in scheduledToasts)
+        {
+            if (toast.Id.StartsWith($"Task_{CreationDate.Ticks % 100000000}"))
             {
-                return _reminderDateTime;
+                notifier.RemoveFromSchedule(toast);
             }
         }
-        set
+    }
+
+    // Helper method to check if the toast notification exists
+    private bool CheckIfReminderExists()
+    {
+        var notifier = ToastNotificationManager.CreateToastNotifier();
+        var scheduledToasts = notifier.GetScheduledToastNotifications();
+
+        // Check if any scheduled toast has the matching ID for this task
+        return scheduledToasts.Any(toast => toast.Id.StartsWith($"Task_{CreationDate.Ticks % 100000000}"));
+    }
+
+    private bool IsReminderInTheFuture()
+    {
+        var notifier = ToastNotificationManager.CreateToastNotifier();
+        var scheduledToasts = notifier.GetScheduledToastNotifications();
+
+        // Find the toast notification with the matching ID and check if the reminder time is in the future
+        var taskToast = scheduledToasts.FirstOrDefault(toast => toast.Id.StartsWith($"Task_{CreationDate.Ticks % 100000000}"));
+        if (taskToast != null)
         {
-            if (_reminderDateTime != value)
-            {
-                _reminderDateTime = value;
-                OnPropertyChanged(nameof(ReminderDateTime));
-            }
+            var reminderTime = taskToast.DeliveryTime.DateTime;
+            return reminderTime > DateTime.Now;
         }
+
+        // If no matching toast found, return false
+        return false;
+    }
+
+    // Helper method to generate a unique toast ID based on the creation date
+    private string GetToastId()
+    {
+        return $"Task_{CreationDate.Ticks % 100000000}"; // Ensures ID stays within 8 digits
     }
 
     public ObservableCollection<ListTask> SubTasks
