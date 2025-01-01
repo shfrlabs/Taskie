@@ -38,6 +38,7 @@ namespace Taskie
             DeterminePro();
             CheckOnboarding();
             ProFlyout();
+            ListTools.RefreshRepetitiveLists();
             Navigation.Height = rectlist.ActualHeight;
             ListTools.ListCreatedEvent += UpdateLists;
             ListTools.ListDeletedEvent += ListDeleted;
@@ -282,11 +283,54 @@ namespace Taskie
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag });
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = (sender as ListViewItem).Tag });
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Emoji), Text = resourceLoader.GetString("ChangeEmoji"), Tag = (sender as ListViewItem).Tag });
+            flyout.Items.Add(GetRepeatMenuFlyoutItem((sender as ListViewItem).Tag));
             (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
             (flyout.Items[1] as MenuFlyoutItem).Click += DeleteList_Click;
             (flyout.Items[2] as MenuFlyoutItem).Click += ExportList_Click;
             (flyout.Items[3] as MenuFlyoutItem).Click += ChangeEmoji_Click;
             flyout.ShowAt(sender as ListViewItem);
+        }
+
+        private MenuFlyoutItemBase GetRepeatMenuFlyoutItem(object tag)
+        {
+           var (metadata, tasks) = ListTools.ReadList(tag.ToString().Replace(".json", null));
+            if (metadata.RepeatTime != null)
+            {
+                MenuFlyoutItem item = new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Cancel), Text = resourceLoader.GetString("StopRepeating"), Tag = tag };
+                item.Click += (sender, args) =>
+                {
+                    metadata.RepeatTime = null;
+                    metadata.LastRepeatTime = null;
+                    ListTools.SaveList(tag.ToString().Replace(".json", null), tasks, metadata);
+                };
+                return item;
+            }
+            else
+            {
+                MenuFlyoutItem item = new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.RepeatAll), Text = resourceLoader.GetString("RepeatList"), Tag = tag };
+                item.Click += (sender, args) =>
+                {
+                    ContentDialog dialog = new ContentDialog();
+                    StackPanel stackPanel = new StackPanel();
+                    stackPanel.Orientation = Orientation.Horizontal;
+                    NumberBox input = new NumberBox() { Value = 24, MinWidth = 100 };
+                    stackPanel.Children.Add(input);
+                    stackPanel.Children.Add(new TextBlock() { Text = resourceLoader.GetString("EveryXHours"), Margin = new Thickness(10, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center });
+                    dialog.Content = stackPanel;
+                    dialog.PrimaryButtonText = "OK";
+                    dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
+                    dialog.PrimaryButtonClick += (sender, args) =>
+                    {
+                        if (input.Value > 0)
+                        {
+                            metadata.RepeatTime = new TimeSpan(0, (int)input.Value, 0, 0);
+                            metadata.LastRepeatTime = DateTime.Now;
+                            ListTools.SaveList(tag.ToString().Replace(".json", null), tasks, metadata);
+                        }
+                    };
+                };
+                return item;
+            }
         }
 
         public class IncrementalEmojiSource : ObservableCollection<string>, ISupportIncrementalLoading // source for emojis in the "Change emoji" dialog

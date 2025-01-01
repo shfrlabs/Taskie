@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.VoiceCommands;
 using Windows.Storage;
 
 namespace TaskieLib
@@ -250,6 +251,52 @@ namespace TaskieLib
             {
                 Console.WriteLine($"Error changing list font: {ex.Message}");
             }
+        }
+
+        public static void ChangeListRepeatTime(string listId, TimeSpan? repeatTime)
+        {
+            try
+            {
+                var (metadata, tasks) = ReadList(listId);
+                ListMetadata newData = metadata;
+                newData.LastRepeatTime = DateTime.Now;
+                newData.RepeatTime = repeatTime;
+                SaveList(listId, tasks, newData);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error changing list repeat time: {ex.Message}");
+            }
+        }
+
+        public static void RefreshRepetitiveLists()
+        {
+            foreach (var list in GetLists())
+            {
+                var (metadata, tasks) = ReadList(list.id);
+                if (metadata.LastRepeatTime != null && metadata.RepeatTime != null)
+                {
+                    if ((metadata.LastRepeatTime + metadata.RepeatTime) < DateTime.Now)
+                    {
+                        RefreshRepetitiveList(list.id);
+                    }
+                }
+            }
+        }
+
+        private static void RefreshRepetitiveList(string id)
+        {
+            var (metadata, tasks) = ReadList(id);
+            metadata.LastRepeatTime = DateTime.Now;
+            foreach (ListTask task in tasks)
+            {
+                task.IsDone = false;
+                foreach (ListTask subtask in task.SubTasks)
+                { // waiting for poll results
+                    subtask.IsDone = false;
+                }
+            }
+            SaveList(id, tasks, metadata);
         }
     }
 }

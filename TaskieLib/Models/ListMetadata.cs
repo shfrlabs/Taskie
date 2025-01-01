@@ -12,6 +12,34 @@ public class ListMetadata : INotifyPropertyChanged
     private string _emoji;
     private int? _groupID;
     private string _titlefont;
+    private TimeSpan? _repeatTime;
+    private DateTime? _lastRepeatTime;
+
+    public TimeSpan? RepeatTime
+    {
+        get { return _repeatTime; }
+        set
+        {
+            if (_repeatTime != value)
+            {
+                _repeatTime = value;
+                OnPropertyChanged(nameof(RepeatTime));
+            };
+        }
+    }
+
+    public DateTime? LastRepeatTime
+    {
+        get { return _lastRepeatTime; }
+        set
+        {
+            if (_lastRepeatTime != value)
+            {
+                _lastRepeatTime = value;
+                OnPropertyChanged(nameof(LastRepeatTime));
+            };
+        }
+    }
 
     public string TitleFont // Pro only.
     {

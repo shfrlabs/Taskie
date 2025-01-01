@@ -367,4 +367,16 @@
   <data name="ReminderGreeting" xml:space="preserve">
     <value>Here's your scheduled reminder:</value>
   </data>
+  <data name="EveryXHours" xml:space="preserve">
+    <value>hours</value>
+  </data>
+  <data name="RepeatList" xml:space="preserve">
+    <value>Schedule clearing</value>
+  </data>
+  <data name="RepeatListDescription" xml:space="preserve">
+    <value>Got chores? You can schedule this list to untick all its tasks at an interval to start fresh every time.</value>
+  </data>
+  <data name="StopRepeating" xml:space="preserve">
+    <value>Stop scheduled clearing</value>
+  </data>
 </root>
