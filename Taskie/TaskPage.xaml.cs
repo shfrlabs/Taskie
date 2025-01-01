@@ -633,19 +633,24 @@ namespace Taskie
                     Tag = "Reminder"
                 };
                 Button addReminderBtn = new Button();
-                addReminderBtn.Margin = new Thickness(5);
+                addReminderBtn.Margin = new Thickness(0, 5, 0, 0);
                 addReminderBtn.Content = resourceLoader.GetString("AddReminder/Text");
+                addReminderBtn.Width = 250;
 
-                DatePicker datePicker = new DatePicker();
+                CalendarDatePicker datePicker = new CalendarDatePicker();
+                
                 datePicker.Date = DateTime.Now;
-                datePicker.Margin = new Thickness(5);
+                datePicker.MinDate = DateTime.Now;
+                datePicker.Width = 250;
 
                 TimePicker timePicker = new TimePicker();
                 timePicker.Time = DateTime.Now.TimeOfDay;
-                timePicker.Margin = new Thickness(5);
+                timePicker.Width = 250;
+                timePicker.Margin = new Thickness(0, 5, 0, 0);
 
                 StackPanel stackPanel = new StackPanel();
                 stackPanel.Orientation = Orientation.Vertical;
+                stackPanel.HorizontalAlignment = HorizontalAlignment.Stretch;
 
                 stackPanel.Children.Add(datePicker);
                 stackPanel.Children.Add(timePicker);
@@ -655,7 +660,7 @@ namespace Taskie
                 timeChooser.Content = stackPanel;
                 addReminderBtn.Click += (s, args) =>
                 {
-                    DateTime date = new DateTime(datePicker.Date.Year, datePicker.Date.Month, datePicker.Date.Day, timePicker.Time.Hours, timePicker.Time.Minutes, timePicker.Time.Seconds);
+                    DateTime date = new DateTime(datePicker.Date.Value.Year, datePicker.Date.Value.Month, datePicker.Date.Value.Day, timePicker.Time.Hours, timePicker.Time.Minutes, timePicker.Time.Seconds);
                     if (date > DateTime.Now)
                     { task.AddReminder(date); }
                     timeChooser.Hide();
