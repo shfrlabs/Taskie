@@ -662,7 +662,7 @@ namespace Taskie
                 {
                     DateTime date = new DateTime(datePicker.Date.Value.Year, datePicker.Date.Value.Month, datePicker.Date.Value.Day, timePicker.Time.Hours, timePicker.Time.Minutes, timePicker.Time.Seconds);
                     if (date > DateTime.Now)
-                    { task.AddReminder(date); }
+                    { task.AddReminder(date, listId); }
                     timeChooser.Hide();
                 };
 

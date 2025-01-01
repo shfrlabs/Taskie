@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System;
 using Windows.UI.Notifications;
 using System.Linq;
+using Windows.Data.Xml.Dom;
 
 public class ListTask : INotifyPropertyChanged
 {
@@ -18,10 +19,10 @@ public class ListTask : INotifyPropertyChanged
     }
 
     // Method to add a reminder (toast notification)
-    public void AddReminder(DateTimeOffset reminderDateTime)
+    public void AddReminder(DateTimeOffset reminderDateTime, string listId)
     {
         // Schedule the toast notification
-        ScheduleToastNotification(reminderDateTime);
+        ScheduleToastNotification(reminderDateTime, listId);
     }
 
     // Method to remove a reminder (toast notification)
@@ -39,12 +40,16 @@ public class ListTask : INotifyPropertyChanged
     }
 
     // Helper method to schedule a toast notification
-    private void ScheduleToastNotification(DateTimeOffset reminderDateTime)
+    private void ScheduleToastNotification(DateTimeOffset reminderDateTime, string listId)
     {
         var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
         var stringElements = toastXml.GetElementsByTagName("text");
         stringElements[0].AppendChild(toastXml.CreateTextNode("Reminder"));
         stringElements[1].AppendChild(toastXml.CreateTextNode($"Task: {Name}"));
+
+        // Add arguments to the toast notification
+        var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");
+        toastElement.SetAttribute("launch", $"listId={listId}");
 
         var toast = new ScheduledToastNotification(toastXml, reminderDateTime)
         {

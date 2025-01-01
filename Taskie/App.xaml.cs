@@ -2,6 +2,7 @@
 using TaskieLib;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -25,6 +26,7 @@ namespace Taskie
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
+        public string ToastActivationArgument { get; private set; }
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             bool canEnablePrelaunch = Windows.Foundation.Metadata.ApiInformation.IsMethodPresent("Windows.ApplicationModel.Core.CoreApplication", "EnablePrelaunch");
@@ -40,6 +42,11 @@ namespace Taskie
                 }
 
                 Window.Current.Content = rootFrame;
+            }
+
+            if (e.Arguments.Contains("listId"))
+            {
+                ToastActivationArgument = e.Arguments;
             }
 
             if (e.PrelaunchActivated == false)

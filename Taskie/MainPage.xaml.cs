@@ -46,7 +46,31 @@ namespace Taskie
             ListTools.AWOpenEvent += Tools_AWOpenEvent;
             ListTools.AWClosedEvent += Tools_AWClosedEvent;
             ActualThemeChanged += MainPage_ActualThemeChanged;
+
+            if (App.Current is App app && !string.IsNullOrEmpty(app.ToastActivationArgument))
+            {
+                HandleToastActivation(app.ToastActivationArgument);
+            }
         }
+
+        public void HandleToastActivation(string argument)
+        {
+            // Extract the task ID from the argument
+            var listId = argument.Split('=')[1];
+            System.Diagnostics.Debug.WriteLine($"Toast notification activated. List ID: {listId}");
+
+            // Navigate to the specific task page
+            contentFrame.Navigate(typeof(TaskPage), listId);
+            foreach (ListViewItem item in Navigation.Items)
+            {
+                if (item.Tag.ToString().Replace(".json", null) == listId)
+                {
+                    Navigation.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+
 
         // nagging users to buy Pro
         private void ProFlyout()
