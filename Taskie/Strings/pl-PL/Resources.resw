@@ -361,4 +361,16 @@
   <data name="ReminderGreeting" xml:space="preserve">
     <value>Oto zaplanowane przypomnienie:</value>
   </data>
+  <data name="EveryXHours" xml:space="preserve">
+    <value>godzin(y)</value>
+  </data>
+  <data name="RepeatList" xml:space="preserve">
+    <value>Zaplanuj czyszczenie</value>
+  </data>
+  <data name="RepeatListDescription" xml:space="preserve">
+    <value>Masz regularne obowiązki? Możesz zaplanować czyszczenie tej listy, co odznaczy wszystkie zadania co odstęp czasu.</value>
+  </data>
+  <data name="StopRepeating" xml:space="preserve">
+    <value>Wyłącz czyszczenie</value>
+  </data>
 </root>
