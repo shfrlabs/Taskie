@@ -4,6 +4,7 @@ using System;
 using Windows.UI.Notifications;
 using System.Linq;
 using Windows.Data.Xml.Dom;
+using Windows.ApplicationModel.Resources;
 
 public class ListTask : INotifyPropertyChanged
 {
@@ -39,13 +40,14 @@ public class ListTask : INotifyPropertyChanged
         return CheckIfReminderExists() && IsReminderInTheFuture();
     }
 
+    private ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
     // Helper method to schedule a toast notification
     private void ScheduleToastNotification(DateTimeOffset reminderDateTime, string listId)
     {
         var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
         var stringElements = toastXml.GetElementsByTagName("text");
-        stringElements[0].AppendChild(toastXml.CreateTextNode("Reminder"));
-        stringElements[1].AppendChild(toastXml.CreateTextNode($"Task: {Name}"));
+        stringElements[0].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("ReminderGreeting")));
+        stringElements[1].AppendChild(toastXml.CreateTextNode($"{Name}"));
 
         // Add arguments to the toast notification
         var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");

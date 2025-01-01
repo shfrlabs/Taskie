@@ -358,4 +358,7 @@
   <data name="RemoveReminder.Text" xml:space="preserve">
     <value>Usuń przypomnienie</value>
   </data>
+  <data name="ReminderGreeting" xml:space="preserve">
+    <value>Oto zaplanowane przypomnienie:</value>
+  </data>
 </root>

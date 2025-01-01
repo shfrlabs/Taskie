@@ -364,4 +364,7 @@
   <data name="RemoveReminder.Text" xml:space="preserve">
     <value>Remove reminder</value>
   </data>
+  <data name="ReminderGreeting" xml:space="preserve">
+    <value>Here's your scheduled reminder:</value>
+  </data>
 </root>
