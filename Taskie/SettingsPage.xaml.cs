@@ -4,6 +4,7 @@ using System.Linq;
 using Taskie.SettingsPages;
 using Windows.ApplicationModel.Resources;
 using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -15,6 +16,10 @@ namespace Taskie
         public SettingsPage()
         {
             this.InitializeComponent();
+            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.ButtonBackgroundColor = Colors.Transparent;
+            titleBar.ButtonHoverBackgroundColor = Colors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             addPages();
             settingPageList.SelectedItem = settingPageList.Items.FirstOrDefault();
             contentFrame.Navigate(typeof(AppearancePage));
