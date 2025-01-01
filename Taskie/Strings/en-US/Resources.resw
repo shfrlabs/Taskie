@@ -358,4 +358,10 @@
   <data name="NewSubTaskTitle" xml:space="preserve">
     <value>New subtask</value>
   </data>
+  <data name="AddReminder.Text" xml:space="preserve">
+    <value>Add reminder</value>
+  </data>
+  <data name="RemoveReminder.Text" xml:space="preserve">
+    <value>Remove reminder</value>
+  </data>
 </root>

@@ -194,7 +194,7 @@ namespace Taskie
             ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
         }
 
-        private async void RenameList_Click(object sender, RoutedEventArgs e)
+        private void RenameList_Click(object sender, RoutedEventArgs e)
         {
             TextBox input = new TextBox()
             {
@@ -619,5 +619,93 @@ namespace Taskie
                 }
             }
         }
+
+        private void UpdateFlyoutMenu(MenuFlyout flyout, ListTask task, Button btn)
+        {
+            flyout.Items.Remove(flyout.Items.FirstOrDefault(item => (item as MenuFlyoutItem)?.Tag?.ToString() == "Reminder"));
+
+            if (!task.HasReminder())
+            {
+                var addReminderItem = new MenuFlyoutItem
+                {
+                    Icon = new SymbolIcon(Symbol.Calendar),
+                    Text = resourceLoader.GetString("AddReminder/Text"),
+                    Tag = "Reminder"
+                };
+                Button addReminderBtn = new Button();
+                addReminderBtn.Margin = new Thickness(0, 5, 0, 0);
+                addReminderBtn.Content = resourceLoader.GetString("AddReminder/Text");
+                addReminderBtn.Width = 250;
+
+                CalendarDatePicker datePicker = new CalendarDatePicker();
+                
+                datePicker.Date = DateTime.Now;
+                datePicker.MinDate = DateTime.Now;
+                datePicker.Width = 250;
+
+                TimePicker timePicker = new TimePicker();
+                timePicker.Time = DateTime.Now.TimeOfDay;
+                timePicker.Width = 250;
+                timePicker.Margin = new Thickness(0, 5, 0, 0);
+
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Orientation = Orientation.Vertical;
+                stackPanel.HorizontalAlignment = HorizontalAlignment.Stretch;
+
+                stackPanel.Children.Add(datePicker);
+                stackPanel.Children.Add(timePicker);
+                stackPanel.Children.Add(addReminderBtn);
+
+                Flyout timeChooser = new Flyout();
+                timeChooser.Content = stackPanel;
+                addReminderBtn.Click += (s, args) =>
+                {
+                    DateTime date = new DateTime(datePicker.Date.Value.Year, datePicker.Date.Value.Month, datePicker.Date.Value.Day, timePicker.Time.Hours, timePicker.Time.Minutes, timePicker.Time.Seconds);
+                    if (date > DateTime.Now)
+                    { task.AddReminder(date); }
+                    timeChooser.Hide();
+                };
+
+                addReminderItem.Click += (s, args) => {
+                    timeChooser.ShowAt(btn, new FlyoutShowOptions() { Placement = FlyoutPlacementMode.Bottom });
+                };
+
+                flyout.Items.Add(addReminderItem);
+            }
+            else
+            {
+                var removeReminderItem = new MenuFlyoutItem
+                {
+                    Icon = new SymbolIcon(Symbol.Delete),
+                    Text = resourceLoader.GetString("RemoveReminder/Text"),
+                    Tag = "Reminder"
+                };
+
+                removeReminderItem.Click += (s, args) =>
+                {
+                    task.RemoveReminder();
+                    UpdateFlyoutMenu(flyout, task, btn);
+                };
+
+                flyout.Items.Add(removeReminderItem);
+            }
+        }
+
+        private void TaskThreeDots_Loaded(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            ListTask boundTask = button.DataContext as ListTask;
+            var taskList = ListTools.ReadList(listId).Tasks;
+            var task = taskList.FirstOrDefault(t => t.CreationDate == boundTask.CreationDate);
+
+            if (task == null)
+            {
+                return;
+            }
+
+            MenuFlyout flyout = button.Flyout as MenuFlyout;
+            UpdateFlyoutMenu(flyout, task, button);
+        }
+
     }
 }

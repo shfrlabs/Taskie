@@ -24,7 +24,7 @@
                         <Grid Grid.Column="1">
                             <TextBlock Text="{Binding Name}" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="TaskNameText"/>
                         </Grid>
-                        <Button Background="Transparent" Height="32" BorderThickness="0" Width="34" Padding="0" Grid.Column="2">
+                        <Button Background="Transparent" Height="32" BorderThickness="0" Width="34" Padding="0" Grid.Column="2" Loaded="TaskThreeDots_Loaded" Click="TaskThreeDots_Loaded">
                             <FontIcon FontSize="14" Glyph="&#xE10C;" />
                             <Button.Flyout>
                                 <MenuFlyout>
