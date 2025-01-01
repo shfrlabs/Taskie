@@ -305,7 +305,7 @@ namespace Taskie
 
                     if (taskNameText != null)
                     {
-                        taskNameText.MaxWidth = (sender as Rectangle).ActualWidth;
+                        taskNameText.Width = (sender as Rectangle).ActualWidth;
                     }
                 }
             }
