@@ -308,15 +308,21 @@ namespace Taskie
             else
             {
                 MenuFlyoutItem item = new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.RepeatAll), Text = resourceLoader.GetString("RepeatList"), Tag = tag };
-                item.Click += (sender, args) =>
+                item.Click += async (sender, args) =>
                 {
                     ContentDialog dialog = new ContentDialog();
                     StackPanel stackPanel = new StackPanel();
+                    StackPanel mainPanel = new StackPanel();
                     stackPanel.Orientation = Orientation.Horizontal;
-                    NumberBox input = new NumberBox() { Value = 24, MinWidth = 100 };
+                    NumberBox input = new NumberBox() { Value = 24 };
                     stackPanel.Children.Add(input);
                     stackPanel.Children.Add(new TextBlock() { Text = resourceLoader.GetString("EveryXHours"), Margin = new Thickness(10, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center });
-                    dialog.Content = stackPanel;
+                    mainPanel.Children.Add(new TextBlock() { Text = resourceLoader.GetString("RepeatListDescription"), TextWrapping = TextWrapping.Wrap, MaxLines = 3, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 0, 0, 10), VerticalAlignment = VerticalAlignment.Center });
+                    mainPanel.Children.Add(stackPanel);
+                    mainPanel.Orientation = Orientation.Vertical;
+                    dialog.Content = mainPanel;
+                    dialog.Title = resourceLoader.GetString("RepeatList");
+                    dialog.DefaultButton = ContentDialogButton.Primary;
                     dialog.PrimaryButtonText = "OK";
                     dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
                     dialog.PrimaryButtonClick += (sender, args) =>
@@ -328,6 +334,7 @@ namespace Taskie
                             ListTools.SaveList(tag.ToString().Replace(".json", null), tasks, metadata);
                         }
                     };
+                    await dialog.ShowAsync();
                 };
                 return item;
             }
