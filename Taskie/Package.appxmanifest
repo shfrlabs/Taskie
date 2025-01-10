@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="c1a3fbcd-a258-4641-a1c6-7b5727fd3760"
-    Publisher="CN=shef3r - preview"
+    Name="BRStudios.Taskie"
+    Publisher="CN=A43ACDD8-D8D2-4B12-B25B-98D2138C0CFE"
     Version="1.3.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="c1a3fbcd-a258-4641-a1c6-7b5727fd3760" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="4b313a38-cea6-421b-88fe-00f780d18723" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Taskie</DisplayName>
-    <PublisherDisplayName>Bruno</PublisherDisplayName>
+    <PublisherDisplayName>shefer&apos;s labs</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
