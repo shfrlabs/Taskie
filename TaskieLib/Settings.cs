@@ -1,11 +1,13 @@
 ﻿using System;
 using Windows.Storage;
 using Windows.Foundation.Collections;
+using Windows.ApplicationModel.Store;
 
 namespace TaskieLib
 {
     public static class Settings
     {
+        private static LicenseInformation licenseInformation = CurrentAppSimulator.LicenseInformation;
         private static IPropertySet savedSettings = ApplicationData.Current.LocalSettings.Values;
 
         // Application theme (light/dark)

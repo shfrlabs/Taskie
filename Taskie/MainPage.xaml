@@ -32,7 +32,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="110"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="135" x:Name="BottomRow"/>
+                    <RowDefinition Height="65" x:Name="BottomRow"/> <!--135 potem-->
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Bottom">
                     <Button Background="{StaticResource SystemAccentColorLight2}" x:Name="AddItemBtn" Click="AddList" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 , 10">
@@ -67,13 +67,13 @@
                     <ListView x:Name="Navigation" Margin="7,2,7,0" SelectionMode="Single" SelectionChanged="Navigation_SelectionChanged_1"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="2">
-                    <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
-                    <Button x:Name="UpdateButton" Click="UpgradeButton_Click" HorizontalContentAlignment="Center" Margin="10, 3, 10 ,10" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" BorderThickness="2" BorderBrush="{StaticResource SystemAccentColorLight2}">
+                    <Button x:Name="UpdateButton" Visibility="Collapsed" Click="UpgradeButton_Click" HorizontalContentAlignment="Center" Margin="10, 3, 10 ,10" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" BorderThickness="2" BorderBrush="{StaticResource SystemAccentColorLight2}">
                         <StackPanel Orientation="Horizontal">
                             <FontIcon Glyph="&#xE74A;" FontSize="18" Margin="0,0,10,0"/>
                             <TextBlock FontSize="15" x:Uid="UpgradeText"></TextBlock>
                         </StackPanel>
                     </Button>
+                    <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
                     <Button x:Name="SettingsButton" Click="SettingsButton_Click" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Height="45" CornerRadius="8" Margin="10, 0, 10 ,0">
                         <StackPanel Orientation="Horizontal">
                             <FontIcon Glyph="&#xE713;" FontSize="18" Margin="0,0,10,0"/>
