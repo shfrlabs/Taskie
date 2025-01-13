@@ -75,11 +75,11 @@ namespace Taskie
         // nagging users to buy Pro
         private void ProFlyout()
         {
-            if (!Settings.isPro && (new Random()).Next(1, 25) == 16)
-            {
-                protip.Target = UpdateButton;
-                protip.IsOpen = true;
-            }
+            //if (!Settings.isPro && (new Random()).Next(1, 25) == 16)
+            //{
+            //    protip.Target = UpdateButton;
+            //    protip.IsOpen = true;
+            //}
         }
 
 #if DEBUG
