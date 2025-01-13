@@ -21,8 +21,8 @@
                 </LinearGradientBrush>
             </TextBlock.Foreground>
         </TextBlock>
-        <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Width="400" FontSize="17" FontFamily="Segoe UI Variable" FontWeight="Medium">Meet your quick and private to-do companion.</TextBlock>
-        <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Width="400" Opacity="0.8" FontFamily="Segoe UI Variable">Add your tasks, organize lists and customize the app.</TextBlock>
-        <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Width="400" Opacity="0.8" FontFamily="Segoe UI Variable">Have fun and be productive!</TextBlock>
+        <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Width="400" FontSize="17" FontFamily="Segoe UI Variable" FontWeight="Medium" x:Uid="Welcome1"></TextBlock>
+        <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Width="400" Opacity="0.8" FontFamily="Segoe UI Variable" x:Uid="Welcome2"></TextBlock>
+        <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Width="400" Opacity="0.8" FontFamily="Segoe UI Variable" x:Uid="Welcome3"></TextBlock>
     </StackPanel>
 </Page>

@@ -367,4 +367,13 @@
   <data name="ReminderGreeting" xml:space="preserve">
     <value>Here's your scheduled reminder:</value>
   </data>
+  <data name="Welcome1.Text" xml:space="preserve">
+    <value>Meet your quick and private to-do companion.</value>
+  </data>
+  <data name="Welcome2.Text" xml:space="preserve">
+    <value>Add your tasks, organize lists and customize the app.</value>
+  </data>
+  <data name="Welcome3.Text" xml:space="preserve">
+    <value>Have fun and be productive!</value>
+  </data>
 </root>

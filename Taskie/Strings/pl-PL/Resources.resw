@@ -361,4 +361,13 @@
   <data name="ReminderGreeting" xml:space="preserve">
     <value>Oto zaplanowane przypomnienie:</value>
   </data>
+  <data name="Welcome1.Text" xml:space="preserve">
+    <value>Poznaj szybką i prywatną aplikację listy zadań.</value>
+  </data>
+  <data name="Welcome2.Text" xml:space="preserve">
+    <value>Dodaj zadania, organizuj listy i dostosuj aplikację.</value>
+  </data>
+  <data name="Welcome3.Text" xml:space="preserve">
+    <value>Baw się dobrze!</value>
+  </data>
 </root>
