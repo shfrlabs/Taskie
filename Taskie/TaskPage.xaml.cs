@@ -159,7 +159,7 @@ namespace Taskie
             TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("TaskName"), Text = note.Name };
             if (!ListTools.isAWOpen)
             {
-                ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameTask/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input };
+                ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameTask/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input, DefaultButton = ContentDialogButton.Primary };
                 ContentDialogResult result = await dialog.ShowAsync();
                 if (result == ContentDialogResult.Primary)
                 {
@@ -474,6 +474,7 @@ namespace Taskie
                 dialog.Title = resourceLoader.GetString("NewSubTaskTitle");
                 TextBox box = new TextBox();
                 dialog.Content = box;
+                dialog.DefaultButton = ContentDialogButton.Primary;
                 dialog.PrimaryButtonText = "OK";
                 dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
 
@@ -589,6 +590,7 @@ namespace Taskie
                 dialog.Title = resourceLoader.GetString("RenameSubTaskTitle");
                 TextBox box = new TextBox() { Text = subTask.Name };
                 dialog.Content = box;
+                dialog.DefaultButton = ContentDialogButton.Primary;
                 dialog.PrimaryButtonText = "OK";
                 dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
 
@@ -696,15 +698,17 @@ namespace Taskie
             Button button = sender as Button;
             ListTask boundTask = button.DataContext as ListTask;
             var taskList = ListTools.ReadList(listId).Tasks;
-            var task = taskList.FirstOrDefault(t => t.CreationDate == boundTask.CreationDate);
-
-            if (task == null)
+            ListTask task;
+            try
             {
-                return;
-            }
-
-            MenuFlyout flyout = button.Flyout as MenuFlyout;
-            UpdateFlyoutMenu(flyout, task, button);
+                task = taskList.FirstOrDefault(t => t.CreationDate == boundTask.CreationDate);
+                if (task == null)
+                {
+                    return;
+                }
+                MenuFlyout flyout = button.Flyout as MenuFlyout;
+                UpdateFlyoutMenu(flyout, task, button);
+            } catch { }
         }
 
     }
