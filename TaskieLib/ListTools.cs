@@ -52,7 +52,7 @@ namespace TaskieLib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving list: {ex.Message}");
+                Debug.WriteLine("[List saving] Exception occured: " + ex.Message);
             }
         }
 
@@ -74,7 +74,7 @@ namespace TaskieLib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error getting lists: {ex.Message}");
+                Debug.WriteLine("[List getter] Exception occured: " + ex.Message);
                 return new (string name, string id)[0];
             }
         }
@@ -94,7 +94,7 @@ namespace TaskieLib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error reading list: {ex.Message}");
+                Debug.WriteLine("[List reader] Exception occured: " + ex.Message);
             }
 
             return (new ListMetadata(), new List<ListTask>());
@@ -118,7 +118,7 @@ namespace TaskieLib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating list: {ex.Message}");
+                Debug.WriteLine("[List creation] Exception occured: " + ex.Message);
                 return null;
             }
         }
@@ -149,7 +149,7 @@ namespace TaskieLib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error deleting list: {ex.Message}");
+                Debug.WriteLine("[List deletion] Exception occured: " + ex.Message);
             }
         }
 
@@ -165,7 +165,7 @@ namespace TaskieLib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error renaming list: {ex.Message}");
+                Debug.WriteLine("[List renaming] Exception occured: " + ex.Message);
             }
         }
 
@@ -182,7 +182,7 @@ namespace TaskieLib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error changing list emoji: {ex.Message}");
+                Debug.WriteLine("[List emoji change] Exception occured: " + ex.Message);
             }
         }
 
@@ -233,7 +233,7 @@ namespace TaskieLib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error importing file: {ex.Message}");
+                Debug.WriteLine("[File import] Exception occured: " + ex.Message);
             }
         }
 
@@ -248,7 +248,7 @@ namespace TaskieLib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error changing list font: {ex.Message}");
+                Debug.WriteLine("[List font change] Exception occured: " + ex.Message);
             }
         }
     }

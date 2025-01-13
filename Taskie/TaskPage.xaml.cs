@@ -263,7 +263,7 @@ namespace Taskie
                     { }
                 });
             }
-            catch { }
+            catch (Exception ex) { Debug.WriteLine("[List export] Exception occured: " + ex.Message); }
         }
 
         private void DeleteList_Click(object sender, RoutedEventArgs e)
@@ -285,7 +285,7 @@ namespace Taskie
                     ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
                 }
             }
-            catch { }
+            catch (Exception ex) { Debug.WriteLine("[Task state change] Exception occured: " + ex.Message); }
 
         }
 
@@ -531,10 +531,7 @@ namespace Taskie
                 }
                 ListTools.SaveList(listId, tasks, currentList.Metadata);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error updating subtask state: {ex.Message}");
-            }
+            catch (Exception ex) { Debug.WriteLine("[Subtask state change] Exception occured: " + ex.Message); }
             finally
             {
                 _updateSemaphore.Release();
@@ -708,7 +705,7 @@ namespace Taskie
                 }
                 MenuFlyout flyout = button.Flyout as MenuFlyout;
                 UpdateFlyoutMenu(flyout, task, button);
-            } catch { }
+            } catch (Exception ex) { Debug.WriteLine("[TaskThreeDots_Loaded] Exception occured: " + ex.Message); }
         }
 
     }

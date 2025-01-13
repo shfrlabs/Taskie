@@ -381,7 +381,7 @@ namespace Taskie
                     }
                 });
             }
-            catch { }
+            catch (Exception ex) { Debug.WriteLine("[List export] Exception occured: " + ex.Message); }
         }
 
 
@@ -554,7 +554,7 @@ namespace Taskie
                 sender.Text = "";
                 searchbox.ItemsSource = new List<string>();
             }
-            catch { }
+            catch (Exception ex) { Debug.WriteLine("[Search box suggestion chooser] Exception occured: " + ex.Message); }
         }
     }
 }
