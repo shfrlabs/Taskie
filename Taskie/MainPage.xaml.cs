@@ -1,5 +1,4 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
-using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.UI.Xaml.Controls;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -23,6 +22,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using Windows.Foundation;
+using Windows.UI.Notifications;
+using System.Xml;
 
 namespace Taskie
 {
@@ -500,10 +501,20 @@ namespace Taskie
             // DEBUG UPGRADE OPTION
             if (!Settings.isPro)
             {
-                ToastContentBuilder builder = new ToastContentBuilder()
-                    .AddText(resourceLoader.GetString("successfulUpgrade"))
-                    .AddText(resourceLoader.GetString("successfulUpgradeSub"));
-                builder.Show();
+                var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
+                var stringElements = toastXml.GetElementsByTagName("text");
+                stringElements[0].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgrade")));
+                stringElements[1].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgradeSub")));
+
+                // Add arguments to the toast notification
+                var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");
+
+                var toast = new ScheduledToastNotification(toastXml, DateTimeOffset.Now.AddSeconds(1))
+                {
+                    Id = "proUpgrade"
+                };
+
+                ToastNotificationManager.CreateToastNotifier().AddToSchedule(toast);
                 Settings.isPro = true;
                 await CoreApplication.RequestRestartAsync("Pro status changed.");
             }
