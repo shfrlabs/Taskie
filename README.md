@@ -4,6 +4,10 @@
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
 </a></p>
 
+### Features
+- Reminders
+- Subtasks
+- List customization
 
 ### File structure
 Taskie stores your lists as JSON files in the app's local folder. You can export them into a `.taskie` file (that's just a renamed ZIP containing the JSON files)
