@@ -371,6 +371,8 @@ namespace Taskie
         private async void CompactOverlay_Click(object sender, RoutedEventArgs e)
         {
             AppWindow window = await AppWindow.TryCreateAsync();
+            window.Presenter.RequestPresentation(AppWindowPresentationKind.CompactOverlay);
+
             window.TitleBar.ButtonBackgroundColor = Colors.Transparent;
             window.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             if (Settings.Theme == "Dark")
@@ -386,13 +388,9 @@ namespace Taskie
             frame.Navigate(typeof(TaskPage), listId.Replace(".json", null));
             ListTools.isAWOpen = true;
             ElementCompositionPreview.SetAppWindowContent(window, frame);
-            window.Presenter.RequestPresentation(AppWindowPresentationKind.CompactOverlay);
             window.TitleBar.ExtendsContentIntoTitleBar = true;
-            await window.TryShowAsync();
-            IList<AppDiagnosticInfo> infos = await AppDiagnosticInfo.RequestInfoForAppAsync();
-            IList<AppResourceGroupInfo> resourceInfos = infos[0].GetResourceGroups();
-            await resourceInfos[0].StartSuspendAsync();
             cobtn.Visibility = Visibility.Collapsed;
+            await window.TryShowAsync();
             this.Frame.Navigate(typeof(COClosePage));
         }
 
@@ -400,6 +398,7 @@ namespace Taskie
         {
             ListTools.isAWOpen = false;
             cobtn.Visibility = Visibility.Visible;
+            this.Frame.Navigate(typeof(EmptyPage));
         }
 
         private void topoptions_Loaded(object sender, RoutedEventArgs e)
@@ -429,6 +428,7 @@ namespace Taskie
                     }
                 }
                 topoptions.Visibility = Visibility.Collapsed;
+                cobtn.Visibility = Visibility.Collapsed;
             }
         }
 

@@ -8,7 +8,7 @@
     mc:Ignorable="d">
 
     <StackPanel Orientation="Vertical" Margin="50" VerticalAlignment="Center" HorizontalAlignment="Center">
-        <FontIcon FontFamily="Segoe UI Emoji" FontSize="100" Glyph="&#x1F448;"/>
+        <FontIcon FontFamily="Segoe UI Emoji" FontSize="100" Glyph="&#x1F4CB;"/>
         <TextBlock x:Uid="EmptyListText" Margin="0,20,0,0" TextAlignment="Center" FontSize="18" Opacity=".8" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </StackPanel>
 </Page>

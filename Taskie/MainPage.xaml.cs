@@ -111,17 +111,21 @@ namespace Taskie
 
         private void Tools_AWClosedEvent() // Executes when Taskie Mini is closed.
         {
-            Navigation.Visibility = Visibility.Visible;
+            Navigation.IsEnabled = true;
             Navigation.SelectedItem = null;
-            AddItemBtn.Visibility = Visibility.Visible;
+            AddItemBtn.IsEnabled = true;
             searchbox.IsEnabled = true;
+            NewListBtnIcon.Foreground = new SolidColorBrush(Colors.Black);
+            NewListBtnText.Foreground = new SolidColorBrush(Colors.Black);
         }
 
         private void Tools_AWOpenEvent() // Executes when Taskie Mini is opened.
         {
-            AddItemBtn.Visibility = Visibility.Collapsed;
+            AddItemBtn.IsEnabled = false;
             searchbox.IsEnabled = false;
-            Navigation.Visibility = Visibility.Collapsed;
+            Navigation.IsEnabled = false;
+            NewListBtnIcon.Foreground = (Brush)Resources["ButtonDisabledForegroundThemeBrush"];
+            NewListBtnText.Foreground = (Brush)Resources["ButtonDisabledForegroundThemeBrush"];
         }
 
         public void DeterminePro() // Locks down features for free users.

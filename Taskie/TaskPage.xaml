@@ -83,23 +83,25 @@
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <!-- i should change the testname fr -->
             <TextBlock x:Name="testname" FontWeight="SemiBold" FontSize="28" RightTapped="testname_RightTapped" TextTrimming="CharacterEllipsis"></TextBlock>
-            <Button Margin="0,0,14,0" x:Name="topoptions" Loaded="topoptions_Loaded" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right" Canvas.ZIndex="999">
-                <Button.Content>
-                    <FontIcon Glyph="&#xE712;" FontSize="14"/>
-                </Button.Content>
-                <Button.Flyout>
-                    <MenuFlyout Placement="BottomEdgeAlignedRight">
-                        <MenuFlyoutItem Icon="Rename" Click="RenameList_Click" x:Uid="RenameList"></MenuFlyoutItem>
-                        <MenuFlyoutItem Icon="Delete" Click="DeleteList_Click" x:Uid="DeleteList"></MenuFlyoutItem>
-                        <MenuFlyoutItem Icon="Save" Click="ExportList_Click" x:Uid="ExportList"></MenuFlyoutItem>
-                        <MenuFlyoutItem x:Uid="CompactOverlayButton" Click="CompactOverlay_Click" x:Name="cobtn">
-                            <MenuFlyoutItem.Icon>
-                                <FontIcon Glyph="&#xEE49;"/>
-                            </MenuFlyoutItem.Icon>
-                        </MenuFlyoutItem>
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,7,0">
+                <Button Margin="0,0,5,0" x:Name="topoptions" Loaded="topoptions_Loaded" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right" Canvas.ZIndex="999">
+                    <Button.Content>
+                        <FontIcon Glyph="&#xE712;" FontSize="14"/>
+                    </Button.Content>
+                    <Button.Flyout>
+                        <MenuFlyout Placement="BottomEdgeAlignedRight">
+                            <MenuFlyoutItem Icon="Rename" Click="RenameList_Click" x:Uid="RenameList"></MenuFlyoutItem>
+                            <MenuFlyoutItem Icon="Delete" Click="DeleteList_Click" x:Uid="DeleteList"></MenuFlyoutItem>
+                            <MenuFlyoutItem Icon="Save" Click="ExportList_Click" x:Uid="ExportList"></MenuFlyoutItem>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+                <Button Margin="10,0,0,0" x:Uid="CompactOverlayButton" Click="CompactOverlay_Click" x:Name="cobtn"  Background="Transparent" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right" Canvas.ZIndex="999">
+                    <Button.Content>
+                        <FontIcon Glyph="&#xEE49;" FontSize="13"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
         </Grid>
         <ScrollViewer HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-12, 50, 0, 48">
             <ListView x:Name="taskListView" Margin="0,0,-13,0" SelectionMode="None" ItemTemplate="{StaticResource TaskItemTemplate}">
