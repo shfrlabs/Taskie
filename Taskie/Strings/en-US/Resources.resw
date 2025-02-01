@@ -376,4 +376,10 @@
   <data name="Welcome3.Text" xml:space="preserve">
     <value>Have fun and be productive!</value>
   </data>
+  <data name="UpgradeUnavialable" xml:space="preserve">
+    <value>Temporarily unavailable</value>
+  </data>
+  <data name="EmptyListText.Text" xml:space="preserve">
+    <value>Choose or create a list in the sidebar.</value>
+  </data>
 </root>

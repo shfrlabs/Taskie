@@ -47,6 +47,7 @@ namespace Taskie
             ListTools.AWOpenEvent += Tools_AWOpenEvent;
             ListTools.AWClosedEvent += Tools_AWClosedEvent;
             ActualThemeChanged += MainPage_ActualThemeChanged;
+            contentFrame.Navigate(typeof(EmptyPage));
 
             if (App.Current is App app && !string.IsNullOrEmpty(app.ToastActivationArgument))
             {
@@ -228,7 +229,7 @@ namespace Taskie
         private void ListDeleted(string listID)
         {
             Debug.WriteLine("List deleted: " + listID);
-            contentFrame.Content = new StackPanel();
+            contentFrame.Navigate(typeof(EmptyPage));
             Navigation.SelectedItem = null;
             foreach (var item in Navigation.Items)
             {
@@ -426,7 +427,7 @@ namespace Taskie
         {
             Navigation.Items.Clear();
             SetupNavigationMenu();
-            contentFrame.Content = null;
+            contentFrame.Navigate(typeof(EmptyPage));
             DeterminePro();
         } // Resets the main view
 
@@ -490,7 +491,8 @@ namespace Taskie
             frame.Navigate(typeof(UpgradeDialogContentPage));
             dialog.Content = frame;
             dialog.DefaultButton = ContentDialogButton.Primary;
-            dialog.PrimaryButtonText = string.Format(resourceLoader.GetString("UpgradeFor"), "$0.99"); // placeholder
+            dialog.PrimaryButtonText = resourceLoader.GetString("UpgradeUnavialable"); // placeholder
+            dialog.IsPrimaryButtonEnabled = false;
             dialog.PrimaryButtonClick += Dialog_UpgradeAction;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             await dialog.ShowAsync();

@@ -370,4 +370,10 @@
   <data name="Welcome3.Text" xml:space="preserve">
     <value>Baw się dobrze!</value>
   </data>
+  <data name="UpgradeUnavialable" xml:space="preserve">
+    <value>Tymczasowo niedostępne</value>
+  </data>
+  <data name="EmptyListText.Text" xml:space="preserve">
+    <value>Wybierz lub utwórz listę przy użyciu paska bocznego.</value>
+  </data>
 </root>
