@@ -9,7 +9,7 @@
   <Identity
     Name="BRStudios.Taskie"
     Publisher="CN=A43ACDD8-D8D2-4B12-B25B-98D2138C0CFE"
-    Version="1.3.6.0" />
+    Version="1.3.7.0" />
 
   <mp:PhoneIdentity PhoneProductId="4b313a38-cea6-421b-88fe-00f780d18723" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
