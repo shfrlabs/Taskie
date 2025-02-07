@@ -103,8 +103,8 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <ScrollViewer HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-12, 50, 0, 48">
-            <ListView x:Name="taskListView" Margin="0,0,-13,0" SelectionMode="None" ItemTemplate="{StaticResource TaskItemTemplate}">
+        <ScrollViewer HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-12, 50, 0, 30">
+            <ListView x:Name="taskListView" Margin="0,0,-8,0" SelectionMode="None" ItemTemplate="{StaticResource TaskItemTemplate}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -113,8 +113,8 @@
             </ListView>
         </ScrollViewer>
         <Rectangle HorizontalAlignment="Stretch" Margin="48,0,115,0" Grid.Column="1" Canvas.ZIndex="-10" x:Name="NameBox" SizeChanged="NameBox_SizeChanged" Loaded="NameBox_Loaded"/>
-        <Rectangle x:Name="addTaskRect" Fill="{StaticResource LayerFillColorDefaultBrush}" Opacity=".5" Canvas.ZIndex="-10" VerticalAlignment="Bottom" Height="66" Margin="-20"/>
-        <AutoSuggestBox Style="{StaticResource AddItemBoxStyle}" KeyDown="AutoSuggestBox_KeyDown" Background="Transparent" BorderThickness="0" Margin="0,0,0,-8" Canvas.ZIndex="10" VerticalContentAlignment="Center" QuerySubmitted="AutoSuggestBox_QuerySubmitted" FontSize="14" HorizontalAlignment="Stretch" Height="45" VerticalAlignment="Bottom" CornerRadius="8" x:Uid="AddTaskBox">
+        <Rectangle x:Name="addTaskRect" Fill="{StaticResource LayerFillColorDefaultBrush}" Opacity=".7" Canvas.ZIndex="-10" VerticalAlignment="Bottom" Height="50" Margin="-20"/>
+        <AutoSuggestBox Style="{StaticResource AddItemBoxStyle}" KeyDown="AutoSuggestBox_KeyDown" BorderThickness="0" Margin="-10,0,-10,-18" Canvas.ZIndex="10" VerticalContentAlignment="Center" QuerySubmitted="AutoSuggestBox_QuerySubmitted" FontSize="14" HorizontalAlignment="Stretch" Height="45" VerticalAlignment="Bottom" CornerRadius="8" x:Uid="AddTaskBox">
             <AutoSuggestBox.QueryIcon>
                 <FontIcon Opacity=".9" FontSize="12" Glyph="&#xE710;" />
             </AutoSuggestBox.QueryIcon>

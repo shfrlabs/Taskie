@@ -24,6 +24,7 @@ using Windows.UI.Xaml.Media;
 using Windows.Foundation;
 using Windows.UI.Notifications;
 using System.Xml;
+using Windows.Networking;
 
 namespace Taskie
 {
@@ -198,8 +199,8 @@ namespace Taskie
                         StackPanel content = new StackPanel();
                         content.Orientation = Orientation.Horizontal;
                         content.VerticalAlignment = VerticalAlignment.Center;
-                        content.Children.Add(new FontIcon() { Glyph = metadata.Emoji, FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
-                        content.Children.Add(new TextBlock() { Text = newname, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 2 });
+                        content.Children.Add(new FontIcon() { Glyph = metadata.Emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 13 });
+                        content.Children.Add(new TextBlock { Text = newname, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 13, VerticalAlignment = VerticalAlignment.Center });
                         navigationItem.Content = content;
                         break;
                     }
@@ -268,8 +269,8 @@ namespace Taskie
                 StackPanel content = new StackPanel();
                 content.Orientation = Orientation.Horizontal;
                 content.VerticalAlignment = VerticalAlignment.Center;
-                content.Children.Add(new FontIcon() { Glyph = metadata.Emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
-                content.Children.Add(new TextBlock { Text = listName, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 2, Width = 80 });
+                content.Children.Add(new FontIcon() { Glyph = metadata.Emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 13 });
+                content.Children.Add(new TextBlock { Text = listName, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 13, VerticalAlignment = VerticalAlignment.Center });
                 Navigation.Items.Add(new ListViewItem() { Tag = listID, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
                 AddRightClickMenu(Navigation.Items.Last() as ListViewItem);
             }
