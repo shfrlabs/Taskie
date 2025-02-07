@@ -136,7 +136,7 @@
     <value>Wygląd</value>
   </data>
   <data name="AppearanceText.Text" xml:space="preserve">
-    <value>Appearance</value>
+    <value>Wygląd</value>
   </data>
   <data name="AppThemeSubText.Text" xml:space="preserve">
     <value>Zmień motyw aplikacji.</value>
