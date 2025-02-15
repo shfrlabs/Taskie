@@ -364,4 +364,7 @@
   <data name="EmptyListText.Text" xml:space="preserve">
     <value>Wybierz lub utwórz listę przy użyciu paska bocznego.</value>
   </data>
+  <data name="WebsiteLink.Content" xml:space="preserve">
+    <value>Moja strona</value>
+  </data>
 </root>

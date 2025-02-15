@@ -13,14 +13,15 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <ScrollViewer HorizontalScrollMode="Disabled" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalScrollBarVisibility="Visible" Grid.Row="1">
-            <StackPanel Orientation="Vertical" Margin="1,0,0,0" HorizontalAlignment="Left">
-                <Image Source="..\Assets\Logowithtext.png" Height="120" HorizontalAlignment="Left" Margin="0,0,0,30"/>
-                <TextBlock TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="18" Opacity=".8" x:Uid="AdvertTag"/>
-                <TextBlock TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="17" Opacity=".7" x:Uid="AdvertUWPTag"/>
-                <TextBlock TextWrapping="Wrap" Margin="0,20,0,0" HorizontalAlignment="Left" FontSize="15" TextAlignment="Left" x:Uid="AboutApp"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,20,0,0">
+            <StackPanel Orientation="Vertical" Margin="0,0,0,0" HorizontalAlignment="Center">
+                <Image Source="..\Assets\Logowithtext.png" Height="120" HorizontalAlignment="Center" Margin="0,0,0,30"/>
+                <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="20" Opacity=".8" x:Uid="AdvertTag" TextAlignment="Center" HorizontalTextAlignment="Center"/>
+                <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="18" Opacity=".7" x:Uid="AdvertUWPTag"  TextAlignment="Center" HorizontalTextAlignment="Center"/>
+                <TextBlock TextWrapping="Wrap" Margin="0,20,0,0" HorizontalAlignment="Center" FontSize="16" TextAlignment="Center" x:Uid="AboutApp" HorizontalTextAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
                     <HyperlinkButton NavigateUri="https://github.com/shef3r" FontSize="18" Margin="5" x:Uid="GitHubLink"/>
                     <HyperlinkButton NavigateUri="https://twitter.com/sheferdev" FontSize="18" Margin="5" x:Uid="TwitterLink"/>
+                    <HyperlinkButton NavigateUri="https://shef3r.dev/" FontSize="18" Margin="5" x:Uid="WebsiteLink"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

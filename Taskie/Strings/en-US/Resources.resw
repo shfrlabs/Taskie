@@ -370,4 +370,7 @@
   <data name="EmptyListText.Text" xml:space="preserve">
     <value>Choose or create a list in the sidebar.</value>
   </data>
+  <data name="WebsiteLink.Content" xml:space="preserve">
+    <value>My website</value>
+  </data>
 </root>
