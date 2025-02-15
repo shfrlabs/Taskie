@@ -12,7 +12,7 @@
     <Page.Resources>
         <lib:EmptyCollectionVisibilityConverter x:Key="VisConverter"/>
         <DataTemplate x:Key="TaskItemTemplate">
-            <muxc:Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="Auto" x:Name="rootGrid" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,0,5" CornerRadius="8" BorderThickness="1" Loaded="TaskAdded_Grid">
+            <muxc:Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="Auto" x:Name="rootGrid" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,5,5" CornerRadius="8" BorderThickness="1" Loaded="TaskAdded_Grid">
                 <muxc:Expander.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>

@@ -278,9 +278,9 @@ namespace Taskie
         {
             MenuFlyout flyout = new MenuFlyout();
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = resourceLoader.GetString("RenameList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Emoji), Text = resourceLoader.GetString("ChangeEmoji"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
+            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
+            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
             (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
             (flyout.Items[1] as MenuFlyoutItem).Click += DeleteList_Click;
             (flyout.Items[2] as MenuFlyoutItem).Click += ExportList_Click;
