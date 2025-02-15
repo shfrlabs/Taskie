@@ -22,6 +22,7 @@
                     <HyperlinkButton NavigateUri="https://github.com/shef3r" FontSize="18" Margin="5" x:Uid="GitHubLink"/>
                     <HyperlinkButton NavigateUri="https://twitter.com/sheferdev" FontSize="18" Margin="5" x:Uid="TwitterLink"/>
                     <HyperlinkButton NavigateUri="https://shef3r.dev/" FontSize="18" Margin="5" x:Uid="WebsiteLink"/>
+                    <HyperlinkButton NavigateUri="https://discord.gg/zXn7mM33VK" FontSize="18" Margin="5" Content="Discord"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
