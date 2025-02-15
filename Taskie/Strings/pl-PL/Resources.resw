@@ -145,10 +145,10 @@
     <value>Motyw</value>
   </data>
   <data name="AuthDescription.Text" xml:space="preserve">
-    <value>Spraw, by aplikacja prosiła o hasło lub biometrię przez Windows Hello. Ta opcja może nie być dostępna, jeżeli ten komputer nie jest zabezpieczony hasłem i biometrią/PINem lub jeżeli nie zakupiono Taskie Pro.</value>
+    <value>Spraw, by aplikacja prosiła o hasło lub biometrię przez Windows Hello. Ta opcja może nie być dostępna, jeżeli ten komputer nie jest zabezpieczony hasłem i biometrią/PINem.</value>
   </data>
   <data name="AuthDisabledDescription" xml:space="preserve">
-    <value>Usunięto metodę biometrii, PIN lub hasło, administrator systemu wyłączył tę opcję, zwrócono pieniądze za Taskie Pro lub stało się coś innego. Sprawdź Ustawienia Windows &gt; Konta &gt; Opcje logowania lub sklep Microsoft Store.</value>
+    <value>Usunięto metodę biometrii, PIN lub hasło, administrator systemu wyłączył tę opcję lub stało się coś innego. Sprawdź Ustawienia Windows &gt; Konta &gt; Opcje logowania.</value>
   </data>
   <data name="AuthDisabledTitle" xml:space="preserve">
     <value>Uwierzytelnianie zostało wyłączone.</value>
@@ -270,12 +270,6 @@
   <data name="CloseCO.Text" xml:space="preserve">
     <value>Zamknij okno nakładki by pracować w tym oknie.</value>
   </data>
-  <data name="protip.Subtitle" xml:space="preserve">
-    <value>Ulepsz aplikację małą transkacją by usunąć limity i rozposzenia.</value>
-  </data>
-  <data name="protip.Title" xml:space="preserve">
-    <value>Podoba Ci się Taskie?</value>
-  </data>
   <data name="tipwrongname.Title" xml:space="preserve">
     <value>Nie możesz tego zrobić!</value>
   </data>
@@ -311,25 +305,19 @@
     <value>Rozpocznij</value>
   </data>
   <data name="AdvancedCustomizationUpgrade.Text" xml:space="preserve">
-    <value>• Zaawansowana personalizacja</value>
+    <value>Zaawansowana personalizacja</value>
   </data>
   <data name="FileAttachmentUpgrade.Text" xml:space="preserve">
-    <value>• Dołącz pliki do zadania</value>
+    <value>Dołącz pliki do zadania</value>
   </data>
   <data name="GroupSpecificKanbanUpgrade.Text" xml:space="preserve">
-    <value>• Widok kanban dla pojedynczej grupy</value>
+    <value>Widok kanban dla pojedynczej grupy</value>
   </data>
   <data name="PrioritySupportUpgrade.Text" xml:space="preserve">
-    <value>• Priorytetowe wsparcie</value>
+    <value>Priorytetowe wsparcie</value>
   </data>
   <data name="RemoveBannersUpgrade.Text" xml:space="preserve">
-    <value>• Usuń reklamy Pro (przycisk, wskazówka)</value>
-  </data>
-  <data name="RepetitiveListsUpgrade.Text" xml:space="preserve">
-    <value>• Powtarzane listy (odznaczanie w danym okresie)</value>
-  </data>
-  <data name="UnlimitedRemindersUpgrade.Text" xml:space="preserve">
-    <value>• Nielimitowane przypomnienia</value>
+    <value>Usuń reklamę Pro (przycisk "Ulepsz")</value>
   </data>
   <data name="DeleteSubTask.Text" xml:space="preserve">
     <value>Usuń podzadanie</value>

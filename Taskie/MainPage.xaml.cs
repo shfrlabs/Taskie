@@ -39,7 +39,6 @@ namespace Taskie
             CheckSecurity();
             DeterminePro();
             CheckOnboarding();
-            ProFlyout();
             Navigation.Height = rectlist.ActualHeight;
             ListTools.ListCreatedEvent += UpdateLists;
             ListTools.ListDeletedEvent += ListDeleted;
@@ -72,17 +71,6 @@ namespace Taskie
                     break;
                 }
             }
-        }
-
-
-        // nagging users to buy Pro
-        private void ProFlyout()
-        {
-            //if (!Settings.isPro && (new Random()).Next(1, 25) == 16)
-            //{
-            //    protip.Target = UpdateButton;
-            //    protip.IsOpen = true;
-            //}
         }
 
 #if DEBUG
@@ -132,33 +120,37 @@ namespace Taskie
         public void DeterminePro() // Locks down features for free users.
         {
             if (Settings.isPro)
-            { 
-                proText.Visibility = Visibility.Visible;
+            {
+                proText.Text = "PRO";
                 BottomRow.Height = new GridLength(65);
                 UpdateButton.Visibility = Visibility.Collapsed;
             }
-            if (!Settings.isPro && ListTools.GetLists().Count() > 2)
-            {
-                AddItemBtn.IsEnabled = false;
-                NewListBtnIcon.Foreground = new SolidColorBrush(Colors.White);
-                NewListBtnIcon.Opacity = 0.7;
-                NewListBtnText.Foreground = new SolidColorBrush(Colors.White);
-                NewListBtnText.Opacity = 0.7;
-            }
             else
             {
-                AddItemBtn.IsEnabled = true;
-                NewListBtnIcon.Foreground = new SolidColorBrush(Colors.Black);
-                NewListBtnText.Foreground = new SolidColorBrush(Colors.Black);
-                NewListBtnText.Opacity = 1;
-                NewListBtnIcon.Opacity = 1;
+                proText.Text = "FREE";
             }
+            //if (!Settings.isPro && ListTools.GetLists().Count() > 2)
+            //{
+            //    AddItemBtn.IsEnabled = false;
+            //    NewListBtnIcon.Foreground = new SolidColorBrush(Colors.White);
+            //    NewListBtnIcon.Opacity = 0.7;
+            //    NewListBtnText.Foreground = new SolidColorBrush(Colors.White);
+            //    NewListBtnText.Opacity = 0.7;
+            //}
+            //else
+            //{
+            //    AddItemBtn.IsEnabled = true;
+            //    NewListBtnIcon.Foreground = new SolidColorBrush(Colors.Black);
+            //    NewListBtnText.Foreground = new SolidColorBrush(Colors.Black);
+            //    NewListBtnText.Opacity = 1;
+            //    NewListBtnIcon.Opacity = 1;
+            //} - limitation removed
         }
 
-        public async void CheckSecurity() // checks if it's possible to ask for Windows Hello authentication
+        public async void CheckSecurity()
         {
             UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
-            if ((availability != UserConsentVerifierAvailability.Available && Settings.isAuthUsed) || (Settings.isAuthUsed && !Settings.isPro))
+            if ((availability != UserConsentVerifierAvailability.Available && Settings.isAuthUsed) || Settings.isAuthUsed)
             {
                 Settings.isAuthUsed = false;
                 ContentDialog contentDialog = new ContentDialog() { Title = resourceLoader.GetString("AuthDisabledTitle"), Content = resourceLoader.GetString("AuthDisabledDescription"), PrimaryButtonText = "OK", DefaultButton = ContentDialogButton.Primary };
@@ -573,6 +565,24 @@ namespace Taskie
                 searchbox.ItemsSource = new List<string>();
             }
             catch (Exception ex) { Debug.WriteLine("[Search box suggestion chooser] Exception occured: " + ex.Message); }
+        }
+
+        private void SidebarButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (mainGrid.ColumnDefinitions[0].Width == new GridLength(0))
+            {
+                mainGrid.ColumnDefinitions[0].Width = new GridLength(200);
+                rect2.Visibility = Visibility.Visible;
+                contentFrame.Margin = new Thickness(-20, 0, 0, 0);
+                SidebarButton.Opacity = 1;
+            }
+            else
+            {
+                mainGrid.ColumnDefinitions[0].Width = new GridLength(0);
+                rect2.Visibility = Visibility.Collapsed;
+                contentFrame.Margin = new Thickness(0, 10, 0, 0);
+                SidebarButton.Opacity = 0.7;
+            }
         }
     }
 }

@@ -17,12 +17,15 @@
         </DataTemplate>
     </Page.Resources>
     <Grid>
+        <Button x:Name="SidebarButton" IsTabStop="False" HorizontalAlignment="Left" Margin="132,7,0,0" VerticalAlignment="Top" Height="30" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Canvas.ZIndex="999999" Click="SidebarButton_Click">
+            <FontIcon Glyph="&#xE90C;" FontSize="16"/>
+        </Button>
         <Grid Background="Transparent" x:Name="TTB" VerticalAlignment="Top" Height="36" Canvas.ZIndex="9999">
             <Image Source="Assets\Logo.png" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0"/>
             <TextBlock Margin="45,0,0,0" VerticalAlignment="Center" FontSize="12">Taskie</TextBlock>
-            <TextBlock Margin="85,1,0,0" VerticalAlignment="Center" FontSize="10" Opacity=".7" x:Name="proText" Visibility="Collapsed">PRO</TextBlock>
+            <TextBlock Margin="85,1,0,0" VerticalAlignment="Center" FontSize="10" Opacity=".7" x:Name="proText">FREE</TextBlock>
         </Grid>
-        <Grid>
+        <Grid x:Name="mainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
@@ -52,7 +55,7 @@
                         </Button.Resources>
                         <StackPanel Orientation="Horizontal">
                             <FontIcon Glyph="&#xE710;" FontSize="15" Margin="0,0,10,0" Foreground="Black" x:Name="NewListBtnIcon"/>
-                            <TextBlock FontSize="13" x:Uid="NewListBtn" x:Name="NewListBtnText"/>
+                            <TextBlock FontSize="13" x:Uid="NewListBtn" x:Name="NewListBtnText" Foreground="Black"/>
                         </StackPanel>
                     </Button>
                     <AutoSuggestBox TextChanged="AutoSuggestBox_TextChanged" SuggestionChosen="searchbox_SuggestionChosen" Margin="10,0,10,2" x:Uid="SearchBox" HorizontalAlignment="Stretch" Height="40" CornerRadius="8" FontSize="13" BorderBrush="{ThemeResource ControlElevationBorderBrush}" VerticalContentAlignment="Center" Style="{StaticResource SearchStyle}" VerticalAlignment="Bottom" x:Name="searchbox">
@@ -89,7 +92,6 @@
             </Rectangle>
             <Rectangle VerticalAlignment="Stretch" Margin="-20" Grid.Column="0" Grid.RowSpan="4" Fill="{StaticResource SystemAltLowColor}" Canvas.ZIndex="-10" Opacity="1" Width="200" HorizontalAlignment="Left" x:Name="rect2"/>
         </Grid>
-        <muxc:TeachingTip x:Uid="protip" x:Name="protip" IsOpen="False"/>
         <muxc:TeachingTip x:Uid="tipwrongname" x:Name="tipwrongname" IsOpen="False"/>
     </Grid>
 </Page>
