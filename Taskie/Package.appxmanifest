@@ -8,10 +8,10 @@
 
   <Identity
     Name="BRStudios.Taskie"
-    Publisher="CN=shef3r DEBUG"
+    Publisher="CN=A43ACDD8-D8D2-4B12-B25B-98D2138C0CFE"
     Version="1.4.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="6eacb2b5-e19c-4fbf-bb2f-5e1e8cd895f4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="efae26a0-2073-457b-8e2c-e47f07f263d0" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Taskie</DisplayName>

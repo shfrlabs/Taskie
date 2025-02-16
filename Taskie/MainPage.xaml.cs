@@ -282,9 +282,9 @@ namespace Taskie
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
             (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
-            (flyout.Items[1] as MenuFlyoutItem).Click += DeleteList_Click;
+            (flyout.Items[1] as MenuFlyoutItem).Click += ChangeEmoji_Click;
             (flyout.Items[2] as MenuFlyoutItem).Click += ExportList_Click;
-            (flyout.Items[3] as MenuFlyoutItem).Click += ChangeEmoji_Click;
+            (flyout.Items[3] as MenuFlyoutItem).Click += DeleteList_Click;
             flyout.ShowAt(sender as ListViewItem);
         }
 
