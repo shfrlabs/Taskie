@@ -11,3 +11,16 @@
 
 ### File structure
 Taskie stores your lists as JSON files in the app's local folder. You can export them into a `.taskie` file (that's just a renamed ZIP containing the JSON files)
+
+### How to translate?
+- Download [this](https://github.com/shef3r/Taskie/blob/main/Taskie/Strings/en-US/Resources.resw) file. (or clone the repo if you know what you're doing)
+- Open it in a text editor.
+- After scrolling down, you should find data entries like this:
+```xml
+<data name="AboutCategory" xml:space="preserve">
+    <value>About</value>
+</data>
+```
+- Translate the text in the `<value>` tag.
+- Find your locale online (ex. `en-US`)
+- Create an issue with the file, adding "Translation: " and the locale in the title. (or a pull request if you know what you're doing)
