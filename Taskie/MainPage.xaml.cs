@@ -441,33 +441,9 @@ namespace Taskie
 
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            AppWindow window = await AppWindow.TryCreateAsync();
-            window.Title = resourceLoader.GetString("SettingsText/Text");
-            Frame settingsContent = new Frame();
-            settingsContent.Navigate(typeof(SettingsPage));
-            window.TitleBar.ExtendsContentIntoTitleBar = true;
-            window.TitleBar.ButtonBackgroundColor = Colors.Transparent;
-            ElementCompositionPreview.SetAppWindowContent(window, settingsContent);
-            window.Closed += SettingsWindowClosed;
-            (sender as Button).IsEnabled = false;
-            if (Settings.Theme == "Dark")
-            {
-                window.TitleBar.ButtonForegroundColor = Windows.UI.Colors.White;
-                window.TitleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.White;
-
-            }
-            else if (Settings.Theme == "Light")
-            {
-                window.TitleBar.ButtonForegroundColor = Windows.UI.Colors.Black;
-                window.TitleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.Black;
-            }
-            await window.TryShowAsync();
+            contentFrame.Navigate(typeof(SettingsPage));
+            Navigation.SelectedItem = null;
         }
-
-        private void SettingsWindowClosed(AppWindow sender, AppWindowClosedEventArgs args)
-        {
-            SettingsButton.IsEnabled = true;
-        } // disallows for >1 settings window at a time
 
         private void Navigation_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         { // opens a list

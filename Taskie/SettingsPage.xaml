@@ -11,25 +11,26 @@
         <AcrylicBrush TintColor="{StaticResource SystemAltHighColor}" TintOpacity="1" BackgroundSource="HostBackdrop" FallbackColor="{StaticResource BGColor}"/>
     </Page.Background>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="160"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Rectangle x:Name="rect2" VerticalAlignment="Stretch" Margin="-20" Grid.Column="0" Grid.RowSpan="4" Fill="{StaticResource SystemAltLowColor}" Canvas.ZIndex="-10" Opacity="1" Width="180" HorizontalAlignment="Left"/>
-        <Grid Background="Transparent" x:Name="TTB" VerticalAlignment="Top" Height="36" Grid.Column="0" Canvas.ZIndex="9999">
-            <FontIcon Width="20" Height="20" HorizontalAlignment="Left" FontSize="16" Glyph="&#xE713;" Margin="16,0,0,0"/>
-            <TextBlock Margin="45,0,0,0" VerticalAlignment="Center" FontSize="12" x:Uid="SettingsText"/>
-        </Grid>
-        <ListView Width="160" SelectionMode="Single" x:Name="settingPageList" Margin="0,40,0,0" SelectionChanged="settingPageList_SelectionChanged">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                        <FontIcon FontFamily="Segoe UI Emoji" Glyph="{Binding Emoji}" Margin="0,0,10,0" VerticalAlignment="Center" FontSize="16"/>
-                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+        <ScrollViewer>
+            <StackPanel Orientation="Vertical" Padding="20">
+                <TextBlock FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0" x:Uid="AppearanceText"/>
+                <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Visible" Grid.Row="1">
+                    <StackPanel Orientation="Vertical" Margin="1,0,0,0">
+                        <TextBlock x:Uid="AppThemeText" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
+                        <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10" x:Uid="AppThemeSubText"/>
+                        <RadioButton x:Uid="LightThemeRadio" x:Name="LightRadio" Tag="Light" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"/>
+                        <RadioButton x:Uid="DarkThemeRadio" x:Name="DarkRadio" Tag="Dark" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"/>
+                        <RadioButton x:Uid="SystemThemeRadio" x:Name="SystemRadio" Tag="System" Checked="RadioButton_StateChanged" Unchecked="RadioButton_StateChanged"></RadioButton>
+                        <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,10,5,10" x:Uid="RestartWarning"/>
+                        <Button x:Name="RestartButton" Click="RestartButton_Click">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
+                                <FontIcon Glyph="&#xE895;" Margin="0,0,20,0"/>
+                                <TextBlock x:Uid="RestartButton"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <Frame x:Name="contentFrame" Grid.Column="1"/>
+                </ScrollViewer>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

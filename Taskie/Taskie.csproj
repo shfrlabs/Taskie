@@ -145,9 +145,6 @@
     <Compile Include="SettingsPages\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsPages\AppearancePage.xaml.cs">
-      <DependentUpon>AppearancePage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SettingsPages\ExportImportPage.xaml.cs">
       <DependentUpon>ExportImportPage.xaml</DependentUpon>
     </Compile>
@@ -254,10 +251,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SettingsPages\AboutPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SettingsPages\AppearancePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

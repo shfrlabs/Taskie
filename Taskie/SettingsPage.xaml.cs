@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Taskie.SettingsPages;
+using TaskieLib;
+using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -13,24 +15,69 @@ namespace Taskie
 {
     public sealed partial class SettingsPage : Page
     {
+        private bool isUpdating = false;
+
         public SettingsPage()
         {
             this.InitializeComponent();
-            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonBackgroundColor = Colors.Transparent;
-            titleBar.ButtonHoverBackgroundColor = Colors.Transparent;
-            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            addPages();
-            settingPageList.SelectedItem = settingPageList.Items.FirstOrDefault();
-            contentFrame.Navigate(typeof(AppearancePage));
+            SetAppearance();
             ActualThemeChanged += SettingsPage_ActualThemeChanged;
+        }
+
+        private void SetAppearance()
+        {
+            isUpdating = true;
+
+            if (Settings.Theme == "System")
+            {
+                SystemRadio.IsChecked = true;
+                DarkRadio.IsChecked = false;
+                LightRadio.IsChecked = false;
+            }
+            else if (Settings.Theme == "Light")
+            {
+                SystemRadio.IsChecked = false;
+                DarkRadio.IsChecked = false;
+                LightRadio.IsChecked = true;
+            }
+            else if (Settings.Theme == "Dark")
+            {
+                SystemRadio.IsChecked = false;
+                DarkRadio.IsChecked = true;
+                LightRadio.IsChecked = false;
+            }
+
+            isUpdating = false;
+        }
+
+        private void RadioButton_StateChanged(object sender, RoutedEventArgs e)
+        {
+            if (isUpdating)
+                return;
+
+            var radioButton = sender as RadioButton;
+            if (radioButton == null)
+                return;
+
+            string selectedTheme = radioButton.Tag?.ToString();
+
+            if (radioButton.IsChecked == true)
+            {
+                isUpdating = true;
+                Settings.Theme = selectedTheme;
+                isUpdating = false;
+            }
+        }
+
+        private async void RestartButton_Click(object sender, RoutedEventArgs e)
+        {
+            var result = await CoreApplication.RequestRestartAsync("Theme has been changed");
         }
 
         private void SettingsPage_ActualThemeChanged(FrameworkElement sender, object args)
         {
             (this.Background as AcrylicBrush).TintColor = (Color)Application.Current.Resources["SystemAltHighColor"];
             (this.Background as AcrylicBrush).FallbackColor = (Color)Application.Current.Resources["SystemAltLowColor"];
-            (rect2.Fill as SolidColorBrush).Color = (Color)Application.Current.Resources["SystemAltLowColor"];
         }
 
         private class SettingCategory
@@ -38,30 +85,6 @@ namespace Taskie
             public string Emoji { get; set; }
             public string Name { get; set; }
             public string Page { get; set; }
-        }
-        private void addPages()
-        {
-            ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
-            List<SettingCategory> settingCategories = new List<SettingCategory>() {
-                new SettingCategory() { Emoji = "🎨", Name = resourceLoader.GetString("AppearanceCategory"), Page = "AppearancePage" },
-                new SettingCategory() { Emoji = "☁️", Name = resourceLoader.GetString("BackupsCategory"), Page = "ExportImportPage" },
-                new SettingCategory() { Emoji = "🔒", Name = resourceLoader.GetString("SecurityCategory"), Page = "SecurityPage" },
-                new SettingCategory() { Emoji = "ℹ️", Name = resourceLoader.GetString("AboutCategory"), Page = "AboutPage" }
-            };
-            settingPageList.ItemsSource = settingCategories;
-        }
-
-        private void settingPageList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var selectedCategory = (sender as ListView).SelectedItem as SettingCategory;
-            if (selectedCategory != null)
-            {
-                Type pageType = Type.GetType($"Taskie.SettingsPages.{selectedCategory.Page}");
-                if (pageType != null)
-                {
-                    contentFrame.Navigate(pageType);
-                }
-            }
         }
     }
 }
