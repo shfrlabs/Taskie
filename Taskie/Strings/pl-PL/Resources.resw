@@ -127,7 +127,7 @@
     <value>Dodaj zadanie...</value>
   </data>
   <data name="AdvertTag.Text" xml:space="preserve">
-    <value> Twój szybki i prywatny towarzysz do zadań.</value>
+    <value>Twój szybki i prywatny towarzysz do zadań.</value>
   </data>
   <data name="AdvertUWPTag.Text" xml:space="preserve">
     <value>Stworzony przy użyciu UWP.</value>

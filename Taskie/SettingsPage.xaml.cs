@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using Taskie.SettingsPages;
+using System.Threading.Tasks;
 using TaskieLib;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
+using Windows.Security.Credentials.UI;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -21,7 +25,36 @@ namespace Taskie
         {
             this.InitializeComponent();
             SetAppearance();
+            SetSecurity();
+            CheckSecurity();
             ActualThemeChanged += SettingsPage_ActualThemeChanged;
+        }
+
+        private async void CheckSecurity()
+        {
+            UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
+            if (availability != UserConsentVerifierAvailability.Available | !Settings.isPro)
+            {
+                AuthToggle.IsOn = false;
+                AuthToggle.IsEnabled = false;
+                Settings.isAuthUsed = false;
+            }
+        }
+
+        private void SetSecurity()
+        {
+            if (Settings.isAuthUsed)
+            { AuthToggle.IsOn = true; }
+            else
+            { AuthToggle.IsOn = false; }
+        }
+
+        private void AuthToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            if ((sender as ToggleSwitch)?.Tag?.ToString() == "Auth")
+            {
+                Settings.isAuthUsed = (sender as ToggleSwitch).IsOn;
+            }
         }
 
         private void SetAppearance()
@@ -69,7 +102,95 @@ namespace Taskie
             }
         }
 
+        private async void export_Click(object sender, RoutedEventArgs e)
+        {
+            StorageFile exportFile = await ListTools.ExportedLists();
+            FileSavePicker savePicker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+            };
+            savePicker.SuggestedFileName = exportFile.Name;
+            savePicker.FileTypeChoices.Add(exportFile.FileType, new List<string> { exportFile.FileType });
+            StorageFile destinationFile = await savePicker.PickSaveFileAsync();
+            if (destinationFile != null)
+            {
+                await exportFile.CopyAndReplaceAsync(destinationFile);
+            }
+            else
+            {
+            }
+            File.Delete(exportFile.Path);
+        }
+
+        private async void import_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new FileOpenPicker();
+            picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            picker.FileTypeFilter.Add(".taskie");
+            picker.FileTypeFilter.Add(".json");
+
+            var files = await picker.PickMultipleFilesAsync();
+            if (files != null)
+            {
+                foreach (StorageFile file in files)
+                {
+                    string fileExtension = Path.GetExtension(file.Name).ToLower();
+                    if (fileExtension == ".json")
+                    {
+                        ListTools.ImportFile(file);
+                    }
+                    else if (fileExtension == ".taskie")
+                    {
+                        await ProcessTaskieFile(file);
+                    }
+                }
+            }
+        }
+
+        private async Task ProcessTaskieFile(StorageFile taskieFile)
+        {
+            using (var zipStream = await taskieFile.OpenStreamForReadAsync())
+            {
+                using (var archive = new System.IO.Compression.ZipArchive(zipStream, System.IO.Compression.ZipArchiveMode.Read))
+                {
+                    foreach (var entry in archive.Entries)
+                    {
+                        if (Path.GetExtension(entry.FullName).ToLower() == ".json")
+                        {
+                            using (var entryStream = entry.Open())
+                            {
+                                var memoryStream = new MemoryStream();
+                                await entryStream.CopyToAsync(memoryStream);
+                                memoryStream.Position = 0;
+                                var unzippedFile = await CreateStorageFileFromStreamAsync(entry.FullName, memoryStream);
+                                ListTools.ImportFile(unzippedFile);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private async Task<StorageFile> CreateStorageFileFromStreamAsync(string fileName, Stream stream)
+        {
+            var tempFolder = ApplicationData.Current.TemporaryFolder;
+            var tempFile = await tempFolder.CreateFileAsync(fileName, CreationCollisionOption.GenerateUniqueName);
+
+            using (var fileStream = await tempFile.OpenStreamForWriteAsync())
+            {
+                await stream.CopyToAsync(fileStream);
+            }
+
+            return tempFile;
+        }
+
+
         private async void RestartButton_Click(object sender, RoutedEventArgs e)
+        {
+            var result = await CoreApplication.RequestRestartAsync("After import");
+        }
+
+        private async void RestartButtonTheme_Click(object sender, RoutedEventArgs e)
         {
             var result = await CoreApplication.RequestRestartAsync("Theme has been changed");
         }
