@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Controls;
@@ -33,6 +34,76 @@ namespace Taskie
             ActualThemeChanged += TaskPage_ActualThemeChanged;
             ListTools.ListRenamedEvent += ListRenamed;
             testname.FontFamily = ListTools.ReadList(listId).Metadata.TitleFont != null ? new FontFamily(ListTools.ReadList(listId).Metadata.TitleFont) : new FontFamily("Segoe UI Variable");
+        }
+
+        private void ChangeProgressBarValue(object dataContext, bool addOne = false, int overrideTotal = -1)
+        {
+            var listView = this.FindName("taskListView") as ListView;
+            if (listView == null)
+                return;
+            foreach (var item in listView.Items)
+            {
+                if ((item as ListTask).CreationDate == (dataContext as ListTask).CreationDate)
+                {
+                    var container = listView.ContainerFromItem(item) as ListViewItem;
+                    if (container == null)
+                        continue;
+
+                    var expander = FindVisualChild<Expander>(container, "rootGrid");
+                    if (expander == null)
+                        continue;
+
+                    var headerGrid = expander.Header as Grid;
+                    if (headerGrid == null)
+                        continue;
+
+                    var progressBar = headerGrid.Children
+                        .OfType<Windows.UI.Xaml.Controls.ProgressBar>()
+                        .FirstOrDefault();
+
+                    if (progressBar != null)
+                    {
+                        progressBar.Value = (double)((new ProgressConverter()).Convert(SubTaskNumber(expander, addOne, overrideTotal), typeof(double), null, null));
+                    }
+                }
+            }
+        }
+
+        private (int, int) SubTaskNumber(Expander expander, bool addOne = false, int overrideTotal = -1)
+        {
+            int total = 0;
+            int completed = 0;
+
+            if (expander.Content is StackPanel stackPanel)
+            {
+                foreach (var child in stackPanel.Children)
+                {
+                    if (child is ListView listView)
+                    {
+                        foreach (var item in listView.Items)
+                        {
+                            var container = listView.ContainerFromItem(item) as ListViewItem;
+                            if (container != null)
+                            {
+                                var checkBox = FindDescendant<CheckBox>(container, "SubTaskCheckBox");
+                                if (checkBox != null)
+                                {
+                                    total++;
+                                    if (checkBox.IsChecked == true)
+                                    {
+                                        completed++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (addOne)
+                total++;
+            if (overrideTotal != -1)
+                total = overrideTotal;
+            return (total, completed);
         }
 
         private void ListRenamed(string oldname, string newname)
@@ -360,6 +431,7 @@ namespace Taskie
                 };
                 tasks.Add(task);
                 taskListView.Items.Add(task);
+                (sender as AutoSuggestBox).Text = string.Empty;
                 ListTools.SaveList(listId, tasks, metadata);
             }
         }
@@ -367,6 +439,13 @@ namespace Taskie
         private void TaskAdded_Grid(object sender, RoutedEventArgs e)
         {
             ChangeWidth(NameBox);
+            if ((sender as Expander).DataContext is ListTask listtask)
+            {
+                if (listtask.SubTasks.Count > 0)
+                {
+                    (sender as Expander).IsExpanded = true; // NAASTY workaround cause the tasks only count in the progressbar when its expanded..
+                }
+            }
         }
         private async void CompactOverlay_Click(object sender, RoutedEventArgs e)
         {
@@ -491,6 +570,7 @@ namespace Taskie
                         SubTasks = new ObservableCollection<ListTask>()
                     };
                     parent.SubTasks.Add(task2add);
+                    ChangeProgressBarValue(parent, true);
                 }
             }
             Debug.WriteLine(index);
@@ -525,6 +605,8 @@ namespace Taskie
                     var subTask = task.SubTasks.FirstOrDefault(st => st.CreationDate == taskToChange.CreationDate);
                     if (subTask != null)
                     {
+                        ChangeProgressBarValue(task);
+                        Debug.WriteLine(task.Name);
                         subTask.IsDone = checkBox.IsChecked ?? false;
                         break;
                     }
@@ -557,9 +639,13 @@ namespace Taskie
                 ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
                 if (taskToRemove != null)
                 {
+                    if (parentTask.SubTasks.Count == 1 && parentTask.SubTasks.Last().IsDone == true)
+                    {
+                        ChangeProgressBarValue(parentTask, false, 0);
+                    }
                     parentTask.SubTasks.Remove(taskToRemove);
                     tasks[index] = parentTask;
-                    taskListView.Items[index] = parentTask; // TODO: this is baaddd
+                    (taskListView.Items[index] as ListTask).SubTasks = parentTask.SubTasks;
                 }
                 else
                 {
@@ -605,7 +691,7 @@ namespace Taskie
                         {
                             parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = box.Text;
                             tasks[index] = parentTask;
-                            taskListView.Items[index] = parentTask; // TODO: this is baaddd
+                            (taskListView.Items[index] as ListTask).SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = box.Text;
                         }
                         else
                         {
@@ -708,5 +794,23 @@ namespace Taskie
             } catch (Exception ex) { Debug.WriteLine("[TaskThreeDots_Loaded] Exception occured: " + ex.Message); }
         }
 
+        private void Progress_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            HideShowProgress(sender as Windows.UI.Xaml.Controls.ProgressBar);
+        }
+        private void Progress_Loaded(object sender, RoutedEventArgs e)
+        {
+            HideShowProgress(sender as Windows.UI.Xaml.Controls.ProgressBar);
+        }
+        private void HideShowProgress(Windows.UI.Xaml.Controls.ProgressBar progressBar) {
+            if (progressBar.Value == 0)
+            {
+                progressBar.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                progressBar.Visibility = Visibility.Visible;
+            }
+        }
     }
 }

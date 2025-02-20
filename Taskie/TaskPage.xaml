@@ -11,29 +11,34 @@
 
     <Page.Resources>
         <lib:EmptyCollectionVisibilityConverter x:Key="VisConverter"/>
+        <lib:ReverseEmptyCollectionVisibilityConverter x:Key="ReverseVisConverter"/>
+        <lib:ProgressConverter x:Key="ProgressConverter"/>
         <DataTemplate x:Key="TaskItemTemplate">
             <muxc:Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="Auto" x:Name="rootGrid" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="15,5,15,5" Margin="0,0,5,5" CornerRadius="8" BorderThickness="1" Loaded="TaskAdded_Grid">
                 <muxc:Expander.Header>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="32"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="34"/>
-                        </Grid.ColumnDefinitions>
-                        <CheckBox Grid.Column="0" Checked="TaskStateChanged" Unchecked="TaskStateChanged" IsChecked="{Binding IsDone}"/>
-                        <Grid Grid.Column="1">
-                            <TextBlock Text="{Binding Name}" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="TaskNameText"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="32"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="34"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Column="0" Checked="TaskStateChanged" Unchecked="TaskStateChanged" IsChecked="{Binding IsDone}"/>
+                            <Grid Grid.Column="1">
+                                <TextBlock Text="{Binding Name}" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="TaskNameText"/>
+                            </Grid>
+                            <Button Background="Transparent" Height="32" BorderThickness="0" Width="34" Padding="0" Grid.Column="2" Loaded="TaskThreeDots_Loaded" Click="TaskThreeDots_Loaded">
+                                <FontIcon FontSize="14" Glyph="&#xE10C;" />
+                                <Button.Flyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Icon="Rename" Click="RenameTask_Click" x:Uid="RenameTask" Loaded="MenuFlyoutItem_Loaded"/>
+                                        <MenuFlyoutItem Icon="Add" Click="AddSubTask_Click" x:Uid="AddSubTask" Loaded="MenuFlyoutItem_Loaded"/>
+                                        <MenuFlyoutItem Icon="Delete" Click="DeleteTask_Click" x:Uid="DeleteTask"/>
+                                    </MenuFlyout>
+                                </Button.Flyout>
+                            </Button>
                         </Grid>
-                        <Button Background="Transparent" Height="32" BorderThickness="0" Width="34" Padding="0" Grid.Column="2" Loaded="TaskThreeDots_Loaded" Click="TaskThreeDots_Loaded">
-                            <FontIcon FontSize="14" Glyph="&#xE10C;" />
-                            <Button.Flyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem Icon="Rename" Click="RenameTask_Click" x:Uid="RenameTask" Loaded="MenuFlyoutItem_Loaded"/>
-                                    <MenuFlyoutItem Icon="Add" Click="AddSubTask_Click" x:Uid="AddSubTask" Loaded="MenuFlyoutItem_Loaded"/>
-                                    <MenuFlyoutItem Icon="Delete" Click="DeleteTask_Click" x:Uid="DeleteTask"/>
-                                </MenuFlyout>
-                            </Button.Flyout>
-                        </Button>
+                        <ProgressBar x:Name="Progress" Loaded="Progress_Loaded" ValueChanged="Progress_ValueChanged" Maximum="100" VerticalAlignment="Bottom" Margin="-15,-10,-60,-10" Visibility="{Binding SubTasks.Count, Converter={StaticResource ReverseVisConverter}}" Foreground="{StaticResource SystemAccentColorLight2}"/>
                     </Grid>
                 </muxc:Expander.Header>
                 <muxc:Expander.Content>
@@ -62,7 +67,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="34"/>
                 </Grid.ColumnDefinitions>
-                <CheckBox Grid.Column="0" Checked="SubTaskStateChanged" Unchecked="SubTaskStateChanged" IsChecked="{Binding IsDone}"/>
+                <CheckBox Grid.Column="0" Checked="SubTaskStateChanged" Unchecked="SubTaskStateChanged" x:Name="SubTaskCheckBox" IsChecked="{Binding IsDone}"/>
                 <Grid Grid.Column="1">
                     <TextBlock Text="{Binding Name}" ToolTipService.ToolTip="{Binding Name}" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="TaskNameText"/>
                 </Grid>

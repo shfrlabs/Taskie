@@ -19,6 +19,7 @@ public class ListTask : INotifyPropertyChanged
         _subTasks = new ObservableCollection<ListTask>();
     }
 
+    #region Reminders
     // Method to add a reminder (toast notification)
     public void AddReminder(DateTimeOffset reminderDateTime, string listId)
     {
@@ -109,6 +110,7 @@ public class ListTask : INotifyPropertyChanged
     {
         return $"Task_{CreationDate.Ticks % 100000000}"; // Ensures ID stays within 8 digits
     }
+    #endregion
 
     public ObservableCollection<ListTask> SubTasks
     {

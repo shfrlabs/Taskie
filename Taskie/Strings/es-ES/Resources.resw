@@ -118,259 +118,252 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutApp.Text" xml:space="preserve">
-    <value>Dziękuję za wsparcie. Taskie to jeden z mych pierwszych projektów, któremu poświęciłem dużo czasu. Możesz sprawdzić moje inne projekty na GitHubie. Mam nadzieję, że Taskie ci się spodoba! Pozdrowienia z Polski!</value>
+    <value>Gracias por apoyarme. Taskie es uno de mis primeros proyectos, en el que puse mucho cariño. Puedes echarle un vistazo a mis otros proyectos en GitHub. Espero que te guste Taskie. ¡Te mando mis mejores deseos desde Polonia!</value>
   </data>
   <data name="AboutCategory" xml:space="preserve">
-    <value>O aplikacji</value>
+    <value>Acerca de</value>
   </data>
   <data name="AddTaskBox.PlaceholderText" xml:space="preserve">
-    <value>Dodaj zadanie...</value>
+    <value>Agregar tarea...</value>
   </data>
   <data name="AdvertTag.Text" xml:space="preserve">
-    <value>Twój szybki i prywatny towarzysz do zadań.</value>
+    <value>Tu compañero de tareas rápido y privado.</value>
   </data>
   <data name="AdvertUWPTag.Text" xml:space="preserve">
-    <value>Stworzony przy użyciu UWP.</value>
+    <value>Hecho con UWP.</value>
   </data>
   <data name="AppearanceCategory" xml:space="preserve">
-    <value>Wygląd</value>
+    <value>Apariencia</value>
   </data>
   <data name="AppearanceText.Text" xml:space="preserve">
-    <value>Wygląd</value>
+    <value>Apariencia</value>
   </data>
   <data name="AppThemeSubText.Text" xml:space="preserve">
-    <value>Zmień motyw aplikacji.</value>
+    <value>Cambiar el tema de la app</value>
   </data>
   <data name="AppThemeText.Text" xml:space="preserve">
-    <value>Motyw</value>
+    <value>Tema</value>
   </data>
   <data name="AuthDescription.Text" xml:space="preserve">
-    <value>Spraw, by aplikacja prosiła o hasło lub biometrię przez Windows Hello. Ta opcja może nie być dostępna, jeżeli ten komputer nie jest zabezpieczony hasłem i biometrią/PINem.</value>
+    <value>Haz que la aplicación te pida tu contraseña/PIN/datos biométricos a través de Windows Hello. Es posible que esta opción no esté disponible si tu computadora no tiene contraseña.</value>
   </data>
   <data name="AuthDisabledDescription" xml:space="preserve">
-    <value>Usunięto metodę biometrii, PIN lub hasło, administrator systemu wyłączył tę opcję lub stało się coś innego. Sprawdź Ustawienia Windows &gt; Konta &gt; Opcje logowania.</value>
+    <value>Es posible que hayas eliminado los datos biométricos o la contraseña, que tu administrador haya eliminado la opción o que haya ocurrido algo más. Consulta la configuración de Windows.</value>
   </data>
   <data name="AuthDisabledTitle" xml:space="preserve">
-    <value>Uwierzytelnianie zostało wyłączone.</value>
+    <value>La autenticación ha sido desactivada.</value>
   </data>
   <data name="AuthText.Text" xml:space="preserve">
-    <value>Użyj uwierzytelniania</value>
+    <value>Utilizar autenticación</value>
   </data>
   <data name="BackupHeader.Text" xml:space="preserve">
-    <value>Kopia zapasowa</value>
+    <value>Respaldar</value>
   </data>
   <data name="BackupsCategory" xml:space="preserve">
-    <value>Kopie zapasowe</value>
+    <value>Copia de seguridad</value>
   </data>
   <data name="BackupsText.Text" xml:space="preserve">
-    <value>Kopie zapasowe</value>
+    <value>Copia de seguridad</value>
   </data>
   <data name="BackupText.Text" xml:space="preserve">
-    <value>Wyeksportuj wszystkie listy jednym kliknięciem poniżej. By wyeksportować jedną listę, kliknij na nią prawym przyciskiem myszy, i wybierz "Eksportuj" by wygenerować plik, którego możesz użyć, by przywrócić listę do aplikacji.</value>
+    <value>A continuación exporte todas las listas con un solo clic. En el caso de querer exportar solo una lista, haga clic derecho sobre ella y seleccione Exportar o utilice el menú de tres puntos después de abrirla.</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Anuluj</value>
+    <value>Cancelar</value>
   </data>
   <data name="CompactOverlayButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Włącz Taskie Mini</value>
+    <value>Abrir Taskie Mini</value>
   </data>
   <data name="DarkThemeRadio.Content" xml:space="preserve">
-    <value>Ciemny</value>
+    <value>Oscuro</value>
   </data>
   <data name="DeleteList.Text" xml:space="preserve">
-    <value>Usuń listę</value>
+    <value>Borrar lista</value>
   </data>
   <data name="DeleteTask.Text" xml:space="preserve">
-    <value>Usuń zadanie</value>
+    <value>Borrar tarea</value>
   </data>
   <data name="ExportButton.Text" xml:space="preserve">
-    <value>Eksportuj</value>
+    <value>Exportar</value>
   </data>
   <data name="ExportList.Text" xml:space="preserve">
-    <value>Eksportuj</value>
+    <value>Exportar</value>
   </data>
   <data name="GitHubLink.Content" xml:space="preserve">
     <value>GitHub</value>
   </data>
   <data name="ImportButton.Text" xml:space="preserve">
-    <value>Importuj</value>
+    <value>Importar</value>
   </data>
   <data name="LightThemeRadio.Content" xml:space="preserve">
-    <value>Jasny</value>
+    <value>Claro</value>
   </data>
   <data name="ListName" xml:space="preserve">
-    <value>Nazwa listy</value>
+    <value>Nombre de lista</value>
   </data>
   <data name="LoginMessage" xml:space="preserve">
-    <value>Zaloguj się do Taskie przy użyciu Windows Hello. Możesz wyłączyć tę funkcję w Ustawieniach.</value>
+    <value>Inicia sesión en Taskie con Windows Hello. Puedes desactivar esta opción en Configuración.</value>
   </data>
   <data name="NewList" xml:space="preserve">
-    <value>Nowa lista</value>
+    <value>Nueva lista</value>
   </data>
   <data name="NewListBtn.Text" xml:space="preserve">
-    <value>Nowa lista</value>
+    <value>Nueva lista</value>
   </data>
   <data name="RenameList.Text" xml:space="preserve">
-    <value>Zmień nazwę listy</value>
+    <value>Renombrar lista</value>
   </data>
   <data name="RenameTask.Text" xml:space="preserve">
-    <value>Zmień nazwę</value>
+    <value>Renombrar</value>
   </data>
   <data name="RestartButton.Text" xml:space="preserve">
-    <value>Restartuj</value>
+    <value>Reiniciar</value>
   </data>
   <data name="RestartWarning.Text" xml:space="preserve">
-    <value>To wymaga restartu aplikacji.</value>
+    <value>Esto requiere reiniciar la aplicación.</value>
   </data>
   <data name="RestoreHeader.Text" xml:space="preserve">
-    <value>Przywróć</value>
+    <value>Restaurar</value>
   </data>
   <data name="RestoreText.Text" xml:space="preserve">
-    <value>Zaimportuj kopię pojedynczej listy (*.json) lub pełną kopię zapasową (*.taskie) by przywrócić je do aplikacji. Jeżeli lista o danej nazwie już istnieje, zaimportowana lista będzie miała dodane (2) na koniec nazwy.</value>
+    <value>Importe aquí una lista (*.json) o una copia de seguridad completa (*.taskie). Si ya existe una lista, se importará con un (2) junto a su nombre.</value>
   </data>
   <data name="SearchBox.PlaceholderText" xml:space="preserve">
-    <value>Szukaj</value>
+    <value>Buscar</value>
   </data>
   <data name="SecurityCategory" xml:space="preserve">
-    <value>Bezpieczeństwo</value>
+    <value>Seguridad</value>
   </data>
   <data name="SecurityHeader.Text" xml:space="preserve">
-    <value>Bezpieczeństwo</value>
+    <value>Seguridad</value>
   </data>
   <data name="SettingsText.Text" xml:space="preserve">
-    <value>Ustawienia</value>
+    <value>Configuración</value>
   </data>
   <data name="SystemThemeRadio.Content" xml:space="preserve">
-    <value>Motyw systemu</value>
+    <value>Tema del sistema</value>
   </data>
   <data name="TaskName" xml:space="preserve">
-    <value>Nazwa zadania</value>
+    <value>Nombre de la tarea</value>
   </data>
   <data name="TwitterLink.Content" xml:space="preserve">
     <value>Twitter</value>
   </data>
   <data name="UpgradeText.Text" xml:space="preserve">
-    <value>Ulepsz</value>
+    <value>Mejorar</value>
   </data>
   <data name="ListLimitText.Text" xml:space="preserve">
-    <value>Usuń limit 3 list</value>
-  </data>
-  <data name="WinHelloText.Text" xml:space="preserve">
-    <value>Bezpieczne logowanie z Windows Hello</value>
-  </data>
-  <data name="IndicatorText.Text" xml:space="preserve">
-    <value>Znaczek Pro</value>
+    <value>Remover el límite de 3 listas</value>
   </data>
   <data name="CloseCO.Text" xml:space="preserve">
-    <value>Zamknij okno nakładki by pracować w tym oknie.</value>
+    <value>Cierre la superposición compacta para trabajar en esta ventana.</value>
   </data>
   <data name="tipwrongname.Title" xml:space="preserve">
-    <value>Nie możesz tego zrobić!</value>
+    <value>No puedes hacer eso!</value>
   </data>
   <data name="tipwrongname.Subtitle" xml:space="preserve">
-    <value>Lista z tą nazwą już istnieje.</value>
+    <value>Ya existe una lista con este nombre.</value>
   </data>
   <data name="successfulUpgrade" xml:space="preserve">
-    <value>Pomyślnie ulepszono aplikację!</value>
+    <value>Actualización exitosa!</value>
   </data>
   <data name="SuccessfulUpgradeSub" xml:space="preserve">
-    <value>Taskie Pro zostało odblokowane.</value>
+    <value>Taskie Pro fue desbloqueado.</value>
   </data>
   <data name="ProCancelled" xml:space="preserve">
-    <value>Cofnięto zakup Pro.</value>
+    <value>Has devuelto Taskie Pro.</value>
   </data>
   <data name="ProCancelledSub" xml:space="preserve">
-    <value>Taskie Pro zostało zablokowane.</value>
-  </data>
-  <data name="ChangeEmoji" xml:space="preserve">
-    <value>Zmień emoji</value>
-  </data>
-  <data name="ChangeFont" xml:space="preserve">
-    <value>Zmień czcionkę</value>
-  </data>
-  <data name="UpgradeFor" xml:space="preserve">
-    <value>Ulepsz za {0}</value>
-    <comment>Shown in upgrade dialog</comment>
-  </data>
-  <data name="Exit" xml:space="preserve">
-    <value>Wyjdź z aplikacji</value>
-  </data>
-  <data name="GetStarted" xml:space="preserve">
-    <value>Rozpocznij</value>
-  </data>
-  <data name="AdvancedCustomizationUpgrade.Text" xml:space="preserve">
-    <value>Zaawansowana personalizacja</value>
-  </data>
-  <data name="FileAttachmentUpgrade.Text" xml:space="preserve">
-    <value>Dołącz pliki do zadania</value>
-  </data>
-  <data name="GroupSpecificKanbanUpgrade.Text" xml:space="preserve">
-    <value>Widok kanban dla pojedynczej grupy</value>
-  </data>
-  <data name="PrioritySupportUpgrade.Text" xml:space="preserve">
-    <value>Priorytetowe wsparcie</value>
-  </data>
-  <data name="RemoveBannersUpgrade.Text" xml:space="preserve">
-    <value>Usuń reklamę Pro (przycisk "Ulepsz")</value>
-  </data>
-  <data name="DeleteSubTask.Text" xml:space="preserve">
-    <value>Usuń podzadanie</value>
-  </data>
-  <data name="AddSubTaskBox.PlaceholderText" xml:space="preserve">
-    <value>Dodaj podzadanie...</value>
-  </data>
-  <data name="AddSubTask.Text" xml:space="preserve">
-    <value>Dodaj podzadanie</value>
-  </data>
-  <data name="RenameSubTask.Text" xml:space="preserve">
-    <value>Zmień nazwę podzadania</value>
-  </data>
-  <data name="NoSubTasks.Text" xml:space="preserve">
-    <value>Brak dostępnych podzadań.</value>
-  </data>
-  <data name="RenameSubTaskTitle" xml:space="preserve">
-    <value>Zmień nazwę podzadania</value>
-  </data>
-  <data name="NewSubTaskTitle" xml:space="preserve">
-    <value>Nowe podzadanie</value>
-  </data>
-  <data name="AddReminder.Text" xml:space="preserve">
-    <value>Dodaj przypomnienie</value>
-  </data>
-  <data name="RemoveReminder.Text" xml:space="preserve">
-    <value>Usuń przypomnienie</value>
-  </data>
-  <data name="ReminderGreeting" xml:space="preserve">
-    <value>Oto zaplanowane przypomnienie:</value>
-  </data>
-  <data name="Welcome1.Text" xml:space="preserve">
-    <value>Poznaj szybką i prywatną aplikację listy zadań.</value>
-  </data>
-  <data name="Welcome2.Text" xml:space="preserve">
-    <value>Dodaj zadania, organizuj listy i dostosuj aplikację.</value>
-  </data>
-  <data name="Welcome3.Text" xml:space="preserve">
-    <value>Baw się dobrze!</value>
-  </data>
-  <data name="UpgradeUnavialable" xml:space="preserve">
-    <value>Tymczasowo niedostępne</value>
-  </data>
-  <data name="EmptyListText.Text" xml:space="preserve">
-    <value>Wybierz lub utwórz listę przy użyciu paska bocznego.</value>
-  </data>
-  <data name="WebsiteLink.Content" xml:space="preserve">
-    <value>Moja strona</value>
+    <value>Las funciones Pro fueron bloqueadas.</value>
   </data>
   <data name="Oops" xml:space="preserve">
     <value>Ups!</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Zamknij</value>
+    <value>Cerrar</value>
   </data>
-  <data name="PrioritySupport.Text" xml:space="preserve">
-    <value>Wsparcie priorytetowe</value>
+  <data name="ChangeEmoji" xml:space="preserve">
+    <value>Cambiar emoji</value>
   </data>
-  <data name="PromoBanner.Text" xml:space="preserve">
-    <value>Usuń banery promocyjne</value>
+  <data name="ChangeFont" xml:space="preserve">
+    <value>Cambiar fuente</value>
+  </data>
+  <data name="UpgradeFor" xml:space="preserve">
+    <value>Mejorar por {0}</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Salir de la app</value>
+  </data>
+  <data name="GetStarted" xml:space="preserve">
+    <value>Comenzemos</value>
+  </data>
+  <data name="PrioritySupportUpgrade.Text" xml:space="preserve">
+    <value>Soporte prioritario</value>
+  </data>
+  <data name="AdvancedCustomizationUpgrade.Text" xml:space="preserve">
+    <value>Personalización avanzada</value>
+  </data>
+  <data name="GroupSpecificKanbanUpgrade.Text" xml:space="preserve">
+    <value>Vista kanban</value>
+  </data>
+  <data name="FileAttachmentUpgrade.Text" xml:space="preserve">
+    <value>Adjuntar archivos a las tareas</value>
+  </data>
+  <data name="RemoveBannersUpgrade.Text" xml:space="preserve">
+    <value>Remover la publicidad (botón de Taskie Pro)</value>
+  </data>
+  <data name="AddSubTaskBox.PlaceholderText" xml:space="preserve">
+    <value>Agregar subtarea...</value>
+  </data>
+  <data name="DeleteSubTask.Text" xml:space="preserve">
+    <value>Borrar subtarea</value>
+  </data>
+  <data name="AddSubTask.Text" xml:space="preserve">
+    <value>Agregar subtarea</value>
+  </data>
+  <data name="RenameSubTask.Text" xml:space="preserve">
+    <value>Borrar subtarea</value>
+  </data>
+  <data name="NoSubTasks.Text" xml:space="preserve">
+    <value>No hay subtareas disponibles.</value>
+  </data>
+  <data name="RenameSubTaskTitle" xml:space="preserve">
+    <value>Renombrar subtarea</value>
+  </data>
+  <data name="IndicatorText.Text" xml:space="preserve">
+    <value>Indicador Pro</value>
+  </data>
+  <data name="WinHelloText.Text" xml:space="preserve">
+    <value>Inicio de sesión seguro con Windows Hello</value>
+  </data>
+  <data name="NewSubTaskTitle" xml:space="preserve">
+    <value>Nueva subtarea</value>
+  </data>
+  <data name="AddReminder.Text" xml:space="preserve">
+    <value>Agregar recordatorio</value>
+  </data>
+  <data name="RemoveReminder.Text" xml:space="preserve">
+    <value>Borrar recordatorio</value>
+  </data>
+  <data name="ReminderGreeting" xml:space="preserve">
+    <value>Aquí está tu recordatorio programado:</value>
+  </data>
+  <data name="Welcome1.Text" xml:space="preserve">
+    <value>Conoce a tu compañero de tareas rápidas y privadas.</value>
+  </data>
+  <data name="Welcome2.Text" xml:space="preserve">
+    <value>Agrega tus tareas, organiza listas y personaliza la aplicación.</value>
+  </data>
+  <data name="Welcome3.Text" xml:space="preserve">
+    <value>Diviértete y sé productivo!</value>
+  </data>
+  <data name="UpgradeUnavialable" xml:space="preserve">
+    <value>Temporalmente no disponible</value>
+  </data>
+  <data name="EmptyListText.Text" xml:space="preserve">
+    <value>Seleccione o cree una lista en la barra lateral.</value>
+  </data>
+  <data name="WebsiteLink.Content" xml:space="preserve">
+    <value>Mi sitio web</value>
   </data>
 </root>

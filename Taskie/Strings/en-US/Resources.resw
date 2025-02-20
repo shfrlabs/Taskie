@@ -255,6 +255,12 @@
   <data name="ListLimitText.Text" xml:space="preserve">
     <value>Remove 3 list limit</value>
   </data>
+  <data name="WinHelloText.Text" xml:space="preserve">
+    <value>Secure login with Windows Hello</value>
+  </data>
+  <data name="IndicatorText.Text" xml:space="preserve">
+    <value>Pro indicator</value>
+  </data>
   <data name="CloseCO.Text" xml:space="preserve">
     <value>Close the compact overlay to work in this window.</value>
   </data>
@@ -276,12 +282,6 @@
   <data name="ProCancelledSub" xml:space="preserve">
     <value>Pro features were blocked.</value>
   </data>
-  <data name="Oops" xml:space="preserve">
-    <value>Oops!</value>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>Close</value>
-  </data>
   <data name="ChangeEmoji" xml:space="preserve">
     <value>Change emoji</value>
   </data>
@@ -297,26 +297,26 @@
   <data name="GetStarted" xml:space="preserve">
     <value>Get started</value>
   </data>
-  <data name="PrioritySupportUpgrade.Text" xml:space="preserve">
-    <value>Priority support</value>
-  </data>
   <data name="AdvancedCustomizationUpgrade.Text" xml:space="preserve">
     <value>Advanced customization</value>
-  </data>
-  <data name="GroupSpecificKanbanUpgrade.Text" xml:space="preserve">
-    <value>Kanban view</value>
   </data>
   <data name="FileAttachmentUpgrade.Text" xml:space="preserve">
     <value>Attach files to tasks</value>
   </data>
+  <data name="GroupSpecificKanbanUpgrade.Text" xml:space="preserve">
+    <value>Kanban view</value>
+  </data>
+  <data name="PrioritySupportUpgrade.Text" xml:space="preserve">
+    <value>Priority support</value>
+  </data>
   <data name="RemoveBannersUpgrade.Text" xml:space="preserve">
     <value>Remove Pro advertising (button)</value>
   </data>
-  <data name="AddSubTaskBox.PlaceholderText" xml:space="preserve">
-    <value>Add subtask...</value>
-  </data>
   <data name="DeleteSubTask.Text" xml:space="preserve">
     <value>Delete subtask</value>
+  </data>
+  <data name="AddSubTaskBox.PlaceholderText" xml:space="preserve">
+    <value>Add subtask...</value>
   </data>
   <data name="AddSubTask.Text" xml:space="preserve">
     <value>Add subtask</value>
@@ -329,18 +329,6 @@
   </data>
   <data name="RenameSubTaskTitle" xml:space="preserve">
     <value>Rename subtask</value>
-  </data>
-  <data name="IndicatorText.Text" xml:space="preserve">
-    <value>Pro indicator</value>
-  </data>
-  <data name="WinHelloText.Text" xml:space="preserve">
-    <value>Secure login with Windows Hello</value>
-  </data>
-  <data name="PrioritySupport.Text" xml:space="preserve">
-    <value>Priority support</value>
-  </data>
-  <data name="PromoBanner.Text" xml:space="preserve">
-    <value>Promo banner</value>
   </data>
   <data name="NewSubTaskTitle" xml:space="preserve">
     <value>New subtask</value>
@@ -371,5 +359,11 @@
   </data>
   <data name="WebsiteLink.Content" xml:space="preserve">
     <value>My website</value>
+  </data>
+  <data name="Oops" xml:space="preserve">
+    <value>Oops!</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
   </data>
 </root>
