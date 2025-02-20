@@ -35,7 +35,6 @@ namespace Taskie
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Windows.Foundation.Size(600, 500));
             InitializeComponent();
             SetupTitleBar();
-            SetupNavigationMenu();
             CheckSecurity();
             DeterminePro();
             CheckOnboarding();
@@ -559,6 +558,13 @@ namespace Taskie
                 contentFrame.Margin = new Thickness(0, 10, 0, 0);
                 SidebarButton.Opacity = 0.7;
             }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadRing.IsActive = false;
+            LoadRing.Visibility = Visibility.Collapsed;
+            SetupNavigationMenu();
         }
     }
 }

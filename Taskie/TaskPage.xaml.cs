@@ -216,6 +216,7 @@ namespace Taskie
                     IsDone = false
                 };
                 tasks.Add(task);
+                sender.Text = string.Empty;
                 taskListView.Items.Add(task);
                 ListTools.SaveList(listId, tasks, metadata);
             }

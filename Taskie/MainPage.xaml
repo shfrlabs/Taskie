@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True" Loaded="Page_Loaded">
     <Page.Resources>
         <ItemsPanelTemplate x:Key="WrapGridPanel">
             <WrapGrid Orientation="Horizontal" />
@@ -68,6 +68,7 @@
                 <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Stretch">
                     <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
                     <ListView x:Name="Navigation" Margin="7,2,7,0" SelectionMode="Single" SelectionChanged="Navigation_SelectionChanged_1"/>
+                    <ProgressRing IsActive="True" x:Name="LoadRing" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="2">
                     <NavigationViewItemSeparator Width="300" Margin="-100, 0, 0, 0" Opacity=".3"></NavigationViewItemSeparator>
