@@ -319,9 +319,6 @@
   <data name="AddSubTaskBox.PlaceholderText" xml:space="preserve">
     <value>Dodaj podzadanie...</value>
   </data>
-  <data name="AddSubTask.Text" xml:space="preserve">
-    <value>Dodaj podzadanie</value>
-  </data>
   <data name="RenameSubTask.Text" xml:space="preserve">
     <value>Zmień nazwę podzadania</value>
   </data>
@@ -366,11 +363,5 @@
   </data>
   <data name="Close" xml:space="preserve">
     <value>Zamknij</value>
-  </data>
-  <data name="PrioritySupport.Text" xml:space="preserve">
-    <value>Wsparcie priorytetowe</value>
-  </data>
-  <data name="PromoBanner.Text" xml:space="preserve">
-    <value>Usuń banery promocyjne</value>
   </data>
 </root>

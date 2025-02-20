@@ -32,7 +32,6 @@
                                 <Button.Flyout>
                                     <MenuFlyout>
                                         <MenuFlyoutItem Icon="Rename" Click="RenameTask_Click" x:Uid="RenameTask" Loaded="MenuFlyoutItem_Loaded"/>
-                                        <MenuFlyoutItem Icon="Add" Click="AddSubTask_Click" x:Uid="AddSubTask" Loaded="MenuFlyoutItem_Loaded"/>
                                         <MenuFlyoutItem Icon="Delete" Click="DeleteTask_Click" x:Uid="DeleteTask"/>
                                     </MenuFlyout>
                                 </Button.Flyout>
@@ -56,6 +55,11 @@
                                 </Style>
                             </ListView.ItemContainerStyle>
                         </ListView>
+                        <AutoSuggestBox x:Uid="AddSubTaskBox" Style="{StaticResource AddItemBoxStyle}" BorderThickness="0" Canvas.ZIndex="10" VerticalContentAlignment="Center" QuerySubmitted="SubTaskBox_QuerySubmitted" FontSize="14" HorizontalAlignment="Stretch" Height="45" VerticalAlignment="Bottom" CornerRadius="8">
+                            <AutoSuggestBox.QueryIcon>
+                                <FontIcon Opacity=".9" FontSize="12" Glyph="&#xE710;" />
+                            </AutoSuggestBox.QueryIcon>
+                        </AutoSuggestBox>
                     </StackPanel>
                 </muxc:Expander.Content>
             </muxc:Expander>

@@ -15,6 +15,7 @@ namespace Taskie
     {
         public App()
         {
+            ApplicationLanguages.PrimaryLanguageOverride = "en-US";
             if (Settings.Theme == "Dark")
             {
                 Application.Current.RequestedTheme = ApplicationTheme.Dark;

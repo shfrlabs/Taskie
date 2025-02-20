@@ -255,6 +255,12 @@
   <data name="ListLimitText.Text" xml:space="preserve">
     <value>Remover el límite de 3 listas</value>
   </data>
+  <data name="WinHelloText.Text" xml:space="preserve">
+    <value>Inicio de sesión seguro con Windows Hello</value>
+  </data>
+  <data name="IndicatorText.Text" xml:space="preserve">
+    <value>Indicador Pro</value>
+  </data>
   <data name="CloseCO.Text" xml:space="preserve">
     <value>Cierre la superposición compacta para trabajar en esta ventana.</value>
   </data>
@@ -276,12 +282,6 @@
   <data name="ProCancelledSub" xml:space="preserve">
     <value>Las funciones Pro fueron bloqueadas.</value>
   </data>
-  <data name="Oops" xml:space="preserve">
-    <value>Ups!</value>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>Cerrar</value>
-  </data>
   <data name="ChangeEmoji" xml:space="preserve">
     <value>Cambiar emoji</value>
   </data>
@@ -297,29 +297,26 @@
   <data name="GetStarted" xml:space="preserve">
     <value>Comenzemos</value>
   </data>
-  <data name="PrioritySupportUpgrade.Text" xml:space="preserve">
-    <value>Soporte prioritario</value>
-  </data>
   <data name="AdvancedCustomizationUpgrade.Text" xml:space="preserve">
     <value>Personalización avanzada</value>
-  </data>
-  <data name="GroupSpecificKanbanUpgrade.Text" xml:space="preserve">
-    <value>Vista kanban</value>
   </data>
   <data name="FileAttachmentUpgrade.Text" xml:space="preserve">
     <value>Adjuntar archivos a las tareas</value>
   </data>
+  <data name="GroupSpecificKanbanUpgrade.Text" xml:space="preserve">
+    <value>Vista kanban</value>
+  </data>
+  <data name="PrioritySupportUpgrade.Text" xml:space="preserve">
+    <value>Soporte prioritario</value>
+  </data>
   <data name="RemoveBannersUpgrade.Text" xml:space="preserve">
     <value>Remover la publicidad (botón de Taskie Pro)</value>
-  </data>
-  <data name="AddSubTaskBox.PlaceholderText" xml:space="preserve">
-    <value>Agregar subtarea...</value>
   </data>
   <data name="DeleteSubTask.Text" xml:space="preserve">
     <value>Borrar subtarea</value>
   </data>
-  <data name="AddSubTask.Text" xml:space="preserve">
-    <value>Agregar subtarea</value>
+  <data name="AddSubTaskBox.PlaceholderText" xml:space="preserve">
+    <value>Agregar subtarea...</value>
   </data>
   <data name="RenameSubTask.Text" xml:space="preserve">
     <value>Borrar subtarea</value>
@@ -329,12 +326,6 @@
   </data>
   <data name="RenameSubTaskTitle" xml:space="preserve">
     <value>Renombrar subtarea</value>
-  </data>
-  <data name="IndicatorText.Text" xml:space="preserve">
-    <value>Indicador Pro</value>
-  </data>
-  <data name="WinHelloText.Text" xml:space="preserve">
-    <value>Inicio de sesión seguro con Windows Hello</value>
   </data>
   <data name="NewSubTaskTitle" xml:space="preserve">
     <value>Nueva subtarea</value>
@@ -365,5 +356,11 @@
   </data>
   <data name="WebsiteLink.Content" xml:space="preserve">
     <value>Mi sitio web</value>
+  </data>
+  <data name="Oops" xml:space="preserve">
+    <value>Ups!</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Cerrar</value>
   </data>
 </root>

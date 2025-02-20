@@ -543,45 +543,6 @@ namespace Taskie
             }
         }
 
-        private async void AddSubTask_Click(object sender, RoutedEventArgs e)
-        {
-            (ListMetadata meta, List<ListTask> tasklist) = ListTools.ReadList(listId);
-            ListTask parent = (sender as MenuFlyoutItem).DataContext as ListTask;
-            int index = tasklist.FindIndex(task => task.CreationDate == parent?.CreationDate);
-            if (parent != null)
-            {
-                ContentDialog dialog = new ContentDialog();
-                dialog.Title = resourceLoader.GetString("NewSubTaskTitle");
-                TextBox box = new TextBox();
-                dialog.Content = box;
-                dialog.DefaultButton = ContentDialogButton.Primary;
-                dialog.PrimaryButtonText = "OK";
-                dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
-
-                ContentDialogResult result = await dialog.ShowAsync();
-
-                if (result == ContentDialogResult.Primary && !string.IsNullOrEmpty(box.Text))
-                {
-                    ListTask task2add = new ListTask
-                    {
-                        CreationDate = DateTime.Now,
-                        ParentCreationDate = parent.CreationDate,
-                        IsDone = false,
-                        Name = box.Text,
-                        SubTasks = new ObservableCollection<ListTask>()
-                    };
-                    parent.SubTasks.Add(task2add);
-                    ChangeProgressBarValue(parent, true);
-                }
-            }
-            Debug.WriteLine(index);
-            if (index > -1)
-            {
-                tasklist[index] = parent;
-                ListTools.SaveList(listId, tasklist, meta);
-            }
-        }
-
         // no, i dont know what a sephamore is this isnt my first language
         // a very special someone helped me here
         private static SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
@@ -811,6 +772,36 @@ namespace Taskie
             else
             {
                 progressBar.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void SubTaskBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            (ListMetadata meta, List<ListTask> tasklist) = ListTools.ReadList(listId);
+            ListTask parent = sender.DataContext as ListTask;
+            int index = tasklist.FindIndex(task => task.CreationDate == parent?.CreationDate);
+            if (parent != null)
+            {
+
+                if (!string.IsNullOrEmpty(sender.Text))
+                {
+                    ListTask task2add = new ListTask
+                    {
+                        CreationDate = DateTime.Now,
+                        ParentCreationDate = parent.CreationDate,
+                        IsDone = false,
+                        Name = sender.Text,
+                        SubTasks = new ObservableCollection<ListTask>()
+                    };
+                    parent.SubTasks.Add(task2add);
+                    ChangeProgressBarValue(parent, true);
+                }
+            }
+            Debug.WriteLine(index);
+            if (index > -1)
+            {
+                tasklist[index] = parent;
+                ListTools.SaveList(listId, tasklist, meta);
             }
         }
     }
