@@ -224,19 +224,34 @@ namespace Taskie
 
         public ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
 
-        private async void RenameTask_Click(object sender, RoutedEventArgs e)
+        private void RenameTask_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyoutItem menuFlyoutItem = (MenuFlyoutItem)sender;
             var note = menuFlyoutItem.DataContext as ListTask;
-            TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("TaskName"), Text = note.Name };
-            if (!ListTools.isAWOpen)
+
+            TextBox input = new TextBox()
             {
-                ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameTask/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input, DefaultButton = ContentDialogButton.Primary };
-                ContentDialogResult result = await dialog.ShowAsync();
-                if (result == ContentDialogResult.Primary)
+                PlaceholderText = resourceLoader.GetString("TaskName"),
+                Text = note.Name,
+                Margin = new Thickness(-10),
+                Width = NameBox.ActualWidth + 40
+            };
+
+            Flyout flyout = new Flyout()
+            {
+                Content = input,
+                Placement = FlyoutPlacementMode.Left
+            };
+
+            input.KeyDown += (s, args) => { if (args.Key == VirtualKey.Enter) { flyout.Hide(); } };
+
+            flyout.Closed += (s, args) =>
+            {
+                string newName = input.Text;
+                if (!string.IsNullOrEmpty(newName) && newName != note.Name)
                 {
-                    string text = input.Text;
-                    note.Name = text;
+                    note.Name = newName;
+
                     List<ListTask> tasks = new List<ListTask>();
                     if (!(ListTools.ReadList(listId).Tasks == null || ListTools.ReadList(listId).Metadata == null))
                     {
@@ -244,11 +259,16 @@ namespace Taskie
                         {
                             tasks.Add(task2add);
                         }
-                    };
+                    }
+
                     int index = tasks.FindIndex(task => task.CreationDate == note.CreationDate);
                     tasks[index] = note;
                     ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
                 }
+            };
+            if (menuFlyoutItem.Tag is Button button)
+            {
+                flyout.ShowAt(button);
             }
         }
 
@@ -612,28 +632,36 @@ namespace Taskie
         }
 
 
-        private async void RenameSubTask_Click(object sender, RoutedEventArgs e)
+        private void RenameSubTask_Click(object sender, RoutedEventArgs e)
         {
-            ListTask subTask = (sender as MenuFlyoutItem)?.DataContext as ListTask;
+            MenuFlyoutItem menuFlyoutItem = (MenuFlyoutItem)sender;
+            var subTask = menuFlyoutItem.DataContext as ListTask;
             if (subTask == null)
             {
                 return;
             }
+
             (ListMetadata meta, List<ListTask> tasks) = ListTools.ReadList(listId);
 
-            if (!ListTools.isAWOpen)
+            TextBox input = new TextBox()
             {
-                ContentDialog dialog = new ContentDialog();
-                dialog.Title = resourceLoader.GetString("RenameSubTaskTitle");
-                TextBox box = new TextBox() { Text = subTask.Name };
-                dialog.Content = box;
-                dialog.DefaultButton = ContentDialogButton.Primary;
-                dialog.PrimaryButtonText = "OK";
-                dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
+                PlaceholderText = resourceLoader.GetString("TaskName"),
+                Text = subTask.Name,
+                Margin = new Thickness(-10),
+                Width = NameBox.ActualWidth + 65
+            };
 
-                ContentDialogResult result = await dialog.ShowAsync();
+            Flyout flyout = new Flyout()
+            {
+                Content = input,
+                Placement = FlyoutPlacementMode.Left
+            };
 
-                if (result == ContentDialogResult.Primary && !string.IsNullOrEmpty(box.Text))
+            input.KeyDown += (s, args) => { if (args.Key == VirtualKey.Enter) { flyout.Hide(); } };
+
+            flyout.Closed += (s, args) =>
+            {
+                if (!string.IsNullOrEmpty(input.Text))
                 {
                     int index = tasks.FindIndex(task => task.CreationDate == subTask?.ParentCreationDate);
                     if (index > -1)
@@ -643,19 +671,20 @@ namespace Taskie
                         ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
                         if (taskToRemove != null)
                         {
-                            parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = box.Text;
+                            parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = input.Text;
                             tasks[index] = parentTask;
-                            (taskListView.Items[index] as ListTask).SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = box.Text;
+                            (taskListView.Items[index] as ListTask).SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = input.Text;
                         }
                         else
                         {
                         }
                     }
-                    else
-                    {
-                    }
-                    ListTools.SaveList(listId, tasks, meta);
                 }
+            };
+
+            if (menuFlyoutItem.Tag is Button button)
+            {
+                flyout.ShowAt(button);
             }
         }
 
@@ -733,6 +762,7 @@ namespace Taskie
         private void TaskThreeDots_Loaded(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
+            (button.Flyout as MenuFlyout).Items[0].Tag = button;
             ListTask boundTask = button.DataContext as ListTask;
             var taskList = ListTools.ReadList(listId).Tasks;
             ListTask task;
@@ -795,6 +825,11 @@ namespace Taskie
                 tasklist[index] = parent;
                 ListTools.SaveList(listId, tasklist, meta);
             }
+        }
+
+        private void SubTaskThreeDots_Loaded(object sender, RoutedEventArgs e)
+        {
+            ((sender as Button).Flyout as MenuFlyout).Items[0].Tag = sender;
         }
     }
 }
