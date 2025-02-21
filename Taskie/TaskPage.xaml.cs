@@ -272,15 +272,7 @@ namespace Taskie
             {
                 PlaceholderText = resourceLoader.GetString("ListName"),
                 Text = listname,
-                Width = 200
-            };
-            Button okButton = new Button()
-            {
-                Content = "OK",
-                HorizontalAlignment = HorizontalAlignment.Right,
-                VerticalAlignment = VerticalAlignment.Center,
-                Width = 50,
-                Margin = new Thickness(0, 10, 0, 0)
+                Width = NameBox.ActualWidth + 55
             };
             Flyout flyout = new Flyout()
             {
@@ -288,12 +280,12 @@ namespace Taskie
                 {
                     Children =
             {
-                input,
-                okButton
-            }
+                input
+            },
+                    Margin = new Thickness(-10),
                 }
             };
-            okButton.Click += (s, args) =>
+            flyout.Closed += (s, args) =>
             {
                 string text = input.Text;
                 if (!string.IsNullOrEmpty(text))
@@ -304,7 +296,7 @@ namespace Taskie
                 }
                 flyout.Hide();
             };
-            flyout.ShowAt(topoptions);
+            flyout.ShowAt(topoptions, new FlyoutShowOptions() { Placement = FlyoutPlacementMode.Left } );
         }
 
 
