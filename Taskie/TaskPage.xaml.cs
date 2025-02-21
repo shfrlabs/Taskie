@@ -234,7 +234,8 @@ namespace Taskie
                 PlaceholderText = resourceLoader.GetString("TaskName"),
                 Text = note.Name,
                 Margin = new Thickness(-10),
-                Width = NameBox.ActualWidth + 40
+                Width = NameBox.ActualWidth + 40,
+                MaxWidth = 400
             };
 
             Flyout flyout = new Flyout()
@@ -292,7 +293,8 @@ namespace Taskie
             {
                 PlaceholderText = resourceLoader.GetString("ListName"),
                 Text = listname,
-                Width = NameBox.ActualWidth + 55
+                Width = NameBox.ActualWidth + 55,
+                MaxWidth = 400
             };
             Flyout flyout = new Flyout()
             {
@@ -305,6 +307,7 @@ namespace Taskie
                     Margin = new Thickness(-10),
                 }
             };
+            input.KeyDown += (s, args) => { if (args.Key == VirtualKey.Enter) { flyout.Hide(); } };
             flyout.Closed += (s, args) =>
             {
                 string text = input.Text;
@@ -648,7 +651,8 @@ namespace Taskie
                 PlaceholderText = resourceLoader.GetString("TaskName"),
                 Text = subTask.Name,
                 Margin = new Thickness(-10),
-                Width = NameBox.ActualWidth + 65
+                Width = NameBox.ActualWidth + 65,
+                MaxWidth = 400
             };
 
             Flyout flyout = new Flyout()
@@ -830,6 +834,141 @@ namespace Taskie
         private void SubTaskThreeDots_Loaded(object sender, RoutedEventArgs e)
         {
             ((sender as Button).Flyout as MenuFlyout).Items[0].Tag = sender;
+        }
+
+        private void TaskNameText_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            TextBlock textBlock = (TextBlock)sender;
+            var note = textBlock.DataContext as ListTask;
+
+            TextBox input = new TextBox()
+            {
+                PlaceholderText = resourceLoader.GetString("TaskName"),
+                Text = note.Name,
+                Margin = new Thickness(-10),
+                Width = NameBox.ActualWidth + 40,
+                MaxWidth = 400
+            };
+
+            Flyout flyout = new Flyout()
+            {
+                Content = input,
+                Placement = FlyoutPlacementMode.BottomEdgeAlignedLeft,
+            };
+
+            input.KeyDown += (s, args) => { if (args.Key == VirtualKey.Enter) { flyout.Hide(); } };
+
+            flyout.Closed += (s, args) =>
+            {
+                string newName = input.Text;
+                if (!string.IsNullOrEmpty(newName) && newName != note.Name)
+                {
+                    note.Name = newName;
+
+                    List<ListTask> tasks = new List<ListTask>();
+                    if (!(ListTools.ReadList(listId).Tasks == null || ListTools.ReadList(listId).Metadata == null))
+                    {
+                        foreach (ListTask task2add in ListTools.ReadList(listId).Tasks)
+                        {
+                            tasks.Add(task2add);
+                        }
+                    }
+
+                    int index = tasks.FindIndex(task => task.CreationDate == note.CreationDate);
+                    tasks[index] = note;
+                    ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
+                }
+            };
+            flyout.ShowAt(sender as TextBlock);
+        }
+
+        private void SubTaskNameText_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            TextBlock textBlock = (TextBlock)sender;
+            var subTask = textBlock.DataContext as ListTask;
+            if (subTask == null)
+            {
+                return;
+            }
+
+            (ListMetadata meta, List<ListTask> tasks) = ListTools.ReadList(listId);
+
+            TextBox input = new TextBox()
+            {
+                PlaceholderText = resourceLoader.GetString("TaskName"),
+                Text = subTask.Name,
+                Margin = new Thickness(-10),
+                Width = NameBox.ActualWidth + 65,
+                MaxWidth = 400
+            };
+
+            Flyout flyout = new Flyout()
+            {
+                Content = input,
+                Placement = FlyoutPlacementMode.BottomEdgeAlignedLeft
+            };
+
+            input.KeyDown += (s, args) => { if (args.Key == VirtualKey.Enter) { flyout.Hide(); } };
+
+            flyout.Closed += (s, args) =>
+            {
+                if (!string.IsNullOrEmpty(input.Text))
+                {
+                    int index = tasks.FindIndex(task => task.CreationDate == subTask?.ParentCreationDate);
+                    if (index > -1)
+                    {
+                        ListTask parentTask = tasks[index];
+
+                        ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
+                        if (taskToRemove != null)
+                        {
+                            parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = input.Text;
+                            tasks[index] = parentTask;
+                            (taskListView.Items[index] as ListTask).SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = input.Text;
+                        }
+                        else
+                        {
+                        }
+                    }
+                }
+            };
+
+            flyout.ShowAt(sender as TextBlock);
+        }
+
+        private void testname_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            TextBox input = new TextBox()
+            {
+                PlaceholderText = resourceLoader.GetString("ListName"),
+                Text = listname,
+                Width = NameBox.ActualWidth + 55,
+                MaxWidth = 400
+            };
+            Flyout flyout = new Flyout()
+            {
+                Content = new StackPanel()
+                {
+                    Children =
+            {
+                input
+            },
+                    Margin = new Thickness(-10),
+                }
+            };
+            input.KeyDown += (s, args) => { if (args.Key == VirtualKey.Enter) { flyout.Hide(); } };
+            flyout.Closed += (s, args) =>
+            {
+                string text = input.Text;
+                if (!string.IsNullOrEmpty(text))
+                {
+                    ListTools.RenameList(listId, text);
+                    listname = text;
+                    testname.Text = listname;
+                }
+                flyout.Hide();
+            };
+            flyout.ShowAt(sender as TextBlock, new FlyoutShowOptions() { Placement = FlyoutPlacementMode.BottomEdgeAlignedLeft });
         }
     }
 }
