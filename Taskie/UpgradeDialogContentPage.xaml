@@ -6,60 +6,133 @@
     xmlns:local="using:Taskie"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Width="350">
-    <StackPanel Orientation="Vertical">
-        <Image Source="Assets\banner.png" Margin="-30,-25,-30,0" VerticalAlignment="Top" AutomationProperties.Name="Taskie Pro"/>
-        <Grid Margin="20,0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Opacity="0.8">
+    mc:Ignorable="d"
+    Width="350">
+    <StackPanel
+        Orientation="Vertical">
+        <Image
+            Source="Assets\banner.png"
+            Margin="-30,-25,-30,0"
+            VerticalAlignment="Top"
+            AutomationProperties.Name="Taskie Pro" />
+        <Grid
+            Margin="20,0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom"
+            Opacity="0.8">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="*" />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <TextBlock Margin="5,0,0,0"/>
+            <Grid
+                Grid.Row="0">
+                <TextBlock
+                    Margin="5,0,0,0" />
             </Grid>
-            <Grid Grid.Row="1">
+            <Grid
+                Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition
+                        Width="30" />
+                    <ColumnDefinition
+                        Width="*" />
                 </Grid.ColumnDefinitions>
-                <CheckBox VerticalAlignment="Center" IsEnabled="False" IsChecked="True"/>
-                <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" FontSize="16" Grid.Column="1" x:Uid="PrioritySupportUpgrade"/>
+                <CheckBox
+                    VerticalAlignment="Center"
+                    IsEnabled="False"
+                    IsChecked="True" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Margin="5,0,0,0"
+                    FontSize="16"
+                    Grid.Column="1"
+                    x:Uid="PrioritySupportUpgrade" />
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid
+                Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition
+                        Width="30" />
+                    <ColumnDefinition
+                        Width="*" />
                 </Grid.ColumnDefinitions>
-                <CheckBox VerticalAlignment="Center" IsEnabled="False" IsChecked="True"/>
-                <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" FontSize="16" Grid.Column="1" x:Uid="AdvancedCustomizationUpgrade"/>
+                <CheckBox
+                    VerticalAlignment="Center"
+                    IsEnabled="False"
+                    IsChecked="True" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Margin="5,0,0,0"
+                    FontSize="16"
+                    Grid.Column="1"
+                    x:Uid="AdvancedCustomizationUpgrade" />
             </Grid>
-            <Grid Grid.Row="3">
+            <Grid
+                Grid.Row="3">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition
+                        Width="30" />
+                    <ColumnDefinition
+                        Width="*" />
                 </Grid.ColumnDefinitions>
-                <CheckBox VerticalAlignment="Center" IsEnabled="False" IsChecked="True"/>
-                <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" FontSize="16" Grid.Column="1" x:Uid="GroupSpecificKanbanUpgrade"/>
+                <CheckBox
+                    VerticalAlignment="Center"
+                    IsEnabled="False"
+                    IsChecked="True" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Margin="5,0,0,0"
+                    FontSize="16"
+                    Grid.Column="1"
+                    x:Uid="GroupSpecificKanbanUpgrade" />
             </Grid>
-            <Grid Grid.Row="4">
+            <Grid
+                Grid.Row="4">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition
+                        Width="30" />
+                    <ColumnDefinition
+                        Width="*" />
                 </Grid.ColumnDefinitions>
-                <CheckBox VerticalAlignment="Center" IsEnabled="False" IsChecked="True"/>
-                <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" FontSize="16" Grid.Column="1" x:Uid="FileAttachmentUpgrade"/>
+                <CheckBox
+                    VerticalAlignment="Center"
+                    IsEnabled="False"
+                    IsChecked="True" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Margin="5,0,0,0"
+                    FontSize="16"
+                    Grid.Column="1"
+                    x:Uid="FileAttachmentUpgrade" />
             </Grid>
-            <Grid Grid.Row="5">
+            <Grid
+                Grid.Row="5">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition
+                        Width="30" />
+                    <ColumnDefinition
+                        Width="*" />
                 </Grid.ColumnDefinitions>
-                <CheckBox VerticalAlignment="Center" IsEnabled="False" IsChecked="True"/>
-                <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" FontSize="16" Grid.Column="1"  x:Uid="RemoveBannersUpgrade"/>
+                <CheckBox
+                    VerticalAlignment="Center"
+                    IsEnabled="False"
+                    IsChecked="True" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Margin="5,0,0,0"
+                    FontSize="16"
+                    Grid.Column="1"
+                    x:Uid="RemoveBannersUpgrade" />
             </Grid>
         </Grid>
     </StackPanel>

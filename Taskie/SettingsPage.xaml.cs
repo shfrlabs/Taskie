@@ -1,28 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using TaskieLib;
 using Windows.ApplicationModel.Core;
-using Windows.ApplicationModel.Resources;
 using Windows.Security.Credentials.UI;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
-namespace Taskie
-{
-    public sealed partial class SettingsPage : Page
-    {
+namespace Taskie {
+    public sealed partial class SettingsPage : Page {
         private bool isUpdating = false;
 
-        public SettingsPage()
-        {
+        public SettingsPage() {
             this.InitializeComponent();
             SetAppearance();
             SetSecurity();
@@ -30,51 +24,39 @@ namespace Taskie
             ActualThemeChanged += SettingsPage_ActualThemeChanged;
         }
 
-        private async void CheckSecurity()
-        {
+        #region Feature avialability checks
+
+        private async void CheckSecurity() {
             UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
-            if (availability != UserConsentVerifierAvailability.Available | !Settings.isPro)
-            {
+            if (availability != UserConsentVerifierAvailability.Available | !Settings.isPro) {
                 AuthToggle.IsOn = false;
                 AuthToggle.IsEnabled = false;
                 Settings.isAuthUsed = false;
             }
         }
 
-        private void SetSecurity()
-        {
-            if (Settings.isAuthUsed)
-            { AuthToggle.IsOn = true; }
-            else
-            { AuthToggle.IsOn = false; }
+        #endregion
+
+        #region Restoring switch/radio states
+
+        private void SetSecurity() {
+            AuthToggle.IsOn = Settings.isAuthUsed;
         }
 
-        private void AuthToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            if ((sender as ToggleSwitch)?.Tag?.ToString() == "Auth")
-            {
-                Settings.isAuthUsed = (sender as ToggleSwitch).IsOn;
-            }
-        }
-
-        private void SetAppearance()
-        {
+        private void SetAppearance() {
             isUpdating = true;
 
-            if (Settings.Theme == "System")
-            {
+            if (Settings.Theme == "System") {
                 SystemRadio.IsChecked = true;
                 DarkRadio.IsChecked = false;
                 LightRadio.IsChecked = false;
             }
-            else if (Settings.Theme == "Light")
-            {
+            else if (Settings.Theme == "Light") {
                 SystemRadio.IsChecked = false;
                 DarkRadio.IsChecked = false;
                 LightRadio.IsChecked = true;
             }
-            else if (Settings.Theme == "Dark")
-            {
+            else if (Settings.Theme == "Dark") {
                 SystemRadio.IsChecked = false;
                 DarkRadio.IsChecked = true;
                 LightRadio.IsChecked = false;
@@ -83,8 +65,17 @@ namespace Taskie
             isUpdating = false;
         }
 
-        private void RadioButton_StateChanged(object sender, RoutedEventArgs e)
-        {
+        #endregion
+
+        #region Click and toggle handlers
+
+        private void AuthToggleSwitch_Toggled(object sender, RoutedEventArgs e) {
+            if ((sender as ToggleSwitch)?.Tag?.ToString() == "Auth") {
+                Settings.isAuthUsed = (sender as ToggleSwitch).IsOn;
+            }
+        }        
+
+        private void RadioButton_StateChanged(object sender, RoutedEventArgs e) {
             if (isUpdating)
                 return;
 
@@ -94,71 +85,67 @@ namespace Taskie
 
             string selectedTheme = radioButton.Tag?.ToString();
 
-            if (radioButton.IsChecked == true)
-            {
+            if (radioButton.IsChecked == true) {
                 isUpdating = true;
                 Settings.Theme = selectedTheme;
                 isUpdating = false;
             }
         }
 
-        private async void export_Click(object sender, RoutedEventArgs e)
-        {
+        private async void export_Click(object sender, RoutedEventArgs e) {
             StorageFile exportFile = await ListTools.ExportedLists();
-            FileSavePicker savePicker = new FileSavePicker
-            {
+            FileSavePicker savePicker = new FileSavePicker {
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
             savePicker.SuggestedFileName = exportFile.Name;
             savePicker.FileTypeChoices.Add(exportFile.FileType, new List<string> { exportFile.FileType });
             StorageFile destinationFile = await savePicker.PickSaveFileAsync();
-            if (destinationFile != null)
-            {
+            if (destinationFile != null) {
                 await exportFile.CopyAndReplaceAsync(destinationFile);
             }
-            else
-            {
+            else {
             }
             File.Delete(exportFile.Path);
         }
 
-        private async void import_Click(object sender, RoutedEventArgs e)
-        {
+        private async void import_Click(object sender, RoutedEventArgs e) {
             var picker = new FileOpenPicker();
             picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
             picker.FileTypeFilter.Add(".taskie");
             picker.FileTypeFilter.Add(".json");
 
             var files = await picker.PickMultipleFilesAsync();
-            if (files != null)
-            {
-                foreach (StorageFile file in files)
-                {
+            if (files != null) {
+                foreach (StorageFile file in files) {
                     string fileExtension = Path.GetExtension(file.Name).ToLower();
-                    if (fileExtension == ".json")
-                    {
+                    if (fileExtension == ".json") {
                         ListTools.ImportFile(file);
                     }
-                    else if (fileExtension == ".taskie")
-                    {
+                    else if (fileExtension == ".taskie") {
                         await ProcessTaskieFile(file);
                     }
                 }
             }
         }
 
-        private async Task ProcessTaskieFile(StorageFile taskieFile)
-        {
-            using (var zipStream = await taskieFile.OpenStreamForReadAsync())
-            {
-                using (var archive = new System.IO.Compression.ZipArchive(zipStream, System.IO.Compression.ZipArchiveMode.Read))
-                {
-                    foreach (var entry in archive.Entries)
-                    {
-                        if (Path.GetExtension(entry.FullName).ToLower() == ".json")
-                        {
-                            using (var entryStream = entry.Open())
-                            {
+        private async void RestartButton_Click(object sender, RoutedEventArgs e) {
+            var result = await CoreApplication.RequestRestartAsync("After import");
+        }
+
+        private async void RestartButtonTheme_Click(object sender, RoutedEventArgs e) {
+            var result = await CoreApplication.RequestRestartAsync("Theme has been changed");
+        }
+
+        #endregion
+
+        #region Other methods and events
+
+        private async Task ProcessTaskieFile(StorageFile taskieFile) {
+            using (var zipStream = await taskieFile.OpenStreamForReadAsync()) {
+                using (var archive = new System.IO.Compression.ZipArchive(zipStream, System.IO.Compression.ZipArchiveMode.Read)) {
+                    foreach (var entry in archive.Entries) {
+                        if (Path.GetExtension(entry.FullName).ToLower() == ".json") {
+                            using (var entryStream = entry.Open()) {
                                 var memoryStream = new MemoryStream();
                                 await entryStream.CopyToAsync(memoryStream);
                                 memoryStream.Position = 0;
@@ -171,41 +158,28 @@ namespace Taskie
             }
         }
 
-        private async Task<StorageFile> CreateStorageFileFromStreamAsync(string fileName, Stream stream)
-        {
+        private async Task<StorageFile> CreateStorageFileFromStreamAsync(string fileName, Stream stream) {
             var tempFolder = ApplicationData.Current.TemporaryFolder;
             var tempFile = await tempFolder.CreateFileAsync(fileName, CreationCollisionOption.GenerateUniqueName);
 
-            using (var fileStream = await tempFile.OpenStreamForWriteAsync())
-            {
+            using (var fileStream = await tempFile.OpenStreamForWriteAsync()) {
                 await stream.CopyToAsync(fileStream);
             }
 
             return tempFile;
         }
 
-
-        private async void RestartButton_Click(object sender, RoutedEventArgs e)
-        {
-            var result = await CoreApplication.RequestRestartAsync("After import");
-        }
-
-        private async void RestartButtonTheme_Click(object sender, RoutedEventArgs e)
-        {
-            var result = await CoreApplication.RequestRestartAsync("Theme has been changed");
-        }
-
-        private void SettingsPage_ActualThemeChanged(FrameworkElement sender, object args)
-        {
+        private void SettingsPage_ActualThemeChanged(FrameworkElement sender, object args) {
             (this.Background as AcrylicBrush).TintColor = (Color)Application.Current.Resources["SystemAltHighColor"];
             (this.Background as AcrylicBrush).FallbackColor = (Color)Application.Current.Resources["SystemAltLowColor"];
         }
 
-        private class SettingCategory
-        {
+        private class SettingCategory {
             public string Emoji { get; set; }
             public string Name { get; set; }
             public string Page { get; set; }
         }
+
+        #endregion
     }
 }

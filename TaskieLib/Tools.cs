@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using Windows.Foundation;
+using Windows.UI.Xaml.Data;
 
-namespace TaskieLib
-{
-    public class Tools
-    {
-        public static string[] GetSystemEmojis()
-        {
+namespace TaskieLib {
+    public class Tools {
+        public static string[] GetSystemEmojis() {
             List<string> emojis = new List<string>();
 
             var emojiRanges = new (int Start, int End)[]
@@ -21,23 +23,48 @@ namespace TaskieLib
             (0xFE00, 0xFE0F),   // Variation Selectors
             };
 
-            foreach (var (start, end) in emojiRanges)
-            {
-                for (int codePoint = start; codePoint <= end; codePoint++)
-                {
-                    if (char.IsSurrogate((char)codePoint)) continue;
+            foreach (var (start, end) in emojiRanges) {
+                for (int codePoint = start; codePoint <= end; codePoint++) {
+                    if (char.IsSurrogate((char)codePoint))
+                        continue;
 
-                    try
-                    {
+                    try {
                         string emoji = char.ConvertFromUtf32(codePoint);
                         emojis.Add(emoji);
                     }
-                    catch
-                    { }
+                    catch { }
                 }
             }
 
             return emojis.ToArray();
+        }
+
+        public class IncrementalEmojiSource : ObservableCollection<string>, ISupportIncrementalLoading // source for emojis in the "Change emoji" dialog
+        {
+            private readonly string[] allEmojis;
+            private int currentIndex = 0;
+            private const int BatchSize = 50;
+
+            public IncrementalEmojiSource(string[] emojis) {
+                allEmojis = emojis;
+            }
+
+            public bool HasMoreItems => currentIndex < allEmojis.Length;
+
+            public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count) {
+                return InternalLoadMoreItemsAsync(count).AsAsyncOperation();
+            }
+
+            private async Task<LoadMoreItemsResult> InternalLoadMoreItemsAsync(uint count) {
+                await Task.Delay(50);
+
+                int itemsToLoad = Math.Min(BatchSize, allEmojis.Length - currentIndex);
+                for (int i = 0; i < itemsToLoad; i++) {
+                    Add(allEmojis[currentIndex++]);
+                }
+
+                return new LoadMoreItemsResult { Count = (uint)itemsToLoad };
+            }
         }
     }
 }

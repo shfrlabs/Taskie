@@ -3,15 +3,12 @@
 
 using Windows.UI.Xaml.Controls;
 
-namespace Taskie
-{
+namespace Taskie {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class OOBEDialogPage : Page
-    {
-        public OOBEDialogPage()
-        {
+    public sealed partial class OOBEDialogPage : Page {
+        public OOBEDialogPage() {
             this.InitializeComponent();
         }
     }
