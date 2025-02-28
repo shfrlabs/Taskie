@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.Data.Xml.Dom;
+using Windows.Storage;
 using Windows.UI.Notifications;
 
 public class ListTask : INotifyPropertyChanged {
@@ -12,9 +13,11 @@ public class ListTask : INotifyPropertyChanged {
     private string _name;
     private bool _isDone;
     private ObservableCollection<ListTask> _subTasks;
+    private ObservableCollection<StorageFile> _attachments;
 
     public ListTask() {
         _subTasks = new ObservableCollection<ListTask>();
+        _attachments = new ObservableCollection<StorageFile>();
     }
 
     #region Reminders
@@ -97,6 +100,16 @@ public class ListTask : INotifyPropertyChanged {
         return $"Task_{CreationDate.Ticks % 100000000}"; // Ensures ID stays within 8 digits
     }
     #endregion
+
+    public ObservableCollection<StorageFile> Attachments {
+        get { return _attachments; }
+        set {
+            if (_attachments != value) {
+                _attachments = value;
+                OnPropertyChanged(nameof(Attachments));
+            }
+        }
+    }
 
     public ObservableCollection<ListTask> SubTasks {
         get { return _subTasks; }

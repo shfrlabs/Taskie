@@ -9,11 +9,14 @@ public class ListMetadata : INotifyPropertyChanged {
     private int? _groupID;
     private string _titlefont;
 
-    public string TitleFont // Pro only.
+    public string TitleFont
     {
-        get { if (_titlefont != null) { return _titlefont; } else { return "Segoe UI Variable"; }; }
+        get { if (_titlefont != null) { return _titlefont; } else { return null; }; }
         set {
-            _titlefont = value;
+            if (_titlefont != value) {
+                _titlefont = value;
+                OnPropertyChanged(nameof(TitleFont));
+            }
         }
     }
 

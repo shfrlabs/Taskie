@@ -2,6 +2,7 @@
 using TaskieLib;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Store;
 using Windows.Globalization;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;

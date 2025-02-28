@@ -1,10 +1,13 @@
-﻿using Windows.Foundation.Collections;
+﻿using Windows.ApplicationModel.Store;
+using Windows.Foundation.Collections;
 using Windows.Storage;
 
 namespace TaskieLib {
     public static class Settings {
         private static IPropertySet savedSettings = ApplicationData.Current.LocalSettings.Values;
-
+#if DEBUG
+        private static LicenseInformation licenseInformation = CurrentAppSimulator.LicenseInformation;
+#endif
         // Application theme (light/dark)
         public static string Theme {
             get {
@@ -51,13 +54,10 @@ namespace TaskieLib {
         // value for testing Pro, will be replaced with Store identification when that rolls around
         public static bool isPro {
             get {
-                if (savedSettings.ContainsKey("pro") && (string)savedSettings["pro"] == "1") {
-                    return true;
-                }
+#if DEBUG
+                return licenseInformation.ProductLicenses["ProLifetime"].IsActive;
+#endif
                 return false;
-            }
-            set {
-                savedSettings["pro"] = value ? "1" : "0";
             }
         }
     }

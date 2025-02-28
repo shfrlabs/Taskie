@@ -28,8 +28,10 @@ namespace Taskie {
             this.InitializeComponent();
             ActualThemeChanged += TaskPage_ActualThemeChanged;
             ListTools.ListRenamedEvent += ListRenamed;
-            testname.FontFamily = ListTools.ReadList(listId).Metadata.TitleFont != null ? new FontFamily(ListTools.ReadList(listId).Metadata.TitleFont) : new FontFamily("Segoe UI Variable");
+            Debug.WriteLine(ListTools.ReadList(listId).Metadata.TitleFont);
+            testname.FontFamily = new FontFamily(ListTools.ReadList(listId).Metadata.TitleFont ?? "Segoe UI Variable");
         }
+        // TODO: there's something wrong with the font family getter
 
         #region Click handlers
 
@@ -368,7 +370,6 @@ namespace Taskie {
                 foreach (string font in Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies()) {
                     MenuFlyoutItem subfont = new MenuFlyoutItem() { Tag = font, Text = font, FontFamily = new FontFamily(font) };
                     subfont.Click += (sender, args) => {
-                        System.Diagnostics.Debug.WriteLine(listId);
                         ListTools.ChangeListFont(listId, (sender as MenuFlyoutItem).Tag.ToString());
                         testname.FontFamily = new FontFamily(font);
                     };

@@ -8,6 +8,7 @@ using System.Xml;
 using TaskieLib;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
+using Windows.ApplicationModel.Store;
 using Windows.Security.Credentials.UI;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -162,6 +163,17 @@ namespace Taskie {
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.PrimaryButtonText = resourceLoader.GetString("UpgradeUnavialable"); // placeholder
             dialog.IsPrimaryButtonEnabled = false;
+#if DEBUG
+            try {
+                var listingInformation = await CurrentAppSimulator.LoadListingInformationAsync();
+                var proLifetimeAddOn = listingInformation.ProductListings["ProLifetime"];
+                dialog.PrimaryButtonText = string.Format(resourceLoader.GetString("UpgradeFor"), proLifetimeAddOn.FormattedPrice);
+            }
+            catch {
+                dialog.PrimaryButtonText = resourceLoader.GetString("Upgrade");
+            }
+            dialog.IsPrimaryButtonEnabled = true;
+#endif
             dialog.PrimaryButtonClick += Dialog_UpgradeAction;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             await dialog.ShowAsync();
@@ -440,23 +452,27 @@ namespace Taskie {
         }
 
         private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            // DEBUG UPGRADE OPTION
             if (!Settings.isPro) {
-                var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
-                var stringElements = toastXml.GetElementsByTagName("text");
-                stringElements[0].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgrade")));
-                stringElements[1].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgradeSub")));
+                try {
+                    ProductPurchaseStatus result = (await CurrentAppSimulator.RequestProductPurchaseAsync("ProLifetime")).Status;
+                    if (result.HasFlag(ProductPurchaseStatus.Succeeded) || result.HasFlag(ProductPurchaseStatus.AlreadyPurchased)) {
+                        var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
+                        var stringElements = toastXml.GetElementsByTagName("text");
+                        stringElements[0].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgrade")));
+                        stringElements[1].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgradeSub")));
 
-                // Add arguments to the toast notification
-                var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");
+                        // Add arguments to the toast notification
+                        var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");
 
-                var toast = new ScheduledToastNotification(toastXml, DateTimeOffset.Now.AddSeconds(1)) {
-                    Id = "proUpgrade"
-                };
+                        var toast = new ScheduledToastNotification(toastXml, DateTimeOffset.Now.AddSeconds(1)) {
+                            Id = "proUpgrade"
+                        };
 
-                ToastNotificationManager.CreateToastNotifier().AddToSchedule(toast);
-                Settings.isPro = true;
-                await CoreApplication.RequestRestartAsync("Pro status changed.");
+                        ToastNotificationManager.CreateToastNotifier().AddToSchedule(toast);
+                        await CoreApplication.RequestRestartAsync("Pro status changed.");
+                    }
+                }
+                catch { }
             }
         }
 
