@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.UI.Xaml.Data;
 
 namespace TaskieLib {
@@ -65,6 +67,20 @@ namespace TaskieLib {
 
                 return new LoadMoreItemsResult { Count = (uint)itemsToLoad };
             }
+        }
+
+        public static ObservableCollection<StorageFile> GetAttachments(long id) {
+            var folder = ApplicationData.Current.LocalFolder;
+            var files = folder.GetFilesAsync().AsTask().Result;
+            var attachments = new ObservableCollection<StorageFile>();
+            Debug.WriteLine("Looking for files that start with: " + $"{id}_");
+            foreach (var file in files) {
+                if (file.Name.StartsWith($"{id}_")) {
+                    attachments.Add(file);
+                }
+            }
+
+            return attachments;
         }
     }
 }

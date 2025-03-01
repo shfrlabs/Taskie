@@ -149,6 +149,7 @@
                             HorizontalScrollBarVisibility="Auto"
                             Width="904"
                             Height="55"
+                            Background="Red"
                             Padding="0,0,0,10"
                             Margin="-7,2,-7,3" Visibility="{Binding Attachments.Count, Converter={StaticResource ReverseVisConverter}}">
                             <StackPanel

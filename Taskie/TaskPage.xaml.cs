@@ -784,7 +784,6 @@ namespace Taskie {
                     var subTask = task.SubTasks.FirstOrDefault(st => st.CreationDate == taskToChange.CreationDate);
                     if (subTask != null) {
                         ChangeProgressBarValue(task);
-                        Debug.WriteLine(task.Name);
                         subTask.IsDone = checkBox.IsChecked ?? false;
                         break;
                     }

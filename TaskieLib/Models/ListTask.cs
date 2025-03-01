@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using TaskieLib;
 using Windows.ApplicationModel.Resources;
 using Windows.Data.Xml.Dom;
 using Windows.Storage;
@@ -13,11 +15,9 @@ public class ListTask : INotifyPropertyChanged {
     private string _name;
     private bool _isDone;
     private ObservableCollection<ListTask> _subTasks;
-    private ObservableCollection<StorageFile> _attachments;
+    private ObservableCollection<StorageFile> _attachments = new ObservableCollection<StorageFile>();
 
     public ListTask() {
-        _subTasks = new ObservableCollection<ListTask>();
-        _attachments = new ObservableCollection<StorageFile>();
     }
 
     #region Reminders
@@ -101,16 +101,6 @@ public class ListTask : INotifyPropertyChanged {
     }
     #endregion
 
-    public ObservableCollection<StorageFile> Attachments {
-        get { return _attachments; }
-        set {
-            if (_attachments != value) {
-                _attachments = value;
-                OnPropertyChanged(nameof(Attachments));
-            }
-        }
-    }
-
     public ObservableCollection<ListTask> SubTasks {
         get { return _subTasks; }
         set {
@@ -122,7 +112,12 @@ public class ListTask : INotifyPropertyChanged {
     }
 
     public DateTime CreationDate {
-        get { return _creationDate; }
+        get {
+            if (_attachments.Count == 0) {
+                _attachments = Tools.GetAttachments(_creationDate.Ticks);
+            }
+            return _creationDate;
+        }
         set {
             if (_creationDate != value) {
                 _creationDate = value;
@@ -159,6 +154,12 @@ public class ListTask : INotifyPropertyChanged {
                 _isDone = value;
                 OnPropertyChanged(nameof(IsDone));
             }
+        }
+    }
+
+    public ObservableCollection<StorageFile> Attachments {
+        get {
+            return _attachments;
         }
     }
 
