@@ -759,7 +759,7 @@ namespace Taskie {
         private void TaskAdded_Grid(object sender, RoutedEventArgs e) {
             ChangeWidth(NameBox);
             if ((sender as Expander).DataContext is ListTask listtask) {
-                if (listtask.SubTasks.Count > 0) {
+                if (listtask.SubTasks != null && listtask.SubTasks.Count > 0) {
                     (sender as Expander).IsExpanded = true; // NAASTY workaround cause the tasks only count in the progressbar when its expanded..
                 }
             }
