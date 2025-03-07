@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using Windows.UI.Xaml.Media;
 
 // Object used for list metadata in a list's JSON
 public class ListMetadata : INotifyPropertyChanged {
@@ -11,7 +12,7 @@ public class ListMetadata : INotifyPropertyChanged {
 
     public string TitleFont
     {
-        get { if (_titlefont != null) { return _titlefont; } else { return null; }; }
+        get { return _titlefont; }
         set {
             if (_titlefont != value) {
                 _titlefont = value;

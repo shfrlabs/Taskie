@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml.Controls;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,10 +29,7 @@ namespace Taskie {
             this.InitializeComponent();
             ActualThemeChanged += TaskPage_ActualThemeChanged;
             ListTools.ListRenamedEvent += ListRenamed;
-            Debug.WriteLine(ListTools.ReadList(listId).Metadata.TitleFont);
-            testname.FontFamily = new FontFamily(ListTools.ReadList(listId).Metadata.TitleFont ?? "Segoe UI Variable");
         }
-        // TODO: there's something wrong with the font family getter
 
         #region Click handlers
 
@@ -40,7 +38,7 @@ namespace Taskie {
             StackPanel panel = new StackPanel() { Margin = new Thickness(10), MinWidth = 200 };
             if (Settings.isPro)
             {
-                Microsoft.UI.Xaml.Controls.DropDownButton item = new Microsoft.UI.Xaml.Controls.DropDownButton() { MinWidth = 120 };
+                Microsoft.UI.Xaml.Controls.DropDownButton item = new Microsoft.UI.Xaml.Controls.DropDownButton() { MinWidth = 120, HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Left };
                 item.Content = resourceLoader.GetString("ChangeFont");
                 MenuFlyout menuFlyout = new MenuFlyout();
                 foreach (string font in Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies())
@@ -57,7 +55,7 @@ namespace Taskie {
             }
             Flyout flyout = new Flyout();
             flyout.Content = panel;
-            flyout.ShowAt(topoptions);
+            flyout.ShowAt(topoptions, new FlyoutShowOptions() { Placement = FlyoutPlacementMode.BottomEdgeAlignedRight });
         }
         private void RenameTask_Click(object sender, RoutedEventArgs e) {
             MenuFlyoutItem menuFlyoutItem = (MenuFlyoutItem)sender;
@@ -832,5 +830,8 @@ namespace Taskie {
 
         #endregion
 
+        private void testname_Loaded(object sender, RoutedEventArgs e) {
+            testname.FontFamily = new FontFamily(ListTools.ReadList(listId).Metadata.TitleFont);
+        }
     }
 }

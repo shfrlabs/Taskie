@@ -220,7 +220,8 @@
                 x:Name="testname"
                 FontWeight="SemiBold"
                 FontSize="28"
-                TextTrimming="CharacterEllipsis"></TextBlock>
+                TextTrimming="CharacterEllipsis"
+                Loaded="testname_Loaded"></TextBlock>
             <StackPanel
                 Orientation="Horizontal"
                 VerticalAlignment="Top"
