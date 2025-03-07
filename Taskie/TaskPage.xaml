@@ -218,10 +218,8 @@
             <!-- i should change the testname fr -->
             <TextBlock
                 x:Name="testname"
-                DoubleTapped="testname_DoubleTapped"
                 FontWeight="SemiBold"
                 FontSize="28"
-                RightTapped="testname_RightTapped"
                 TextTrimming="CharacterEllipsis"></TextBlock>
             <StackPanel
                 Orientation="Horizontal"

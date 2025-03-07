@@ -37,7 +37,27 @@ namespace Taskie {
 
         private void CustomizeList_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            StackPanel panel = new StackPanel() { Margin = new Thickness(10), MinWidth = 200 };
+            if (Settings.isPro)
+            {
+                Microsoft.UI.Xaml.Controls.DropDownButton item = new Microsoft.UI.Xaml.Controls.DropDownButton() { MinWidth = 120 };
+                item.Content = resourceLoader.GetString("ChangeFont");
+                MenuFlyout menuFlyout = new MenuFlyout();
+                foreach (string font in Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies())
+                {
+                    MenuFlyoutItem subfont = new MenuFlyoutItem() { Tag = font, Text = font, FontFamily = new FontFamily(font) };
+                    subfont.Click += (sender, args) => {
+                        ListTools.ChangeListFont(listId, (sender as MenuFlyoutItem).Tag.ToString());
+                        testname.FontFamily = new FontFamily(font);
+                    };
+                    menuFlyout.Items.Add(subfont);
+                }
+                item.Flyout = menuFlyout;
+                panel.Children.Add(item);
+            }
+            Flyout flyout = new Flyout();
+            flyout.Content = panel;
+            flyout.ShowAt(topoptions);
         }
         private void RenameTask_Click(object sender, RoutedEventArgs e) {
             MenuFlyoutItem menuFlyoutItem = (MenuFlyoutItem)sender;
@@ -363,25 +383,6 @@ namespace Taskie {
                 flyout.Hide();
             };
             flyout.ShowAt(sender as TextBlock, new FlyoutShowOptions() { Placement = FlyoutPlacementMode.BottomEdgeAlignedLeft });
-        }
-
-        private void testname_RightTapped(object sender, RightTappedRoutedEventArgs e) {
-            if (Settings.isPro) {
-                MenuFlyout flyout = new MenuFlyout();
-                MenuFlyoutSubItem item = new MenuFlyoutSubItem();
-                item.Icon = new SymbolIcon(Symbol.Font);
-                item.Text = resourceLoader.GetString("ChangeFont");
-                foreach (string font in Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies()) {
-                    MenuFlyoutItem subfont = new MenuFlyoutItem() { Tag = font, Text = font, FontFamily = new FontFamily(font) };
-                    subfont.Click += (sender, args) => {
-                        ListTools.ChangeListFont(listId, (sender as MenuFlyoutItem).Tag.ToString());
-                        testname.FontFamily = new FontFamily(font);
-                    };
-                    item.Items.Add(subfont);
-                }
-                flyout.Items.Add(item);
-                flyout.ShowAt(testname);
-            }
         }
 
         #endregion
