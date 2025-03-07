@@ -11,55 +11,14 @@
     x:Name="TPage">
 
     <Page.Resources>
-        <DataTemplate
-            x:Key="FileTemplate">
-            <Grid
-                CornerRadius="8"
-                Margin="0,0,8,0"
-                VerticalAlignment="Stretch"
-                Background="{StaticResource LayerFillColorDefaultBrush}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="45" />
-                    <ColumnDefinition
-                        Width="*" />
-                </Grid.ColumnDefinitions>
-                <SymbolIcon
-                    Symbol="Attach"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Grid.Column="0" />
-                <Grid
-                    Grid.Column="1"
-                    Margin="0,0,10,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                    </Grid.RowDefinitions>
-                    <TextBlock
-                        Grid.Row="0"
-                        FontSize="14"
-                        VerticalAlignment="Bottom"
-                        Text="{Binding FileName}">
-                    </TextBlock>
-                    <TextBlock
-                        Grid.Row="1"
-                        Opacity="0.7"
-                        FontSize="13"
-                        VerticalAlignment="Top"
-                        Text="{Binding FileType}">
-                    </TextBlock>
-                </Grid>
-            </Grid>
-        </DataTemplate>
         <lib:EmptyCollectionVisibilityConverter
             x:Key="VisConverter" />
         <lib:ReverseEmptyCollectionVisibilityConverter
             x:Key="ReverseVisConverter" />
         <lib:ProgressConverter
             x:Key="ProgressConverter" />
+        <lib:ProVisibilityConverter
+            x:Key="ProVisibilityConverter" />
         <DataTemplate
             x:Key="TaskItemTemplate">
             <muxc:Expander
@@ -143,20 +102,6 @@
                 <muxc:Expander.Content>
                     <StackPanel
                         Orientation="Vertical">
-                        <ScrollViewer
-                            HorizontalAlignment="Left"
-                            VerticalScrollBarVisibility="Disabled"
-                            HorizontalScrollBarVisibility="Auto"
-                            Width="904"
-                            Height="55"
-                            Background="Red"
-                            Padding="0,0,0,10"
-                            Margin="-7,2,-7,3" Visibility="{Binding Attachments.Count, Converter={StaticResource ReverseVisConverter}}">
-                            <StackPanel
-                                Orientation="Horizontal"
-                                x:Name="Files">
-                            </StackPanel>
-                        </ScrollViewer>
                         <TextBlock
                             x:Uid="NoSubTasks"
                             TextWrapping="Wrap"
@@ -312,6 +257,14 @@
                                 Icon="Save"
                                 Click="ExportList_Click"
                                 x:Uid="ExportList"></MenuFlyoutItem>
+                            <MenuFlyoutItem
+                                Click="CustomizeList_Click"
+                                x:Uid="CustomizeList"
+                                Visibility="{x:Bind lib:Settings.isPro, Converter={StaticResource ProVisibilityConverter}}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE790;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>

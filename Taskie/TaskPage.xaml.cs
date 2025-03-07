@@ -35,6 +35,10 @@ namespace Taskie {
 
         #region Click handlers
 
+        private void CustomizeList_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
         private void RenameTask_Click(object sender, RoutedEventArgs e) {
             MenuFlyoutItem menuFlyoutItem = (MenuFlyoutItem)sender;
             var note = menuFlyoutItem.DataContext as ListTask;
@@ -826,5 +830,6 @@ namespace Taskie {
         }
 
         #endregion
+
     }
 }

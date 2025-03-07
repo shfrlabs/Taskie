@@ -364,4 +364,7 @@
   <data name="Close" xml:space="preserve">
     <value>Zamknij</value>
   </data>
+  <data name="CustomizeList.Text" xml:space="preserve">
+    <value>Dostosuj listę</value>
+  </data>
 </root>

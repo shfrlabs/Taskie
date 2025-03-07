@@ -15,7 +15,6 @@ public class ListTask : INotifyPropertyChanged {
     private string _name;
     private bool _isDone;
     private ObservableCollection<ListTask> _subTasks;
-    private ObservableCollection<StorageFile> _attachments = new ObservableCollection<StorageFile>();
 
     public ListTask() {
     }
@@ -113,9 +112,6 @@ public class ListTask : INotifyPropertyChanged {
 
     public DateTime CreationDate {
         get {
-            if (_attachments.Count == 0) {
-                _attachments = Tools.GetAttachments(_creationDate.Ticks);
-            }
             return _creationDate;
         }
         set {
@@ -154,12 +150,6 @@ public class ListTask : INotifyPropertyChanged {
                 _isDone = value;
                 OnPropertyChanged(nameof(IsDone));
             }
-        }
-    }
-
-    public ObservableCollection<StorageFile> Attachments {
-        get {
-            return _attachments;
         }
     }
 

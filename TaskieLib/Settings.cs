@@ -55,7 +55,8 @@ namespace TaskieLib {
         public static bool isPro {
             get {
 #if DEBUG
-                return licenseInformation.ProductLicenses["ProLifetime"].IsActive;
+                return true;
+                //return licenseInformation.ProductLicenses["ProLifetime"].IsActive;
 #endif
                 return false;
             }
