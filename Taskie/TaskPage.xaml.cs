@@ -13,6 +13,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.System;
 using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -20,6 +21,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
@@ -52,6 +54,53 @@ namespace Taskie {
                 }
                 item.Flyout = menuFlyout;
                 panel.Children.Add(item);
+
+                Button button = new Button() { Content = "Change list background", HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Left };
+                button.Click += async (sender, args) => {
+                    FileOpenPicker openPicker = new FileOpenPicker();
+                    openPicker.ViewMode = PickerViewMode.Thumbnail;
+                    openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                    openPicker.FileTypeFilter.Add(".jpg");
+                    openPicker.FileTypeFilter.Add(".jpeg");
+                    openPicker.FileTypeFilter.Add(".png");
+                    openPicker.CommitButtonText = "Set as background";
+                    StorageFile file = await openPicker.PickSingleFileAsync();
+                    if (file != null) {
+                        await ListTools.ChangeListBackground(listId, file);
+                        TPage.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri((await ApplicationData.Current.LocalFolder.GetFileAsync("bg_" + listId)).Path)), Stretch = Stretch.UniformToFill, Opacity = 0.6 };
+                    }
+                };
+                panel.Children.Add(button);
+
+                Button button2 = new Button() { Content = "Change list emoji", HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Left };
+                button2.Click += (sender, args) => {
+                    var emojiSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
+
+                    GridView content = new GridView {
+                        ItemsSource = emojiSource,
+                        ItemTemplate = (DataTemplate)Resources["EmojiBlock"],
+                        SelectionMode = ListViewSelectionMode.Single,
+                        Width = 250,
+                        Height = 300,
+                    };
+
+                    content.ItemsPanel = (ItemsPanelTemplate)Resources["WrapGridPanel"];
+
+                    Flyout flyout = new Flyout {
+                        Content = content
+                    };
+
+                    flyout.ShowAt(button2);
+
+
+                    content.SelectionChanged += (sender, args) => {
+                        if (listId.Replace(".json", null) != null && (sender as GridView).SelectedItem != null) {
+                            ListTools.ChangeListEmoji(listId.Replace(".json", null), (sender as GridView).SelectedItem.ToString());
+                        }
+                        flyout.Hide();
+                    };
+                };
+                panel.Children.Add(button2);
             }
             Flyout flyout = new Flyout();
             flyout.Content = panel;
@@ -386,6 +435,27 @@ namespace Taskie {
         #endregion
 
         #region Loaded events
+
+        private async void TPage_Loaded(object sender, RoutedEventArgs e) {
+            try {
+                TPage.Background = new ImageBrush() {
+                    ImageSource = new BitmapImage(new Uri((await ApplicationData.Current.LocalFolder.GetFileAsync("bg_" + listId)).Path)),
+                    Stretch = Stretch.UniformToFill,
+                    Opacity = 0.6
+                };
+            }
+            catch { }
+        }
+
+        private void testname_Loaded(object sender, RoutedEventArgs e) {
+            try {
+                testname.FontFamily = new FontFamily(ListTools.ReadList(listId).Metadata.TitleFont);
+            }
+            catch {
+                testname.FontFamily = new FontFamily("Segoe UI Variable");
+                ListTools.ReadList(listId).Metadata.TitleFont = "Segoe UI Variable";
+            }
+        }
 
         private void NameBox_Loaded(object sender, RoutedEventArgs e) {
             ChangeWidth(sender);
@@ -830,8 +900,5 @@ namespace Taskie {
 
         #endregion
 
-        private void testname_Loaded(object sender, RoutedEventArgs e) {
-            testname.FontFamily = new FontFamily(ListTools.ReadList(listId).Metadata.TitleFont);
-        }
     }
 }

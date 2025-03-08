@@ -8,6 +8,15 @@
         <controls:XamlControlsResources>
             <controls:XamlControlsResources.MergedDictionaries>
                 <ResourceDictionary>
+                    <AcrylicBrush
+                        BackgroundSource="Backdrop"
+                        TintOpacity=".4"
+                        TintColor="{StaticResource LayerFillColorDefault}"
+                        TintLuminosityOpacity="0.4"
+                        x:Key="TaskAcrylic" />
+                    <StaticResource
+                        x:Key="ExpanderHeaderBackground"
+                        ResourceKey="TaskAcrylic" />
                     <ResourceDictionary.ThemeDictionaries>
                         <ResourceDictionary x:Key="Default">
                             <Color x:Key="BGColor">#202020</Color>

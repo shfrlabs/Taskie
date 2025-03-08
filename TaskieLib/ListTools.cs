@@ -223,7 +223,11 @@ namespace TaskieLib {
             }
         }
 
+        public static async Task ChangeListBackground(string listId, StorageFile file) {
+            await file.CopyAsync(ApplicationData.Current.LocalFolder, "bg_" + listId, NameCollisionOption.ReplaceExisting);
+        }
+
         #endregion
-        
+
     }
 }

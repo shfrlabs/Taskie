@@ -8,9 +8,29 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    x:Name="TPage">
+    x:Name="TPage" Loaded="TPage_Loaded">
 
     <Page.Resources>
+        <AcrylicBrush
+            BackgroundSource="Backdrop"
+            TintOpacity=".4"
+            TintColor="{StaticResource LayerFillColorDefault}"
+            TintLuminosityOpacity="0.2"
+            x:Key="AddTaskAcrylic" />
+        <ItemsPanelTemplate
+            x:Key="WrapGridPanel">
+            <WrapGrid
+                Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+        <DataTemplate
+            x:Key="EmojiBlock">
+            <TextBlock
+                FontSize="20"
+                Margin="-2"
+                FontFamily="Segoe UI Emoji"
+                Text="{Binding}" />
+        </DataTemplate>
+        <!-- laggy asf -->
         <lib:EmptyCollectionVisibilityConverter
             x:Key="VisConverter" />
         <lib:ReverseEmptyCollectionVisibilityConverter
@@ -25,8 +45,8 @@
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Stretch"
                 Height="Auto"
+                Background="{StaticResource TaskAcrylic}"
                 x:Name="rootGrid"
-                Background="{StaticResource LayerFillColorDefaultBrush}"
                 Padding="15,5,15,5"
                 Margin="0,0,5,5"
                 CornerRadius="8"
@@ -316,8 +336,7 @@
             Loaded="NameBox_Loaded" />
         <Rectangle
             x:Name="addTaskRect"
-            Fill="{StaticResource LayerFillColorDefaultBrush}"
-            Opacity=".7"
+            Fill="{StaticResource AddTaskAcrylic}"
             Canvas.ZIndex="-10"
             VerticalAlignment="Bottom"
             Height="50"

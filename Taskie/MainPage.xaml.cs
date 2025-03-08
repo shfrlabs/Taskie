@@ -48,34 +48,6 @@ namespace Taskie {
         }
 
         #region Click handlers
-        private void ChangeEmoji_Click(object sender, RoutedEventArgs e) {
-            var emojiSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
-
-            GridView content = new GridView {
-                Tag = (sender as MenuFlyoutItem).Tag,
-                ItemsSource = emojiSource,
-                ItemTemplate = (DataTemplate)Resources["EmojiBlock"],
-                SelectionMode = ListViewSelectionMode.Single,
-                Width = 250,
-                Height = 300,
-            };
-
-            content.ItemsPanel = (ItemsPanelTemplate)Resources["WrapGridPanel"];
-
-            Flyout flyout = new Flyout {
-                Content = content
-            };
-
-            flyout.ShowAt(AddItemBtn);
-
-
-            content.SelectionChanged += (sender, args) => {
-                if ((sender as GridView).Tag.ToString().Replace(".json", null) != null && (sender as GridView).SelectedItem != null) {
-                    ListTools.ChangeListEmoji((sender as GridView).Tag.ToString().Replace(".json", null), (sender as GridView).SelectedItem.ToString());
-                }
-                flyout.Hide();
-            };
-        }
 
         private void DeleteList_Click(object sender, RoutedEventArgs e) {
             string listname = (sender as MenuFlyoutItem).Tag as string;
@@ -366,13 +338,11 @@ namespace Taskie {
         private void OpenRightClickList(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e) {
             MenuFlyout flyout = new MenuFlyout();
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = resourceLoader.GetString("RenameList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Emoji), Text = resourceLoader.GetString("ChangeEmoji"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
             (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
-            (flyout.Items[1] as MenuFlyoutItem).Click += ChangeEmoji_Click;
-            (flyout.Items[2] as MenuFlyoutItem).Click += ExportList_Click;
-            (flyout.Items[3] as MenuFlyoutItem).Click += DeleteList_Click;
+            (flyout.Items[1] as MenuFlyoutItem).Click += ExportList_Click;
+            (flyout.Items[2] as MenuFlyoutItem).Click += DeleteList_Click;
             flyout.ShowAt(sender as ListViewItem);
         }
         #endregion
