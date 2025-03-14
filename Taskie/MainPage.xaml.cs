@@ -417,43 +417,40 @@ namespace Taskie {
         private async void AddList(object sender, RoutedEventArgs e)
         {
             ContentDialog dialog = new ContentDialog();
-            TextBox box = new TextBox();
-            Button emojiButton = new Button();
-            emojiButton.Content = "📋";
-            emojiButton.Click += (sender, args) =>
+            TextBox box = new TextBox() { VerticalContentAlignment = VerticalAlignment.Bottom, MaxWidth = 300, BorderThickness = new Thickness(0), PlaceholderText = "Name your list...", Padding = new Thickness(9, 9, 4, 4), FontSize = 15, CornerRadius = new CornerRadius(4)};
+            Button emojiButton = new Button() { Content = "📋", Padding = new Thickness(0), HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Width = 40, Height = 40, FontSize = 20 };
+            var flyout = new Flyout();
+            var gridView = new GridView();
+
+            gridView.ItemsPanel = (ItemsPanelTemplate)Resources["WrapGridPanel"];
+            gridView.ItemTemplate = (DataTemplate)Resources["EmojiBlock"];
+            gridView.ItemsSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
+            gridView.SelectionMode = ListViewSelectionMode.Single;
+            gridView.SelectionChanged += (s, args) =>
             {
-                var flyout = new Flyout();
-                var gridView = new GridView();
-
-                
-                gridView.ItemsPanel = (ItemsPanelTemplate)Resources["WrapGridPanel"];
-                gridView.ItemTemplate = (DataTemplate)Resources["EmojiBlock"];
-
-                gridView.ItemsSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
-
-                gridView.SelectionMode = ListViewSelectionMode.Single;
-
-                gridView.SelectionChanged += (s, args) =>
-                {
-                    emojiButton.Content = gridView.SelectedItem;
-                    flyout.Hide();
-                };
-
-                flyout.Content = gridView;
-                flyout.Placement = FlyoutPlacementMode.Bottom;
-                flyout.ShowAt(emojiButton);
+                emojiButton.Content = gridView.SelectedItem;
+                flyout.Hide();
             };
-            StackPanel panel = new StackPanel()
-            {
-                Children = { emojiButton, box }
+
+            flyout.Content = gridView;
+            flyout.Placement = FlyoutPlacementMode.Bottom;
+            emojiButton.Click += (sender, args) => { flyout.ShowAt(emojiButton); };
+            Grid panel = new Grid() {
+                Margin = new Thickness(0, 10, 0, 0),
+                Children = { emojiButton, box },
+                ColumnDefinitions = { new ColumnDefinition() { Width = new GridLength(47) }, new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) } },
+                HorizontalAlignment = HorizontalAlignment.Stretch
             };
-            string listName = null;
+            Grid.SetColumn(box, 1);
+            string listName = resourceLoader.GetString("NewList");
             dialog.Content = panel;
+            dialog.Title = "Create a new list";
+            dialog.IsPrimaryButtonEnabled = true;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             dialog.PrimaryButtonText = "OK";
             dialog.PrimaryButtonClick += (sender, args) => // needs fix
             {
-                if (box.Text == null)
+                if (string.IsNullOrEmpty(box.Text))
                 {
                     listName = ListTools.CreateList(resourceLoader.GetString("NewList"), null, emojiButton.Content.ToString());
                 }
@@ -461,13 +458,12 @@ namespace Taskie {
                 {
                     listName = ListTools.CreateList(box.Text, null, emojiButton.Content.ToString());
                 }
+                UpdateLists();
+                foreach (ListViewItem item in Navigation.Items) {
+                    if (!string.IsNullOrEmpty(listName) && item.Tag.ToString().Contains(listName)) { Navigation.SelectedItem = item; break; }
+                }
             };
             await dialog.ShowAsync();
-            UpdateLists();
-            foreach (ListViewItem item in Navigation.Items)
-            {
-                if (!string.IsNullOrEmpty(listName) | item.Tag.ToString().Contains(listName)) { Navigation.SelectedItem = item; break; }
-            }
         }
 
 

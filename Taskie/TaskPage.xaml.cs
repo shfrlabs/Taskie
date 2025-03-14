@@ -887,7 +887,14 @@ namespace Taskie {
                         Name = sender.Text,
                         SubTasks = new ObservableCollection<ListTask>()
                     };
-                    parent.SubTasks.Add(task2add);
+                    try {
+                        parent.SubTasks.Add(task2add);
+                    }
+                    catch {
+                        if (parent.SubTasks == null) {
+                            parent.SubTasks = new ObservableCollection<ListTask> { task2add };
+                        }
+                    }
                     ChangeProgressBarValue(parent, true);
                 }
             }

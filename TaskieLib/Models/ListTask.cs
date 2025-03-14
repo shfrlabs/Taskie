@@ -17,6 +17,9 @@ public class ListTask : INotifyPropertyChanged {
     private ObservableCollection<ListTask> _subTasks;
 
     public ListTask() {
+        if (_subTasks == null) {
+            _subTasks = new ObservableCollection<ListTask>();
+        }
     }
 
     #region Reminders
