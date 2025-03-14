@@ -18,6 +18,7 @@ using Windows.UI.Notifications;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 
 namespace Taskie {
@@ -406,20 +407,69 @@ namespace Taskie {
 
         public ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
 
-        private void UpdateLists(string listID, string listName) {
+        private void UpdateLists(string listID = null, string listName = null) {
             Navigation.Items.Clear();
             SetupNavigationMenu();
             contentFrame.Navigate(typeof(EmptyPage));
             DeterminePro();
         } // Resets the main view
 
-        private void AddList(object sender, RoutedEventArgs e) {
-            string listName = ListTools.CreateList(resourceLoader.GetString("NewList"));
-            UpdateLists(null, resourceLoader.GetString("NewList"));
-            foreach (ListViewItem item in Navigation.Items) {
-                if (item.Tag.ToString().Contains(listName)) { Navigation.SelectedItem = item; break; }
+        private async void AddList(object sender, RoutedEventArgs e)
+        {
+            ContentDialog dialog = new ContentDialog();
+            TextBox box = new TextBox();
+            Button emojiButton = new Button();
+            emojiButton.Content = "📋";
+            emojiButton.Click += (sender, args) =>
+            {
+                var flyout = new Flyout();
+                var gridView = new GridView();
+
+                
+                gridView.ItemsPanel = (ItemsPanelTemplate)Resources["WrapGridPanel"];
+                gridView.ItemTemplate = (DataTemplate)Resources["EmojiBlock"];
+
+                gridView.ItemsSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
+
+                gridView.SelectionMode = ListViewSelectionMode.Single;
+
+                gridView.SelectionChanged += (s, args) =>
+                {
+                    emojiButton.Content = gridView.SelectedItem;
+                    flyout.Hide();
+                };
+
+                flyout.Content = gridView;
+                flyout.Placement = FlyoutPlacementMode.Bottom;
+                flyout.ShowAt(emojiButton);
+            };
+            StackPanel panel = new StackPanel()
+            {
+                Children = { emojiButton, box }
+            };
+            string listName = null;
+            dialog.Content = panel;
+            dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
+            dialog.PrimaryButtonText = "OK";
+            dialog.PrimaryButtonClick += (sender, args) => // needs fix
+            {
+                if (box.Text == null)
+                {
+                    listName = ListTools.CreateList(resourceLoader.GetString("NewList"), null, emojiButton.Content.ToString());
+                }
+                else
+                {
+                    listName = ListTools.CreateList(box.Text, null, emojiButton.Content.ToString());
+                }
+            };
+            await dialog.ShowAsync();
+            UpdateLists();
+            foreach (ListViewItem item in Navigation.Items)
+            {
+                if (!string.IsNullOrEmpty(listName) | item.Tag.ToString().Contains(listName)) { Navigation.SelectedItem = item; break; }
             }
         }
+
 
         private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
             if (!Settings.isPro) {

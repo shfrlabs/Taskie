@@ -17,19 +17,6 @@
             TintColor="{StaticResource LayerFillColorDefault}"
             TintLuminosityOpacity="0.2"
             x:Key="AddTaskAcrylic" />
-        <ItemsPanelTemplate
-            x:Key="WrapGridPanel">
-            <WrapGrid
-                Orientation="Horizontal" />
-        </ItemsPanelTemplate>
-        <DataTemplate
-            x:Key="EmojiBlock">
-            <TextBlock
-                FontSize="20"
-                Margin="-2"
-                FontFamily="Segoe UI Emoji"
-                Text="{Binding}" />
-        </DataTemplate>
         <!-- laggy asf -->
         <lib:EmptyCollectionVisibilityConverter
             x:Key="VisConverter" />
