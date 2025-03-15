@@ -8,6 +8,21 @@
         <controls:XamlControlsResources>
             <controls:XamlControlsResources.MergedDictionaries>
                 <ResourceDictionary>
+                    <ItemsPanelTemplate
+                        x:Key="WrapGridPanel">
+                        <WrapGrid
+                            Orientation="Horizontal"
+                            MaximumRowsOrColumns="4"
+                            MaxHeight="300" />
+                    </ItemsPanelTemplate>
+                    <DataTemplate
+                        x:Key="EmojiBlock">
+                        <TextBlock
+                            FontSize="20"
+                            Margin="-2"
+                            FontFamily="Segoe UI Emoji"
+                            Text="{Binding}" />
+                    </DataTemplate>
                     <AcrylicBrush
                         BackgroundSource="Backdrop"
                         TintOpacity=".4"

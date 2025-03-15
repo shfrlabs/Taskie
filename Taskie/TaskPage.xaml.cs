@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using TaskieLib;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
@@ -21,12 +23,15 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
 namespace Taskie {
     public sealed partial class TaskPage : Page {
+        private List<ListTask> tasks;
+
         public TaskPage() {
             this.InitializeComponent();
             ActualThemeChanged += TaskPage_ActualThemeChanged;
@@ -67,7 +72,14 @@ namespace Taskie {
                     StorageFile file = await openPicker.PickSingleFileAsync();
                     if (file != null) {
                         await ListTools.ChangeListBackground(listId, file);
-                        TPage.Background = new ImageBrush() { ImageSource = new BitmapImage(new Uri((await ApplicationData.Current.LocalFolder.GetFileAsync("bg_" + listId)).Path)), Stretch = Stretch.UniformToFill, Opacity = 0.6 };
+
+                        using (var stream = await file.OpenAsync(FileAccessMode.Read)) {
+                            var bitmapImage = new BitmapImage();
+                            await bitmapImage.SetSourceAsync(stream);
+                            bgImage.Source = bitmapImage;
+                        }
+
+                        AnimateOpacity(bgImage);
                     }
                 };
                 panel.Children.Add(button);
@@ -78,13 +90,13 @@ namespace Taskie {
 
                     GridView content = new GridView {
                         ItemsSource = emojiSource,
-                        ItemTemplate = (DataTemplate)Resources["EmojiBlock"],
+                        ItemTemplate = (DataTemplate)Application.Current.Resources["EmojiBlock"],
                         SelectionMode = ListViewSelectionMode.Single,
                         Width = 250,
                         Height = 300,
                     };
 
-                    content.ItemsPanel = (ItemsPanelTemplate)Resources["WrapGridPanel"];
+                    content.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
 
                     Flyout flyout = new Flyout {
                         Content = content
@@ -432,19 +444,32 @@ namespace Taskie {
             flyout.ShowAt(sender as TextBlock, new FlyoutShowOptions() { Placement = FlyoutPlacementMode.BottomEdgeAlignedLeft });
         }
 
-        #endregion
-
-        #region Loaded events
-
         private async void TPage_Loaded(object sender, RoutedEventArgs e) {
-            try {
-                TPage.Background = new ImageBrush() {
-                    ImageSource = new BitmapImage(new Uri((await ApplicationData.Current.LocalFolder.GetFileAsync("bg_" + listId)).Path)),
-                    Stretch = Stretch.UniformToFill,
-                    Opacity = 0.6
-                };
-            }
-            catch { }
+            await Task.Run(async () => {
+                if (File.Exists(System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, "bg_" + listId))) {
+                    var file = await ApplicationData.Current.LocalFolder.GetFileAsync("bg_" + listId);
+                    var uri = new Uri(file.Path);
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => {
+                        var bitmapImage = new BitmapImage(uri);
+                        bgImage.Source = bitmapImage;
+                        AnimateOpacity(bgImage);
+                    });
+                }
+            });
+        }
+
+        private void AnimateOpacity(UIElement element) {
+            var animation = new DoubleAnimation {
+                From = 0,
+                To = 0.4,
+                Duration = new Duration(TimeSpan.FromSeconds(1))
+            };
+
+            var storyboard = new Storyboard();
+            storyboard.Children.Add(animation);
+            Storyboard.SetTarget(animation, element);
+            Storyboard.SetTargetProperty(animation, "Opacity");
+            storyboard.Begin();
         }
 
         private void testname_Loaded(object sender, RoutedEventArgs e) {
@@ -494,10 +519,9 @@ namespace Taskie {
             Button button = sender as Button;
             (button.Flyout as MenuFlyout).Items[0].Tag = button;
             ListTask boundTask = button.DataContext as ListTask;
-            var taskList = ListTools.ReadList(listId).Tasks;
             ListTask task;
             try {
-                task = taskList.FirstOrDefault(t => t.CreationDate == boundTask.CreationDate);
+                task = tasks.FirstOrDefault(t => t.CreationDate == boundTask.CreationDate);
                 if (task == null) {
                     return;
                 }
@@ -759,8 +783,10 @@ namespace Taskie {
             }
             base.OnNavigatedTo(e);
 
-            if (!(ListTools.ReadList(listId).Tasks == null || ListTools.ReadList(listId).Metadata == null)) {
-                foreach (ListTask task in ListTools.ReadList(listId).Tasks) {
+            var listData = ListTools.ReadList(listId);
+            tasks = listData.Tasks;
+            if (tasks != null && listData.Metadata != null) {
+                foreach (ListTask task in tasks) {
                     taskListView.Items.Add(task);
                 }
             }

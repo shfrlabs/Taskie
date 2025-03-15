@@ -219,6 +219,12 @@
     <Grid
         Margin="20,25,20,20"
         x:Name="maingrid">
+        <Image
+            x:Name="bgImage"
+            Opacity="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Stretch="UniformToFill" Margin="-20, -25, -20, -20" />
         <Grid
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top">

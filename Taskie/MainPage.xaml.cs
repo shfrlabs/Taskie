@@ -200,7 +200,7 @@ namespace Taskie {
         {
             if (Settings.isPro) {
                 proText.Text = "PRO";
-                BottomRow.Height = new GridLength(65);
+                BottomRow.Height = new GridLength(62);
                 UpdateButton.Visibility = Visibility.Collapsed;
             }
             else {
@@ -422,8 +422,8 @@ namespace Taskie {
             var flyout = new Flyout();
             var gridView = new GridView();
 
-            gridView.ItemsPanel = (ItemsPanelTemplate)Resources["WrapGridPanel"];
-            gridView.ItemTemplate = (DataTemplate)Resources["EmojiBlock"];
+            gridView.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
+            gridView.ItemTemplate = (DataTemplate)Application.Current.Resources["EmojiBlock"];
             gridView.ItemsSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
             gridView.SelectionMode = ListViewSelectionMode.Single;
             gridView.SelectionChanged += (s, args) =>
@@ -445,7 +445,7 @@ namespace Taskie {
             string listName = resourceLoader.GetString("NewList");
             dialog.Content = panel;
             dialog.Title = "Create a new list";
-            dialog.IsPrimaryButtonEnabled = true;
+            dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             dialog.PrimaryButtonText = "OK";
             dialog.PrimaryButtonClick += (sender, args) => // needs fix
