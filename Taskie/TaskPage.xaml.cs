@@ -1,5 +1,4 @@
 ﻿using Microsoft.UI.Xaml.Controls;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,8 +14,6 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.System;
 using Windows.UI;
-using Windows.UI.Text;
-using Windows.UI.ViewManagement;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -41,8 +38,7 @@ namespace Taskie {
 
         #region Click handlers
 
-        private void CustomizeList_Click(object sender, RoutedEventArgs e)
-        {
+        private void CustomizeList_Click(object sender, RoutedEventArgs e) {
             StackPanel panel = new StackPanel() { Margin = new Thickness(2) };
 
             StackPanel bgbtnpanel = new StackPanel() {
@@ -111,7 +107,7 @@ namespace Taskie {
             fontChooser.SelectedItem = ListTools.ReadList(listId).Metadata.TitleFont;
             panel.Children.Add(fontExpander);
 
-            
+
             Expander emojiExpander = new Expander() {
                 Header = new StackPanel() { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center, Children = { new FontIcon() { Glyph = "\uE899", Margin = new Thickness(0, 0, 10, 0) }, new TextBlock() { Text = resourceLoader.GetString("ChangeEmoji") } } },
                 Width = 300,

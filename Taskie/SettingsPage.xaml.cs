@@ -73,7 +73,7 @@ namespace Taskie {
             if ((sender as ToggleSwitch)?.Tag?.ToString() == "Auth") {
                 Settings.isAuthUsed = (sender as ToggleSwitch).IsOn;
             }
-        }        
+        }
 
         private void RadioButton_StateChanged(object sender, RoutedEventArgs e) {
             if (isUpdating)

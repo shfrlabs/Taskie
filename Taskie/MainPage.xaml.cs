@@ -414,10 +414,9 @@ namespace Taskie {
             DeterminePro();
         } // Resets the main view
 
-        private async void AddList(object sender, RoutedEventArgs e)
-        {
+        private async void AddList(object sender, RoutedEventArgs e) {
             ContentDialog dialog = new ContentDialog();
-            TextBox box = new TextBox() { VerticalContentAlignment = VerticalAlignment.Bottom, MaxWidth = 300, BorderThickness = new Thickness(0), PlaceholderText = resourceLoader.GetString("NewList"), Padding = new Thickness(9, 9, 4, 4), FontSize = 15, CornerRadius = new CornerRadius(4)};
+            TextBox box = new TextBox() { VerticalContentAlignment = VerticalAlignment.Bottom, MaxWidth = 300, BorderThickness = new Thickness(0), PlaceholderText = resourceLoader.GetString("NewList"), Padding = new Thickness(9, 9, 4, 4), FontSize = 15, CornerRadius = new CornerRadius(4) };
             Button emojiButton = new Button() { Content = "📋", Padding = new Thickness(0), HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Width = 40, Height = 40, FontSize = 20 };
             var flyout = new Flyout();
             var gridView = new GridView();
@@ -426,8 +425,7 @@ namespace Taskie {
             gridView.ItemTemplate = (DataTemplate)Application.Current.Resources["EmojiBlock"];
             gridView.ItemsSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
             gridView.SelectionMode = ListViewSelectionMode.Single;
-            gridView.SelectionChanged += (s, args) =>
-            {
+            gridView.SelectionChanged += (s, args) => {
                 emojiButton.Content = gridView.SelectedItem;
                 flyout.Hide();
             };
@@ -450,12 +448,10 @@ namespace Taskie {
             dialog.PrimaryButtonText = "OK";
             dialog.PrimaryButtonClick += (sender, args) => // needs fix
             {
-                if (string.IsNullOrEmpty(box.Text))
-                {
+                if (string.IsNullOrEmpty(box.Text)) {
                     listName = ListTools.CreateList(resourceLoader.GetString("NewList"), null, emojiButton.Content.ToString());
                 }
-                else
-                {
+                else {
                     listName = ListTools.CreateList(box.Text, null, emojiButton.Content.ToString());
                 }
                 UpdateLists();
