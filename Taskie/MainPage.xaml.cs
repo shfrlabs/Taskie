@@ -24,7 +24,7 @@ using Windows.UI.Xaml.Media;
 namespace Taskie {
     public sealed partial class MainPage : Page {
         public MainPage() {
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Windows.Foundation.Size(600, 500));
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Windows.Foundation.Size(500, 600));
             InitializeComponent();
             SetupTitleBar();
             CheckSecurity();
@@ -417,7 +417,7 @@ namespace Taskie {
         private async void AddList(object sender, RoutedEventArgs e)
         {
             ContentDialog dialog = new ContentDialog();
-            TextBox box = new TextBox() { VerticalContentAlignment = VerticalAlignment.Bottom, MaxWidth = 300, BorderThickness = new Thickness(0), PlaceholderText = "Name your list...", Padding = new Thickness(9, 9, 4, 4), FontSize = 15, CornerRadius = new CornerRadius(4)};
+            TextBox box = new TextBox() { VerticalContentAlignment = VerticalAlignment.Bottom, MaxWidth = 300, BorderThickness = new Thickness(0), PlaceholderText = resourceLoader.GetString("NewList"), Padding = new Thickness(9, 9, 4, 4), FontSize = 15, CornerRadius = new CornerRadius(4)};
             Button emojiButton = new Button() { Content = "📋", Padding = new Thickness(0), HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Width = 40, Height = 40, FontSize = 20 };
             var flyout = new Flyout();
             var gridView = new GridView();
@@ -444,7 +444,7 @@ namespace Taskie {
             Grid.SetColumn(box, 1);
             string listName = resourceLoader.GetString("NewList");
             dialog.Content = panel;
-            dialog.Title = "Create a new list";
+            dialog.Title = resourceLoader.GetString("CreateListHeader");
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             dialog.PrimaryButtonText = "OK";

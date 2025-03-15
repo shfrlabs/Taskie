@@ -12,7 +12,7 @@
                         x:Key="WrapGridPanel">
                         <WrapGrid
                             Orientation="Horizontal"
-                            MaximumRowsOrColumns="4"
+                            MaximumRowsOrColumns="5"
                             MaxHeight="300" />
                     </ItemsPanelTemplate>
                     <DataTemplate

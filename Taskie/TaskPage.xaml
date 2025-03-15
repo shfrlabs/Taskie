@@ -271,8 +271,7 @@
                                 x:Uid="ExportList"></MenuFlyoutItem>
                             <MenuFlyoutItem
                                 Click="CustomizeList_Click"
-                                x:Uid="CustomizeList"
-                                Visibility="{x:Bind lib:Settings.isPro, Converter={StaticResource ProVisibilityConverter}}">
+                                x:Uid="CustomizeList">
                                 <MenuFlyoutItem.Icon>
                                     <FontIcon Glyph="&#xE790;" />
                                 </MenuFlyoutItem.Icon>

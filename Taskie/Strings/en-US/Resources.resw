@@ -366,4 +366,13 @@
   <data name="CustomizeList.Text" xml:space="preserve">
     <value>Customize</value>
   </data>
+  <data name="ChangeListBackground" xml:space="preserve">
+    <value>Change list background</value>
+  </data>
+  <data name="SetAsBackground" xml:space="preserve">
+    <value>Set as background</value>
+  </data>
+  <data name="CreateListHeader" xml:space="preserve">
+    <value>Create a new list</value>
+  </data>
 </root>

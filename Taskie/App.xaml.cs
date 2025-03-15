@@ -12,7 +12,6 @@ using Windows.UI.Xaml.Navigation;
 namespace Taskie {
     sealed partial class App : Application {
         public App() {
-            ApplicationLanguages.PrimaryLanguageOverride = "en-US";
             if (Settings.Theme == "Dark") {
                 Application.Current.RequestedTheme = ApplicationTheme.Dark;
 

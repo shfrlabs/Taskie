@@ -41,9 +41,9 @@ public class ListTask : INotifyPropertyChanged {
         return CheckIfReminderExists() && IsReminderInTheFuture();
     }
 
-    private ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
     // Helper method to schedule a toast notification
     private void ScheduleToastNotification(DateTimeOffset reminderDateTime, string listId) {
+        ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
         var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
         var stringElements = toastXml.GetElementsByTagName("text");
         stringElements[0].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("ReminderGreeting")));

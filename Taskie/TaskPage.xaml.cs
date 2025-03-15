@@ -15,6 +15,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.System;
 using Windows.UI;
+using Windows.UI.Text;
 using Windows.UI.ViewManagement;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
@@ -42,78 +43,98 @@ namespace Taskie {
 
         private void CustomizeList_Click(object sender, RoutedEventArgs e)
         {
-            StackPanel panel = new StackPanel() { Margin = new Thickness(10), MinWidth = 200 };
-            if (Settings.isPro)
-            {
-                Microsoft.UI.Xaml.Controls.DropDownButton item = new Microsoft.UI.Xaml.Controls.DropDownButton() { MinWidth = 120, HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Left };
-                item.Content = resourceLoader.GetString("ChangeFont");
-                MenuFlyout menuFlyout = new MenuFlyout();
-                foreach (string font in Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies())
+            StackPanel panel = new StackPanel() { Margin = new Thickness(2) };
+
+            StackPanel bgbtnpanel = new StackPanel() {
+                Orientation = Orientation.Horizontal,
+                Children =
                 {
-                    MenuFlyoutItem subfont = new MenuFlyoutItem() { Tag = font, Text = font, FontFamily = new FontFamily(font) };
-                    subfont.Click += (sender, args) => {
-                        ListTools.ChangeListFont(listId, (sender as MenuFlyoutItem).Tag.ToString());
-                        testname.FontFamily = new FontFamily(font);
-                    };
-                    menuFlyout.Items.Add(subfont);
+                    new FontIcon() { Glyph = "\uE70F", FontSize = 14, Margin = new Thickness(0, 0, 10, 0) },
+                    new TextBlock() { Text = resourceLoader.GetString("ChangeListBackground"), FontSize = 14 }
                 }
-                item.Flyout = menuFlyout;
-                panel.Children.Add(item);
+            };
+            HyperlinkButton button = new HyperlinkButton() {
+                Content = bgbtnpanel,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 10, 0, 10)
+            };
+            button.IsEnabled = Settings.isPro;
 
-                Button button = new Button() { Content = "Change list background", HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Left };
-                button.Click += async (sender, args) => {
-                    FileOpenPicker openPicker = new FileOpenPicker();
-                    openPicker.ViewMode = PickerViewMode.Thumbnail;
-                    openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                    openPicker.FileTypeFilter.Add(".jpg");
-                    openPicker.FileTypeFilter.Add(".jpeg");
-                    openPicker.FileTypeFilter.Add(".png");
-                    openPicker.CommitButtonText = "Set as background";
-                    StorageFile file = await openPicker.PickSingleFileAsync();
-                    if (file != null) {
-                        await ListTools.ChangeListBackground(listId, file);
+            button.Click += async (sender, args) => {
+                FileOpenPicker openPicker = new FileOpenPicker();
+                openPicker.ViewMode = PickerViewMode.Thumbnail;
+                openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                openPicker.FileTypeFilter.Add(".jpg");
+                openPicker.FileTypeFilter.Add(".jpeg");
+                openPicker.FileTypeFilter.Add(".png");
+                openPicker.CommitButtonText = resourceLoader.GetString("SetAsBackground");
+                StorageFile file = await openPicker.PickSingleFileAsync();
+                if (file != null) {
+                    await ListTools.ChangeListBackground(listId, file);
 
-                        using (var stream = await file.OpenAsync(FileAccessMode.Read)) {
-                            var bitmapImage = new BitmapImage();
-                            await bitmapImage.SetSourceAsync(stream);
-                            bgImage.Source = bitmapImage;
-                        }
-
-                        AnimateOpacity(bgImage);
+                    using (var stream = await file.OpenAsync(FileAccessMode.Read)) {
+                        var bitmapImage = new BitmapImage();
+                        await bitmapImage.SetSourceAsync(stream);
+                        bgImage.Source = bitmapImage;
                     }
-                };
-                panel.Children.Add(button);
 
-                Button button2 = new Button() { Content = "Change list emoji", HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Left };
-                button2.Click += (sender, args) => {
-                    var emojiSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
-
-                    GridView content = new GridView {
-                        ItemsSource = emojiSource,
-                        ItemTemplate = (DataTemplate)Application.Current.Resources["EmojiBlock"],
-                        SelectionMode = ListViewSelectionMode.Single,
-                        Width = 250,
-                        Height = 300,
-                    };
-
-                    content.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
-
-                    Flyout flyout = new Flyout {
-                        Content = content
-                    };
-
-                    flyout.ShowAt(button2);
+                    AnimateOpacity(bgImage);
+                }
+            };
+            panel.Children.Add(button);
 
 
-                    content.SelectionChanged += (sender, args) => {
-                        if (listId.Replace(".json", null) != null && (sender as GridView).SelectedItem != null) {
-                            ListTools.ChangeListEmoji(listId.Replace(".json", null), (sender as GridView).SelectedItem.ToString());
-                        }
-                        flyout.Hide();
-                    };
-                };
-                panel.Children.Add(button2);
+            Expander fontExpander = new Expander() {
+                Header = new StackPanel() { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center, Children = { new FontIcon() { Glyph = "\uE8D2", Margin = new Thickness(0, 0, 10, 0) }, new TextBlock() { Text = resourceLoader.GetString("ChangeFont") } } },
+                Width = 300
+            };
+            ListView fontChooser = new ListView() {
+                SelectionMode = ListViewSelectionMode.Single,
+                Height = 300,
+                Width = 250,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            fontChooser.IsEnabled = Settings.isPro;
+            fontChooser.SelectionChanged += (s, a) => {
+                ListTools.ChangeListFont(listId, (fontChooser.SelectedItem as ListViewItem).Tag.ToString());
+                testname.FontFamily = new FontFamily((fontChooser.SelectedItem as ListViewItem).Tag.ToString());
+            };
+
+            fontExpander.Content = fontChooser;
+
+            foreach (string font in Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies()) {
+                ListViewItem subfont = new ListViewItem() { Tag = font, Content = font, FontFamily = new FontFamily(font) };
+                fontChooser.Items.Add(subfont);
             }
+
+            fontChooser.SelectedItem = ListTools.ReadList(listId).Metadata.TitleFont;
+            panel.Children.Add(fontExpander);
+
+            
+            Expander emojiExpander = new Expander() {
+                Header = new StackPanel() { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center, Children = { new FontIcon() { Glyph = "\uE899", Margin = new Thickness(0, 0, 10, 0) }, new TextBlock() { Text = resourceLoader.GetString("ChangeEmoji") } } },
+                Width = 300,
+                Margin = new Thickness(0, 10, 0, 0)
+            };
+            var emojiSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
+            GridView content = new GridView {
+                ItemsSource = emojiSource,
+                ItemTemplate = (DataTemplate)Application.Current.Resources["EmojiBlock"],
+                SelectionMode = ListViewSelectionMode.Single,
+                Width = 250,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Height = 200,
+            };
+            content.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
+            content.SelectedItem = ListTools.ReadList(listId).Metadata.Emoji;
+            content.SelectionChanged += (sender, args) => {
+                if (listId.Replace(".json", null) != null && (sender as GridView).SelectedItem != null) {
+                    ListTools.ChangeListEmoji(listId.Replace(".json", null), (sender as GridView).SelectedItem.ToString());
+                }
+            };
+            emojiExpander.Content = content;
+            panel.Children.Add(emojiExpander);
             Flyout flyout = new Flyout();
             flyout.Content = panel;
             flyout.ShowAt(topoptions, new FlyoutShowOptions() { Placement = FlyoutPlacementMode.BottomEdgeAlignedRight });
@@ -458,20 +479,6 @@ namespace Taskie {
             });
         }
 
-        private void AnimateOpacity(UIElement element) {
-            var animation = new DoubleAnimation {
-                From = 0,
-                To = 0.4,
-                Duration = new Duration(TimeSpan.FromSeconds(1))
-            };
-
-            var storyboard = new Storyboard();
-            storyboard.Children.Add(animation);
-            Storyboard.SetTarget(animation, element);
-            Storyboard.SetTargetProperty(animation, "Opacity");
-            storyboard.Begin();
-        }
-
         private void testname_Loaded(object sender, RoutedEventArgs e) {
             try {
                 testname.FontFamily = new FontFamily(ListTools.ReadList(listId).Metadata.TitleFont);
@@ -542,6 +549,20 @@ namespace Taskie {
         #endregion
 
         #region Utility methods
+
+        private void AnimateOpacity(UIElement element) {
+            var animation = new DoubleAnimation {
+                From = 0,
+                To = 0.4,
+                Duration = new Duration(TimeSpan.FromSeconds(1))
+            };
+
+            var storyboard = new Storyboard();
+            storyboard.Children.Add(animation);
+            Storyboard.SetTarget(animation, element);
+            Storyboard.SetTargetProperty(animation, "Opacity");
+            storyboard.Begin();
+        }
 
         private void ChangeWidth(object sender) {
             foreach (ListTask task in taskListView.Items) {
@@ -775,7 +796,7 @@ namespace Taskie {
             }
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e) {
+        protected override async void OnNavigatedTo(NavigationEventArgs e) {
             listId = e.Parameter.ToString();
             if (e.Parameter != null) {
                 testname.Text = ListTools.ReadList(listId).Metadata.Name;
@@ -783,13 +804,17 @@ namespace Taskie {
             }
             base.OnNavigatedTo(e);
 
-            var listData = ListTools.ReadList(listId);
-            tasks = listData.Tasks;
-            if (tasks != null && listData.Metadata != null) {
-                foreach (ListTask task in tasks) {
-                    taskListView.Items.Add(task);
+            await Task.Run(async () => {
+                var listData = ListTools.ReadList(listId);
+                tasks = listData.Tasks;
+                if (tasks != null && listData.Metadata != null) {
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => {
+                        foreach (ListTask task in tasks) {
+                            taskListView.Items.Add(task);
+                        }
+                    });
                 }
-            }
+            });
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args) {
