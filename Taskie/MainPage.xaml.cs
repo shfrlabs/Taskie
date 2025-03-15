@@ -8,6 +8,7 @@ using System.Xml;
 using TaskieLib;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
+using Windows.ApplicationModel.Store;
 using Windows.Security.Credentials.UI;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -17,12 +18,13 @@ using Windows.UI.Notifications;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 
 namespace Taskie {
     public sealed partial class MainPage : Page {
         public MainPage() {
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Windows.Foundation.Size(600, 500));
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Windows.Foundation.Size(500, 600));
             InitializeComponent();
             SetupTitleBar();
             CheckSecurity();
@@ -47,34 +49,6 @@ namespace Taskie {
         }
 
         #region Click handlers
-        private void ChangeEmoji_Click(object sender, RoutedEventArgs e) {
-            var emojiSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
-
-            GridView content = new GridView {
-                Tag = (sender as MenuFlyoutItem).Tag,
-                ItemsSource = emojiSource,
-                ItemTemplate = (DataTemplate)Resources["EmojiBlock"],
-                SelectionMode = ListViewSelectionMode.Single,
-                Width = 250,
-                Height = 300,
-            };
-
-            content.ItemsPanel = (ItemsPanelTemplate)Resources["WrapGridPanel"];
-
-            Flyout flyout = new Flyout {
-                Content = content
-            };
-
-            flyout.ShowAt(AddItemBtn);
-
-
-            content.SelectionChanged += (sender, args) => {
-                if ((sender as GridView).Tag.ToString().Replace(".json", null) != null && (sender as GridView).SelectedItem != null) {
-                    ListTools.ChangeListEmoji((sender as GridView).Tag.ToString().Replace(".json", null), (sender as GridView).SelectedItem.ToString());
-                }
-                flyout.Hide();
-            };
-        }
 
         private void DeleteList_Click(object sender, RoutedEventArgs e) {
             string listname = (sender as MenuFlyoutItem).Tag as string;
@@ -162,6 +136,17 @@ namespace Taskie {
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.PrimaryButtonText = resourceLoader.GetString("UpgradeUnavialable"); // placeholder
             dialog.IsPrimaryButtonEnabled = false;
+#if DEBUG
+            try {
+                var listingInformation = await CurrentAppSimulator.LoadListingInformationAsync();
+                var proLifetimeAddOn = listingInformation.ProductListings["ProLifetime"];
+                dialog.PrimaryButtonText = string.Format(resourceLoader.GetString("UpgradeFor"), proLifetimeAddOn.FormattedPrice);
+            }
+            catch {
+                dialog.PrimaryButtonText = resourceLoader.GetString("Upgrade");
+            }
+            dialog.IsPrimaryButtonEnabled = true;
+#endif
             dialog.PrimaryButtonClick += Dialog_UpgradeAction;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             await dialog.ShowAsync();
@@ -215,7 +200,7 @@ namespace Taskie {
         {
             if (Settings.isPro) {
                 proText.Text = "PRO";
-                BottomRow.Height = new GridLength(65);
+                BottomRow.Height = new GridLength(62);
                 UpdateButton.Visibility = Visibility.Collapsed;
             }
             else {
@@ -354,13 +339,11 @@ namespace Taskie {
         private void OpenRightClickList(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e) {
             MenuFlyout flyout = new MenuFlyout();
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = resourceLoader.GetString("RenameList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Emoji), Text = resourceLoader.GetString("ChangeEmoji"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
             flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
             (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
-            (flyout.Items[1] as MenuFlyoutItem).Click += ChangeEmoji_Click;
-            (flyout.Items[2] as MenuFlyoutItem).Click += ExportList_Click;
-            (flyout.Items[3] as MenuFlyoutItem).Click += DeleteList_Click;
+            (flyout.Items[1] as MenuFlyoutItem).Click += ExportList_Click;
+            (flyout.Items[2] as MenuFlyoutItem).Click += DeleteList_Click;
             flyout.ShowAt(sender as ListViewItem);
         }
         #endregion
@@ -424,39 +407,84 @@ namespace Taskie {
 
         public ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
 
-        private void UpdateLists(string listID, string listName) {
+        private void UpdateLists(string listID = null, string listName = null) {
             Navigation.Items.Clear();
             SetupNavigationMenu();
             contentFrame.Navigate(typeof(EmptyPage));
             DeterminePro();
         } // Resets the main view
 
-        private void AddList(object sender, RoutedEventArgs e) {
-            string listName = ListTools.CreateList(resourceLoader.GetString("NewList"));
-            UpdateLists(null, resourceLoader.GetString("NewList"));
-            foreach (ListViewItem item in Navigation.Items) {
-                if (item.Tag.ToString().Contains(listName)) { Navigation.SelectedItem = item; break; }
-            }
+        private async void AddList(object sender, RoutedEventArgs e) {
+            ContentDialog dialog = new ContentDialog();
+            TextBox box = new TextBox() { VerticalContentAlignment = VerticalAlignment.Bottom, MaxWidth = 300, BorderThickness = new Thickness(0), PlaceholderText = resourceLoader.GetString("NewList"), Padding = new Thickness(9, 9, 4, 4), FontSize = 15, CornerRadius = new CornerRadius(4) };
+            Button emojiButton = new Button() { Content = "📋", Padding = new Thickness(0), HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Width = 40, Height = 40, FontSize = 20 };
+            var flyout = new Flyout();
+            var gridView = new GridView();
+
+            gridView.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
+            gridView.ItemTemplate = (DataTemplate)Application.Current.Resources["EmojiBlock"];
+            gridView.ItemsSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
+            gridView.SelectionMode = ListViewSelectionMode.Single;
+            gridView.SelectionChanged += (s, args) => {
+                emojiButton.Content = gridView.SelectedItem;
+                flyout.Hide();
+            };
+
+            flyout.Content = gridView;
+            flyout.Placement = FlyoutPlacementMode.Bottom;
+            emojiButton.Click += (sender, args) => { flyout.ShowAt(emojiButton); };
+            Grid panel = new Grid() {
+                Margin = new Thickness(0, 10, 0, 0),
+                Children = { emojiButton, box },
+                ColumnDefinitions = { new ColumnDefinition() { Width = new GridLength(47) }, new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) } },
+                HorizontalAlignment = HorizontalAlignment.Stretch
+            };
+            Grid.SetColumn(box, 1);
+            string listName = resourceLoader.GetString("NewList");
+            dialog.Content = panel;
+            dialog.Title = resourceLoader.GetString("CreateListHeader");
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
+            dialog.PrimaryButtonText = "OK";
+            dialog.PrimaryButtonClick += (sender, args) => // needs fix
+            {
+                if (string.IsNullOrEmpty(box.Text)) {
+                    listName = ListTools.CreateList(resourceLoader.GetString("NewList"), null, emojiButton.Content.ToString());
+                }
+                else {
+                    listName = ListTools.CreateList(box.Text, null, emojiButton.Content.ToString());
+                }
+                UpdateLists();
+                foreach (ListViewItem item in Navigation.Items) {
+                    if (!string.IsNullOrEmpty(listName) && item.Tag.ToString().Contains(listName)) { Navigation.SelectedItem = item; break; }
+                }
+            };
+            await dialog.ShowAsync();
         }
 
+
         private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            // DEBUG UPGRADE OPTION
             if (!Settings.isPro) {
-                var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
-                var stringElements = toastXml.GetElementsByTagName("text");
-                stringElements[0].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgrade")));
-                stringElements[1].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgradeSub")));
+                try {
+                    ProductPurchaseStatus result = (await CurrentAppSimulator.RequestProductPurchaseAsync("ProLifetime")).Status;
+                    if (result.HasFlag(ProductPurchaseStatus.Succeeded) || result.HasFlag(ProductPurchaseStatus.AlreadyPurchased)) {
+                        var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
+                        var stringElements = toastXml.GetElementsByTagName("text");
+                        stringElements[0].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgrade")));
+                        stringElements[1].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgradeSub")));
 
-                // Add arguments to the toast notification
-                var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");
+                        // Add arguments to the toast notification
+                        var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");
 
-                var toast = new ScheduledToastNotification(toastXml, DateTimeOffset.Now.AddSeconds(1)) {
-                    Id = "proUpgrade"
-                };
+                        var toast = new ScheduledToastNotification(toastXml, DateTimeOffset.Now.AddSeconds(1)) {
+                            Id = "proUpgrade"
+                        };
 
-                ToastNotificationManager.CreateToastNotifier().AddToSchedule(toast);
-                Settings.isPro = true;
-                await CoreApplication.RequestRestartAsync("Pro status changed.");
+                        ToastNotificationManager.CreateToastNotifier().AddToSchedule(toast);
+                        await CoreApplication.RequestRestartAsync("Pro status changed.");
+                    }
+                }
+                catch { }
             }
         }
 

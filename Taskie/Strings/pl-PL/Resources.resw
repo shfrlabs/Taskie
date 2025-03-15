@@ -364,4 +364,16 @@
   <data name="Close" xml:space="preserve">
     <value>Zamknij</value>
   </data>
+  <data name="CustomizeList.Text" xml:space="preserve">
+    <value>Dostosuj listę</value>
+  </data>
+  <data name="ChangeListBackground" xml:space="preserve">
+    <value>Zmień tło</value>
+  </data>
+  <data name="SetAsBackground" xml:space="preserve">
+    <value>Ustaw jako tło</value>
+  </data>
+  <data name="CreateListHeader" xml:space="preserve">
+    <value>Utwórz nową listę</value>
+  </data>
 </root>

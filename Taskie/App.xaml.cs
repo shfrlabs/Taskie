@@ -2,7 +2,6 @@
 using TaskieLib;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Globalization;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -11,7 +10,6 @@ using Windows.UI.Xaml.Navigation;
 namespace Taskie {
     sealed partial class App : Application {
         public App() {
-            ApplicationLanguages.PrimaryLanguageOverride = "en-US";
             if (Settings.Theme == "Dark") {
                 Application.Current.RequestedTheme = ApplicationTheme.Dark;
 

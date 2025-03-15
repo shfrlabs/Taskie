@@ -7,8 +7,6 @@ namespace TaskieLib {
             if (value is ValueTuple<int, int> tuple) {
                 double subTaskTotal = tuple.Item1;
                 double subTaskCompleted = tuple.Item2;
-
-                System.Diagnostics.Debug.WriteLine($"Completed: {subTaskCompleted}, Total: {subTaskTotal}, setting value to: {(subTaskCompleted / subTaskTotal) * 100}");
                 return subTaskTotal != 0 ? ((subTaskCompleted / subTaskTotal) * 100) : 0;
             }
             throw new ArgumentException("Expected value to be a Tuple<int, int>, instead is " + value.GetType());

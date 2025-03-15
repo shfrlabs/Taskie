@@ -121,6 +121,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ProgressConverter.cs" />
+    <Compile Include="ProVisibilityConverter.cs" />
     <Compile Include="ReverseEmptyCollectionVisibilityConverter.cs" />
     <Compile Include="EmptyCollectionVisibilityConverter.cs" />
     <Compile Include="Models\GroupMetadata.cs" />

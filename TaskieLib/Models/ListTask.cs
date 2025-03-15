@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using TaskieLib;
 using Windows.ApplicationModel.Resources;
 using Windows.Data.Xml.Dom;
+using Windows.Storage;
 using Windows.UI.Notifications;
 
 public class ListTask : INotifyPropertyChanged {
@@ -14,7 +17,9 @@ public class ListTask : INotifyPropertyChanged {
     private ObservableCollection<ListTask> _subTasks;
 
     public ListTask() {
-        _subTasks = new ObservableCollection<ListTask>();
+        if (_subTasks == null) {
+            _subTasks = new ObservableCollection<ListTask>();
+        }
     }
 
     #region Reminders
@@ -36,9 +41,9 @@ public class ListTask : INotifyPropertyChanged {
         return CheckIfReminderExists() && IsReminderInTheFuture();
     }
 
-    private ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
     // Helper method to schedule a toast notification
     private void ScheduleToastNotification(DateTimeOffset reminderDateTime, string listId) {
+        ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
         var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
         var stringElements = toastXml.GetElementsByTagName("text");
         stringElements[0].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("ReminderGreeting")));
@@ -109,7 +114,9 @@ public class ListTask : INotifyPropertyChanged {
     }
 
     public DateTime CreationDate {
-        get { return _creationDate; }
+        get {
+            return _creationDate;
+        }
         set {
             if (_creationDate != value) {
                 _creationDate = value;

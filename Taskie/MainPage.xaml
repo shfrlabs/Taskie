@@ -9,21 +9,6 @@
     mc:Ignorable="d"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     Loaded="Page_Loaded">
-    <Page.Resources>
-        <ItemsPanelTemplate
-            x:Key="WrapGridPanel">
-            <WrapGrid
-                Orientation="Horizontal" />
-        </ItemsPanelTemplate>
-        <DataTemplate
-            x:Key="EmojiBlock">
-            <TextBlock
-                FontSize="20"
-                Margin="-2"
-                FontFamily="Segoe UI Emoji"
-                Text="{Binding}" />
-        </DataTemplate>
-    </Page.Resources>
     <Grid>
         <Button
             x:Name="SidebarButton"

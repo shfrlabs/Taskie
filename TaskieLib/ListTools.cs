@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Xaml.Media;
 
 namespace TaskieLib {
     public class ListTools {
@@ -222,7 +223,11 @@ namespace TaskieLib {
             }
         }
 
+        public static async Task ChangeListBackground(string listId, StorageFile file) {
+            await file.CopyAsync(ApplicationData.Current.LocalFolder, "bg_" + listId, NameCollisionOption.ReplaceExisting);
+        }
+
         #endregion
-        
+
     }
 }

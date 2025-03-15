@@ -8,23 +8,32 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    x:Name="TPage">
+    x:Name="TPage" Loaded="TPage_Loaded">
 
     <Page.Resources>
+        <AcrylicBrush
+            BackgroundSource="Backdrop"
+            TintOpacity=".4"
+            TintColor="{StaticResource LayerFillColorDefault}"
+            TintLuminosityOpacity="0.2"
+            x:Key="AddTaskAcrylic" />
+        <!-- laggy asf -->
         <lib:EmptyCollectionVisibilityConverter
             x:Key="VisConverter" />
         <lib:ReverseEmptyCollectionVisibilityConverter
             x:Key="ReverseVisConverter" />
         <lib:ProgressConverter
             x:Key="ProgressConverter" />
+        <lib:ProVisibilityConverter
+            x:Key="ProVisibilityConverter" />
         <DataTemplate
             x:Key="TaskItemTemplate">
             <muxc:Expander
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Stretch"
                 Height="Auto"
+                Background="{StaticResource TaskAcrylic}"
                 x:Name="rootGrid"
-                Background="{StaticResource LayerFillColorDefaultBrush}"
                 Padding="15,5,15,5"
                 Margin="0,0,5,5"
                 CornerRadius="8"
@@ -105,6 +114,7 @@
                             TextWrapping="Wrap"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
+                            Margin="10"
                             Opacity="0.6"
                             TextTrimming="CharacterEllipsis"
                             Visibility="{Binding SubTasks.Count, Converter={StaticResource VisConverter}}" />
@@ -209,17 +219,22 @@
     <Grid
         Margin="20,25,20,20"
         x:Name="maingrid">
+        <Image
+            x:Name="bgImage"
+            Opacity="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Stretch="UniformToFill" Margin="-20, -25, -20, -20" />
         <Grid
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top">
             <!-- i should change the testname fr -->
             <TextBlock
                 x:Name="testname"
-                DoubleTapped="testname_DoubleTapped"
                 FontWeight="SemiBold"
                 FontSize="28"
-                RightTapped="testname_RightTapped"
-                TextTrimming="CharacterEllipsis"></TextBlock>
+                TextTrimming="CharacterEllipsis"
+                Loaded="testname_Loaded"></TextBlock>
             <StackPanel
                 Orientation="Horizontal"
                 VerticalAlignment="Top"
@@ -254,6 +269,13 @@
                                 Icon="Save"
                                 Click="ExportList_Click"
                                 x:Uid="ExportList"></MenuFlyoutItem>
+                            <MenuFlyoutItem
+                                Click="CustomizeList_Click"
+                                x:Uid="CustomizeList">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE790;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>
@@ -306,8 +328,7 @@
             Loaded="NameBox_Loaded" />
         <Rectangle
             x:Name="addTaskRect"
-            Fill="{StaticResource LayerFillColorDefaultBrush}"
-            Opacity=".7"
+            Fill="{StaticResource AddTaskAcrylic}"
             Canvas.ZIndex="-10"
             VerticalAlignment="Bottom"
             Height="50"

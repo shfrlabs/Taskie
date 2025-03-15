@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using Windows.UI.Xaml.Media;
 
 // Object used for list metadata in a list's JSON
 public class ListMetadata : INotifyPropertyChanged {
@@ -9,11 +10,14 @@ public class ListMetadata : INotifyPropertyChanged {
     private int? _groupID;
     private string _titlefont;
 
-    public string TitleFont // Pro only.
+    public string TitleFont
     {
-        get { if (_titlefont != null) { return _titlefont; } else { return "Segoe UI Variable"; }; }
+        get { return _titlefont; }
         set {
-            _titlefont = value;
+            if (_titlefont != value) {
+                _titlefont = value;
+                OnPropertyChanged(nameof(TitleFont));
+            }
         }
     }
 

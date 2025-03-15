@@ -79,11 +79,22 @@
                         </StackPanel>
                     </Grid>
                     <TextBlock TextWrapping="Wrap" Margin="0,20,0,0" HorizontalAlignment="Left" FontSize="15" Opacity=".9" TextAlignment="Left" x:Uid="AboutApp" HorizontalTextAlignment="Left"/>
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="0,20,0,0">
-                        <HyperlinkButton NavigateUri="https://github.com/shef3r" FontSize="14" Margin="5" x:Uid="GitHubLink"/>
-                        <HyperlinkButton NavigateUri="https://twitter.com/sheferdev" FontSize="14" Margin="5" x:Uid="TwitterLink"/>
-                        <HyperlinkButton NavigateUri="https://shef3r.dev/" FontSize="14" Margin="5" x:Uid="WebsiteLink"/>
-                        <HyperlinkButton NavigateUri="https://discord.gg/zXn7mM33VK" FontSize="14" Margin="5" Content="Discord"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,20,0,0">
+                        <HyperlinkButton
+                            NavigateUri="https://github.com/shef3r"
+                            FontSize="14"
+                            Margin="5"
+                            x:Uid="GitHubLink" />
+                        <HyperlinkButton
+                            NavigateUri="https://shef3r.dev/"
+                            FontSize="14"
+                            Margin="5"
+                            x:Uid="WebsiteLink" />
+                        <HyperlinkButton
+                            NavigateUri="https://discord.gg/zXn7mM33VK"
+                            FontSize="14"
+                            Margin="5"
+                            Content="Discord" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
