@@ -103,8 +103,8 @@ namespace Taskie {
                 ListViewItem subfont = new ListViewItem() { Tag = font, Content = font, FontFamily = new FontFamily(font) };
                 fontChooser.Items.Add(subfont);
             }
-
-            fontChooser.SelectedItem = ListTools.ReadList(listId).Metadata.TitleFont;
+            ListMetadata data = ListTools.ReadList(listId).Metadata;
+            fontChooser.SelectedItem = data.TitleFont;
             panel.Children.Add(fontExpander);
 
 
@@ -123,7 +123,7 @@ namespace Taskie {
                 Height = 200,
             };
             content.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
-            content.SelectedItem = ListTools.ReadList(listId).Metadata.Emoji;
+            content.SelectedItem = data.Emoji;
             content.SelectionChanged += (sender, args) => {
                 if (listId.Replace(".json", null) != null && (sender as GridView).SelectedItem != null) {
                     ListTools.ChangeListEmoji(listId.Replace(".json", null), (sender as GridView).SelectedItem.ToString());
@@ -159,16 +159,11 @@ namespace Taskie {
                 if (!string.IsNullOrEmpty(newName) && newName != note.Name) {
                     note.Name = newName;
 
-                    List<ListTask> tasks = new List<ListTask>();
-                    if (!(ListTools.ReadList(listId).Tasks == null || ListTools.ReadList(listId).Metadata == null)) {
-                        foreach (ListTask task2add in ListTools.ReadList(listId).Tasks) {
-                            tasks.Add(task2add);
-                        }
-                    }
+                    (ListMetadata data, List<ListTask> tasks) = ListTools.ReadList(listId);
 
                     int index = tasks.FindIndex(task => task.CreationDate == note.CreationDate);
                     tasks[index] = note;
-                    ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
+                    ListTools.SaveList(listId, tasks, data);
                 }
             };
             if (menuFlyoutItem.Tag is Button button) {
@@ -178,14 +173,14 @@ namespace Taskie {
 
         private void DeleteTask_Click(object sender, RoutedEventArgs e) {
             ListTask taskToDelete = (sender as MenuFlyoutItem).DataContext as ListTask;
-            List<ListTask> tasks = ListTools.ReadList(listId).Tasks;
+            (ListMetadata metadata, List<ListTask> tasks) = ListTools.ReadList(listId);
             int index = tasks.FindIndex(task => task.CreationDate == taskToDelete.CreationDate);
             if (index != -1) {
                 tasks.RemoveAt(index);
-                ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
+                ListTools.SaveList(listId, tasks, metadata);
                 taskListView.Items.Remove(taskToDelete);
             }
-            ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
+            ListTools.SaveList(listId, tasks, metadata);
         }
 
         private void RenameList_Click(object sender, RoutedEventArgs e) {
@@ -372,16 +367,10 @@ namespace Taskie {
                 if (!string.IsNullOrEmpty(newName) && newName != note.Name) {
                     note.Name = newName;
 
-                    List<ListTask> tasks = new List<ListTask>();
-                    if (!(ListTools.ReadList(listId).Tasks == null || ListTools.ReadList(listId).Metadata == null)) {
-                        foreach (ListTask task2add in ListTools.ReadList(listId).Tasks) {
-                            tasks.Add(task2add);
-                        }
-                    }
-
+                    (ListMetadata metadata, List<ListTask> tasks) = ListTools.ReadList(listId);
                     int index = tasks.FindIndex(task => task.CreationDate == note.CreationDate);
                     tasks[index] = note;
-                    ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
+                    ListTools.SaveList(listId, tasks, metadata);
                 }
             };
             flyout.ShowAt(sender as TextBlock);
@@ -476,12 +465,13 @@ namespace Taskie {
         }
 
         private void testname_Loaded(object sender, RoutedEventArgs e) {
+            (ListMetadata metadata, List<ListTask> tasks) = ListTools.ReadList(listId);
             try {
-                testname.FontFamily = new FontFamily(ListTools.ReadList(listId).Metadata.TitleFont);
+                testname.FontFamily = new FontFamily(metadata.TitleFont);
             }
             catch {
                 testname.FontFamily = new FontFamily("Segoe UI Variable");
-                ListTools.ReadList(listId).Metadata.TitleFont = "Segoe UI Variable";
+                metadata.TitleFont = "Segoe UI Variable";
             }
         }
 
@@ -754,7 +744,7 @@ namespace Taskie {
             this.Frame.Navigate(typeof(EmptyPage));
         }
 
-        private void ListRenamed(string oldname, string newname) {
+        private void ListRenamed(string oldname, string newname, string emoji) {
             testname.Text = newname;
         }
 
@@ -794,16 +784,16 @@ namespace Taskie {
 
         protected override async void OnNavigatedTo(NavigationEventArgs e) {
             listId = e.Parameter.ToString();
+            (ListMetadata data, List<ListTask> tasks) = ListTools.ReadList(listId);
             if (e.Parameter != null) {
-                testname.Text = ListTools.ReadList(listId).Metadata.Name;
-                listname = ListTools.ReadList(listId).Metadata.Name;
+                string name = data.Name;
+                testname.Text = name;
+                listname = name;
             }
             base.OnNavigatedTo(e);
 
             await Task.Run(async () => {
-                var listData = ListTools.ReadList(listId);
-                tasks = listData.Tasks;
-                if (tasks != null && listData.Metadata != null) {
+                if (tasks != null && data != null) {
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => {
                         foreach (ListTask task in tasks) {
                             taskListView.Items.Add(task);
@@ -815,14 +805,7 @@ namespace Taskie {
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args) {
             if (!string.IsNullOrEmpty(args.QueryText)) {
-                ListMetadata metadata = ListTools.ReadList(listId).Metadata;
-                List<ListTask> tasks = new List<ListTask>();
-                if (ListTools.ReadList(listId).Tasks.Count > 0) {
-                    foreach (ListTask task2add in ListTools.ReadList(listId).Tasks) {
-                        tasks.Add(task2add);
-                    }
-                }
-                ;
+                (ListMetadata metadata, List<ListTask> tasks) = ListTools.ReadList(listId);
                 ListTask task = new ListTask() {
                     Name = args.QueryText,
                     CreationDate = DateTime.Now,
@@ -837,13 +820,13 @@ namespace Taskie {
 
         private void TaskStateChanged(object sender, RoutedEventArgs e) {
             ListTask tasktoChange = (sender as CheckBox).DataContext as ListTask;
-            List<ListTask> tasks = ListTools.ReadList(listId).Tasks;
+            (ListMetadata data, List<ListTask> tasks) = ListTools.ReadList(listId);
             try {
                 int index = tasks.FindIndex(task => task.CreationDate == tasktoChange.CreationDate);
                 if (index != -1) {
                     tasktoChange.IsDone = (bool)(sender as CheckBox).IsChecked;
                     tasks[index] = tasktoChange;
-                    ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
+                    ListTools.SaveList(listId, tasks, data);
                 }
             }
             catch (Exception ex) { Debug.WriteLine("[Task state change] Exception occured: " + ex.Message); }
@@ -856,14 +839,7 @@ namespace Taskie {
 
         private void AutoSuggestBox_KeyDown(object sender, KeyRoutedEventArgs e) {
             if (e.Key == Windows.System.VirtualKey.Enter && !string.IsNullOrEmpty((sender as AutoSuggestBox).Text)) {
-                List<ListTask> tasks = new List<ListTask>();
-                if (!(ListTools.ReadList(listId).Tasks == null || ListTools.ReadList(listId).Metadata == null)) {
-                    foreach (ListTask task2add in ListTools.ReadList(listId).Tasks) {
-                        tasks.Add(task2add);
-                    }
-                }
-                ;
-                ListMetadata metadata = ListTools.ReadList(listId).Metadata;
+                (ListMetadata metadata, List<ListTask> tasks) = ListTools.ReadList(listId);
                 ListTask task = new ListTask() {
                     Name = (sender as AutoSuggestBox).Text,
                     CreationDate = DateTime.Now,

@@ -33,32 +33,32 @@ namespace TaskieLib {
         public delegate void ListDeleted(string listID);
         public static event ListDeleted ListDeletedEvent;
 
-        public delegate void ListRenamed(string listID, string newname);
+        public delegate void ListRenamed(string listID, string newname, string emoji);
         public static event ListRenamed ListRenamedEvent;
 
-        public delegate void ListEmojiChanged(string listID, string emoji);
+        public delegate void ListEmojiChanged(string listID, string name, string emoji);
         public static event ListEmojiChanged ListEmojiChangedEvent;
 
         #endregion
 
         #region List handling methods
 
-        public static (string name, string id)[] GetLists() {
+        public static (string name, string id, string emoji)[] GetLists() {
             try {
                 string localFolderPath = ApplicationData.Current.LocalFolder.Path;
                 DirectoryInfo info = new DirectoryInfo(localFolderPath);
                 FileInfo[] files = info.GetFiles("*.json");
-                List<(string name, string id)> lists = new List<(string name, string id)>();
+                List<(string name, string id, string emoji)> lists = new List<(string name, string id, string emoji)>();
                 foreach (FileInfo file in files) {
                     var content = File.ReadAllText(file.FullName);
                     var metadata = JsonConvert.DeserializeObject<dynamic>(content).listmetadata;
-                    lists.Add((metadata?.Name.ToString(), file.Name));
+                    lists.Add((metadata?.Name.ToString(), file.Name, metadata?.Emoji));
                 }
                 return lists.ToArray();
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List getter] Exception occured: " + ex.Message);
-                return new (string name, string id)[0];
+                return new (string name, string id, string emoji)[0];
             }
         }
 
@@ -143,7 +143,7 @@ namespace TaskieLib {
                 string oldName = metadata.Name;
                 metadata.Name = newListName;
                 SaveList(listId, tasks, metadata);
-                ListRenamedEvent.Invoke(listId, newListName);
+                ListRenamedEvent.Invoke(listId, newListName, metadata.Emoji);
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List renaming] Exception occured: " + ex.Message);
@@ -157,7 +157,7 @@ namespace TaskieLib {
                 newData.Emoji = newEmoji;
                 Debug.WriteLine(newData.Emoji);
                 SaveList(listId, tasks, newData);
-                ListEmojiChangedEvent?.Invoke(listId, newEmoji);
+                ListEmojiChangedEvent?.Invoke(listId, newData.Name, newEmoji);
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List emoji change] Exception occured: " + ex.Message);

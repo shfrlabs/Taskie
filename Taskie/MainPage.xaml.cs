@@ -9,6 +9,7 @@ using TaskieLib;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
 using Windows.ApplicationModel.Store;
+using Windows.Networking;
 using Windows.Security.Credentials.UI;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -82,7 +83,8 @@ namespace Taskie {
         }
 
         private async void RenameList_Click(object sender, RoutedEventArgs e) {
-            string listname = ListTools.ReadList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null)).Metadata.Name;
+            ListMetadata data = ListTools.ReadList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null)).Metadata;
+            string listname = data.Name;
             TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("ListName"), Text = listname };
             ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameList/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input, DefaultButton = ContentDialogButton.Primary };
             ContentDialogResult result = await dialog.ShowAsync();
@@ -102,7 +104,7 @@ namespace Taskie {
                     tipwrongname.IsOpen = true;
                 }
                 listname = text;
-                ListRenamed(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null), text);
+                ListRenamed(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null), text, data.Emoji);
             }
         }
 
@@ -134,7 +136,7 @@ namespace Taskie {
             frame.Navigate(typeof(UpgradeDialogContentPage));
             dialog.Content = frame;
             dialog.DefaultButton = ContentDialogButton.Primary;
-            dialog.PrimaryButtonText = resourceLoader.GetString("UpgradeUnavialable"); // placeholder
+            dialog.PrimaryButtonText = resourceLoader.GetString("UpgradeUnavialable");
             dialog.IsPrimaryButtonEnabled = false;
 #if DEBUG
             try {
@@ -233,13 +235,11 @@ namespace Taskie {
         }
 
         private void SetupNavigationMenu() {
-            foreach ((string listName, string listID) in TaskieLib.ListTools.GetLists()) {
-                ListMetadata metadata = ListTools.ReadList(listID.Replace(".json", null)).Metadata;
-                Debug.WriteLine(JsonConvert.SerializeObject(metadata));
+            foreach ((string listName, string listID, string listEmoji) in TaskieLib.ListTools.GetLists()) {
                 StackPanel content = new StackPanel();
                 content.Orientation = Orientation.Horizontal;
                 content.VerticalAlignment = VerticalAlignment.Center;
-                content.Children.Add(new FontIcon() { Glyph = metadata.Emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 13 });
+                content.Children.Add(new FontIcon() { Glyph = listEmoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 13 });
                 content.Children.Add(new TextBlock { Text = listName, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 13, VerticalAlignment = VerticalAlignment.Center });
                 Navigation.Items.Add(new ListViewItem() { Tag = listID, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
                 AddRightClickMenu(Navigation.Items.Last() as ListViewItem);
@@ -278,16 +278,15 @@ namespace Taskie {
         #endregion
 
         #region List-related events
-        private void ListRenamed(string listID, string newname) {
+        private void ListRenamed(string listID, string newname, string emoji) {
             Debug.WriteLine("List got renamed:" + listID);
             foreach (var item in Navigation.Items) {
                 if (item is ListViewItem navigationItem) {
                     if (navigationItem.Tag.ToString().Replace(".json", null) == listID) {
-                        ListMetadata metadata = ListTools.ReadList(listID).Metadata;
                         StackPanel content = new StackPanel();
                         content.Orientation = Orientation.Horizontal;
                         content.VerticalAlignment = VerticalAlignment.Center;
-                        content.Children.Add(new FontIcon() { Glyph = metadata.Emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 13 });
+                        content.Children.Add(new FontIcon() { Glyph = emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 13 });
                         content.Children.Add(new TextBlock { Text = newname, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 13, VerticalAlignment = VerticalAlignment.Center });
                         navigationItem.Content = content;
                         break;
@@ -296,17 +295,16 @@ namespace Taskie {
             }
         }
 
-        private void ListEmojiChanged(string listID, string emoji) {
+        private void ListEmojiChanged(string listID, string name, string emoji) {
             Debug.WriteLine("List emoji changed:" + listID);
             foreach (var item in Navigation.Items) {
                 if (item is ListViewItem navigationItem) {
                     if (navigationItem.Tag.ToString().Replace(".json", null) == listID) {
-                        ListMetadata metadata = ListTools.ReadList(listID).Metadata;
                         StackPanel content = new StackPanel();
                         content.Orientation = Orientation.Horizontal;
                         content.VerticalAlignment = VerticalAlignment.Center;
-                        content.Children.Add(new FontIcon() { Glyph = emoji, FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 14 });
-                        content.Children.Add(new TextBlock() { Text = metadata.Name, Margin = new Thickness(12, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 2 });
+                        content.Children.Add(new FontIcon() { Glyph = emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 13 });
+                        content.Children.Add(new TextBlock { Text = name, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 13, VerticalAlignment = VerticalAlignment.Center });
                         navigationItem.Content = content;
                         break;
                     }
@@ -366,7 +364,7 @@ namespace Taskie {
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args) {
             if (string.IsNullOrWhiteSpace(sender.Text)) { sender.IsSuggestionListOpen = false; sender.ItemsSource = new List<string>(); }
             else {
-                sender.ItemsSource = Array.FindAll<(string, string)>(ListTools.GetLists(), s => s.Item1.ToLower().Contains(sender.Text.ToLower())).Select(t => t.Item1).ToArray();
+                sender.ItemsSource = Array.FindAll<(string, string, string)>(ListTools.GetLists(), s => s.Item1.ToLower().Contains(sender.Text.ToLower())).Select(t => t.Item1).ToArray();
             }
         }
 
@@ -377,7 +375,7 @@ namespace Taskie {
         private void searchbox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) {
             try {
                 string foundItem = "";
-                foreach ((string name, string id) item in ListTools.GetLists()) {
+                foreach ((string name, string id, string emoji) item in ListTools.GetLists()) {
                     if (args.SelectedItem.ToString() == item.name) {
                         foundItem = item.id.Replace(".json", null);
                     }
@@ -446,7 +444,7 @@ namespace Taskie {
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             dialog.PrimaryButtonText = "OK";
-            dialog.PrimaryButtonClick += (sender, args) => // needs fix
+            dialog.PrimaryButtonClick += (sender, args) =>
             {
                 if (string.IsNullOrEmpty(box.Text)) {
                     listName = ListTools.CreateList(resourceLoader.GetString("NewList"), null, emojiButton.Content.ToString());
