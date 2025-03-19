@@ -349,7 +349,7 @@
   <data name="Welcome3.Text" xml:space="preserve">
     <value>Baw się dobrze!</value>
   </data>
-  <data name="UpgradeUnavialable" xml:space="preserve">
+  <data name="UpgradeUnavailable" xml:space="preserve">
     <value>Tymczasowo niedostępne</value>
   </data>
   <data name="EmptyListText.Text" xml:space="preserve">

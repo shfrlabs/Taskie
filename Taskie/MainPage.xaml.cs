@@ -135,20 +135,9 @@ namespace Taskie {
             dialog.BorderThickness = new Thickness(2);
             frame.Navigate(typeof(UpgradeDialogContentPage));
             dialog.Content = frame;
-            dialog.DefaultButton = ContentDialogButton.Primary;
-            dialog.PrimaryButtonText = resourceLoader.GetString("UpgradeUnavialable");
+            dialog.PrimaryButtonText = resourceLoader.GetString("UpgradeUnavailable");
             dialog.IsPrimaryButtonEnabled = false;
-#if DEBUG
-            try {
-                var listingInformation = await CurrentAppSimulator.LoadListingInformationAsync();
-                var proLifetimeAddOn = listingInformation.ProductListings["ProLifetime"];
-                dialog.PrimaryButtonText = string.Format(resourceLoader.GetString("UpgradeFor"), proLifetimeAddOn.FormattedPrice);
-            }
-            catch {
-                dialog.PrimaryButtonText = resourceLoader.GetString("Upgrade");
-            }
-            dialog.IsPrimaryButtonEnabled = true;
-#endif
+            dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.PrimaryButtonClick += Dialog_UpgradeAction;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             await dialog.ShowAsync();
@@ -198,9 +187,9 @@ namespace Taskie {
             }
         }
 
-        public void DeterminePro() // Locks down features for free users.
+        public async void DeterminePro() // Locks down features for free users.
         {
-            if (Settings.isPro) {
+            if (await Settings.CheckIfProAsync()) {
                 proText.Text = "PRO";
                 BottomRow.Height = new GridLength(62);
                 UpdateButton.Visibility = Visibility.Collapsed;
@@ -462,7 +451,7 @@ namespace Taskie {
 
 
         private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
-            if (!Settings.isPro) {
+            if (!await Settings.CheckIfProAsync()) {
                 try {
                     ProductPurchaseStatus result = (await CurrentAppSimulator.RequestProductPurchaseAsync("ProLifetime")).Status;
                     if (result.HasFlag(ProductPurchaseStatus.Succeeded) || result.HasFlag(ProductPurchaseStatus.AlreadyPurchased)) {

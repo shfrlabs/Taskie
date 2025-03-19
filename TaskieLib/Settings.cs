@@ -1,13 +1,13 @@
-﻿using Windows.ApplicationModel.Store;
+﻿using System.Threading.Tasks;
+using System;
 using Windows.Foundation.Collections;
+using Windows.Services.Store;
 using Windows.Storage;
 
 namespace TaskieLib {
     public static class Settings {
         private static IPropertySet savedSettings = ApplicationData.Current.LocalSettings.Values;
-#if DEBUG
-        private static LicenseInformation licenseInformation = CurrentAppSimulator.LicenseInformation;
-#endif
+        private static StoreContext context = StoreContext.GetDefault();
         // Application theme (light/dark)
         public static string Theme {
             get {
@@ -51,15 +51,11 @@ namespace TaskieLib {
                 savedSettings["launched"] = value ? "1" : "0";
             }
         }
-        // value for testing Pro, will be replaced with Store identification when that rolls around
-        public static bool isPro {
-            get {
-#if DEBUG
-                return true;
-                //return licenseInformation.ProductLicenses["ProLifetime"].IsActive;
-#endif
-                return false;
-            }
+
+        public static async Task<bool> CheckIfProAsync() {
+            StoreContext storeContext = StoreContext.GetDefault();
+            StoreAppLicense license = await storeContext.GetAppLicenseAsync();
+            return license != null && license.SkuStoreId == "ProLifetime";
         }
     }
 }

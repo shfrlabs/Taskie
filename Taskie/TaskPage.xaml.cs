@@ -38,7 +38,7 @@ namespace Taskie {
 
         #region Click handlers
 
-        private void CustomizeList_Click(object sender, RoutedEventArgs e) {
+        private async void CustomizeList_Click(object sender, RoutedEventArgs e) {
             StackPanel panel = new StackPanel() { Margin = new Thickness(2) };
 
             StackPanel bgbtnpanel = new StackPanel() {
@@ -55,7 +55,7 @@ namespace Taskie {
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10)
             };
-            button.IsEnabled = Settings.isPro;
+            button.IsEnabled = await Settings.CheckIfProAsync();
 
             button.Click += async (sender, args) => {
                 FileOpenPicker openPicker = new FileOpenPicker();
@@ -91,7 +91,7 @@ namespace Taskie {
                 Width = 250,
                 HorizontalAlignment = HorizontalAlignment.Center
             };
-            fontChooser.IsEnabled = Settings.isPro;
+            fontChooser.IsEnabled = await Settings.CheckIfProAsync();
             fontChooser.SelectionChanged += (s, a) => {
                 ListTools.ChangeListFont(listId, (fontChooser.SelectedItem as ListViewItem).Tag.ToString());
                 testname.FontFamily = new FontFamily((fontChooser.SelectedItem as ListViewItem).Tag.ToString());

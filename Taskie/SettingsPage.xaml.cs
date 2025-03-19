@@ -28,7 +28,7 @@ namespace Taskie {
 
         private async void CheckSecurity() {
             UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
-            if (availability != UserConsentVerifierAvailability.Available | !Settings.isPro) {
+            if (availability != UserConsentVerifierAvailability.Available | !await Settings.CheckIfProAsync()) {
                 AuthToggle.IsOn = false;
                 AuthToggle.IsEnabled = false;
                 Settings.isAuthUsed = false;
