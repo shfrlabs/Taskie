@@ -3,11 +3,12 @@ using System;
 using Windows.Foundation.Collections;
 using Windows.Services.Store;
 using Windows.Storage;
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace TaskieLib {
     public static class Settings {
         private static IPropertySet savedSettings = ApplicationData.Current.LocalSettings.Values;
-        private static StoreContext context = StoreContext.GetDefault();
         // Application theme (light/dark)
         public static string Theme {
             get {
@@ -54,8 +55,11 @@ namespace TaskieLib {
 
         public static async Task<bool> CheckIfProAsync() {
             StoreContext storeContext = StoreContext.GetDefault();
-            StoreAppLicense license = await storeContext.GetAppLicenseAsync();
-            return license != null && license.SkuStoreId == "ProLifetime";
+            StoreAppLicense appLicense = await storeContext.GetAppLicenseAsync();
+            if (appLicense.AddOnLicenses.TryGetValue("ProLifetime", out StoreLicense proLicense)) {
+                return proLicense.IsActive;
+            }
+            return false;
         }
     }
 }
