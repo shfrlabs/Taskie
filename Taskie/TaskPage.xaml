@@ -16,6 +16,7 @@
             TintOpacity=".4"
             TintColor="{StaticResource LayerFillColorDefault}"
             TintLuminosityOpacity="0.2"
+            FallbackColor="{StaticResource LayerFillColorDefault}"
             x:Key="AddTaskAcrylic" />
         <!-- laggy asf -->
         <lib:EmptyCollectionVisibilityConverter

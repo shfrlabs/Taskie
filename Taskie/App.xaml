@@ -27,6 +27,7 @@
                         BackgroundSource="Backdrop"
                         TintOpacity=".4"
                         TintColor="{StaticResource LayerFillColorDefault}"
+                        FallbackColor="{StaticResource LayerFillColorDefault}"
                         TintLuminosityOpacity="0.4"
                         x:Key="TaskAcrylic" />
                     <StaticResource

@@ -54,6 +54,9 @@ namespace TaskieLib {
         }
 
         public static async Task<bool> CheckIfProAsync() {
+#if DEBUG
+            return true;
+#endif
             StoreContext storeContext = StoreContext.GetDefault();
             StoreAppLicense appLicense = await storeContext.GetAppLicenseAsync();
             if (appLicense.AddOnLicenses.TryGetValue("ProLifetime", out StoreLicense proLicense)) {

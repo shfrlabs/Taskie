@@ -509,6 +509,7 @@ namespace Taskie {
         }
 
         private void TaskThreeDots_Loaded(object sender, RoutedEventArgs e) {
+            tasks = ListTools.ReadList(listId).Tasks;
             Button button = sender as Button;
             (button.Flyout as MenuFlyout).Items[0].Tag = button;
             ListTask boundTask = button.DataContext as ListTask;
