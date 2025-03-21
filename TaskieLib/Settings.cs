@@ -5,6 +5,7 @@ using Windows.Services.Store;
 using Windows.Storage;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace TaskieLib {
     public static class Settings {
@@ -53,16 +54,27 @@ namespace TaskieLib {
             }
         }
 
+        private static StoreContext context = null;
+
         public static async Task<bool> CheckIfProAsync() {
-#if DEBUG
-            return true;
-#endif
-            StoreContext storeContext = StoreContext.GetDefault();
-            StoreAppLicense appLicense = await storeContext.GetAppLicenseAsync();
-            if (appLicense.AddOnLicenses.TryGetValue("ProLifetime", out StoreLicense proLicense)) {
-                return proLicense.IsActive;
+            if (context == null) {
+                context = StoreContext.GetDefault();
             }
-            return false;
+
+            string[] productKinds = { "Durable" };
+            List<string> filterList = new List<string>(productKinds);
+
+            StoreProductQueryResult queryResult = await context.GetUserCollectionAsync(filterList);
+
+            if (queryResult.ExtendedError != null) {
+                Debug.WriteLine("[Store status] Error: " + queryResult.ExtendedError.Message);
+                return false;
+            }
+            else {
+                string productId = "9N7T6N7R39NR";
+
+                return queryResult.Products.ContainsKey(productId);
+            }
         }
     }
 }

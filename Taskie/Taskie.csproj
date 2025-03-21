@@ -30,7 +30,7 @@
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <LangVersion>8.0</LangVersion>
     <PackageCertificateKeyFile>Taskie_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <AppxPackageDir>C:\Users\bruno\Desktop\</AppxPackageDir>
+    <AppxPackageDir>C:\Users\Admin\Desktop\</AppxPackageDir>
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -281,7 +281,6 @@
     </PRIResource>
     <PRIResource Include="Strings\pl-PL\Resources.resw" />
     <PRIResource Include="Strings\es-ES\Resources.resw" />
-    <None Include="Taskie_TemporaryKey.pfx" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
