@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Taskie": {
+      "commandName": "MsixPackage"
+    }
+  }
+}
