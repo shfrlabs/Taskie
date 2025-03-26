@@ -4,6 +4,7 @@ using Windows.Foundation.Collections;
 using Windows.Services.Store;
 using Windows.Storage;
 using System.Diagnostics;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace TaskieLib {
