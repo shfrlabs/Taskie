@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -51,7 +52,7 @@ namespace TaskieLib {
                 List<(string name, string id, string emoji)> lists = new List<(string name, string id, string emoji)>();
                 foreach (FileInfo file in files) {
                     var content = File.ReadAllText(file.FullName);
-                    var metadata = JsonConvert.DeserializeObject<dynamic>(content).listmetadata;
+                    var metadata = JsonSerializer.Deserialize<dynamic>(content).listmetadata;
                     lists.Add((metadata?.Name.ToString(), file.Name, metadata?.Emoji));
                 }
                 return lists.ToArray();
@@ -75,9 +76,9 @@ namespace TaskieLib {
             try {
                 string taskFileContent = GetTaskFileContent(listId);
                 if (taskFileContent != null) {
-                    dynamic listData = JsonConvert.DeserializeObject<dynamic>(taskFileContent);
-                    var metadata = JsonConvert.DeserializeObject<ListMetadata>(listData.listmetadata.ToString());
-                    var tasks = JsonConvert.DeserializeObject<List<ListTask>>(listData.tasks.ToString());
+                    dynamic listData = JsonSerializer.Deserialize<dynamic>(taskFileContent);
+                    var metadata = JsonSerializer.Deserialize<ListMetadata>(listData.listmetadata.ToString());
+                    var tasks = JsonSerializer.Deserialize<List<ListTask>>(listData.tasks.ToString());
                     return (metadata, tasks);
                 }
             }
@@ -115,7 +116,7 @@ namespace TaskieLib {
                     listmetadata = metadata,
                     tasks = tasks
                 };
-                File.WriteAllText(filePath, JsonConvert.SerializeObject(listData));
+                File.WriteAllText(filePath, JsonSerializer.Serialize(listData));
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List saving] Exception occured: " + ex.Message);
@@ -204,10 +205,10 @@ namespace TaskieLib {
         public static async void ImportFile(StorageFile file) {
             try {
                 string content = await FileIO.ReadTextAsync(file);
-                dynamic listData = JsonConvert.DeserializeObject<dynamic>(content);
+                dynamic listData = JsonSerializer.Deserialize<dynamic>(content);
 
-                ListMetadata metadata = JsonConvert.DeserializeObject<ListMetadata>(listData.listmetadata.ToString());
-                var tasks = JsonConvert.DeserializeObject<List<ListTask>>(listData.tasks.ToString());
+                ListMetadata metadata = JsonSerializer.Deserialize<ListMetadata>(listData.listmetadata.ToString());
+                var tasks = JsonSerializer.Deserialize<List<ListTask>>(listData.tasks.ToString());
 
                 metadata.Name = GenerateUniqueListName(metadata.Name);
 
