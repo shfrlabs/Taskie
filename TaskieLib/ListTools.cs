@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,24 +7,25 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Windows.UI.Xaml.Media;
 
 namespace TaskieLib {
     public class ListTools {
+        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions {
+            PropertyNameCaseInsensitive = true
+        };
 
         #region Event declarations
 
         private static bool _isawopen;
-        public static bool isAWOpen // Whether or not compact overlay (Taskie Mini) is open
-        {
+        public static bool isAWOpen {
             get => _isawopen;
             set { if (!value) { AWClosedEvent.Invoke(); } else { AWOpenEvent.Invoke(); } _isawopen = value; }
         }
 
-        public delegate void AWClosed(); // Taskie Mini closed
+        public delegate void AWClosed();
         public static event AWClosed AWClosedEvent;
 
-        public delegate void AWOpen(); // Taskie Mini open
+        public delegate void AWOpen();
         public static event AWOpen AWOpenEvent;
 
         public delegate void ListCreated(string listID, string name);
@@ -48,17 +49,25 @@ namespace TaskieLib {
                 string localFolderPath = ApplicationData.Current.LocalFolder.Path;
                 DirectoryInfo info = new DirectoryInfo(localFolderPath);
                 FileInfo[] files = info.GetFiles("*.json");
-                List<(string name, string id, string emoji)> lists = new List<(string name, string id, string emoji)>();
+                var lists = new List<(string name, string id, string emoji)>();
+
                 foreach (FileInfo file in files) {
                     var content = File.ReadAllText(file.FullName);
-                    var metadata = JsonConvert.DeserializeObject<dynamic>(content).listmetadata;
-                    lists.Add((metadata?.Name.ToString(), file.Name, metadata?.Emoji));
+                    JsonDocument doc = JsonDocument.Parse(content);
+
+                    if (doc.RootElement.TryGetProperty("listmetadata", out var metadataElement)) {
+                        var metadata = JsonSerializer.Deserialize<ListMetadata>(metadataElement.GetRawText(), _jsonOptions);
+                        lists.Add((metadata?.Name, file.Name, metadata?.Emoji));
+                    }
+                    else {
+                        lists.Add((null, file.Name, null));
+                    }
                 }
                 return lists.ToArray();
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List getter] Exception occured: " + ex.Message);
-                return new (string name, string id, string emoji)[0];
+                return Array.Empty<(string, string, string)>();
             }
         }
 
@@ -75,16 +84,26 @@ namespace TaskieLib {
             try {
                 string taskFileContent = GetTaskFileContent(listId);
                 if (taskFileContent != null) {
-                    dynamic listData = JsonConvert.DeserializeObject<dynamic>(taskFileContent);
-                    var metadata = JsonConvert.DeserializeObject<ListMetadata>(listData.listmetadata.ToString());
-                    var tasks = JsonConvert.DeserializeObject<List<ListTask>>(listData.tasks.ToString());
-                    return (metadata, tasks);
+                    JsonDocument doc = JsonDocument.Parse(taskFileContent);
+                    var root = doc.RootElement;
+
+                    ListMetadata metadata = null;
+                    List<ListTask> tasks = null;
+
+                    if (root.TryGetProperty("listmetadata", out var metadataElement)) {
+                        metadata = JsonSerializer.Deserialize<ListMetadata>(metadataElement.GetRawText(), _jsonOptions);
+                    }
+
+                    if (root.TryGetProperty("tasks", out var tasksElement)) {
+                        tasks = JsonSerializer.Deserialize<List<ListTask>>(tasksElement.GetRawText(), _jsonOptions);
+                    }
+
+                    return (metadata ?? new ListMetadata(), tasks ?? new List<ListTask>());
                 }
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List reader] Exception occured: " + ex.Message);
             }
-
             return (new ListMetadata(), new List<ListTask>());
         }
 
@@ -115,7 +134,7 @@ namespace TaskieLib {
                     listmetadata = metadata,
                     tasks = tasks
                 };
-                File.WriteAllText(filePath, JsonConvert.SerializeObject(listData));
+                File.WriteAllText(filePath, JsonSerializer.Serialize(listData));
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List saving] Exception occured: " + ex.Message);
@@ -186,10 +205,7 @@ namespace TaskieLib {
 
         public static string GetTaskFileContent(string listId) {
             string filePath = GetFilePath(listId);
-            if (File.Exists(filePath)) {
-                return File.ReadAllText(filePath);
-            }
-            return null;
+            return File.Exists(filePath) ? File.ReadAllText(filePath) : null;
         }
 
         public static async Task<StorageFile> ExportedLists() {
@@ -204,19 +220,29 @@ namespace TaskieLib {
         public static async void ImportFile(StorageFile file) {
             try {
                 string content = await FileIO.ReadTextAsync(file);
-                dynamic listData = JsonConvert.DeserializeObject<dynamic>(content);
+                JsonDocument doc = JsonDocument.Parse(content);
+                var root = doc.RootElement;
 
-                ListMetadata metadata = JsonConvert.DeserializeObject<ListMetadata>(listData.listmetadata.ToString());
-                var tasks = JsonConvert.DeserializeObject<List<ListTask>>(listData.tasks.ToString());
+                ListMetadata metadata = null;
+                List<ListTask> tasks = null;
 
-                metadata.Name = GenerateUniqueListName(metadata.Name);
-
-                string newListId;
-                do {
-                    newListId = Guid.NewGuid().ToString();
+                if (root.TryGetProperty("listmetadata", out var metadataElement)) {
+                    metadata = JsonSerializer.Deserialize<ListMetadata>(metadataElement.GetRawText(), _jsonOptions);
                 }
-                while (File.Exists(GetFilePath(newListId)));
-                SaveList(newListId, tasks, metadata);
+
+                if (root.TryGetProperty("tasks", out var tasksElement)) {
+                    tasks = JsonSerializer.Deserialize<List<ListTask>>(tasksElement.GetRawText(), _jsonOptions);
+                }
+
+                if (metadata != null) {
+                    metadata.Name = GenerateUniqueListName(metadata.Name);
+                    string newListId;
+                    do {
+                        newListId = Guid.NewGuid().ToString();
+                    } while (File.Exists(GetFilePath(newListId)));
+
+                    SaveList(newListId, tasks, metadata);
+                }
             }
             catch (Exception ex) {
                 Debug.WriteLine("[File import] Exception occured: " + ex.Message);
@@ -228,6 +254,5 @@ namespace TaskieLib {
         }
 
         #endregion
-
     }
 }
