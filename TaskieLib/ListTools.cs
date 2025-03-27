@@ -1,17 +1,18 @@
-﻿using System.Text.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace TaskieLib {
     public class ListTools {
         private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions {
-            PropertyNameCaseInsensitive = true
+            PropertyNameCaseInsensitive = true,
+            TypeInfoResolver = JsonContext.Default
         };
 
         #region Event declarations
@@ -130,11 +131,11 @@ namespace TaskieLib {
             Debug.WriteLine("Saving " + listId);
             try {
                 string filePath = GetFilePath(listId);
-                var listData = new {
-                    listmetadata = metadata,
-                    tasks = tasks
-                };
-                File.WriteAllText(filePath, JsonSerializer.Serialize(listData));
+                ListData listData = new ListData(
+                    metadata,
+                    tasks
+                );
+                File.WriteAllText(filePath, JsonSerializer.Serialize(listData, _jsonOptions));
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List saving] Exception occured: " + ex.Message);
