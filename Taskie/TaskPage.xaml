@@ -11,15 +11,14 @@
    x:Name="TPage" Loaded="TPage_Loaded">
 
    <Page.Resources>
-       <AcrylicBrush
-           BackgroundSource="Backdrop"
-           TintOpacity=".4"
-           TintColor="{StaticResource LayerFillColorDefault}"
-           TintLuminosityOpacity="0.2"
-           FallbackColor="{StaticResource LayerFillColorDefault}"
-           x:Key="AddTaskAcrylic" />
-       <!-- laggy asf -->
-       <lib:EmptyCollectionVisibilityConverter
+        <AcrylicBrush
+            BackgroundSource="Backdrop"
+            TintOpacity=".4"
+            TintColor="{StaticResource LayerFillColorDefault}"
+            TintLuminosityOpacity="0.2"
+            FallbackColor="{StaticResource LayerFillColorDefault}"
+            x:Key="AddTaskAcrylic" />
+        <lib:EmptyCollectionVisibilityConverter
            x:Key="VisConverter" />
        <lib:ReverseEmptyCollectionVisibilityConverter
            x:Key="ReverseVisConverter" />
@@ -110,7 +109,7 @@
                            Margin="10"
                            Opacity="0.6"
                            TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind SubTasks.Count, Converter={StaticResource VisConverter}}" />
+                           Visibility="{x:Bind SubTasks.Count, Converter={StaticResource VisConverter}, Mode=OneWay}" />
                        <ListView
                            Margin="0,0,-13,0"
                            SelectionMode="None"

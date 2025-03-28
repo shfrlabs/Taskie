@@ -28,7 +28,7 @@ using Windows.UI.Xaml.Shapes;
 
 namespace Taskie {
     public sealed partial class TaskPage : Page {
-        private List<ListTask> tasks;
+        private List<ListTask>? tasks;
 
         public TaskPage() {
             this.InitializeComponent();
@@ -93,8 +93,8 @@ namespace Taskie {
             };
             fontChooser.IsEnabled = await Settings.CheckIfProAsync();
             fontChooser.SelectionChanged += (s, a) => {
-                ListTools.ChangeListFont(listId, (fontChooser.SelectedItem as ListViewItem).Tag.ToString());
-                testname.FontFamily = new FontFamily((fontChooser.SelectedItem as ListViewItem).Tag.ToString());
+                ListTools.ChangeListFont(listId, ((ListViewItem)fontChooser.SelectedItem).Tag.ToString());
+                testname.FontFamily = new FontFamily(((ListViewItem)fontChooser.SelectedItem).Tag.ToString());
             };
 
             fontExpander.Content = fontChooser;
@@ -125,8 +125,8 @@ namespace Taskie {
             content.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
             content.SelectedItem = data.Emoji;
             content.SelectionChanged += (sender, args) => {
-                if (listId.Replace(".json", null) != null && (sender as GridView).SelectedItem != null) {
-                    ListTools.ChangeListEmoji(listId.Replace(".json", null), (sender as GridView).SelectedItem.ToString());
+                if (!string.IsNullOrEmpty(listId) && (sender as GridView)?.SelectedItem != null) {
+                    ListTools.ChangeListEmoji(listId.Replace(".json", string.Empty), ((GridView)sender).SelectedItem.ToString());
                 }
             };
             emojiExpander.Content = content;
@@ -141,7 +141,7 @@ namespace Taskie {
 
             TextBox input = new TextBox() {
                 PlaceholderText = resourceLoader.GetString("TaskName"),
-                Text = note.Name,
+                Text = note?.Name,
                 Margin = new Thickness(-10),
                 Width = NameBox.ActualWidth + 40,
                 MaxWidth = 400
@@ -155,8 +155,8 @@ namespace Taskie {
             input.KeyDown += (s, args) => { if (args.Key == VirtualKey.Enter) { flyout.Hide(); } };
 
             flyout.Closed += (s, args) => {
-                string newName = input.Text;
-                if (!string.IsNullOrEmpty(newName) && newName != note.Name) {
+                string? newName = input.Text;
+                if (!string.IsNullOrEmpty(newName) && newName != note?.Name) {
                     note.Name = newName;
 
                     var data = ListTools.ReadList(listId);
@@ -638,8 +638,8 @@ namespace Taskie {
 
         public ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
-        public string listname { get; set; }
-        public string listId { get; set; }
+        public string? listname { get; set; }
+        public string? listId { get; set; }
 
         private static SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
 
@@ -891,6 +891,7 @@ namespace Taskie {
                     };
                     try {
                         parent.SubTasks.Add(task2add);
+                        sender.Text = string.Empty;
                     }
                     catch {
                         if (parent.SubTasks == null) {
