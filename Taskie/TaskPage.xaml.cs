@@ -309,9 +309,6 @@ namespace Taskie {
 
                 ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
                 if (taskToRemove != null) {
-                    if (parentTask.SubTasks.Count == 1 && parentTask.SubTasks.Last().IsDone == true) {
-                        ChangeProgressBarValue(parentTask, false, 0);
-                    }
                     parentTask.SubTasks.Remove(taskToRemove);
                     tasks[index] = parentTask;
                     (taskListView.Items[index] as ListTask).SubTasks = parentTask.SubTasks;
@@ -541,10 +538,6 @@ namespace Taskie {
             catch (Exception ex) { Debug.WriteLine("[TaskThreeDots_Loaded] Exception occured: " + ex.Message); }
         }
 
-        private void Progress_Loaded(object sender, RoutedEventArgs e) {
-            HideShowProgress(sender as Windows.UI.Xaml.Controls.ProgressBar);
-        }
-
         private void SubTaskThreeDots_Loaded(object sender, RoutedEventArgs e) {
             ((sender as Button).Flyout as MenuFlyout).Items[0].Tag = sender;
         }
@@ -575,35 +568,6 @@ namespace Taskie {
 
                     if (taskNameText != null) {
                         taskNameText.Width = (sender as Rectangle).ActualWidth;
-                    }
-                }
-            }
-        }
-
-        private void ChangeProgressBarValue(object dataContext, bool addOne = false, int overrideTotal = -1) {
-            var listView = this.FindName("taskListView") as ListView;
-            if (listView == null)
-                return;
-            foreach (var item in listView.Items) {
-                if ((item as ListTask).CreationDate == (dataContext as ListTask).CreationDate) {
-                    var container = listView.ContainerFromItem(item) as ListViewItem;
-                    if (container == null)
-                        continue;
-
-                    var expander = FindVisualChild<Expander>(container, "rootGrid");
-                    if (expander == null)
-                        continue;
-
-                    var headerGrid = expander.Header as Grid;
-                    if (headerGrid == null)
-                        continue;
-
-                    var progressBar = headerGrid.Children
-                        .OfType<Windows.UI.Xaml.Controls.ProgressBar>()
-                        .FirstOrDefault();
-
-                    if (progressBar != null) {
-                        progressBar.Value = (double)((new ProgressConverter()).Convert(SubTaskNumber(expander, addOne, overrideTotal), typeof(double), null, null));
                     }
                 }
             }
@@ -742,15 +706,6 @@ namespace Taskie {
             }
         }
 
-        private void HideShowProgress(Windows.UI.Xaml.Controls.ProgressBar progressBar) {
-            if (progressBar.Value == 0) {
-                progressBar.Visibility = Visibility.Collapsed;
-            }
-            else {
-                progressBar.Visibility = Visibility.Visible;
-            }
-        }
-
         #endregion
 
         #region Other events
@@ -885,11 +840,6 @@ namespace Taskie {
 
         private void TaskAdded_Grid(object sender, RoutedEventArgs e) {
             ChangeWidth(NameBox);
-            if ((sender as Expander).DataContext is ListTask listtask) {
-                if (listtask.SubTasks != null && listtask.SubTasks.Count > 0) {
-                    (sender as Expander).IsExpanded = true; // NAASTY workaround cause the tasks only count in the progressbar when its expanded..
-                }
-            }
         }
 
         private async void SubTaskStateChanged(object sender, RoutedEventArgs e) {
@@ -910,7 +860,6 @@ namespace Taskie {
                 foreach (var task in tasks) {
                     var subTask = task.SubTasks.FirstOrDefault(st => st.CreationDate == taskToChange.CreationDate);
                     if (subTask != null) {
-                        ChangeProgressBarValue(task);
                         subTask.IsDone = checkBox.IsChecked ?? false;
                         break;
                     }
@@ -921,10 +870,6 @@ namespace Taskie {
             finally {
                 _updateSemaphore.Release();
             }
-        }
-
-        private void Progress_ValueChanged(object sender, RangeBaseValueChangedEventArgs e) {
-            HideShowProgress(sender as Windows.UI.Xaml.Controls.ProgressBar);
         }
 
         private void SubTaskBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args) {
@@ -952,7 +897,6 @@ namespace Taskie {
                             parent.SubTasks = new ObservableCollection<ListTask> { task2add };
                         }
                     }
-                    ChangeProgressBarValue(parent, true);
                 }
             }
             Debug.WriteLine(index);
