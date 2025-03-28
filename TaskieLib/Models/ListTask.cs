@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using TaskieLib;
 using Windows.ApplicationModel.Resources;
 using Windows.Data.Xml.Dom;
-using Windows.Storage;
 using Windows.UI.Notifications;
+using WinRT;
 
-public class ListTask : INotifyPropertyChanged {
+[GeneratedBindableCustomProperty]
+public partial class ListTask : INotifyPropertyChanged {
     private DateTime _creationDate;
     private DateTime? _parentCreationDate;
     private string _name;

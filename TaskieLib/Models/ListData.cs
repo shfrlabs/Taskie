@@ -9,8 +9,7 @@ namespace TaskieLib {
     /// This is used in favor of an anonymous type to allow for source-generated JSON serialization.
     /// </remarks>
     public sealed class ListData {
-        public ListData(ListMetadata listmetadata, List<ListTask> tasks)
-        {
+        public ListData(ListMetadata listmetadata, List<ListTask> tasks) {
             this.Metadata = listmetadata;
             this.Tasks = tasks;
         }

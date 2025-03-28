@@ -8,7 +8,6 @@ using TaskieLib;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
 using Windows.ApplicationModel.Store;
-using Windows.Networking;
 using Windows.Security.Credentials.UI;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -432,8 +431,7 @@ namespace Taskie {
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             dialog.PrimaryButtonText = "OK";
-            dialog.PrimaryButtonClick += (sender, args) =>
-            {
+            dialog.PrimaryButtonClick += (sender, args) => {
                 if (string.IsNullOrEmpty(box.Text)) {
                     listName = ListTools.CreateList(resourceLoader.GetString("NewList"), null, emojiButton.Content.ToString());
                 }

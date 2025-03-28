@@ -870,7 +870,7 @@ namespace Taskie {
                 var data = ListTools.ReadList(listId);
                 var metadata = data.Metadata;
                 var tasks = data.Tasks;
-                
+
                 ListTask task = new ListTask() {
                     Name = (sender as AutoSuggestBox).Text,
                     CreationDate = DateTime.Now,
