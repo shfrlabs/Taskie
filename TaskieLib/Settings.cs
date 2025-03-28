@@ -1,11 +1,10 @@
-﻿using System.Threading.Tasks;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Windows.Foundation.Collections;
 using Windows.Services.Store;
 using Windows.Storage;
-using System.Diagnostics;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace TaskieLib {
     public static class Settings {

@@ -28,7 +28,7 @@ using Windows.UI.Xaml.Shapes;
 
 namespace Taskie {
     public sealed partial class TaskPage : Page {
-        private List<ListTask> tasks;
+        private List<ListTask>? tasks;
 
         public TaskPage() {
             this.InitializeComponent();
@@ -93,8 +93,8 @@ namespace Taskie {
             };
             fontChooser.IsEnabled = await Settings.CheckIfProAsync();
             fontChooser.SelectionChanged += (s, a) => {
-                ListTools.ChangeListFont(listId, (fontChooser.SelectedItem as ListViewItem).Tag.ToString());
-                testname.FontFamily = new FontFamily((fontChooser.SelectedItem as ListViewItem).Tag.ToString());
+                ListTools.ChangeListFont(listId, ((ListViewItem)fontChooser.SelectedItem).Tag.ToString());
+                testname.FontFamily = new FontFamily(((ListViewItem)fontChooser.SelectedItem).Tag.ToString());
             };
 
             fontExpander.Content = fontChooser;
@@ -125,8 +125,8 @@ namespace Taskie {
             content.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
             content.SelectedItem = data.Emoji;
             content.SelectionChanged += (sender, args) => {
-                if (listId.Replace(".json", null) != null && (sender as GridView).SelectedItem != null) {
-                    ListTools.ChangeListEmoji(listId.Replace(".json", null), (sender as GridView).SelectedItem.ToString());
+                if (!string.IsNullOrEmpty(listId) && (sender as GridView)?.SelectedItem != null) {
+                    ListTools.ChangeListEmoji(listId.Replace(".json", string.Empty), ((GridView)sender).SelectedItem.ToString());
                 }
             };
             emojiExpander.Content = content;
@@ -141,7 +141,7 @@ namespace Taskie {
 
             TextBox input = new TextBox() {
                 PlaceholderText = resourceLoader.GetString("TaskName"),
-                Text = note.Name,
+                Text = note?.Name,
                 Margin = new Thickness(-10),
                 Width = NameBox.ActualWidth + 40,
                 MaxWidth = 400
@@ -155,15 +155,17 @@ namespace Taskie {
             input.KeyDown += (s, args) => { if (args.Key == VirtualKey.Enter) { flyout.Hide(); } };
 
             flyout.Closed += (s, args) => {
-                string newName = input.Text;
-                if (!string.IsNullOrEmpty(newName) && newName != note.Name) {
+                string? newName = input.Text;
+                if (!string.IsNullOrEmpty(newName) && newName != note?.Name) {
                     note.Name = newName;
 
-                    (ListMetadata data, List<ListTask> tasks) = ListTools.ReadList(listId);
+                    var data = ListTools.ReadList(listId);
+                    var metadata = data.Metadata;
+                    var tasks = data.Tasks;
 
                     int index = tasks.FindIndex(task => task.CreationDate == note.CreationDate);
                     tasks[index] = note;
-                    ListTools.SaveList(listId, tasks, data);
+                    ListTools.SaveList(listId, tasks, metadata);
                 }
             };
             if (menuFlyoutItem.Tag is Button button) {
@@ -173,7 +175,9 @@ namespace Taskie {
 
         private void DeleteTask_Click(object sender, RoutedEventArgs e) {
             ListTask taskToDelete = (sender as MenuFlyoutItem).DataContext as ListTask;
-            (ListMetadata metadata, List<ListTask> tasks) = ListTools.ReadList(listId);
+            var data = ListTools.ReadList(listId);
+            var metadata = data.Metadata;
+            var tasks = data.Tasks;
             int index = tasks.FindIndex(task => task.CreationDate == taskToDelete.CreationDate);
             if (index != -1) {
                 tasks.RemoveAt(index);
@@ -247,7 +251,9 @@ namespace Taskie {
                 return;
             }
 
-            (ListMetadata meta, List<ListTask> tasks) = ListTools.ReadList(listId);
+            var data = ListTools.ReadList(listId);
+            var metadata = data.Metadata;
+            var tasks = data.Tasks;
 
             TextBox input = new TextBox() {
                 PlaceholderText = resourceLoader.GetString("TaskName"),
@@ -293,7 +299,9 @@ namespace Taskie {
                 return;
             }
 
-            (ListMetadata meta, List<ListTask> tasks) = ListTools.ReadList(listId);
+            var data = ListTools.ReadList(listId);
+            var metadata = data.Metadata;
+            var tasks = data.Tasks;
 
             int index = tasks.FindIndex(task => task.CreationDate == subTask?.ParentCreationDate);
             if (index > -1) {
@@ -301,9 +309,6 @@ namespace Taskie {
 
                 ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
                 if (taskToRemove != null) {
-                    if (parentTask.SubTasks.Count == 1 && parentTask.SubTasks.Last().IsDone == true) {
-                        ChangeProgressBarValue(parentTask, false, 0);
-                    }
                     parentTask.SubTasks.Remove(taskToRemove);
                     tasks[index] = parentTask;
                     (taskListView.Items[index] as ListTask).SubTasks = parentTask.SubTasks;
@@ -313,7 +318,7 @@ namespace Taskie {
             }
             else {
             }
-            ListTools.SaveList(listId, tasks, meta);
+            ListTools.SaveList(listId, tasks, metadata);
         }
 
         private async void CompactOverlay_Click(object sender, RoutedEventArgs e) {
@@ -367,7 +372,10 @@ namespace Taskie {
                 if (!string.IsNullOrEmpty(newName) && newName != note.Name) {
                     note.Name = newName;
 
-                    (ListMetadata metadata, List<ListTask> tasks) = ListTools.ReadList(listId);
+                    var data = ListTools.ReadList(listId);
+                    var metadata = data.Metadata;
+                    var tasks = data.Tasks;
+
                     int index = tasks.FindIndex(task => task.CreationDate == note.CreationDate);
                     tasks[index] = note;
                     ListTools.SaveList(listId, tasks, metadata);
@@ -383,7 +391,9 @@ namespace Taskie {
                 return;
             }
 
-            (ListMetadata meta, List<ListTask> tasks) = ListTools.ReadList(listId);
+            var data = ListTools.ReadList(listId);
+            var metadata = data.Metadata;
+            var tasks = data.Tasks;
 
             TextBox input = new TextBox() {
                 PlaceholderText = resourceLoader.GetString("TaskName"),
@@ -465,7 +475,10 @@ namespace Taskie {
         }
 
         private void testname_Loaded(object sender, RoutedEventArgs e) {
-            (ListMetadata metadata, List<ListTask> tasks) = ListTools.ReadList(listId);
+            var data = ListTools.ReadList(listId);
+            var metadata = data.Metadata;
+            var tasks = data.Tasks;
+
             try {
                 testname.FontFamily = new FontFamily(metadata.TitleFont);
             }
@@ -525,10 +538,6 @@ namespace Taskie {
             catch (Exception ex) { Debug.WriteLine("[TaskThreeDots_Loaded] Exception occured: " + ex.Message); }
         }
 
-        private void Progress_Loaded(object sender, RoutedEventArgs e) {
-            HideShowProgress(sender as Windows.UI.Xaml.Controls.ProgressBar);
-        }
-
         private void SubTaskThreeDots_Loaded(object sender, RoutedEventArgs e) {
             ((sender as Button).Flyout as MenuFlyout).Items[0].Tag = sender;
         }
@@ -559,35 +568,6 @@ namespace Taskie {
 
                     if (taskNameText != null) {
                         taskNameText.Width = (sender as Rectangle).ActualWidth;
-                    }
-                }
-            }
-        }
-
-        private void ChangeProgressBarValue(object dataContext, bool addOne = false, int overrideTotal = -1) {
-            var listView = this.FindName("taskListView") as ListView;
-            if (listView == null)
-                return;
-            foreach (var item in listView.Items) {
-                if ((item as ListTask).CreationDate == (dataContext as ListTask).CreationDate) {
-                    var container = listView.ContainerFromItem(item) as ListViewItem;
-                    if (container == null)
-                        continue;
-
-                    var expander = FindVisualChild<Expander>(container, "rootGrid");
-                    if (expander == null)
-                        continue;
-
-                    var headerGrid = expander.Header as Grid;
-                    if (headerGrid == null)
-                        continue;
-
-                    var progressBar = headerGrid.Children
-                        .OfType<Windows.UI.Xaml.Controls.ProgressBar>()
-                        .FirstOrDefault();
-
-                    if (progressBar != null) {
-                        progressBar.Value = (double)((new ProgressConverter()).Convert(SubTaskNumber(expander, addOne, overrideTotal), typeof(double), null, null));
                     }
                 }
             }
@@ -658,8 +638,8 @@ namespace Taskie {
 
         public ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
-        public string listname { get; set; }
-        public string listId { get; set; }
+        public string? listname { get; set; }
+        public string? listId { get; set; }
 
         private static SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
 
@@ -726,15 +706,6 @@ namespace Taskie {
             }
         }
 
-        private void HideShowProgress(Windows.UI.Xaml.Controls.ProgressBar progressBar) {
-            if (progressBar.Value == 0) {
-                progressBar.Visibility = Visibility.Collapsed;
-            }
-            else {
-                progressBar.Visibility = Visibility.Visible;
-            }
-        }
-
         #endregion
 
         #region Other events
@@ -785,9 +756,13 @@ namespace Taskie {
 
         protected override async void OnNavigatedTo(NavigationEventArgs e) {
             listId = e.Parameter.ToString();
-            (ListMetadata data, List<ListTask> tasks) = ListTools.ReadList(listId);
+
+            var data = ListTools.ReadList(listId);
+            var metadata = data.Metadata;
+            var tasks = data.Tasks;
+
             if (e.Parameter != null) {
-                string name = data.Name;
+                string name = metadata.Name;
                 testname.Text = name;
                 listname = name;
             }
@@ -806,7 +781,10 @@ namespace Taskie {
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args) {
             if (!string.IsNullOrEmpty(args.QueryText)) {
-                (ListMetadata metadata, List<ListTask> tasks) = ListTools.ReadList(listId);
+                var data = ListTools.ReadList(listId);
+                var metadata = data.Metadata;
+                var tasks = data.Tasks;
+
                 ListTask task = new ListTask() {
                     Name = args.QueryText,
                     CreationDate = DateTime.Now,
@@ -821,13 +799,17 @@ namespace Taskie {
 
         private void TaskStateChanged(object sender, RoutedEventArgs e) {
             ListTask tasktoChange = (sender as CheckBox).DataContext as ListTask;
-            (ListMetadata data, List<ListTask> tasks) = ListTools.ReadList(listId);
+
+            var data = ListTools.ReadList(listId);
+            var metadata = data.Metadata;
+            var tasks = data.Tasks;
+
             try {
                 int index = tasks.FindIndex(task => task.CreationDate == tasktoChange.CreationDate);
                 if (index != -1) {
                     tasktoChange.IsDone = (bool)(sender as CheckBox).IsChecked;
                     tasks[index] = tasktoChange;
-                    ListTools.SaveList(listId, tasks, data);
+                    ListTools.SaveList(listId, tasks, metadata);
                 }
             }
             catch (Exception ex) { Debug.WriteLine("[Task state change] Exception occured: " + ex.Message); }
@@ -840,7 +822,10 @@ namespace Taskie {
 
         private void AutoSuggestBox_KeyDown(object sender, KeyRoutedEventArgs e) {
             if (e.Key == Windows.System.VirtualKey.Enter && !string.IsNullOrEmpty((sender as AutoSuggestBox).Text)) {
-                (ListMetadata metadata, List<ListTask> tasks) = ListTools.ReadList(listId);
+                var data = ListTools.ReadList(listId);
+                var metadata = data.Metadata;
+                var tasks = data.Tasks;
+
                 ListTask task = new ListTask() {
                     Name = (sender as AutoSuggestBox).Text,
                     CreationDate = DateTime.Now,
@@ -855,11 +840,6 @@ namespace Taskie {
 
         private void TaskAdded_Grid(object sender, RoutedEventArgs e) {
             ChangeWidth(NameBox);
-            if ((sender as Expander).DataContext is ListTask listtask) {
-                if (listtask.SubTasks != null && listtask.SubTasks.Count > 0) {
-                    (sender as Expander).IsExpanded = true; // NAASTY workaround cause the tasks only count in the progressbar when its expanded..
-                }
-            }
         }
 
         private async void SubTaskStateChanged(object sender, RoutedEventArgs e) {
@@ -880,7 +860,6 @@ namespace Taskie {
                 foreach (var task in tasks) {
                     var subTask = task.SubTasks.FirstOrDefault(st => st.CreationDate == taskToChange.CreationDate);
                     if (subTask != null) {
-                        ChangeProgressBarValue(task);
                         subTask.IsDone = checkBox.IsChecked ?? false;
                         break;
                     }
@@ -893,14 +872,13 @@ namespace Taskie {
             }
         }
 
-        private void Progress_ValueChanged(object sender, RangeBaseValueChangedEventArgs e) {
-            HideShowProgress(sender as Windows.UI.Xaml.Controls.ProgressBar);
-        }
-
         private void SubTaskBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args) {
-            (ListMetadata meta, List<ListTask> tasklist) = ListTools.ReadList(listId);
+            var data = ListTools.ReadList(listId);
+            var metadata = data.Metadata;
+            var tasks = data.Tasks;
+
             ListTask parent = sender.DataContext as ListTask;
-            int index = tasklist.FindIndex(task => task.CreationDate == parent?.CreationDate);
+            int index = tasks.FindIndex(task => task.CreationDate == parent?.CreationDate);
             if (parent != null) {
 
                 if (!string.IsNullOrEmpty(sender.Text)) {
@@ -913,19 +891,19 @@ namespace Taskie {
                     };
                     try {
                         parent.SubTasks.Add(task2add);
+                        sender.Text = string.Empty;
                     }
                     catch {
                         if (parent.SubTasks == null) {
                             parent.SubTasks = new ObservableCollection<ListTask> { task2add };
                         }
                     }
-                    ChangeProgressBarValue(parent, true);
                 }
             }
             Debug.WriteLine(index);
             if (index > -1) {
-                tasklist[index] = parent;
-                ListTools.SaveList(listId, tasklist, meta);
+                tasks[index] = parent;
+                ListTools.SaveList(listId, tasks, metadata);
             }
         }
 

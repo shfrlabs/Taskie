@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.Storage;
 using Windows.UI.Xaml.Data;
 
 namespace TaskieLib {
-    public class Tools {
+    public partial class Tools {
         public static string[] GetSystemEmojis() {
             List<string> emojis = new List<string>();
 
@@ -41,11 +39,11 @@ namespace TaskieLib {
             return emojis.ToArray();
         }
 
-        public class IncrementalEmojiSource : ObservableCollection<string>, ISupportIncrementalLoading // source for emojis in the "Change emoji" dialog
+        public partial class IncrementalEmojiSource : ObservableCollection<string>, ISupportIncrementalLoading // source for emojis in the "Change emoji" dialog
         {
             private readonly string[] allEmojis;
             private int currentIndex = 0;
-            private const int BatchSize = 50;
+            private const int BatchSize = 30;
 
             public IncrementalEmojiSource(string[] emojis) {
                 allEmojis = emojis;
