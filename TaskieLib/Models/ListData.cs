@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace TaskieLib {
     /// <summary>
@@ -10,11 +11,14 @@ namespace TaskieLib {
     public sealed class ListData {
         public ListData(ListMetadata listmetadata, List<ListTask> tasks)
         {
-            this.listmetadata = listmetadata;
-            this.tasks = tasks;
+            this.Metadata = listmetadata;
+            this.Tasks = tasks;
         }
 
-        public ListMetadata listmetadata { get; set; }
-        public List<ListTask> tasks { get; set; }
+        [JsonPropertyName("listmetadata")]
+        public ListMetadata Metadata { get; set; }
+
+        [JsonPropertyName("tasks")]
+        public List<ListTask> Tasks { get; set; }
     }
 }

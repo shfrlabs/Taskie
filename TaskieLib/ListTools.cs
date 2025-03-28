@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -81,7 +82,7 @@ namespace TaskieLib {
             return uniqueName;
         }
 
-        public static (ListMetadata Metadata, List<ListTask> Tasks) ReadList(string listId) {
+        public static ListData ReadList(string listId) {
             try {
                 string taskFileContent = GetTaskFileContent(listId);
                 if (taskFileContent != null) {
@@ -99,13 +100,13 @@ namespace TaskieLib {
                         tasks = JsonSerializer.Deserialize<List<ListTask>>(tasksElement.GetRawText(), _jsonOptions);
                     }
 
-                    return (metadata ?? new ListMetadata(), tasks ?? new List<ListTask>());
+                    return new ListData(metadata ?? new ListMetadata(), tasks ?? new List<ListTask>());
                 }
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List reader] Exception occured: " + ex.Message);
             }
-            return (new ListMetadata(), new List<ListTask>());
+            return new ListData(new ListMetadata(), new List<ListTask>());
         }
 
         public static string CreateList(string listName, int? groupId = 0, string emoji = "📋") {
@@ -159,7 +160,9 @@ namespace TaskieLib {
 
         public static void RenameList(string listId, string newListName) {
             try {
-                var (metadata, tasks) = ReadList(listId);
+                var data = ReadList(listId);
+                var metadata = data.Metadata;
+                var tasks = data.Tasks;
                 string oldName = metadata.Name;
                 metadata.Name = newListName;
                 SaveList(listId, tasks, metadata);
@@ -172,7 +175,9 @@ namespace TaskieLib {
 
         public static void ChangeListEmoji(string listId, string newEmoji) {
             try {
-                var (metadata, tasks) = ReadList(listId);
+                var data = ReadList(listId);
+                var metadata = data.Metadata;
+                var tasks = data.Tasks;
                 ListMetadata newData = metadata;
                 newData.Emoji = newEmoji;
                 Debug.WriteLine(newData.Emoji);
@@ -186,7 +191,9 @@ namespace TaskieLib {
 
         public static void ChangeListFont(string listId, string font) {
             try {
-                var (metadata, tasks) = ReadList(listId);
+                var data = ReadList(listId);
+                var metadata = data.Metadata;
+                var tasks = data.Tasks;
                 ListMetadata newData = metadata;
                 newData.TitleFont = font;
                 SaveList(listId, tasks, newData);
