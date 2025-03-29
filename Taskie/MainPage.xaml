@@ -79,7 +79,7 @@
                     Orientation="Vertical"
                     VerticalAlignment="Bottom">
                     <Button
-                        Background="{StaticResource SystemAccentColorLight2}"
+                        Background="{StaticResource ButtonBG}"
                         x:Name="AddItemBtn"
                         Click="AddList"
                         HorizontalContentAlignment="Center"
@@ -91,7 +91,7 @@
                             <ResourceDictionary>
                                 <ResourceDictionary.ThemeDictionaries>
                                     <ResourceDictionary
-                                        x:Key="Dark">
+                                        x:Key="Default">
                                         <SolidColorBrush
                                             x:Key="ButtonBackgroundPointerOver"
                                             Color="{StaticResource SystemAccentColorLight3}" />
@@ -103,10 +103,10 @@
                                         x:Key="Light">
                                         <SolidColorBrush
                                             x:Key="ButtonBackgroundPressed"
-                                            Color="{StaticResource SystemAccentColorLight3}" />
+                                            Color="{StaticResource SystemAccentColorDark2}" />
                                         <SolidColorBrush
                                             x:Key="ButtonBackgroundPointerOver"
-                                            Color="{StaticResource SystemAccentColorLight3}" />
+                                            Color="{StaticResource SystemAccentColorDark2}" />
                                     </ResourceDictionary>
                                 </ResourceDictionary.ThemeDictionaries>
                             </ResourceDictionary>
@@ -117,13 +117,13 @@
                                 Glyph="&#xE710;"
                                 FontSize="15"
                                 Margin="0,0,10,0"
-                                Foreground="Black"
+                                Foreground="{StaticResource ContrastText}"
                                 x:Name="NewListBtnIcon" />
                             <TextBlock
                                 FontSize="13"
                                 x:Uid="NewListBtn"
                                 x:Name="NewListBtnText"
-                                Foreground="Black" />
+                                Foreground="{StaticResource ContrastText}" />
                         </StackPanel>
                     </Button>
                     <AutoSuggestBox
@@ -191,7 +191,7 @@
                         Height="40"
                         CornerRadius="8"
                         BorderThickness="2"
-                        BorderBrush="{StaticResource SystemAccentColorLight2}">
+                        BorderBrush="{StaticResource ButtonBG}">
                         <StackPanel
                             Orientation="Horizontal">
                             <FontIcon

@@ -34,7 +34,14 @@
                         x:Key="ExpanderHeaderBackground"
                         ResourceKey="TaskAcrylic" />
                     <ResourceDictionary.ThemeDictionaries>
-                        <ResourceDictionary x:Key="Default">
+                        <ResourceDictionary
+                            x:Key="Default">
+                            <SolidColorBrush
+                                Color="Black"
+                                x:Key="ContrastText" />
+                            <SolidColorBrush
+                                x:Key="ButtonBG"
+                                Color="{StaticResource SystemAccentColorLight2}" />
                             <Color x:Key="BGColor">#202020</Color>
                             <LinearGradientBrush x:Key="ProBG" StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Offset="0">
@@ -46,7 +53,14 @@
                             </LinearGradientBrush>
                             <!-- Pro dialog background -->
                         </ResourceDictionary>
-                        <ResourceDictionary x:Key="Light">
+                        <ResourceDictionary
+                            x:Key="Light">
+                            <SolidColorBrush
+                                Color="White"
+                                x:Key="ContrastText" />
+                            <SolidColorBrush
+                                x:Key="ButtonBG"
+                                Color="{StaticResource SystemAccentColorDark1}" />
                             <Color x:Key="BGColor">#f3f3f3</Color>
                             <LinearGradientBrush x:Key="ProBG" StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Offset="0">
