@@ -58,7 +58,7 @@ namespace TaskieLib {
                     JsonDocument doc = JsonDocument.Parse(content);
 
                     if (doc.RootElement.TryGetProperty("listmetadata", out var metadataElement)) {
-                        var metadata = JsonSerializer.Deserialize<ListMetadata>(metadataElement.GetRawText(), _jsonOptions);
+                        var metadata = JsonSerializer.Deserialize(metadataElement.GetRawText(), JsonContext.Default.ListMetadata);
                         lists.Add((metadata?.Name, file.Name, metadata?.Emoji));
                     }
                     else {
@@ -93,11 +93,11 @@ namespace TaskieLib {
                     List<ListTask> tasks = null;
 
                     if (root.TryGetProperty("listmetadata", out var metadataElement)) {
-                        metadata = JsonSerializer.Deserialize<ListMetadata>(metadataElement.GetRawText(), _jsonOptions);
+                        metadata = JsonSerializer.Deserialize(metadataElement.GetRawText(), JsonContext.Default.ListMetadata);
                     }
 
                     if (root.TryGetProperty("tasks", out var tasksElement)) {
-                        tasks = JsonSerializer.Deserialize<List<ListTask>>(tasksElement.GetRawText(), _jsonOptions);
+                        tasks = JsonSerializer.Deserialize(tasksElement.GetRawText(), JsonContext.Default.ListListTask);
                     }
 
                     return new ListData(metadata ?? new ListMetadata(), tasks ?? new List<ListTask>());
@@ -136,7 +136,7 @@ namespace TaskieLib {
                     metadata,
                     tasks
                 );
-                File.WriteAllText(filePath, JsonSerializer.Serialize(listData, _jsonOptions));
+                File.WriteAllText(filePath, JsonSerializer.Serialize(listData, JsonContext.Default.ListData));
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List saving] Exception occured: " + ex.Message);
@@ -235,11 +235,11 @@ namespace TaskieLib {
                 List<ListTask> tasks = null;
 
                 if (root.TryGetProperty("listmetadata", out var metadataElement)) {
-                    metadata = JsonSerializer.Deserialize<ListMetadata>(metadataElement.GetRawText(), _jsonOptions);
+                    metadata = JsonSerializer.Deserialize(metadataElement.GetRawText(), JsonContext.Default.ListMetadata);
                 }
 
                 if (root.TryGetProperty("tasks", out var tasksElement)) {
-                    tasks = JsonSerializer.Deserialize<List<ListTask>>(tasksElement.GetRawText(), _jsonOptions);
+                    tasks = JsonSerializer.Deserialize(tasksElement.GetRawText(), JsonContext.Default.ListListTask);
                 }
 
                 if (metadata != null) {

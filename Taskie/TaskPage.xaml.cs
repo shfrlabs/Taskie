@@ -139,9 +139,13 @@ namespace Taskie {
             MenuFlyoutItem menuFlyoutItem = (MenuFlyoutItem)sender;
             var note = menuFlyoutItem.DataContext as ListTask;
 
+            if (note == null) {
+                return;
+            }
+
             TextBox input = new TextBox() {
                 PlaceholderText = resourceLoader.GetString("TaskName"),
-                Text = note?.Name,
+                Text = note.Name,
                 Margin = new Thickness(-10),
                 Width = NameBox.ActualWidth + 40,
                 MaxWidth = 400
@@ -156,7 +160,7 @@ namespace Taskie {
 
             flyout.Closed += (s, args) => {
                 string? newName = input.Text;
-                if (!string.IsNullOrEmpty(newName) && newName != note?.Name) {
+                if (!string.IsNullOrEmpty(newName) && newName != note.Name) {
                     note.Name = newName;
 
                     var data = ListTools.ReadList(listId);
@@ -174,7 +178,10 @@ namespace Taskie {
         }
 
         private void DeleteTask_Click(object sender, RoutedEventArgs e) {
-            ListTask taskToDelete = (sender as MenuFlyoutItem).DataContext as ListTask;
+            ListTask? taskToDelete = (sender as MenuFlyoutItem)?.DataContext as ListTask;
+            if (taskToDelete == null) {
+                return;
+            }
             var data = ListTools.ReadList(listId);
             var metadata = data.Metadata;
             var tasks = data.Tasks;
@@ -205,7 +212,7 @@ namespace Taskie {
             };
             input.KeyDown += (s, args) => { if (args.Key == VirtualKey.Enter) { flyout.Hide(); } };
             flyout.Closed += (s, args) => {
-                string text = input.Text;
+                string? text = input.Text;
                 if (!string.IsNullOrEmpty(text)) {
                     ListTools.RenameList(listId, text);
                     listname = text;
@@ -276,13 +283,14 @@ namespace Taskie {
                     if (index > -1) {
                         ListTask parentTask = tasks[index];
 
-                        ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
+                        ListTask? taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
                         if (taskToRemove != null) {
-                            parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = input.Text;
+                            var subTaskToUpdate = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
+                            if (subTaskToUpdate != null) {
+                                subTaskToUpdate.Name = input.Text;
+                            }
                             tasks[index] = parentTask;
                             (taskListView.Items[index] as ListTask).SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = input.Text;
-                        }
-                        else {
                         }
                     }
                 }
@@ -294,7 +302,7 @@ namespace Taskie {
         }
 
         private void DeleteSubTask_Click(object sender, RoutedEventArgs e) {
-            ListTask subTask = (sender as MenuFlyoutItem)?.DataContext as ListTask;
+            ListTask? subTask = (sender as MenuFlyoutItem)?.DataContext as ListTask;
             if (subTask == null) {
                 return;
             }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +16,7 @@ namespace TaskieLib {
         public static string Theme {
             get {
                 if (savedSettings.ContainsKey("theme")) {
-                    string theme = savedSettings["theme"] as string;
+                    string? theme = savedSettings["theme"] as string;
                     if (theme == "Light" || theme == "Dark" || theme == "System") {
                         return theme;
                     }
@@ -57,7 +59,7 @@ namespace TaskieLib {
         private static ConcurrentDictionary<string, bool> ownershipCache {
             get {
                 if (savedSettings.ContainsKey("ownershipCache")) {
-                    return savedSettings["ownershipCache"] as ConcurrentDictionary<string, bool>;
+                    return savedSettings["ownershipCache"] as ConcurrentDictionary<string, bool> ?? new ConcurrentDictionary<string, bool>();
                 }
                 else {
                     return new ConcurrentDictionary<string, bool>();
