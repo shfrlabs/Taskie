@@ -561,13 +561,44 @@ namespace Taskie {
         }
 
         private void ChangeWidth(object sender) {
-            foreach (ListTask task in taskListView.Items) {
-                var item = taskListView.ContainerFromItem(task) as ListViewItem;
-                if (item != null) {
-                    var taskNameText = FindDescendant<TextBlock>(item, "TaskNameText");
+            double newWidth = (sender as Rectangle)?.ActualWidth ?? 0;
 
-                    if (taskNameText != null) {
-                        taskNameText.Width = (sender as Rectangle).ActualWidth;
+            foreach (var task in taskListView.Items) {
+                ListViewItem taskContainer = taskListView.ContainerFromItem(task) as ListViewItem;
+                if (taskContainer == null) {
+                    continue;
+                }
+
+                var expander = FindDescendant<Expander>(taskContainer, "rootGrid");
+                if (expander != null) {
+                    if (expander.Header is FrameworkElement headerElement) {
+                        var taskNameText = FindDescendant<TextBlock>(headerElement, "TaskNameText");
+                        if (taskNameText != null) {
+                            taskNameText.Width = newWidth;
+                        }
+                    }
+
+                    if (expander.Content is FrameworkElement contentElement) {
+                        var subTaskList = FindDescendant<ListView>(contentElement, "SubTaskListView");
+                        if (subTaskList != null) {
+                            var listTask = task as ListTask;
+                            if (listTask?.SubTasks != null) {
+                                foreach (var subTask in listTask.SubTasks) {
+                                    ListViewItem subTaskContainer = subTaskList.ContainerFromItem(subTask) as ListViewItem;
+                                    if (subTaskContainer != null) {
+                                        var subTaskNameText = FindDescendant<TextBlock>(subTaskContainer, "TaskNameText");
+                                        if (subTaskNameText != null) {
+                                            subTaskNameText.Width = newWidth;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        var addSubTaskBox = FindDescendant<AutoSuggestBox>(contentElement, "AddSubTaskBox");
+                        if (addSubTaskBox != null) {
+                            addSubTaskBox.Width = newWidth + 120;
+                            addSubTaskBox.MaxWidth = newWidth + 120;
+                        }
                     }
                 }
             }
@@ -576,36 +607,30 @@ namespace Taskie {
         private T FindVisualChild<T>(DependencyObject obj, string name) where T : DependencyObject {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++) {
                 var child = VisualTreeHelper.GetChild(obj, i);
-                if (child != null && child is FrameworkElement && ((FrameworkElement)child).Name == name) {
+                if (child is FrameworkElement feChild && feChild.Name == name) {
                     return (T)child;
                 }
-
                 var childOfChild = FindVisualChild<T>(child, name);
-                if (childOfChild != null) {
+                if (childOfChild != null)
                     return childOfChild;
-                }
             }
             return null;
         }
 
         private T FindDescendant<T>(DependencyObject parent, string name) where T : FrameworkElement {
             int childCount = VisualTreeHelper.GetChildrenCount(parent);
-
             for (int i = 0; i < childCount; i++) {
                 var child = VisualTreeHelper.GetChild(parent, i);
-
-                if (child is T frameworkElement && frameworkElement.Name == name) {
+                if (child is T frameworkElement && frameworkElement.Name == name)
                     return frameworkElement;
-                }
-
                 var result = FindDescendant<T>(child, name);
-                if (result != null) {
+                if (result != null)
                     return result;
-                }
             }
-
             return null;
         }
+
+
 
         private (int, int) SubTaskNumber(Expander expander, bool addOne = false, int overrideTotal = -1) {
             int total = 0;
@@ -709,6 +734,15 @@ namespace Taskie {
         #endregion
 
         #region Other events
+
+
+        private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args) {
+            ChangeWidth(NameBox);
+        }
+
+        private void TaskPage_Unloaded(object sender, RoutedEventArgs e) {
+            ListTools.ListRenamedEvent -= ListRenamed;
+        }
 
         private void AWClosed(AppWindow sender, AppWindowClosedEventArgs args) {
             ListTools.isAWOpen = false;
@@ -815,7 +849,6 @@ namespace Taskie {
             catch (Exception ex) { Debug.WriteLine("[Task state change] Exception occured: " + ex.Message); }
 
         }
-
         private void NameBox_SizeChanged(object sender, SizeChangedEventArgs e) {
             ChangeWidth(sender);
         }
@@ -840,6 +873,59 @@ namespace Taskie {
 
         private void TaskAdded_Grid(object sender, RoutedEventArgs e) {
             ChangeWidth(NameBox);
+            double newWidth = NameBox.ActualWidth;
+            Expander expander = sender as Expander;
+            if (expander.Header is FrameworkElement headerElement) {
+                var taskNameText = FindDescendant<TextBlock>(headerElement, "TaskNameText");
+                if (taskNameText != null) {
+                    taskNameText.Width = newWidth;
+                }
+            }
+
+            if (expander.Content is FrameworkElement contentElement) {
+                var subTaskList = FindDescendant<ListView>(contentElement, "SubTaskListView");
+                if (subTaskList != null) {
+                    var listTask = (sender as Expander).DataContext as ListTask;
+                    if (listTask?.SubTasks != null) {
+                        foreach (var subTask in listTask.SubTasks) {
+                            ListViewItem subTaskContainer = subTaskList.ContainerFromItem(subTask) as ListViewItem;
+                            if (subTaskContainer != null) {
+                                var subTaskNameText = FindDescendant<TextBlock>(subTaskContainer, "TaskNameText");
+                                if (subTaskNameText != null) {
+                                    subTaskNameText.Width = newWidth;
+                                }
+                            }
+                        }
+                    }
+                }
+                var addSubTaskBox = FindDescendant<AutoSuggestBox>(contentElement, "AddSubTaskBox");
+                if (addSubTaskBox != null) {
+                    addSubTaskBox.Width = newWidth + 120;
+                    addSubTaskBox.MaxWidth = newWidth + 120;
+                }
+
+                addSubTaskBox.Loaded += (s, args) => {
+
+                    if (subTaskList != null) {
+                        var listTask = (sender as Expander).DataContext as ListTask;
+                        if (listTask?.SubTasks != null) {
+                            foreach (var subTask in listTask.SubTasks) {
+                                ListViewItem subTaskContainer = subTaskList.ContainerFromItem(subTask) as ListViewItem;
+                                if (subTaskContainer != null) {
+                                    var subTaskNameText = FindDescendant<TextBlock>(subTaskContainer, "TaskNameText");
+                                    if (subTaskNameText != null) {
+                                        subTaskNameText.Width = newWidth;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    addSubTaskBox.Width = NameBox.ActualWidth + 120;
+                    addSubTaskBox.MaxWidth = NameBox.ActualWidth + 120;
+                };
+            }
+
         }
 
         private async void SubTaskStateChanged(object sender, RoutedEventArgs e) {
@@ -907,7 +993,39 @@ namespace Taskie {
             }
         }
 
-        #endregion
+        private void rootGrid_Expanding(Expander sender, ExpanderExpandingEventArgs args) {
+            double newWidth = NameBox.ActualWidth;
+            Expander expander = sender;
+            if (expander.Header is FrameworkElement headerElement) {
+                var taskNameText = FindDescendant<TextBlock>(headerElement, "TaskNameText");
+                if (taskNameText != null) {
+                    taskNameText.Width = newWidth;
+                }
+            }
 
+            if (expander.Content is FrameworkElement contentElement) {
+                var subTaskList = FindDescendant<ListView>(contentElement, "SubTaskListView");
+                if (subTaskList != null) {
+                    var listTask = sender.DataContext as ListTask;
+                    if (listTask?.SubTasks != null) {
+                        foreach (var subTask in listTask.SubTasks) {
+                            ListViewItem subTaskContainer = subTaskList.ContainerFromItem(subTask) as ListViewItem;
+                            if (subTaskContainer != null) {
+                                var subTaskNameText = FindDescendant<TextBlock>(subTaskContainer, "TaskNameText");
+                                if (subTaskNameText != null) {
+                                    subTaskNameText.Width = newWidth;
+                                }
+                            }
+                        }
+                    }
+                }
+                var addSubTaskBox = FindDescendant<AutoSuggestBox>(contentElement, "AddSubTaskBox");
+                if (addSubTaskBox != null) {
+                    addSubTaskBox.Width = newWidth + 120;
+                    addSubTaskBox.MaxWidth = newWidth + 120;
+                }
+            }
+        }
     }
 }
+        #endregion

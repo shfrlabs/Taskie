@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -53,7 +54,21 @@ namespace TaskieLib {
             }
         }
 
-        private static StoreContext context = null;
+        private static ConcurrentDictionary<string, bool> ownershipCache {
+            get {
+                if (savedSettings.ContainsKey("ownershipCache")) {
+                    return savedSettings["ownershipCache"] as ConcurrentDictionary<string, bool>;
+                }
+                else {
+                    return new ConcurrentDictionary<string, bool>();
+                }
+            }
+            set {
+                savedSettings["ownershipCache"] = value;
+            }
+        }
+
+        private static StoreContext? context;
 
         public static async Task<bool> CheckIfProAsync() {
             if (context == null) {
@@ -67,12 +82,16 @@ namespace TaskieLib {
 
             if (queryResult.ExtendedError != null) {
                 Debug.WriteLine("[Store status] Error: " + queryResult.ExtendedError.Message);
+                if (ownershipCache.TryGetValue("9N7T6N7R39NR", out bool isOwned)) {
+                    return isOwned;
+                }
                 return false;
             }
             else {
                 string productId = "9N7T6N7R39NR";
-
-                return queryResult.Products.ContainsKey(productId);
+                bool productOwned = queryResult.Products.ContainsKey(productId);
+                ownershipCache.TryAdd(productId, productOwned);
+                return productOwned;
             }
         }
     }

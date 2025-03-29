@@ -1,16 +1,17 @@
 ﻿<Page
-   x:Class="Taskie.TaskPage"
-   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-   xmlns:local="using:Taskie"
-   xmlns:lib="using:TaskieLib"
-   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-   xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-   mc:Ignorable="d"
-   x:Name="TPage" Loaded="TPage_Loaded">
+    x:Class="Taskie.TaskPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Taskie"
+    xmlns:lib="using:TaskieLib"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    x:Name="TPage"
+    Loaded="TPage_Loaded">
 
-   <Page.Resources>
+    <Page.Resources>
         <AcrylicBrush
             BackgroundSource="Backdrop"
             TintOpacity=".4"
@@ -19,29 +20,30 @@
             FallbackColor="{StaticResource LayerFillColorDefault}"
             x:Key="AddTaskAcrylic" />
         <lib:EmptyCollectionVisibilityConverter
-           x:Key="VisConverter" />
-       <lib:ReverseEmptyCollectionVisibilityConverter
-           x:Key="ReverseVisConverter" />
-       <lib:ProgressConverter
-           x:Key="ProgressConverter" />
-       <lib:ProVisibilityConverter
-           x:Key="ProVisibilityConverter" />
-       <DataTemplate
-           x:Key="TaskItemTemplate"
-           x:DataType="lib:ListTask">
-           <muxc:Expander
-               HorizontalAlignment="Stretch"
-               HorizontalContentAlignment="Stretch"
-               Height="Auto"
-               Background="{StaticResource TaskAcrylic}"
-               x:Name="rootGrid"
-               Padding="15,5,15,5"
-               Margin="0,0,5,5"
-               CornerRadius="8"
-               BorderThickness="1"
-               Loaded="TaskAdded_Grid">
-               <muxc:Expander.Header>
-                   <Grid>
+            x:Key="VisConverter" />
+        <lib:ReverseEmptyCollectionVisibilityConverter
+            x:Key="ReverseVisConverter" />
+        <lib:ProgressConverter
+            x:Key="ProgressConverter" />
+        <lib:ProVisibilityConverter
+            x:Key="ProVisibilityConverter" />
+        <DataTemplate
+            x:Key="TaskItemTemplate"
+            x:DataType="lib:ListTask">
+            <muxc:Expander
+                Expanding="rootGrid_Expanding"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                Height="Auto"
+                Background="{StaticResource TaskAcrylic}"
+                x:Name="rootGrid"
+                Padding="15,5,15,5"
+                Margin="0,0,5,5"
+                CornerRadius="8"
+                BorderThickness="1"
+                Loaded="TaskAdded_Grid">
+                <muxc:Expander.Header>
+                    <Grid>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition
@@ -97,255 +99,262 @@
                             </Button>
                         </Grid>
                     </Grid>
-               </muxc:Expander.Header>
-               <muxc:Expander.Content>
-                   <StackPanel
-                       Orientation="Vertical">
-                       <TextBlock
-                           x:Uid="NoSubTasks"
-                           TextWrapping="Wrap"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Margin="10"
-                           Opacity="0.6"
-                           TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind SubTasks.Count, Converter={StaticResource VisConverter}, Mode=OneWay}" />
-                       <ListView
-                           Margin="0,0,-13,0"
-                           SelectionMode="None"
-                           HorizontalAlignment="Stretch"
-                           ItemTemplate="{StaticResource TaskSubItemTemplate}"
-                           ItemsSource="{x:Bind SubTasks}">
-                           <ListView.ItemContainerStyle>
-                               <Style
-                                   TargetType="ListViewItem">
-                                   <Setter
-                                       Property="HorizontalContentAlignment"
-                                       Value="Stretch" />
-                               </Style>
-                           </ListView.ItemContainerStyle>
-                       </ListView>
-                       <AutoSuggestBox
-                           x:Uid="AddSubTaskBox"
-                           Style="{StaticResource AddItemBoxStyle}"
-                           BorderThickness="0"
-                           Canvas.ZIndex="10"
-                           VerticalContentAlignment="Center"
-                           QuerySubmitted="SubTaskBox_QuerySubmitted"
-                           FontSize="14"
-                           HorizontalAlignment="Stretch"
-                           Height="45"
-                           VerticalAlignment="Bottom"
-                           CornerRadius="8">
-                           <AutoSuggestBox.QueryIcon>
-                               <FontIcon
-                                   Opacity=".9"
-                                   FontSize="12"
-                                   Glyph="&#xE710;" />
-                           </AutoSuggestBox.QueryIcon>
-                       </AutoSuggestBox>
-                   </StackPanel>
-               </muxc:Expander.Content>
-           </muxc:Expander>
-       </DataTemplate>
-       <DataTemplate
-           x:Key="TaskSubItemTemplate"
-           x:DataType="lib:ListTask">
-           <Grid>
-               <Grid.ColumnDefinitions>
-                   <ColumnDefinition
-                       Width="32" />
-                   <ColumnDefinition
-                       Width="*" />
-                   <ColumnDefinition
-                       Width="34" />
-               </Grid.ColumnDefinitions>
-               <CheckBox
-                   Grid.Column="0"
-                   Checked="SubTaskStateChanged"
-                   Unchecked="SubTaskStateChanged"
-                   x:Name="SubTaskCheckBox"
-                   IsChecked="{x:Bind IsDone}" />
-               <Grid
-                   Grid.Column="1">
-                   <TextBlock
-                       Text="{x:Bind Name}"
-                       DoubleTapped="SubTaskNameText_DoubleTapped"
-                       ToolTipService.ToolTip="{x:Bind Name}"
-                       MaxLines="2"
-                       TextWrapping="Wrap"
-                       TextTrimming="CharacterEllipsis"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left"
-                       x:Name="TaskNameText" />
-               </Grid>
-               <Button
-                   Background="Transparent"
-                   Height="32"
-                   BorderThickness="0"
-                   Width="34"
-                   Padding="0"
-                   Grid.Column="2"
-                   x:Name="SubTaskThreeDots"
-                   Loaded="SubTaskThreeDots_Loaded">
-                   <FontIcon
-                       FontSize="14"
-                       Glyph="&#xE10C;" />
-                   <Button.Flyout>
-                       <MenuFlyout>
-                           <MenuFlyoutItem
-                               Icon="Rename"
-                               Click="RenameSubTask_Click"
-                               x:Uid="RenameSubTask"
-                               Loaded="MenuFlyoutItem_Loaded" />
-                           <MenuFlyoutItem
-                               Icon="Delete"
-                               Click="DeleteSubTask_Click"
-                               x:Uid="DeleteSubTask" />
-                       </MenuFlyout>
-                   </Button.Flyout>
-               </Button>
-           </Grid>
-       </DataTemplate>
-   </Page.Resources>
+                </muxc:Expander.Header>
+                <muxc:Expander.Content>
+                    <StackPanel
+                        Orientation="Vertical">
+                        <TextBlock
+                            x:Uid="NoSubTasks"
+                            TextWrapping="Wrap"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="10"
+                            Opacity="0.6"
+                            TextTrimming="CharacterEllipsis"
+                            Visibility="{x:Bind SubTasks.Count, Converter={StaticResource VisConverter}, Mode=OneWay}" />
+                        <ListView
+                            x:Name="SubTaskListView"
+                            Margin="0,0,-13,0"
+                            SelectionMode="None"
+                            HorizontalAlignment="Stretch"
+                            ItemTemplate="{StaticResource TaskSubItemTemplate}"
+                            ItemsSource="{x:Bind SubTasks}">
+                            <ListView.ItemContainerStyle>
+                                <Style
+                                    TargetType="ListViewItem">
+                                    <Setter
+                                        Property="HorizontalContentAlignment"
+                                        Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                        <!-- Added x:Name so this AutoSuggestBox can be found in code -->
+                        <AutoSuggestBox
+                            x:Name="AddSubTaskBox"
+                            x:Uid="AddSubTaskBox"
+                            TextChanged="AutoSuggestBox_TextChanged"
+                            Style="{StaticResource AddItemBoxStyle}"
+                            BorderThickness="0"
+                            Canvas.ZIndex="10"
+                            VerticalContentAlignment="Center"
+                            QuerySubmitted="SubTaskBox_QuerySubmitted"
+                            FontSize="14"
+                            HorizontalAlignment="Stretch"
+                            Height="45"
+                            VerticalAlignment="Bottom"
+                            CornerRadius="8">
+                            <AutoSuggestBox.QueryIcon>
+                                <FontIcon
+                                    Opacity=".9"
+                                    FontSize="12"
+                                    Glyph="&#xE710;" />
+                            </AutoSuggestBox.QueryIcon>
+                        </AutoSuggestBox>
+                    </StackPanel>
+                </muxc:Expander.Content>
+            </muxc:Expander>
+        </DataTemplate>
+        <DataTemplate
+            x:Key="TaskSubItemTemplate"
+            x:DataType="lib:ListTask">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="32" />
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="34" />
+                </Grid.ColumnDefinitions>
+                <CheckBox
+                    Grid.Column="0"
+                    Checked="SubTaskStateChanged"
+                    Unchecked="SubTaskStateChanged"
+                    x:Name="SubTaskCheckBox"
+                    IsChecked="{x:Bind IsDone}" />
+                <Grid
+                    Grid.Column="1">
+                    <TextBlock
+                        Text="{x:Bind Name}"
+                        DoubleTapped="SubTaskNameText_DoubleTapped"
+                        ToolTipService.ToolTip="{x:Bind Name}"
+                        MaxLines="2"
+                        TextWrapping="Wrap"
+                        TextTrimming="CharacterEllipsis"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        x:Name="TaskNameText" />
+                </Grid>
+                <Button
+                    Background="Transparent"
+                    Height="32"
+                    BorderThickness="0"
+                    Width="34"
+                    Padding="0"
+                    Grid.Column="2"
+                    x:Name="SubTaskThreeDots"
+                    Loaded="SubTaskThreeDots_Loaded">
+                    <FontIcon
+                        FontSize="14"
+                        Glyph="&#xE10C;" />
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                Icon="Rename"
+                                Click="RenameSubTask_Click"
+                                x:Uid="RenameSubTask"
+                                Loaded="MenuFlyoutItem_Loaded" />
+                            <MenuFlyoutItem
+                                Icon="Delete"
+                                Click="DeleteSubTask_Click"
+                                x:Uid="DeleteSubTask" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
 
-   <Grid
-       Margin="20,25,20,20"
-       x:Name="maingrid">
-       <Image
-           x:Name="bgImage"
-           Opacity="0"
-           HorizontalAlignment="Stretch"
-           VerticalAlignment="Stretch"
-           Stretch="UniformToFill" Margin="-20, -25, -20, -20" />
-       <Grid
-           HorizontalAlignment="Stretch"
-           VerticalAlignment="Top">
-           <!-- i should change the testname fr -->
-           <TextBlock
-               x:Name="testname"
-               FontWeight="SemiBold"
-               FontSize="28"
-               TextTrimming="CharacterEllipsis"
-               Loaded="testname_Loaded"></TextBlock>
-           <StackPanel
-               Orientation="Horizontal"
-               VerticalAlignment="Top"
-               HorizontalAlignment="Right"
-               Margin="0,10,7,0">
-               <Button
-                   Margin="0,0,5,0"
-                   x:Name="topoptions"
-                   Loaded="topoptions_Loaded"
-                   Background="Transparent"
-                   BorderThickness="0"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Right"
-                   Canvas.ZIndex="999">
-                   <Button.Content>
-                       <FontIcon
-                           Glyph="&#xE712;"
-                           FontSize="14" />
-                   </Button.Content>
-                   <Button.Flyout>
-                       <MenuFlyout
-                           Placement="BottomEdgeAlignedRight">
-                           <MenuFlyoutItem
-                               Icon="Rename"
-                               Click="RenameList_Click"
-                               x:Uid="RenameList"></MenuFlyoutItem>
-                           <MenuFlyoutItem
-                               Icon="Delete"
-                               Click="DeleteList_Click"
-                               x:Uid="DeleteList"></MenuFlyoutItem>
-                           <MenuFlyoutItem
-                               Icon="Save"
-                               Click="ExportList_Click"
-                               x:Uid="ExportList"></MenuFlyoutItem>
-                           <MenuFlyoutItem
-                               Click="CustomizeList_Click"
-                               x:Uid="CustomizeList">
-                               <MenuFlyoutItem.Icon>
-                                   <FontIcon Glyph="&#xE790;" />
-                               </MenuFlyoutItem.Icon>
-                           </MenuFlyoutItem>
-                       </MenuFlyout>
-                   </Button.Flyout>
-               </Button>
-               <Button
-                   Margin="10,0,0,0"
-                   x:Uid="CompactOverlayButton"
-                   Click="CompactOverlay_Click"
-                   x:Name="cobtn"
-                   Background="Transparent"
-                   BorderThickness="0"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Right"
-                   Canvas.ZIndex="999">
-                   <Button.Content>
-                       <FontIcon
-                           Glyph="&#xEE49;"
-                           FontSize="13" />
-                   </Button.Content>
-               </Button>
-           </StackPanel>
-       </Grid>
-       <ScrollViewer
-           HorizontalScrollMode="Disabled"
-           HorizontalScrollBarVisibility="Hidden"
-           HorizontalAlignment="Stretch"
-           VerticalAlignment="Stretch"
-           Margin="-12, 50, 0, 30">
-           <ListView
-               x:Name="taskListView"
-               Margin="0,0,-8,0"
-               SelectionMode="None"
-               ItemTemplate="{StaticResource TaskItemTemplate}">
-               <ListView.ItemContainerStyle>
-                   <Style
-                       TargetType="ListViewItem">
-                       <Setter
-                           Property="HorizontalContentAlignment"
-                           Value="Stretch" />
-                   </Style>
-               </ListView.ItemContainerStyle>
-           </ListView>
-       </ScrollViewer>
-       <Rectangle
-           HorizontalAlignment="Stretch"
-           Margin="48,0,115,0"
-           Grid.Column="1"
-           Canvas.ZIndex="-10"
-           x:Name="NameBox"
-           SizeChanged="NameBox_SizeChanged"
-           Loaded="NameBox_Loaded" />
-       <Rectangle
-           x:Name="addTaskRect"
-           Fill="{StaticResource AddTaskAcrylic}"
-           Canvas.ZIndex="-10"
-           VerticalAlignment="Bottom"
-           Height="50"
-           Margin="-20" />
-       <AutoSuggestBox
-           Style="{StaticResource AddItemBoxStyle}"
-           KeyDown="AutoSuggestBox_KeyDown"
-           BorderThickness="0"
-           Margin="-10,0,-10,-18"
-           Canvas.ZIndex="10"
-           VerticalContentAlignment="Center"
-           QuerySubmitted="AutoSuggestBox_QuerySubmitted"
-           FontSize="14"
-           HorizontalAlignment="Stretch"
-           Height="45"
-           VerticalAlignment="Bottom"
-           CornerRadius="8"
-           x:Uid="AddTaskBox">
-           <AutoSuggestBox.QueryIcon>
-               <FontIcon
-                   Opacity=".9"
-                   FontSize="12"
-                   Glyph="&#xE710;" />
-           </AutoSuggestBox.QueryIcon>
-       </AutoSuggestBox>
-   </Grid>
+    <Grid
+        Margin="20,25,20,20"
+        x:Name="maingrid">
+        <Image
+            x:Name="bgImage"
+            Opacity="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Stretch="UniformToFill"
+            Margin="-20, -25, -20, -20" />
+        <Grid
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top">
+            <!-- i should change the testname fr -->
+            <TextBlock
+                x:Name="testname"
+                FontWeight="SemiBold"
+                FontSize="28"
+                TextTrimming="CharacterEllipsis"
+                Loaded="testname_Loaded" />
+            <StackPanel
+                Orientation="Horizontal"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Margin="0,10,7,0">
+                <Button
+                    Margin="0,0,5,0"
+                    x:Name="topoptions"
+                    Loaded="topoptions_Loaded"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right"
+                    Canvas.ZIndex="999">
+                    <Button.Content>
+                        <FontIcon
+                            Glyph="&#xE712;"
+                            FontSize="14" />
+                    </Button.Content>
+                    <Button.Flyout>
+                        <MenuFlyout
+                            Placement="BottomEdgeAlignedRight">
+                            <MenuFlyoutItem
+                                Icon="Rename"
+                                Click="RenameList_Click"
+                                x:Uid="RenameList" />
+                            <MenuFlyoutItem
+                                Icon="Delete"
+                                Click="DeleteList_Click"
+                                x:Uid="DeleteList" />
+                            <MenuFlyoutItem
+                                Icon="Save"
+                                Click="ExportList_Click"
+                                x:Uid="ExportList" />
+                            <MenuFlyoutItem
+                                Click="CustomizeList_Click"
+                                x:Uid="CustomizeList">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon
+                                        Glyph="&#xE790;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+                <Button
+                    Margin="10,0,0,0"
+                    x:Uid="CompactOverlayButton"
+                    Click="CompactOverlay_Click"
+                    x:Name="cobtn"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right"
+                    Canvas.ZIndex="999">
+                    <Button.Content>
+                        <FontIcon
+                            Glyph="&#xEE49;"
+                            FontSize="13" />
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <ScrollViewer
+            HorizontalScrollMode="Disabled"
+            HorizontalScrollBarVisibility="Hidden"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Margin="-12, 50, 0, 30">
+            <ListView
+                x:Name="taskListView"
+                Margin="0,0,-8,0"
+                SelectionMode="None"
+                ItemTemplate="{StaticResource TaskItemTemplate}">
+                <ListView.ItemContainerStyle>
+                    <Style
+                        TargetType="ListViewItem">
+                        <Setter
+                            Property="HorizontalContentAlignment"
+                            Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </ScrollViewer>
+        <Rectangle
+            HorizontalAlignment="Stretch"
+            Margin="48,0,115,0"
+            Grid.Column="1"
+            Canvas.ZIndex="-10"
+            x:Name="NameBox"
+            SizeChanged="NameBox_SizeChanged"
+            Loaded="NameBox_Loaded" />
+
+        <Rectangle
+            x:Name="addTaskRect"
+            Fill="{StaticResource AddTaskAcrylic}"
+            Canvas.ZIndex="-10"
+            VerticalAlignment="Bottom"
+            Height="50"
+            Margin="-20" />
+        <AutoSuggestBox
+            Style="{StaticResource AddItemBoxStyle}"
+            KeyDown="AutoSuggestBox_KeyDown"
+            BorderThickness="0"
+            Margin="-10,0,-10,-18"
+            Canvas.ZIndex="10"
+            VerticalContentAlignment="Center"
+            QuerySubmitted="AutoSuggestBox_QuerySubmitted"
+            FontSize="14"
+            HorizontalAlignment="Stretch"
+            Height="45"
+            VerticalAlignment="Bottom"
+            CornerRadius="8"
+            x:Uid="AddTaskBox">
+            <AutoSuggestBox.QueryIcon>
+                <FontIcon
+                    Opacity=".9"
+                    FontSize="12"
+                    Glyph="&#xE710;" />
+            </AutoSuggestBox.QueryIcon>
+        </AutoSuggestBox>
+    </Grid>
 </Page>
