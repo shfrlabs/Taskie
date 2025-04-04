@@ -4,10 +4,12 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation.Collections;
 using Windows.Services.Store;
 using Windows.Storage;
+using Windows.UI.Xaml.Controls;
 
 namespace TaskieLib {
     public static class Settings {
@@ -56,20 +58,6 @@ namespace TaskieLib {
             }
         }
 
-        private static ConcurrentDictionary<string, bool> ownershipCache {
-            get {
-                if (savedSettings.ContainsKey("ownershipCache")) {
-                    return savedSettings["ownershipCache"] as ConcurrentDictionary<string, bool> ?? new ConcurrentDictionary<string, bool>();
-                }
-                else {
-                    return new ConcurrentDictionary<string, bool>();
-                }
-            }
-            set {
-                savedSettings["ownershipCache"] = value;
-            }
-        }
-
         private static StoreContext? context;
 
         public static async Task<bool> CheckIfProAsync() {
@@ -84,17 +72,14 @@ namespace TaskieLib {
 
             if (queryResult.ExtendedError != null) {
                 Debug.WriteLine("[Store status] Error: " + queryResult.ExtendedError.Message);
-                if (ownershipCache.TryGetValue("9N7T6N7R39NR", out bool isOwned)) {
-                    return isOwned;
-                }
                 return false;
             }
             else {
                 string productId = "9N7T6N7R39NR";
                 bool productOwned = queryResult.Products.ContainsKey(productId);
-                ownershipCache.TryAdd(productId, productOwned);
                 return productOwned;
             }
         }
+
     }
 }
