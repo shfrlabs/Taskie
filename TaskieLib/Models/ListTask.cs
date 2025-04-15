@@ -6,11 +6,9 @@ using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.Data.Xml.Dom;
 using Windows.UI.Notifications;
-using WinRT;
 
 namespace TaskieLib {
 
-    [GeneratedBindableCustomProperty]
     public partial class ListTask {
         private DateTime _creationDate;
         private DateTime? _parentCreationDate;

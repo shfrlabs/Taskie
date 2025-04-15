@@ -1,19 +1,17 @@
-﻿using System;
+﻿using System.Text.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace TaskieLib {
     public class ListTools {
         private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions {
-            PropertyNameCaseInsensitive = true,
-            TypeInfoResolver = JsonContext.Default
+            PropertyNameCaseInsensitive = true
         };
 
         #region Event declarations
@@ -58,7 +56,7 @@ namespace TaskieLib {
                     JsonDocument doc = JsonDocument.Parse(content);
 
                     if (doc.RootElement.TryGetProperty("listmetadata", out var metadataElement)) {
-                        var metadata = JsonSerializer.Deserialize(metadataElement.GetRawText(), JsonContext.Default.ListMetadata);
+                        var metadata = JsonSerializer.Deserialize<ListMetadata>(metadataElement.GetRawText(), _jsonOptions);
                         lists.Add((metadata?.Name, file.Name, metadata?.Emoji));
                     }
                     else {
@@ -82,7 +80,7 @@ namespace TaskieLib {
             return uniqueName;
         }
 
-        public static ListData ReadList(string listId) {
+        public static (ListMetadata Metadata, List<ListTask> Tasks) ReadList(string listId) {
             try {
                 string taskFileContent = GetTaskFileContent(listId);
                 if (taskFileContent != null) {
@@ -93,20 +91,20 @@ namespace TaskieLib {
                     List<ListTask> tasks = null;
 
                     if (root.TryGetProperty("listmetadata", out var metadataElement)) {
-                        metadata = JsonSerializer.Deserialize(metadataElement.GetRawText(), JsonContext.Default.ListMetadata);
+                        metadata = JsonSerializer.Deserialize<ListMetadata>(metadataElement.GetRawText(), _jsonOptions);
                     }
 
                     if (root.TryGetProperty("tasks", out var tasksElement)) {
-                        tasks = JsonSerializer.Deserialize(tasksElement.GetRawText(), JsonContext.Default.ListListTask);
+                        tasks = JsonSerializer.Deserialize<List<ListTask>>(tasksElement.GetRawText(), _jsonOptions);
                     }
 
-                    return new ListData(metadata ?? new ListMetadata(), tasks ?? new List<ListTask>());
+                    return (metadata ?? new ListMetadata(), tasks ?? new List<ListTask>());
                 }
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List reader] Exception occured: " + ex.Message);
             }
-            return new ListData(new ListMetadata(), new List<ListTask>());
+            return (new ListMetadata(), new List<ListTask>());
         }
 
         public static string CreateList(string listName, int? groupId = 0, string emoji = "📋") {
@@ -132,11 +130,11 @@ namespace TaskieLib {
             Debug.WriteLine("Saving " + listId);
             try {
                 string filePath = GetFilePath(listId);
-                ListData listData = new ListData(
-                    metadata,
-                    tasks
-                );
-                File.WriteAllText(filePath, JsonSerializer.Serialize(listData, JsonContext.Default.ListData));
+                var listData = new {
+                    listmetadata = metadata,
+                    tasks = tasks
+                };
+                File.WriteAllText(filePath, JsonSerializer.Serialize(listData));
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List saving] Exception occured: " + ex.Message);
@@ -160,9 +158,7 @@ namespace TaskieLib {
 
         public static void RenameList(string listId, string newListName) {
             try {
-                var data = ReadList(listId);
-                var metadata = data.Metadata;
-                var tasks = data.Tasks;
+                var (metadata, tasks) = ReadList(listId);
                 string oldName = metadata.Name;
                 metadata.Name = newListName;
                 SaveList(listId, tasks, metadata);
@@ -175,9 +171,7 @@ namespace TaskieLib {
 
         public static void ChangeListEmoji(string listId, string newEmoji) {
             try {
-                var data = ReadList(listId);
-                var metadata = data.Metadata;
-                var tasks = data.Tasks;
+                var (metadata, tasks) = ReadList(listId);
                 ListMetadata newData = metadata;
                 newData.Emoji = newEmoji;
                 Debug.WriteLine(newData.Emoji);
@@ -191,9 +185,7 @@ namespace TaskieLib {
 
         public static void ChangeListFont(string listId, string font) {
             try {
-                var data = ReadList(listId);
-                var metadata = data.Metadata;
-                var tasks = data.Tasks;
+                var (metadata, tasks) = ReadList(listId);
                 ListMetadata newData = metadata;
                 newData.TitleFont = font;
                 SaveList(listId, tasks, newData);
@@ -235,11 +227,11 @@ namespace TaskieLib {
                 List<ListTask> tasks = null;
 
                 if (root.TryGetProperty("listmetadata", out var metadataElement)) {
-                    metadata = JsonSerializer.Deserialize(metadataElement.GetRawText(), JsonContext.Default.ListMetadata);
+                    metadata = JsonSerializer.Deserialize<ListMetadata>(metadataElement.GetRawText(), _jsonOptions);
                 }
 
                 if (root.TryGetProperty("tasks", out var tasksElement)) {
-                    tasks = JsonSerializer.Deserialize(tasksElement.GetRawText(), JsonContext.Default.ListListTask);
+                    tasks = JsonSerializer.Deserialize<List<ListTask>>(tasksElement.GetRawText(), _jsonOptions);
                 }
 
                 if (metadata != null) {

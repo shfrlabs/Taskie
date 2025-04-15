@@ -1,18 +1,24 @@
 <Solution>
   <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
     <Platform Name="arm64" />
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
   <Project Path="Taskie/Taskie.csproj">
+    <Platform Solution="*|Any CPU" Project="x64" />
+    <Platform Solution="*|ARM" Project="x64" />
+    <Platform Solution="*|arm64" Project="arm64" />
     <Platform Solution="*|x64" Project="x64" />
     <Platform Solution="*|x86" Project="x86" />
-    <Platform Solution="*|arm64" Project="arm64" />
     <Deploy />
   </Project>
   <Project Path="TaskieLib/TaskieLib.csproj">
+    <Platform Solution="*|Any CPU" Project="x64" />
+    <Platform Solution="*|ARM" Project="x64" />
+    <Platform Solution="*|arm64" Project="arm64" />
     <Platform Solution="*|x64" Project="x64" />
     <Platform Solution="*|x86" Project="x86" />
-    <Platform Solution="*|arm64" Project="arm64" />
   </Project>
 </Solution>

@@ -811,7 +811,7 @@ namespace Taskie {
             base.OnNavigatedTo(e);
 
             await Task.Run(async () => {
-                if (tasks != null && data != null) {
+                if (tasks != null && data != (null, null)) {
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => {
                         foreach (ListTask task in tasks) {
                             taskListView.Items.Add(task);
