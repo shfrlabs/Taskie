@@ -22,7 +22,7 @@ You can get Pro for its current and future features:
 - [ ] task attachments
 - [ ] kanban/Trello-like view for specific list groups
 
-..all for a small price.
+..all for a small price of $1.99 (lifetime) or 0.99 zł in Poland.
 
 ## 🛠️ How does it work?
 
