@@ -4,7 +4,8 @@
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
 </a></p>
 
-<h2 align=center>The simple, yet powerful to-do companion for Windows 10/11. Made with <b>UWP</b>.</h2>
+<h2 align=center>The simple, yet powerful to-do companion for Windows 10/11.</h2>
+<h4 align=center>Made with <b>UWP</b>.</h4>
 
 ### ✨ Now with new features:
 - Reminders - set a custom notification to appear at your chosen time.
