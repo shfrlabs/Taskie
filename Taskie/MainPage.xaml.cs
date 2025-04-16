@@ -133,8 +133,7 @@ namespace Taskie {
             dialog.BorderThickness = new Thickness(2);
             frame.Navigate(typeof(UpgradeDialogContentPage));
             dialog.Content = frame;
-            dialog.PrimaryButtonText = resourceLoader.GetString("UpgradeUnavailable");
-            dialog.IsPrimaryButtonEnabled = false;
+            dialog.PrimaryButtonText = string.Format(resourceLoader.GetString("UpgradeFor"), await Settings.GetProPriceAsync());
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.PrimaryButtonClick += Dialog_UpgradeAction;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
@@ -450,7 +449,7 @@ namespace Taskie {
         private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
             if (!await Settings.CheckIfProAsync()) {
                 try {
-                    ProductPurchaseStatus result = (await CurrentAppSimulator.RequestProductPurchaseAsync("ProLifetime")).Status;
+                    ProductPurchaseStatus result = (await CurrentApp.RequestProductPurchaseAsync("ProLifetime")).Status;
                     if (result.HasFlag(ProductPurchaseStatus.Succeeded) || result.HasFlag(ProductPurchaseStatus.AlreadyPurchased)) {
                         var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
                         var stringElements = toastXml.GetElementsByTagName("text");
