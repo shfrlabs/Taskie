@@ -99,7 +99,8 @@ namespace Taskie {
 
             fontExpander.Content = fontChooser;
 
-            foreach (string font in Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies()) {
+            foreach (string font in Microsoft.Graphics.Canvas.Text.CanvasTextFormat.GetSystemFontFamilies())
+            {
                 ListViewItem subfont = new ListViewItem() { Tag = font, Content = font, FontFamily = new FontFamily(font) };
                 fontChooser.Items.Add(subfont);
             }
@@ -487,10 +488,12 @@ namespace Taskie {
             var metadata = data.Metadata;
             var tasks = data.Tasks;
 
-            try {
+            try
+            {
                 testname.FontFamily = new FontFamily(metadata.TitleFont);
             }
-            catch {
+            catch
+            {
                 testname.FontFamily = new FontFamily("Segoe UI Variable");
                 metadata.TitleFont = "Segoe UI Variable";
             }

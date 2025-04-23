@@ -7,11 +7,14 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
+using System.Text.Json.Serialization.Metadata;
 
 namespace TaskieLib {
     public class ListTools {
-        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions {
-            PropertyNameCaseInsensitive = true
+        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver()
         };
 
         #region Event declarations
@@ -134,7 +137,7 @@ namespace TaskieLib {
                     listmetadata = metadata,
                     tasks = tasks
                 };
-                File.WriteAllText(filePath, JsonSerializer.Serialize(listData));
+                File.WriteAllText(filePath, JsonSerializer.Serialize(listData, _jsonOptions));
             }
             catch (Exception ex) {
                 Debug.WriteLine("[List saving] Exception occured: " + ex.Message);
@@ -187,7 +190,7 @@ namespace TaskieLib {
             try {
                 var (metadata, tasks) = ReadList(listId);
                 ListMetadata newData = metadata;
-                newData.TitleFont = font;
+                //newData.TitleFont = font;
                 SaveList(listId, tasks, newData);
             }
             catch (Exception ex) {
@@ -203,7 +206,7 @@ namespace TaskieLib {
             return Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{listId}.json");
         }
 
-        public static string GetTaskFileContent(string listId) {
+        public static string? GetTaskFileContent(string listId) {
             string filePath = GetFilePath(listId);
             return File.Exists(filePath) ? File.ReadAllText(filePath) : null;
         }

@@ -50,9 +50,9 @@ namespace Taskie {
         #region Click handlers
 
         private void DeleteList_Click(object sender, RoutedEventArgs e) {
-            string listname = (sender as MenuFlyoutItem).Tag as string;
-            ListTools.DeleteList(listname.Replace(".json", null));
-            ListDeleted(((sender as MenuFlyoutItem).Tag.ToString().Replace(".json", null)));
+            string? listname = ((MenuFlyoutItem)sender).Tag as string;
+            ListTools.DeleteList(listname?.Replace(".json", null));
+            ListDeleted(((MenuFlyoutItem)sender).Tag.ToString().Replace(".json", null));
             DeterminePro();
         }
 
@@ -62,7 +62,7 @@ namespace Taskie {
                     FileSavePicker savePicker = new FileSavePicker {
                         DefaultFileExtension = ".json",
                         SuggestedStartLocation = PickerLocationId.Desktop,
-                        SuggestedFileName = (sender as MenuFlyoutItem)?.Tag?.ToString() ?? string.Empty
+                        SuggestedFileName = ((MenuFlyoutItem)sender)?.Tag?.ToString() ?? string.Empty
                     };
                     savePicker.FileTypeChoices.Add("JSON", new List<string>() { ".json" });
 
@@ -81,7 +81,7 @@ namespace Taskie {
         }
 
         private async void RenameList_Click(object sender, RoutedEventArgs e) {
-            ListMetadata data = ListTools.ReadList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null)).Metadata;
+            ListMetadata data = ListTools.ReadList((((MenuFlyoutItem)sender).Tag as string).Replace(".json", null)).Metadata;
             string listname = data.Name;
             TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("ListName"), Text = listname };
             ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameList/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input, DefaultButton = ContentDialogButton.Primary };
@@ -93,7 +93,7 @@ namespace Taskie {
                         throw new Exception("No list name");
                     }
                     else {
-                        ListTools.RenameList(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null), text);
+                        ListTools.RenameList((((MenuFlyoutItem)sender).Tag as string).Replace(".json", null), text);
                     }
                 }
                 catch {
@@ -102,7 +102,7 @@ namespace Taskie {
                     tipwrongname.IsOpen = true;
                 }
                 listname = text;
-                ListRenamed(((sender as MenuFlyoutItem).Tag as string).Replace(".json", null), text, data.Emoji);
+                ListRenamed((((MenuFlyoutItem)sender).Tag as string).Replace(".json", null), text, data.Emoji);
             }
         }
 
@@ -298,13 +298,13 @@ namespace Taskie {
             }
         }
 
-        private void ListDeleted(string listID) {
+        private void ListDeleted(string? listID) {
             Debug.WriteLine("List deleted: " + listID);
             contentFrame.Navigate(typeof(EmptyPage));
             Navigation.SelectedItem = null;
             foreach (var item in Navigation.Items) {
                 if (item is ListViewItem navigationItem) {
-                    if (navigationItem.Tag.ToString().Replace(".json", null) == listID) {
+                    if (navigationItem.Tag.ToString()?.Replace(".json", null) == listID) {
                         Navigation.Items.Remove(item);
                         break;
                     }

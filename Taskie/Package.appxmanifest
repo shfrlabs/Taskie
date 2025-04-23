@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="BRStudios.Taskie"
-    Publisher="CN=A43ACDD8-D8D2-4B12-B25B-98D2138C0CFE"
-    Version="1.5.5.0" />
+    Name="afb6ee82-5eec-4c1f-8e12-6f8e6e8c3c96"
+    Publisher="CN=3L"
+    Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="efae26a0-2073-457b-8e2c-e47f07f263d0" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="afb6ee82-5eec-4c1f-8e12-6f8e6e8c3c96" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Taskie</DisplayName>
-    <PublisherDisplayName>shefer&apos;s labs</PublisherDisplayName>
+    <PublisherDisplayName>3L</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -30,17 +30,20 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="shef3r.TaskProject.Taskie">
+      EntryPoint="Taskie.App">
       <uap:VisualElements
         DisplayName="Taskie"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="Taskie"
         BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png"/>
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
-        <uap:LockScreen BadgeLogo="Assets\BadgeLogo.png" Notification="badgeAndTileText"/>
       </uap:VisualElements>
     </Application>
   </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
 </Package>

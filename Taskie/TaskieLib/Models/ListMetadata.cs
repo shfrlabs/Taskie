@@ -9,10 +9,13 @@ public class ListMetadata : INotifyPropertyChanged {
     private int? _groupID;
     private string _titlefont;
 
-    public string TitleFont {
+    public string TitleFont
+    {
         get { return _titlefont; }
-        set {
-            if (_titlefont != value) {
+        set
+        {
+            if (_titlefont != value)
+            {
                 _titlefont = value;
                 OnPropertyChanged(nameof(TitleFont));
             }
