@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.35906.104
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskie", "Taskie.csproj", "{34FBB075-EBC2-408F-B093-C1D4FE84CFEB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskie", "Taskie\Taskie.csproj", "{34FBB075-EBC2-408F-B093-C1D4FE84CFEB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskieLib", "TaskieLib\TaskieLib.csproj", "{5925BBD1-1A4D-9C7D-688C-9AD0453DE72B}"
 EndProject
