@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="afb6ee82-5eec-4c1f-8e12-6f8e6e8c3c96"
-    Publisher="CN=3L"
-    Version="1.0.0.0" />
+    Name="shef3r.TaskProject.Taskie"
+    Publisher="CN=Bruno"
+    Version="1.6.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="afb6ee82-5eec-4c1f-8e12-6f8e6e8c3c96" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="1427a407-37be-4e8e-afa4-35943a87f9fe" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Taskie</DisplayName>
-    <PublisherDisplayName>3L</PublisherDisplayName>
+    <PublisherDisplayName>shefer&apos;s labs</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -30,12 +30,12 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="Taskie.App">
+      EntryPoint="shef3r.TaskProject.Taskie">
       <uap:VisualElements
         DisplayName="Taskie"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="Taskie"
+        Description="Taskie - your private task companion."
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />

@@ -7,17 +7,24 @@
     <UseUwp>true</UseUwp>
     <Platforms>x86;x64;arm64</Platforms>
     <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
-    <DefaultLanguage>pl-PL</DefaultLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <PublishAot>true</PublishAot>
     <PublishProfile>win-$(Platform).pubxml</PublishProfile>
     <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <AppxBundle>Never</AppxBundle>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.UI.Xaml" Version="2.8.7" />
     <PackageReference Include="Win2D.uwp" Version="1.28.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="TaskieLib\TaskieLib.csproj" />
+    <ProjectReference Include="..\TaskieLib\TaskieLib.csproj" />
   </ItemGroup>
 </Project>

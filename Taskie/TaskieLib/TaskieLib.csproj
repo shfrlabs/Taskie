@@ -4,9 +4,11 @@
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <Nullable>enable</Nullable>
     <UseUwp>true</UseUwp>
-    <DefaultLanguage>pl-PL</DefaultLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <IsAotCompatible>true</IsAotCompatible>
     <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="9.0.4" />
+  </ItemGroup>
 </Project>
