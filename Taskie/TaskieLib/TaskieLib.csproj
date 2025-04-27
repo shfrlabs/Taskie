@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+		<RdXmlFile Include="rd.xml" />
 	    <AdditionalFiles Include="Models/ListTask.cs" />
     </ItemGroup>
 </Project>

@@ -16,10 +16,13 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+	<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
 	<EnableDynamicCode>true</EnableDynamicCode>
+	<IlcDisableReflection>false</IlcDisableReflection>
+	<IlcGenerateStackTraceData>true</IlcGenerateStackTraceData>
 	<TrimmerDiagnostics>true</TrimmerDiagnostics>
     <AppxBundle>Never</AppxBundle>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
