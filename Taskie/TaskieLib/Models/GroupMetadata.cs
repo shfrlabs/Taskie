@@ -4,12 +4,12 @@ using System.Drawing;
 
 public class GroupMetadata : INotifyPropertyChanged {
     private DateTime _creationDate;
-    private string _name;
+    private string? _name;
     private Color _color;
     private int? _ID;
 
     public DateTime CreationDate {
-        get { return _creationDate; }
+        get => _creationDate;
         set {
             if (_creationDate != value) {
                 _creationDate = value;
@@ -18,8 +18,8 @@ public class GroupMetadata : INotifyPropertyChanged {
         }
     }
 
-    public string Name {
-        get { return _name; }
+    public string? Name {
+        get => _name;
         set {
             if (_name != value) {
                 _name = value;
@@ -29,7 +29,7 @@ public class GroupMetadata : INotifyPropertyChanged {
     }
 
     public Color GColor {
-        get { return _color; }
+        get => _color;
         set {
             if (_color != value) {
                 _color = value;
@@ -39,7 +39,7 @@ public class GroupMetadata : INotifyPropertyChanged {
     }
 
     public int? ID {
-        get { return _ID; }
+        get => _ID;
         set {
             if (value != _ID) {
                 _ID = value;
@@ -48,7 +48,7 @@ public class GroupMetadata : INotifyPropertyChanged {
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged(string propertyName) {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

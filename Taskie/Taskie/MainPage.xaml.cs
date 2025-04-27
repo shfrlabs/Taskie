@@ -49,51 +49,79 @@ namespace Taskie {
 
         #region Click handlers
 
-        private void DeleteList_Click(object sender, RoutedEventArgs e) {
-            string? listname = ((MenuFlyoutItem)sender).Tag as string;
-            ListTools.DeleteList(listname?.Replace(".json", null));
-            ListDeleted(((MenuFlyoutItem)sender).Tag.ToString().Replace(".json", null));
-            DeterminePro();
+        private void DeleteList_Click(object sender, RoutedEventArgs? e) {
+            var listId = ((MenuFlyoutItem)sender).Tag?.ToString()?.Replace(".json", "");
+            if (!string.IsNullOrEmpty(listId)) {
+                ListTools.DeleteList(listId);
+                ListDeleted(listId);
+                DeterminePro();
+            }
         }
 
-        private async void ExportList_Click(object sender, RoutedEventArgs e) {
-            try {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () => {
-                    FileSavePicker savePicker = new FileSavePicker {
-                        DefaultFileExtension = ".json",
-                        SuggestedStartLocation = PickerLocationId.Desktop,
-                        SuggestedFileName = ((MenuFlyoutItem)sender)?.Tag?.ToString() ?? string.Empty
-                    };
-                    savePicker.FileTypeChoices.Add("JSON", new List<string>() { ".json" });
+        private async void ExportList_Click(object sender, RoutedEventArgs? e)
+        {
+            try
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                {
+                    if (sender is MenuFlyoutItem menuItem && menuItem.Tag is string tag)
+                    {
+                        FileSavePicker savePicker = new FileSavePicker
+                        {
+                            DefaultFileExtension = ".json",
+                            SuggestedStartLocation = PickerLocationId.Desktop,
+                            SuggestedFileName = tag
+                        };
+                        savePicker.FileTypeChoices.Add("JSON", new List<string?>() { ".json" });
 
-                    StorageFile file = await savePicker.PickSaveFileAsync();
-                    if (file != null) {
-                        CachedFileManager.DeferUpdates(file);
+                        StorageFile file = await savePicker.PickSaveFileAsync();
+                        if (file != null)
+                        {
+                            CachedFileManager.DeferUpdates(file);
 
-                        string content = ListTools.GetTaskFileContent((sender as MenuFlyoutItem).Tag.ToString());
-                        await FileIO.WriteTextAsync(file, content);
+                            string? content = ListTools.GetTaskFileContent(tag);
+                            if (!string.IsNullOrEmpty(content))
+                            {
+                                await FileIO.WriteTextAsync(file, content);
 
-                        FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                                if (status != FileUpdateStatus.Complete)
+                                {
+                                    Debug.WriteLine("[List export] File update was not completed successfully.");
+                                }
+                            }
+                            else
+                            {
+                                Debug.WriteLine("[List export] Task file content is null or empty.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("[List export] Invalid sender or missing Tag.");
                     }
                 });
             }
-            catch (Exception ex) { Debug.WriteLine("[List export] Exception occured: " + ex.Message); }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("[List export] Exception occurred: " + ex.Message);
+            }
         }
 
-        private async void RenameList_Click(object sender, RoutedEventArgs e) {
-            ListMetadata data = ListTools.ReadList((((MenuFlyoutItem)sender).Tag as string).Replace(".json", null)).Metadata;
-            string listname = data.Name;
+        private async void RenameList_Click(object sender, RoutedEventArgs? e) {
+            ListMetadata data = ListTools.ReadList(((string)((MenuFlyoutItem)sender).Tag).Replace(".json", null)).Metadata;
+            string? listname = data.Name;
             TextBox input = new TextBox() { PlaceholderText = resourceLoader.GetString("ListName"), Text = listname };
             ContentDialog dialog = new ContentDialog() { Title = resourceLoader.GetString("RenameList/Text"), PrimaryButtonText = "OK", SecondaryButtonText = resourceLoader.GetString("Cancel"), Content = input, DefaultButton = ContentDialogButton.Primary };
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary) {
-                string text = input.Text;
+                string? text = input.Text;
                 try {
                     if (string.IsNullOrEmpty(text)) {
                         throw new Exception("No list name");
                     }
                     else {
-                        ListTools.RenameList((((MenuFlyoutItem)sender).Tag as string).Replace(".json", null), text);
+                        ListTools.RenameList(((string)((MenuFlyoutItem)sender).Tag as string).Replace(".json", null), text);
                     }
                 }
                 catch {
@@ -102,18 +130,18 @@ namespace Taskie {
                     tipwrongname.IsOpen = true;
                 }
                 listname = text;
-                ListRenamed((((MenuFlyoutItem)sender).Tag as string).Replace(".json", null), text, data.Emoji);
+                ListRenamed(((string)((MenuFlyoutItem)sender).Tag).Replace(".json", null), text, data.Emoji);
             }
         }
 
-        private void SettingsButton_Click(object sender, RoutedEventArgs e) {
+        private void SettingsButton_Click(object? sender, RoutedEventArgs e) {
             contentFrame.Navigate(typeof(SettingsPage));
             Navigation.SelectedItem = null;
         }
 
-        private void SidebarButton_Click(object sender, RoutedEventArgs e) {
+        private void SidebarButton_Click(object sender, RoutedEventArgs? e) {
             if (mainGrid.ColumnDefinitions[0].Width == new GridLength(0)) {
-                mainGrid.ColumnDefinitions[0].Width = new GridLength(200);
+                mainGrid.ColumnDefinitions[0].Width = new GridLength(185);
                 rect2.Visibility = Visibility.Visible;
                 contentFrame.Margin = new Thickness(-20, 0, 0, 0);
                 SidebarButton.Opacity = 1;
@@ -126,10 +154,10 @@ namespace Taskie {
             }
         }
 
-        private async void UpgradeButton_Click(object sender, RoutedEventArgs e) {
+        private async void UpgradeButton_Click(object? sender, RoutedEventArgs e) {
             ContentDialog dialog = new ContentDialog();
             Frame frame = new Frame();
-            dialog.BorderBrush = Application.Current.Resources["ProBG"] as LinearGradientBrush;
+            dialog.BorderBrush = (LinearGradientBrush?)Application.Current.Resources["ProBG"];
             dialog.BorderThickness = new Thickness(2);
             frame.Navigate(typeof(UpgradeDialogContentPage));
             dialog.Content = frame;
@@ -153,7 +181,7 @@ namespace Taskie {
             if (!Settings.Launched && shouldShowOOBE) {
                 ContentDialog dialog = new ContentDialog();
                 Frame frame = new Frame();
-                dialog.BorderBrush = Application.Current.Resources["ProBG"] as LinearGradientBrush;
+                dialog.BorderBrush = (LinearGradientBrush?)Application.Current.Resources["ProBG"];
                 dialog.BorderThickness = new Thickness(2);
                 frame.Navigate(typeof(OOBEDialogPage));
                 dialog.Content = frame;
@@ -204,7 +232,7 @@ namespace Taskie {
             // Navigate to the specific task page
             contentFrame.Navigate(typeof(TaskPage), listId);
             foreach (ListViewItem item in Navigation.Items) {
-                if (item.Tag.ToString().Replace(".json", null) == listId) {
+                if (item?.Tag?.ToString()?.Replace(".json", null) == listId) {
                     Navigation.SelectedItem = item;
                     break;
                 }
@@ -221,20 +249,47 @@ namespace Taskie {
         }
 
         private void SetupNavigationMenu() {
-            foreach ((string listName, string listID, string listEmoji) in TaskieLib.ListTools.GetLists()) {
-                StackPanel content = new StackPanel();
-                content.Orientation = Orientation.Horizontal;
-                content.VerticalAlignment = VerticalAlignment.Center;
-                content.Children.Add(new FontIcon() { Glyph = listEmoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 13 });
-                content.Children.Add(new TextBlock { Text = listName, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 13, VerticalAlignment = VerticalAlignment.Center });
-                Navigation.Items.Add(new ListViewItem() { Tag = listID, Content = content, HorizontalContentAlignment = HorizontalAlignment.Left });
-                AddRightClickMenu(Navigation.Items.Last() as ListViewItem);
+            foreach (var list in ListTools.GetLists().Where(l => !string.IsNullOrEmpty(l.name))) {
+                var listEmoji = list.emoji ?? "📋";
+                var content = new StackPanel {
+                    Orientation = Orientation.Horizontal,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(-3),
+                    Children =
+                    {
+                new FontIcon
+                {
+                    Glyph = listEmoji,
+                    FontFamily = new FontFamily("Segoe UI Emoji"),
+                    FontSize = 12
+                },
+                new TextBlock
+                {
+                    Text = list.name,
+                    Margin = new Thickness(10, 0, 0, 0),
+                    TextTrimming = TextTrimming.CharacterEllipsis,
+                    MaxLines = 1,
+                    Width = 100,
+                    FontSize = 12,
+                    VerticalAlignment = VerticalAlignment.Center
+                }
+            }
+                };
+
+                var item = new ListViewItem {
+                    Tag = list.id,
+                    Content = content,
+                    HorizontalContentAlignment = HorizontalAlignment.Left
+                };
+
+                Navigation.Items.Add(item);
+                AddRightClickMenu(item);
             }
             DeterminePro();
         }
 
 
-        private void Page_Loaded(object sender, RoutedEventArgs e) {
+        private void Page_Loaded(object sender, RoutedEventArgs? e) {
             LoadRing.IsActive = false;
             LoadRing.Visibility = Visibility.Collapsed;
             SetupNavigationMenu();
@@ -258,22 +313,23 @@ namespace Taskie {
             AddItemBtn.IsEnabled = false;
             searchbox.IsEnabled = false;
             Navigation.IsEnabled = false;
-            NewListBtnIcon.Foreground = (Brush)Resources["ButtonDisabledForegroundThemeBrush"];
-            NewListBtnText.Foreground = (Brush)Resources["ButtonDisabledForegroundThemeBrush"];
+            NewListBtnIcon.Foreground = (Brush?)Resources["ButtonDisabledForegroundThemeBrush"];
+            NewListBtnText.Foreground = (Brush?)Resources["ButtonDisabledForegroundThemeBrush"];
         }
         #endregion
 
         #region List-related events
-        private void ListRenamed(string listID, string newname, string emoji) {
+        private void ListRenamed(string? listID, string? newname, string? emoji) {
             Debug.WriteLine("List got renamed:" + listID);
             foreach (var item in Navigation.Items) {
                 if (item is ListViewItem navigationItem) {
-                    if (navigationItem.Tag.ToString().Replace(".json", null) == listID) {
+                    if (navigationItem?.Tag?.ToString()?.Replace(".json", null) == listID && navigationItem != null) {
                         StackPanel content = new StackPanel();
+                        content.Margin = new Thickness(-3);
                         content.Orientation = Orientation.Horizontal;
                         content.VerticalAlignment = VerticalAlignment.Center;
-                        content.Children.Add(new FontIcon() { Glyph = emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 13 });
-                        content.Children.Add(new TextBlock { Text = newname, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 13, VerticalAlignment = VerticalAlignment.Center });
+                        content.Children.Add(new FontIcon() { Glyph = emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 12 });
+                        content.Children.Add(new TextBlock { Text = newname, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 12, VerticalAlignment = VerticalAlignment.Center });
                         navigationItem.Content = content;
                         break;
                     }
@@ -281,16 +337,16 @@ namespace Taskie {
             }
         }
 
-        private void ListEmojiChanged(string listID, string name, string emoji) {
+        private void ListEmojiChanged(string? listID, string? name, string? emoji) {
             Debug.WriteLine("List emoji changed:" + listID);
             foreach (var item in Navigation.Items) {
                 if (item is ListViewItem navigationItem) {
-                    if (navigationItem.Tag.ToString().Replace(".json", null) == listID) {
-                        StackPanel content = new StackPanel();
+                    if (navigationItem?.Tag?.ToString()?.Replace(".json", null) == listID && navigationItem != null) {
+                        StackPanel content = new StackPanel(); content.Margin = new Thickness(-2);
                         content.Orientation = Orientation.Horizontal;
                         content.VerticalAlignment = VerticalAlignment.Center;
-                        content.Children.Add(new FontIcon() { Glyph = emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 13 });
-                        content.Children.Add(new TextBlock { Text = name, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 13, VerticalAlignment = VerticalAlignment.Center });
+                        content.Children.Add(new FontIcon() { Glyph = emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 12 });
+                        content.Children.Add(new TextBlock { Text = name, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 12, VerticalAlignment = VerticalAlignment.Center });
                         navigationItem.Content = content;
                         break;
                     }
@@ -322,21 +378,21 @@ namespace Taskie {
 
         private void OpenRightClickList(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e) {
             MenuFlyout flyout = new MenuFlyout();
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = resourceLoader.GetString("RenameList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
-            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = (sender as ListViewItem).Tag.ToString().Replace(".json", "") });
-            (flyout.Items[0] as MenuFlyoutItem).Click += RenameList_Click;
-            (flyout.Items[1] as MenuFlyoutItem).Click += ExportList_Click;
-            (flyout.Items[2] as MenuFlyoutItem).Click += DeleteList_Click;
-            flyout.ShowAt(sender as ListViewItem);
+            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Rename), Text = resourceLoader.GetString("RenameList/Text"), Tag = ((ListViewItem?)sender)?.Tag?.ToString()?.Replace(".json", "") });
+            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Save), Text = resourceLoader.GetString("ExportList/Text"), Tag = ((ListViewItem?)sender)?.Tag?.ToString()?.Replace(".json", "") });
+            flyout.Items.Add(new MenuFlyoutItem() { Icon = new SymbolIcon(Symbol.Delete), Text = resourceLoader.GetString("DeleteList/Text"), Tag = ((ListViewItem?)sender)?.Tag?.ToString()?.Replace(".json", "") });
+            ((MenuFlyoutItem)flyout.Items[0]).Click += RenameList_Click;
+            ((MenuFlyoutItem)flyout.Items[1]).Click += ExportList_Click;
+            ((MenuFlyoutItem)flyout.Items[2]).Click += DeleteList_Click;
+            flyout.ShowAt((ListViewItem?)sender);
         }
         #endregion
 
         #region Other events
 
         private void ListSelector_SelectionChanged(object sender, SelectionChangedEventArgs e) { // opens a list
-            ListView NavList = sender as ListView;
-            var selectedItem = NavList.SelectedItem as ListViewItem;
+            ListView NavList = (ListView)sender;
+            var selectedItem = NavList?.SelectedItem as ListViewItem;
             if (selectedItem != null && selectedItem.Tag is string tag) {
                 contentFrame.Navigate(typeof(TaskPage), tag.Replace(".json", null));
             }
@@ -348,10 +404,19 @@ namespace Taskie {
         }
 
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args) {
-            if (string.IsNullOrWhiteSpace(sender.Text)) { sender.IsSuggestionListOpen = false; sender.ItemsSource = new List<string>(); }
-            else {
-                sender.ItemsSource = Array.FindAll<(string, string, string)>(ListTools.GetLists(), s => s.Item1.ToLower().Contains(sender.Text.ToLower())).Select(t => t.Item1).ToArray();
+            if (string.IsNullOrWhiteSpace(sender.Text)) {
+                sender.IsSuggestionListOpen = false;
+                sender.ItemsSource = Array.Empty<string?>();
+                return;
             }
+
+            var searchTerm = sender.Text.ToLower();
+            var lists = ListTools.GetLists()
+                .Where(l => l.name?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false)
+                .Select(l => l.name)
+                .ToArray();
+
+            sender.ItemsSource = lists;
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args) {
@@ -361,52 +426,52 @@ namespace Taskie {
         private void searchbox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) {
             try {
                 string foundItem = "";
-                foreach ((string name, string id, string emoji) item in ListTools.GetLists()) {
-                    if (args.SelectedItem.ToString() == item.name) {
+                foreach ((string? name, string? id, string? emoji) item in ListTools.GetLists()) {
+                    if (args.SelectedItem.ToString() == item.name && item.id != null) {
                         foundItem = item.id.Replace(".json", null);
                     }
                 }
                 if (!string.IsNullOrEmpty(foundItem)) {
                     contentFrame.Navigate(typeof(TaskPage), foundItem.Replace(".json", null));
                     foreach (ListViewItem item in Navigation.Items) {
-                        if (item.Tag.ToString().Replace(".json", null) == foundItem) {
+                        if (item.Tag?.ToString()?.Replace(".json", null) == foundItem) {
                             Navigation.SelectedItem = item;
                         }
                     }
                 }
 
                 sender.Text = "";
-                searchbox.ItemsSource = new List<string>();
+                searchbox.ItemsSource = new List<string?>();
             }
             catch (Exception ex) { Debug.WriteLine("[Search box suggestion chooser] Exception occured: " + ex.Message); }
         }
 
         #endregion
 
-        private void MainPage_ActualThemeChanged(FrameworkElement sender = null, object args = null) {
-            (rect1.Fill as AcrylicBrush).TintColor = (Color)Application.Current.Resources["SystemAltHighColor"];
-            (rect1.Fill as AcrylicBrush).FallbackColor = (Color)Application.Current.Resources["SystemAltLowColor"];
-            (rect2.Fill as SolidColorBrush).Color = (Color)Application.Current.Resources["SystemAltLowColor"];
+        private void MainPage_ActualThemeChanged(FrameworkElement? sender = null, object? args = null) {
+            ((AcrylicBrush)rect1.Fill).TintColor = (Color)Application.Current.Resources["SystemAltHighColor"];
+            ((AcrylicBrush)rect1.Fill).FallbackColor = (Color)Application.Current.Resources["SystemAltLowColor"];
+            ((SolidColorBrush)rect2.Fill).Color = (Color)Application.Current.Resources["SystemAltLowColor"];
         }
 
         public ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
 
-        private void UpdateLists(string listID = null, string listName = null) {
+        private void UpdateLists(string? listID = null, string? listName = null) {
             Navigation.Items.Clear();
             SetupNavigationMenu();
             contentFrame.Navigate(typeof(EmptyPage));
             DeterminePro();
         } // Resets the main view
 
-        private async void AddList(object sender, RoutedEventArgs e) {
+        private async void AddList(object sender, RoutedEventArgs? e) {
             ContentDialog dialog = new ContentDialog();
             TextBox box = new TextBox() { VerticalContentAlignment = VerticalAlignment.Bottom, MaxWidth = 300, BorderThickness = new Thickness(0), PlaceholderText = resourceLoader.GetString("NewList"), Padding = new Thickness(9, 9, 4, 4), FontSize = 15, CornerRadius = new CornerRadius(4) };
             Button emojiButton = new Button() { Content = "📋", Padding = new Thickness(0), HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Width = 40, Height = 40, FontSize = 20 };
             var flyout = new Flyout();
             var gridView = new GridView();
 
-            gridView.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
-            gridView.ItemTemplate = (DataTemplate)Application.Current.Resources["EmojiBlock"];
+            gridView.ItemsPanel = (ItemsPanelTemplate?)Application.Current.Resources["WrapGridPanel"];
+            gridView.ItemTemplate = (DataTemplate?)Application.Current.Resources["EmojiBlock"];
             gridView.ItemsSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
             gridView.SelectionMode = ListViewSelectionMode.Single;
             gridView.SelectionChanged += (s, args) => {
@@ -430,23 +495,34 @@ namespace Taskie {
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             dialog.PrimaryButtonText = "OK";
-            dialog.PrimaryButtonClick += (sender, args) => {
-                if (string.IsNullOrEmpty(box.Text)) {
-                    listName = ListTools.CreateList(resourceLoader.GetString("NewList"), null, emojiButton.Content.ToString());
+
+            dialog.PrimaryButtonClick += (s, args) =>
+            {
+                var emoji = emojiButton.Content?.ToString() ?? "📋";
+                var listName = box.Text.Trim();
+
+                if (string.IsNullOrEmpty(listName)) {
+                    listName = resourceLoader.GetString("NewList");
                 }
-                else {
-                    listName = ListTools.CreateList(box.Text, null, emojiButton.Content.ToString());
-                }
-                UpdateLists();
-                foreach (ListViewItem item in Navigation.Items) {
-                    if (!string.IsNullOrEmpty(listName) && item.Tag.ToString().Contains(listName)) { Navigation.SelectedItem = item; break; }
+
+                var newListId = ListTools.CreateList(listName, null, emoji);
+                if (!string.IsNullOrEmpty(newListId)) {
+                    UpdateLists();
+                    var newItem = Navigation.Items
+                        .OfType<ListViewItem>()
+                        .FirstOrDefault(i => i.Tag?.ToString()?.Replace(".json", null) == newListId);
+
+                    if (newItem != null) {
+                        Navigation.SelectedItem = newItem;
+                    }
                 }
             };
+
             await dialog.ShowAsync();
         }
 
 
-        private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
+        private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs? args) {
             if (!await Settings.CheckIfProAsync()) {
                 try {
                     ProductPurchaseStatus result = (await CurrentApp.RequestProductPurchaseAsync("ProLifetime")).Status;
@@ -457,7 +533,7 @@ namespace Taskie {
                         stringElements[1].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgradeSub")));
 
                         // Add arguments to the toast notification
-                        var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");
+                        var toastElement = (XmlElement?)toastXml.SelectSingleNode("/toast");
 
                         var toast = new ScheduledToastNotification(toastXml, DateTimeOffset.Now.AddSeconds(1)) {
                             Id = "proUpgrade"

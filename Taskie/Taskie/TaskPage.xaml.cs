@@ -241,7 +241,7 @@ namespace Taskie {
                     StorageFile file = await savePicker.PickSaveFileAsync();
                     if (file != null) {
                         CachedFileManager.DeferUpdates(file);
-                        string content = ListTools.GetTaskFileContent(listId);
+                        string? content = ListTools.GetTaskFileContent(listId);
                         await FileIO.WriteTextAsync(file, content);
 
                         FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
@@ -291,7 +291,7 @@ namespace Taskie {
                                 subTaskToUpdate.Name = input.Text;
                             }
                             tasks[index] = parentTask;
-                            (taskListView.Items[index] as ListTask).SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = input.Text;
+                            ((ListTask)taskListView.Items[index]).SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate).Name = input.Text;
                         }
                     }
                 }
@@ -359,11 +359,11 @@ namespace Taskie {
 
         private void TaskNameText_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e) {
             TextBlock textBlock = (TextBlock)sender;
-            var note = textBlock.DataContext as ListTask;
+            ListTask? note = textBlock.DataContext as ListTask;
 
             TextBox input = new TextBox() {
                 PlaceholderText = resourceLoader.GetString("TaskName"),
-                Text = note.Name,
+                Text = note?.Name,
                 Margin = new Thickness(-10),
                 Width = NameBox.ActualWidth + 40,
                 MaxWidth = 400
@@ -761,7 +761,7 @@ namespace Taskie {
             this.Frame.Navigate(typeof(EmptyPage));
         }
 
-        private void ListRenamed(string oldname, string newname, string emoji) {
+        private void ListRenamed(string? oldname, string? newname, string? emoji) {
             testname.Text = newname;
         }
 
@@ -814,7 +814,7 @@ namespace Taskie {
             base.OnNavigatedTo(e);
 
             await Task.Run(async () => {
-                if (tasks != null && data != (null, null)) {
+                if (tasks != null && data != null) {
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => {
                         foreach (ListTask task in tasks) {
                             taskListView.Items.Add(task);
@@ -842,23 +842,41 @@ namespace Taskie {
             }
         }
 
-        private void TaskStateChanged(object sender, RoutedEventArgs e) {
-            ListTask tasktoChange = (sender as CheckBox).DataContext as ListTask;
+        private void TaskStateChanged(object sender, RoutedEventArgs e)
+        {
+            var checkBox = sender as CheckBox;
+            if (checkBox == null)
+            {
+                return;
+            }
+
+            var tasktoChange = checkBox.DataContext as ListTask;
+            if (tasktoChange == null)
+            {
+                return;
+            }
 
             var data = ListTools.ReadList(listId);
             var metadata = data.Metadata;
             var tasks = data.Tasks;
 
-            try {
-                int index = tasks.FindIndex(task => task.CreationDate == tasktoChange.CreationDate);
-                if (index != -1) {
-                    tasktoChange.IsDone = (bool)(sender as CheckBox).IsChecked;
-                    tasks[index] = tasktoChange;
-                    ListTools.SaveList(listId, tasks, metadata);
+            try
+            {
+                if (checkBox.IsChecked.HasValue)
+                {
+                    tasktoChange.IsDone = checkBox.IsChecked.Value;
+                    int index = tasks.FindIndex(task => task.CreationDate == tasktoChange.CreationDate);
+                    if (index != -1)
+                    {
+                        tasks[index] = tasktoChange;
+                        ListTools.SaveList(listId, tasks, metadata);
+                    }
                 }
             }
-            catch (Exception ex) { Debug.WriteLine("[Task state change] Exception occured: " + ex.Message); }
-
+            catch (Exception ex)
+            {
+                Debug.WriteLine("[Task state change] Exception occurred: " + ex.Message);
+            }
         }
         private void NameBox_SizeChanged(object sender, SizeChangedEventArgs e) {
             ChangeWidth(sender);

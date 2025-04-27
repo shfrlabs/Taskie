@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.Json.Serialization;
 using Windows.ApplicationModel.Resources;
 using Windows.Data.Xml.Dom;
 using Windows.UI.Notifications;
@@ -16,6 +18,7 @@ namespace TaskieLib {
         private bool _isDone;
         private ObservableCollection<ListTask> _subTasks;
 
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ListTask))]
         public ListTask() {
             if (_subTasks == null) {
                 _subTasks = new ObservableCollection<ListTask>();
@@ -103,6 +106,7 @@ namespace TaskieLib {
         }
         #endregion
 
+        [JsonPropertyName("SubTasks")]
         public ObservableCollection<ListTask> SubTasks {
             get { return _subTasks; }
             set {
@@ -113,6 +117,7 @@ namespace TaskieLib {
             }
         }
 
+        [JsonPropertyName("CreationDate")]
         public DateTime CreationDate {
             get {
                 return _creationDate;
@@ -125,6 +130,7 @@ namespace TaskieLib {
             }
         }
 
+        [JsonPropertyName("ParentCreationDate")]
         public DateTime? ParentCreationDate {
             get { return _parentCreationDate; }
             set {
@@ -136,6 +142,7 @@ namespace TaskieLib {
             }
         }
 
+        [JsonPropertyName("Name")]
         public string Name {
             get { return _name; }
             set {
@@ -146,6 +153,7 @@ namespace TaskieLib {
             }
         }
 
+        [JsonPropertyName("IsDone")]
         public bool IsDone {
             get { return _isDone; }
             set {
@@ -158,7 +166,9 @@ namespace TaskieLib {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName) {
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            Debug.WriteLine($"PropertyChanged fired for: {propertyName}");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }

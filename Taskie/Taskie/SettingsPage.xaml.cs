@@ -70,8 +70,8 @@ namespace Taskie {
         #region Click and toggle handlers
 
         private void AuthToggleSwitch_Toggled(object sender, RoutedEventArgs e) {
-            if ((sender as ToggleSwitch)?.Tag?.ToString() == "Auth") {
-                Settings.isAuthUsed = (sender as ToggleSwitch).IsOn;
+            if ((sender as ToggleSwitch)?.Tag?.ToString() == "Auth" && sender != null) {
+                Settings.isAuthUsed = ((ToggleSwitch)sender).IsOn;
             }
         }
 
@@ -83,9 +83,9 @@ namespace Taskie {
             if (radioButton == null)
                 return;
 
-            string selectedTheme = radioButton.Tag?.ToString();
+            string? selectedTheme = radioButton.Tag?.ToString();
 
-            if (radioButton.IsChecked == true) {
+            if (radioButton.IsChecked == true && selectedTheme != null) {
                 isUpdating = true;
                 Settings.Theme = selectedTheme;
                 isUpdating = false;
@@ -119,7 +119,7 @@ namespace Taskie {
                 foreach (StorageFile file in files) {
                     string fileExtension = Path.GetExtension(file.Name).ToLower();
                     if (fileExtension == ".json") {
-                        ListTools.ImportFile(file);
+                        await ListTools.ImportFile(file);
                     }
                     else if (fileExtension == ".taskie") {
                         await ProcessTaskieFile(file);
@@ -150,7 +150,7 @@ namespace Taskie {
                                 await entryStream.CopyToAsync(memoryStream);
                                 memoryStream.Position = 0;
                                 var unzippedFile = await CreateStorageFileFromStreamAsync(entry.FullName, memoryStream);
-                                ListTools.ImportFile(unzippedFile);
+                                await ListTools.ImportFile(unzippedFile);
                             }
                         }
                     }
@@ -170,14 +170,14 @@ namespace Taskie {
         }
 
         private void SettingsPage_ActualThemeChanged(FrameworkElement sender, object args) {
-            (this.Background as AcrylicBrush).TintColor = (Color)Application.Current.Resources["SystemAltHighColor"];
-            (this.Background as AcrylicBrush).FallbackColor = (Color)Application.Current.Resources["SystemAltLowColor"];
+            ((AcrylicBrush)this.Background).TintColor = (Color)Application.Current.Resources["SystemAltHighColor"];
+            ((AcrylicBrush)this.Background).FallbackColor = (Color)Application.Current.Resources["SystemAltLowColor"];
         }
 
         private class SettingCategory {
-            public string Emoji { get; set; }
-            public string Name { get; set; }
-            public string Page { get; set; }
+            public required string Emoji { get; set; }
+            public required string Name { get; set; }
+            public required string Page { get; set; }
         }
 
         #endregion

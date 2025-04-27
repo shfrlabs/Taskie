@@ -16,7 +16,9 @@
             VerticalAlignment="Top"
             IsTabStop="False"
             Height="30"
-            Margin="132, 7, 0, 7"
+            Width="30"
+            Padding="0"
+            Margin="125, 7, 0, 7"
             Background="Transparent"
             BorderThickness="0"
             VerticalContentAlignment="Center"
@@ -24,7 +26,7 @@
             Click="SidebarButton_Click">
             <FontIcon
                 Glyph="&#xE90C;"
-                FontSize="16" />
+                FontSize="14" />
         </Button>
         <Grid
             Background="Transparent"
@@ -37,15 +39,15 @@
                 Width="20"
                 Height="20"
                 HorizontalAlignment="Left"
-                Margin="16,0,0,0" />
+                Margin="12,0,0,0" />
             <TextBlock
-                Margin="45,0,0,0"
+                Margin="40,0,0,0"
                 VerticalAlignment="Center"
-                FontSize="12">Taskie</TextBlock>
+                FontSize="12" FontFamily="Segoe UI Variable Text">Taskie</TextBlock>
             <TextBlock
-                Margin="85,1,0,0"
+                Margin="78,2,0,0"
                 VerticalAlignment="Center"
-                FontSize="10"
+                FontSize="9"
                 Opacity=".7"
                 x:Name="proText">FREE</TextBlock>
         </Grid>
@@ -53,7 +55,7 @@
             x:Name="mainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
-                    Width="200" />
+                    Width="185" />
                 <ColumnDefinition
                     Width="*" />
             </Grid.ColumnDefinitions>
@@ -67,11 +69,11 @@
                 VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition
-                        Height="98" />
+                        Height="88" />
                     <RowDefinition
                         Height="*" />
                     <RowDefinition
-                        Height="115"
+                        Height="105"
                         x:Name="BottomRow" />
                 </Grid.RowDefinitions>
                 <StackPanel
@@ -84,7 +86,7 @@
                         Click="AddList"
                         HorizontalContentAlignment="Center"
                         HorizontalAlignment="Stretch"
-                        Height="40"
+                        Height="35"
                         CornerRadius="8"
                         Margin="10, 0, 10, 10">
                         <Button.Resources>
@@ -132,7 +134,7 @@
                         Margin="10,0,10,2"
                         x:Uid="SearchBox"
                         HorizontalAlignment="Stretch"
-                        Height="40"
+                        Height="35"
                         CornerRadius="8"
                         FontSize="13"
                         BorderBrush="{ThemeResource ControlElevationBorderBrush}"
@@ -188,7 +190,7 @@
                         HorizontalContentAlignment="Center"
                         Margin="10, 3, 10 ,10"
                         HorizontalAlignment="Stretch"
-                        Height="40"
+                        Height="35"
                         CornerRadius="8"
                         BorderThickness="2"
                         BorderBrush="{StaticResource ButtonBG}">
@@ -208,7 +210,7 @@
                         Click="SettingsButton_Click"
                         HorizontalContentAlignment="Center"
                         HorizontalAlignment="Stretch"
-                        Height="40"
+                        Height="35"
                         CornerRadius="8"
                         Margin="10, 0, 10 ,0">
                         <StackPanel
@@ -248,7 +250,7 @@
                 Fill="{StaticResource SystemAltLowColor}"
                 Canvas.ZIndex="-10"
                 Opacity="1"
-                Width="200"
+                Width="185"
                 HorizontalAlignment="Left"
                 x:Name="rect2" />
         </Grid>

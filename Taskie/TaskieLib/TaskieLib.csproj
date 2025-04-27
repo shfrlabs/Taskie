@@ -7,8 +7,17 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <IsAotCompatible>true</IsAotCompatible>
     <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="9.0.4" />
   </ItemGroup>
+    <ItemGroup>
+	    <TrimmerRootAssembly Include="TaskieLib" />
+	    <TypePreserve Include="TaskieLib.ListTask" Dynamic="Required All" />
+    </ItemGroup>
+
+    <ItemGroup>
+	    <AdditionalFiles Include="Models/ListTask.cs" />
+    </ItemGroup>
 </Project>

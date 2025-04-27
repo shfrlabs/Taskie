@@ -4,14 +4,14 @@ using System.ComponentModel;
 // Object used for list metadata in a list's JSON
 public class ListMetadata : INotifyPropertyChanged {
     private DateTime _creationDate;
-    private string _name;
-    private string _emoji;
+    private string? _name;
+    private string? _emoji;
     private int? _groupID;
-    private string _titlefont;
+    private string? _titlefont;
 
-    public string TitleFont
+    public string? TitleFont
     {
-        get { return _titlefont; }
+        get => _titlefont;
         set
         {
             if (_titlefont != value)
@@ -23,7 +23,7 @@ public class ListMetadata : INotifyPropertyChanged {
     }
 
     public DateTime CreationDate {
-        get { return _creationDate; }
+        get => _creationDate;
         set {
             if (_creationDate != value) {
                 _creationDate = value;
@@ -32,8 +32,8 @@ public class ListMetadata : INotifyPropertyChanged {
         }
     }
 
-    public string Name {
-        get { return _name; }
+    public string? Name {
+        get => _name;
         set {
             if (_name != value) {
                 _name = value;
@@ -42,8 +42,8 @@ public class ListMetadata : INotifyPropertyChanged {
         }
     }
 
-    public string Emoji {
-        get { return _emoji; }
+    public string? Emoji {
+        get => _emoji;
         set {
             if (_emoji != value) {
                 _emoji = value;
@@ -54,7 +54,7 @@ public class ListMetadata : INotifyPropertyChanged {
 
     public int? GroupID // grouping lists (coming soon)
     {
-        get { return _groupID; }
+        get => _groupID;
         set {
             if (value != _groupID) {
                 _groupID = value;
@@ -63,7 +63,7 @@ public class ListMetadata : INotifyPropertyChanged {
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged(string propertyName) {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -8,8 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    x:Name="TPage"
-    Loaded="TPage_Loaded">
+    x:Name="TPage">
 
     <Page.Resources>
         <AcrylicBrush
@@ -233,6 +232,7 @@
                 x:Name="testname"
                 FontWeight="SemiBold"
                 FontSize="28"
+                Margin="0,0,100,0"
                 TextTrimming="CharacterEllipsis"
                 Loaded="testname_Loaded" />
             <StackPanel
