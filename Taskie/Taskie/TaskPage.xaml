@@ -60,7 +60,7 @@
                             <Grid
                                 Grid.Column="1">
                                 <TextBlock
-                                    Text="{x:Bind Name}"
+                                    Text="{x:Bind Name, Mode=OneWay}"
                                     DoubleTapped="TaskNameText_DoubleTapped"
                                     MaxLines="2"
                                     TextWrapping="Wrap"
@@ -174,7 +174,7 @@
                 <Grid
                     Grid.Column="1">
                     <TextBlock
-                        Text="{x:Bind Name}"
+                        Text="{x:Bind Name, Mode=OneWay}"
                         DoubleTapped="SubTaskNameText_DoubleTapped"
                         ToolTipService.ToolTip="{x:Bind Name}"
                         MaxLines="2"
