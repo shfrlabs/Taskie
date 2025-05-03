@@ -23,25 +23,35 @@
                             FontFamily="Segoe UI Emoji"
                             Text="{Binding}" />
                     </DataTemplate>
-                    <AcrylicBrush
-                        BackgroundSource="Backdrop"
-                        TintOpacity=".4"
-                        TintColor="{StaticResource LayerFillColorDefault}"
-                        FallbackColor="{StaticResource LayerFillColorDefault}"
-                        TintLuminosityOpacity="0.4"
-                        x:Key="TaskAcrylic" />
-                    <StaticResource
-                        x:Key="ExpanderHeaderBackground"
-                        ResourceKey="TaskAcrylic" />
                     <ResourceDictionary.ThemeDictionaries>
                         <ResourceDictionary
                             x:Key="Default">
+
+                            <AcrylicBrush
+                        x:Key="SidebarBrush"
+                        TintColor="{ThemeResource SystemAltHighColor}"
+                        TintOpacity=".9"
+                        BackgroundSource="HostBackdrop"
+                        FallbackColor="{ThemeResource SystemAltLowColor}" />
+                            <SolidColorBrush
+                        x:Key="SystemAltLowColorBrush"
+                        Color="{ThemeResource SystemAltLowColor}"/>
+                            <AcrylicBrush
+    BackgroundSource="Backdrop"
+    TintOpacity=".4"
+    TintColor="{ThemeResource LayerFillColorDefault}"
+    FallbackColor="{ThemeResource LayerFillColorDefault}"
+    TintLuminosityOpacity="0.4"
+    x:Key="TaskAcrylic" />
+                            <ThemeResource
+    x:Key="ExpanderHeaderBackground"
+    ResourceKey="TaskAcrylic" />
                             <SolidColorBrush
                                 Color="Black"
                                 x:Key="ContrastText" />
                             <SolidColorBrush
                                 x:Key="ButtonBG"
-                                Color="{StaticResource SystemAccentColorLight2}" />
+                                Color="{ThemeResource SystemAccentColorLight2}" />
                             <Color x:Key="BGColor">#202020</Color>
                             <LinearGradientBrush x:Key="ProBG" StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Offset="0">
@@ -55,12 +65,32 @@
                         </ResourceDictionary>
                         <ResourceDictionary
                             x:Key="Light">
+
+                            <AcrylicBrush
+                        x:Key="SidebarBrush"
+                        TintColor="{ThemeResource SystemAltHighColor}"
+                        TintOpacity=".9"
+                        BackgroundSource="HostBackdrop"
+                        FallbackColor="{ThemeResource SystemAltLowColor}" />
+                            <SolidColorBrush
+                        x:Key="SystemAltLowColorBrush"
+                        Color="{ThemeResource SystemAltLowColor}"/>
+                            <AcrylicBrush
+    BackgroundSource="Backdrop"
+    TintOpacity=".4"
+    TintColor="{ThemeResource LayerFillColorDefault}"
+    FallbackColor="{ThemeResource LayerFillColorDefault}"
+    TintLuminosityOpacity="0.4"
+    x:Key="TaskAcrylic" />
+                            <ThemeResource
+    x:Key="ExpanderHeaderBackground"
+    ResourceKey="TaskAcrylic" />
                             <SolidColorBrush
                                 Color="White"
                                 x:Key="ContrastText" />
                             <SolidColorBrush
                                 x:Key="ButtonBG"
-                                Color="{StaticResource SystemAccentColorDark1}" />
+                                Color="{ThemeResource SystemAccentColorDark1}" />
                             <Color x:Key="BGColor">#f3f3f3</Color>
                             <LinearGradientBrush x:Key="ProBG" StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Offset="0">
@@ -96,21 +126,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
                     <ResourceDictionary.ThemeDictionaries>
                         <ResourceDictionary x:Key="Default">
-                            <contract7NotPresent:StaticResource x:Key="AutoSuggestBoxSuggestionsListBackground" ResourceKey="SystemControlBackgroundChromeMediumLowBrush" />
-                            <contract7NotPresent:StaticResource x:Key="AutoSuggestBoxSuggestionsListBorderBrush" ResourceKey="SurfaceStrokeColorDefaultBrush" />
-                            <StaticResource x:Key="AutoSuggestBoxLightDismissOverlayBackground" ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
+                            <contract7NotPresent:ThemeResource x:Key="AutoSuggestBoxSuggestionsListBackground" ResourceKey="SystemControlBackgroundChromeMediumLowBrush" />
+                            <contract7NotPresent:ThemeResource x:Key="AutoSuggestBoxSuggestionsListBorderBrush" ResourceKey="SurfaceStrokeColorDefaultBrush" />
+                            <ThemeResource x:Key="AutoSuggestBoxLightDismissOverlayBackground" ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
                             <x:Double x:Key="AutoSuggestBoxIconFontSize">12</x:Double>
                         </ResourceDictionary>
                         <ResourceDictionary x:Key="HighContrast">
-                            <StaticResource x:Key="AutoSuggestBoxSuggestionsListBackground" ResourceKey="SystemControlBackgroundChromeMediumLowBrush" />
-                            <contract7NotPresent:StaticResource x:Key="AutoSuggestBoxSuggestionsListBorderBrush" ResourceKey="SystemControlForegroundChromeHighBrush" />
-                            <StaticResource x:Key="AutoSuggestBoxLightDismissOverlayBackground" ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
+                            <ThemeResource x:Key="AutoSuggestBoxSuggestionsListBackground" ResourceKey="SystemControlBackgroundChromeMediumLowBrush" />
+                            <contract7NotPresent:ThemeResource x:Key="AutoSuggestBoxSuggestionsListBorderBrush" ResourceKey="SystemControlForegroundChromeHighBrush" />
+                            <ThemeResource x:Key="AutoSuggestBoxLightDismissOverlayBackground" ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
                             <x:Double x:Key="AutoSuggestBoxIconFontSize">12</x:Double>
                         </ResourceDictionary>
                         <ResourceDictionary x:Key="Light">
-                            <contract7NotPresent:StaticResource x:Key="AutoSuggestBoxSuggestionsListBackground" ResourceKey="SystemControlBackgroundChromeMediumLowBrush" />
-                            <contract7NotPresent:StaticResource x:Key="AutoSuggestBoxSuggestionsListBorderBrush" ResourceKey="SurfaceStrokeColorDefaultBrush" />
-                            <StaticResource x:Key="AutoSuggestBoxLightDismissOverlayBackground" ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
+                            <contract7NotPresent:ThemeResource x:Key="AutoSuggestBoxSuggestionsListBackground" ResourceKey="SystemControlBackgroundChromeMediumLowBrush" />
+                            <contract7NotPresent:ThemeResource x:Key="AutoSuggestBoxSuggestionsListBorderBrush" ResourceKey="SurfaceStrokeColorDefaultBrush" />
+                            <ThemeResource x:Key="AutoSuggestBoxLightDismissOverlayBackground" ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
                             <x:Double x:Key="AutoSuggestBoxIconFontSize">12</x:Double>
                         </ResourceDictionary>
                     </ResourceDictionary.ThemeDictionaries>
@@ -158,7 +188,7 @@
                                                 BorderBrush="{ThemeResource TextControlButtonBorderBrush}"
                                                 BorderThickness="{TemplateBinding BorderThickness}"
                                                 Background="{ThemeResource TextControlButtonBackground}"
-                                                Margin="{StaticResource AutoSuggestBoxDeleteButtonMargin}"
+                                                Margin="{ThemeResource AutoSuggestBoxDeleteButtonMargin}"
                                                 contract7Present:CornerRadius="{ThemeResource ControlCornerRadius}"
                                                 contract7NotPresent:CornerRadius="{ThemeResource ControlCornerRadius}">
                                                                 <VisualStateManager.VisualStateGroups>
@@ -439,7 +469,7 @@
                                         <Button x:Name="DeleteButton"
                             Grid.Row="1"
                             contract7Present:CornerRadius="{TemplateBinding CornerRadius}"
-                            Style="{StaticResource DeleteButtonStyle}"
+                            Style="{ThemeResource DeleteButtonStyle}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Padding="{ThemeResource HelperButtonThemePadding}"
                             IsTabStop="False"
@@ -454,7 +484,7 @@
                             Grid.Row="1"
                             Grid.Column="2"
                             contract7Present:CornerRadius="5"
-                            Style="{StaticResource QueryButtonStyle}"
+                            Style="{ThemeResource QueryButtonStyle}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Padding="{ThemeResource HelperButtonThemePadding}"
                             IsTabStop="False"
@@ -576,7 +606,7 @@
                                                                 BorderBrush="{ThemeResource TextControlButtonBorderBrush}"
                                                                 BorderThickness="{TemplateBinding BorderThickness}"
                                                                 Background="{ThemeResource TextControlButtonBackground}"
-                                                                Margin="{StaticResource SearchBoxDeleteButtonMargin}"
+                                                                Margin="{ThemeResource SearchBoxDeleteButtonMargin}"
                                                                 contract7Present:CornerRadius="{ThemeResource ControlCornerRadius}"
                                                                 contract7NotPresent:CornerRadius="{ThemeResource ControlCornerRadius}">
                                                                 <VisualStateManager.VisualStateGroups>
@@ -784,7 +814,7 @@
                                         <Button x:Name="DeleteButton"
                             Grid.Row="1"
                             contract7Present:CornerRadius="{TemplateBinding CornerRadius}"
-                            Style="{StaticResource DeleteButtonStyle}"                            
+                            Style="{ThemeResource DeleteButtonStyle}"                            
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Padding="{ThemeResource HelperButtonThemePadding}"
                             IsTabStop="False"
@@ -798,7 +828,7 @@
                                         <Button x:Name="QueryButton"
                             Grid.Row="1"
                             contract7Present:CornerRadius="{TemplateBinding CornerRadius}"
-                            Style="{StaticResource QueryButtonStyle}"
+                            Style="{ThemeResource QueryButtonStyle}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Padding="{ThemeResource HelperButtonThemePadding}"
                             IsTabStop="False"
@@ -833,7 +863,7 @@
                         <Setter Property="BorderThickness" Value="{ThemeResource TextControlBorderThemeThickness}" />
                         <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
                         <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
-                        <Setter Property="TextBoxStyle" Value="{StaticResource SearchBoxTextBoxStyle}" />
+                        <Setter Property="TextBoxStyle" Value="{ThemeResource SearchBoxTextBoxStyle}" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="AutoSuggestBox">
@@ -921,7 +951,7 @@
                         <Setter Property="BorderThickness" Value="0" />
                         <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
                         <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
-                        <Setter Property="TextBoxStyle" Value="{StaticResource AutoSuggestBoxTextBoxStyle}" />
+                        <Setter Property="TextBoxStyle" Value="{ThemeResource AutoSuggestBoxTextBoxStyle}" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="AutoSuggestBox">

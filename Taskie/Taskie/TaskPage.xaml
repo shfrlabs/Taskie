@@ -14,9 +14,9 @@
         <AcrylicBrush
             BackgroundSource="Backdrop"
             TintOpacity=".4"
-            TintColor="{StaticResource LayerFillColorDefault}"
+            TintColor="{ThemeResource LayerFillColorDefault}"
             TintLuminosityOpacity="0.2"
-            FallbackColor="{StaticResource LayerFillColorDefault}"
+            FallbackColor="{ThemeResource LayerFillColorDefault}"
             x:Key="AddTaskAcrylic" />
         <lib:EmptyCollectionVisibilityConverter
             x:Key="VisConverter" />
@@ -34,7 +34,7 @@
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Stretch"
                 Height="Auto"
-                Background="{StaticResource TaskAcrylic}"
+                Background="{ThemeResource TaskAcrylic}"
                 x:Name="rootGrid"
                 Padding="15,5,15,5"
                 Margin="0,0,5,5"
@@ -56,7 +56,7 @@
                                 Grid.Column="0"
                                 Checked="TaskStateChanged"
                                 Unchecked="TaskStateChanged"
-                                IsChecked="{x:Bind IsDone}" />
+                                IsChecked="{x:Bind IsDone, Mode=OneWay}" />
                             <Grid
                                 Grid.Column="1">
                                 <TextBlock
@@ -116,7 +116,7 @@
                             Margin="0,0,-13,0"
                             SelectionMode="None"
                             HorizontalAlignment="Stretch"
-                            ItemTemplate="{StaticResource TaskSubItemTemplate}"
+                            ItemTemplate="{ThemeResource TaskSubItemTemplate}"
                             ItemsSource="{x:Bind SubTasks}">
                             <ListView.ItemContainerStyle>
                                 <Style
@@ -132,7 +132,7 @@
                             x:Name="AddSubTaskBox"
                             x:Uid="AddSubTaskBox"
                             TextChanged="AutoSuggestBox_TextChanged"
-                            Style="{StaticResource AddItemBoxStyle}"
+                            Style="{ThemeResource AddItemBoxStyle}"
                             BorderThickness="0"
                             Canvas.ZIndex="10"
                             VerticalContentAlignment="Center"
@@ -308,7 +308,7 @@
                 x:Name="taskListView"
                 Margin="0,0,-8,0"
                 SelectionMode="None"
-                ItemTemplate="{StaticResource TaskItemTemplate}">
+                ItemTemplate="{ThemeResource TaskItemTemplate}">
                 <ListView.ItemContainerStyle>
                     <Style
                         TargetType="ListViewItem">
@@ -330,13 +330,13 @@
 
         <Rectangle
             x:Name="addTaskRect"
-            Fill="{StaticResource AddTaskAcrylic}"
+            Fill="{ThemeResource AddTaskAcrylic}"
             Canvas.ZIndex="-10"
             VerticalAlignment="Bottom"
             Height="50"
             Margin="-20" />
         <AutoSuggestBox
-            Style="{StaticResource AddItemBoxStyle}"
+            Style="{ThemeResource AddItemBoxStyle}"
             KeyDown="AutoSuggestBox_KeyDown"
             BorderThickness="0"
             Margin="-10,0,-10,-18"

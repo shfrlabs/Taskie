@@ -7,7 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     Loaded="Page_Loaded">
     <Grid>
         <Button
@@ -45,7 +44,7 @@
                 VerticalAlignment="Center"
                 FontSize="12" FontFamily="Segoe UI Variable Text">Taskie</TextBlock>
             <TextBlock
-                Margin="78,2,0,0"
+                Margin="78,0,0,0"
                 VerticalAlignment="Center"
                 FontSize="9"
                 Opacity=".7"
@@ -81,7 +80,7 @@
                     Orientation="Vertical"
                     VerticalAlignment="Bottom">
                     <Button
-                        Background="{StaticResource ButtonBG}"
+                        Background="{ThemeResource ButtonBG}"
                         x:Name="AddItemBtn"
                         Click="AddList"
                         HorizontalContentAlignment="Center"
@@ -96,19 +95,19 @@
                                         x:Key="Default">
                                         <SolidColorBrush
                                             x:Key="ButtonBackgroundPointerOver"
-                                            Color="{StaticResource SystemAccentColorLight3}" />
+                                            Color="{ThemeResource SystemAccentColorLight3}" />
                                         <SolidColorBrush
                                             x:Key="ButtonBackgroundPressed"
-                                            Color="{StaticResource SystemAccentColorLight3}" />
+                                            Color="{ThemeResource SystemAccentColorLight3}" />
                                     </ResourceDictionary>
                                     <ResourceDictionary
                                         x:Key="Light">
                                         <SolidColorBrush
                                             x:Key="ButtonBackgroundPressed"
-                                            Color="{StaticResource SystemAccentColorDark2}" />
+                                            Color="{ThemeResource SystemAccentColorDark2}" />
                                         <SolidColorBrush
                                             x:Key="ButtonBackgroundPointerOver"
-                                            Color="{StaticResource SystemAccentColorDark2}" />
+                                            Color="{ThemeResource SystemAccentColorDark2}" />
                                     </ResourceDictionary>
                                 </ResourceDictionary.ThemeDictionaries>
                             </ResourceDictionary>
@@ -119,13 +118,13 @@
                                 Glyph="&#xE710;"
                                 FontSize="15"
                                 Margin="0,0,10,0"
-                                Foreground="{StaticResource ContrastText}"
+                                Foreground="{ThemeResource ContrastText}"
                                 x:Name="NewListBtnIcon" />
                             <TextBlock
                                 FontSize="13"
                                 x:Uid="NewListBtn"
                                 x:Name="NewListBtnText"
-                                Foreground="{StaticResource ContrastText}" />
+                                Foreground="{ThemeResource ContrastText}" />
                         </StackPanel>
                     </Button>
                     <AutoSuggestBox
@@ -139,7 +138,7 @@
                         FontSize="13"
                         BorderBrush="{ThemeResource ControlElevationBorderBrush}"
                         VerticalContentAlignment="Center"
-                        Style="{StaticResource SearchStyle}"
+                        Style="{ThemeResource SearchStyle}"
                         VerticalAlignment="Bottom"
                         x:Name="searchbox">
                         <AutoSuggestBox.QueryIcon>
@@ -193,7 +192,7 @@
                         Height="35"
                         CornerRadius="8"
                         BorderThickness="2"
-                        BorderBrush="{StaticResource ButtonBG}">
+                        BorderBrush="{ThemeResource ButtonBG}">
                         <StackPanel
                             Orientation="Horizontal">
                             <FontIcon
@@ -226,7 +225,8 @@
                     </Button>
                 </StackPanel>
             </Grid>
-            <Rectangle
+            <Grid
+                Background="{ThemeResource SidebarBrush}"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
                 Grid.RowSpan="3"
@@ -234,20 +234,13 @@
                 Canvas.ZIndex="-10"
                 Grid.ColumnSpan="2"
                 x:Name="rect1">
-                <Rectangle.Fill>
-                    <AcrylicBrush
-                        TintColor="{StaticResource SystemAltHighColor}"
-                        TintOpacity=".9"
-                        BackgroundSource="HostBackdrop"
-                        FallbackColor="{StaticResource SystemAltLowColor}" />
-                </Rectangle.Fill>
-            </Rectangle>
-            <Rectangle
+            </Grid>
+            <Grid
                 VerticalAlignment="Stretch"
                 Margin="-20"
                 Grid.Column="0"
                 Grid.RowSpan="4"
-                Fill="{StaticResource SystemAltLowColor}"
+                Background="{ThemeResource SystemAltLowColorBrush}"
                 Canvas.ZIndex="-10"
                 Opacity="1"
                 Width="185"

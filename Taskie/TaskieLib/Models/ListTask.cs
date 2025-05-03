@@ -24,34 +24,46 @@ namespace TaskieLib
         [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ListTask))]
         public ListTask()
         {
-            _creationDate = DateTime.UtcNow; // Use UTC for better serialization consistency
+            _creationDate = DateTime.UtcNow; // Use UTC for consistency
             _subTasks = new ObservableCollection<ListTask>();
         }
 
         #region Reminders
+        private const string ToastTagFormat = "{0}_{1}"; // Format: CreationTicks_ListId
+
+        /// <summary>
+        /// Adds a toast reminder for this task at the specified future time.
+        /// </summary>
         public void AddReminder(DateTimeOffset reminderDateTime, string listId)
         {
-            if (reminderDateTime < DateTimeOffset.UtcNow)
-                throw new ArgumentException("Reminder time must be in the future");
+            if (reminderDateTime <= DateTimeOffset.UtcNow)
+                throw new ArgumentException("Reminder time must be in the future", nameof(reminderDateTime));
 
-            ValidateMainThread();
-            RemoveReminder();
+            RemoveReminder(listId);
             ScheduleToastNotification(reminderDateTime, listId);
         }
 
-        public void RemoveReminder()
+        /// <summary>
+        /// Removes any scheduled or delivered reminder for this task.
+        /// </summary>
+        public void RemoveReminder(string listId)
         {
-            ValidateMainThread();
             try
             {
                 var notifier = ToastNotificationManager.CreateToastNotifier();
-                var toastId = GetToastId();
-                
-                foreach (var toast in notifier.GetScheduledToastNotifications()
-                    .Where(t => t.Id == toastId).ToList())
+                var tag = GetToastTag(listId);
+
+                // Remove scheduled notifications
+                var scheduled = notifier.GetScheduledToastNotifications()
+                    .Where(t => t.Tag == tag)
+                    .ToList();
+                foreach (var toast in scheduled)
                 {
                     notifier.RemoveFromSchedule(toast);
                 }
+
+                // Remove from action center if already delivered
+                ToastNotificationManager.History.Remove(tag, listId);
             }
             catch (Exception ex)
             {
@@ -59,15 +71,17 @@ namespace TaskieLib
             }
         }
 
-        public bool HasReminder()
+        /// <summary>
+        /// Checks if a reminder is currently scheduled for this task.
+        /// </summary>
+        public bool HasReminder(string listId)
         {
-            ValidateMainThread();
             try
             {
-                var toast = ToastNotificationManager.CreateToastNotifier()
-                    .GetScheduledToastNotifications()
-                    .FirstOrDefault(t => t.Id == GetToastId());
-
+                var notifier = ToastNotificationManager.CreateToastNotifier();
+                var tag = GetToastTag(listId);
+                var toast = notifier.GetScheduledToastNotifications()
+                    .FirstOrDefault(t => t.Tag == tag);
                 return toast != null && toast.DeliveryTime > DateTimeOffset.UtcNow;
             }
             catch
@@ -84,28 +98,30 @@ namespace TaskieLib
                 var textNodes = toastXml.GetElementsByTagName("text");
 
                 textNodes[0].AppendChild(toastXml.CreateTextNode(
-                    ResourceLoader.GetForCurrentView().GetString("ReminderGreeting") ?? "Task reminder"));
-                
+                    ResourceLoader.GetForCurrentView().GetString("ReminderGreeting")));
                 textNodes[1].AppendChild(toastXml.CreateTextNode(Name));
 
-                var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");
-                toastElement?.SetAttribute("launch", $"listId={listId}");
+                // Set launch args so app can navigate to the specific task
+                var toastElement = (XmlElement)toastXml.SelectSingleNode("//toast");
+                toastElement?.SetAttribute("launch",
+                    $"action=viewTask&creationDate={CreationDate:o}&listId={listId}");
 
-                var toast = new ScheduledToastNotification(toastXml, reminderDateTime)
+                var scheduledToast = new ScheduledToastNotification(toastXml, reminderDateTime)
                 {
-                    Id = GetToastId()
+                    Tag = GetToastTag(listId),
+                    Group = listId
                 };
 
-                ToastNotificationManager.CreateToastNotifier().AddToSchedule(toast);
+                ToastNotificationManager.CreateToastNotifier().AddToSchedule(scheduledToast);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error scheduling notification: {ex.Message}");
-                throw new InvalidOperationException("Failed to schedule notification", ex);
             }
         }
 
-        private string GetToastId() => $"T_{_creationDate.Ticks % 1000000000000000000}"; // 19 digits max
+        private string GetToastTag(string listId)
+            => string.Format(ToastTagFormat, _creationDate.Ticks, listId);
         #endregion
 
         [JsonPropertyName("SubTasks")]
@@ -115,21 +131,16 @@ namespace TaskieLib
             set
             {
                 if (_subTasks == value) return;
-                
-                // Maintain collection reference for binding preservation
                 _subTasks.Clear();
                 if (value != null)
                 {
                     foreach (var item in value)
-                    {
                         _subTasks.Add(item);
-                    }
                 }
                 OnPropertyChanged(nameof(SubTasks));
             }
         }
 
-        // Other properties remain the same with improved thread safety
         [JsonPropertyName("CreationDate")]
         public DateTime CreationDate
         {
@@ -184,7 +195,7 @@ namespace TaskieLib
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
+    
         private static void ValidateMainThread()
         {
             if (!CoreApplication.MainView.CoreWindow.Dispatcher.HasThreadAccess)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace TaskieLib {
@@ -37,6 +38,37 @@ namespace TaskieLib {
             }
 
             return emojis.ToArray();
+        }
+
+        public static void SetTheme(string theme) {
+            try {
+                switch (theme) {
+                    case "Light":
+                        Application.Current.RequestedTheme = ApplicationTheme.Light;
+                        break;
+                    case "Dark":
+                        Application.Current.RequestedTheme = ApplicationTheme.Dark;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch {
+                ElementTheme theme2 = ElementTheme.Default;
+                switch (theme) {
+                    case "Light":
+                        theme2 = ElementTheme.Light;
+                        break;
+                    case "Dark":
+                        theme2 = ElementTheme.Dark;
+                        break;
+                    default:
+                        break;
+                }
+                if (Window.Current.Content is FrameworkElement rootElement) {
+                    rootElement.RequestedTheme = theme2;
+                }
+            }
         }
 
         public partial class IncrementalEmojiSource : ObservableCollection<string>, ISupportIncrementalLoading // source for emojis in the "Change emoji" dialog

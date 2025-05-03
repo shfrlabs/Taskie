@@ -539,7 +539,9 @@ namespace Taskie {
             ListTask boundTask = button.DataContext as ListTask;
             ListTask task;
             try {
+#pragma warning disable CS8600
                 task = tasks.FirstOrDefault(t => t.CreationDate == boundTask.CreationDate);
+#pragma warning restore CS8600
                 if (task == null) {
                     return;
                 }
@@ -682,7 +684,7 @@ namespace Taskie {
         private void UpdateFlyoutMenu(MenuFlyout flyout, ListTask task, Button btn) {
             flyout.Items.Remove(flyout.Items.FirstOrDefault(item => (item as MenuFlyoutItem)?.Tag?.ToString() == "Reminder"));
 
-            if (!task.HasReminder()) {
+            if (!task.HasReminder(listId)) {
                 var addReminderItem = new MenuFlyoutItem {
                     Icon = new SymbolIcon(Symbol.Calendar),
                     Text = resourceLoader.GetString("AddReminder/Text"),
@@ -734,7 +736,7 @@ namespace Taskie {
                 };
 
                 removeReminderItem.Click += (s, args) => {
-                    task.RemoveReminder();
+                    task.RemoveReminder(listId);
                     UpdateFlyoutMenu(flyout, task, btn);
                 };
 

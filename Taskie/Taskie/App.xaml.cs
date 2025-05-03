@@ -12,13 +12,7 @@ namespace Taskie {
     sealed partial class App : Application {
         public App() {
             //ApplicationLanguages.PrimaryLanguageOverride = "en-US";
-            if (Settings.Theme == "Dark") {
-                Application.Current.RequestedTheme = ApplicationTheme.Dark;
-
-            }
-            else if (Settings.Theme == "Light") {
-                Application.Current.RequestedTheme = ApplicationTheme.Light;
-            }
+            Tools.SetTheme(Settings.Theme);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }

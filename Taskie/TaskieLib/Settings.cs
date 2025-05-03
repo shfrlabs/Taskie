@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Windows.Foundation.Collections;
 using Windows.Services.Store;
 using Windows.Storage;
+using Windows.UI.Xaml;
 
 namespace TaskieLib {
     public static class Settings {
@@ -25,6 +26,7 @@ namespace TaskieLib {
                 if (value == "Light" || value == "Dark" || value == "System") {
                     savedSettings["theme"] = value;
                 }
+                //Tools.SetTheme(value); mica bug
             }
         }
 

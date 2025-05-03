@@ -13,6 +13,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -446,12 +447,15 @@ namespace Taskie {
             catch (Exception ex) { Debug.WriteLine("[Search box suggestion chooser] Exception occured: " + ex.Message); }
         }
 
-        #endregion
-
-        private void MainPage_ActualThemeChanged(FrameworkElement? sender = null, object? args = null) {
-            ((AcrylicBrush)rect1.Fill).TintColor = (Color)Application.Current.Resources["SystemAltHighColor"];
-            ((AcrylicBrush)rect1.Fill).FallbackColor = (Color)Application.Current.Resources["SystemAltLowColor"];
-            ((SolidColorBrush)rect2.Fill).Color = (Color)Application.Current.Resources["SystemAltLowColor"];
+        private async void MainPage_ActualThemeChanged(FrameworkElement? sender = null, object? args = null)
+        {
+            if (rect1 is FrameworkElement frameworkElement)
+            {
+                frameworkElement.SetValue(Panel.BackgroundProperty, Application.Current.Resources["SidebarBrush"]);
+            }
+            if (rect2 is FrameworkElement frameworkElement2) {
+                frameworkElement2.SetValue(Panel.BackgroundProperty, Application.Current.Resources["SystemAltLowColorBrush"]);
+            }
         }
 
         public ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
@@ -549,3 +553,4 @@ namespace Taskie {
 
     }
 }
+#endregion

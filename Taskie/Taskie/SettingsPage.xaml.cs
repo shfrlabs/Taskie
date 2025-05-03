@@ -18,6 +18,12 @@ namespace Taskie {
 
         public SettingsPage() {
             this.InitializeComponent();
+            VersionTag.Text = "v" + Windows.ApplicationModel.Package.Current.Id.Version.Major.ToString() + "." +
+                Windows.ApplicationModel.Package.Current.Id.Version.Minor.ToString() + "." +
+                Windows.ApplicationModel.Package.Current.Id.Version.Build.ToString() + "." +
+                Windows.ApplicationModel.Package.Current.Id.Version.Revision.ToString();
+            ((AcrylicBrush)this.Background).TintColor = (Color)Application.Current.Resources["SystemAltHighColor"];
+            ((AcrylicBrush)this.Background).FallbackColor = (Color)Application.Current.Resources["SystemAltLowColor"];
             SetAppearance();
             SetSecurity();
             CheckSecurity();

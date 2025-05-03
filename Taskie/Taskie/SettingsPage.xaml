@@ -8,7 +8,7 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d">
     <Page.Background>
-        <AcrylicBrush TintColor="{StaticResource SystemAltHighColor}" TintOpacity="1" BackgroundSource="HostBackdrop" FallbackColor="{StaticResource BGColor}"/>
+        <AcrylicBrush TintColor="{ThemeResource SystemAltHighColor}" TintOpacity="1" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource BGColor}"/>
     </Page.Background>
     <Grid>
         <ScrollViewer>
@@ -43,7 +43,7 @@
                 <StackPanel Orientation="Vertical">
                     <TextBlock x:Uid="BackupHeader" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="1,0,0,10"/>
                     <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10" x:Uid="BackupText"/>
-                    <Button x:Name="export" Style="{StaticResource AccentButtonStyle}" Click="export_Click" Margin="1,0,0,20">
+                    <Button x:Name="export" Style="{ThemeResource AccentButtonStyle}" Click="export_Click" Margin="1,0,0,20">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <FontIcon Margin="0,0,10,0" Glyph="&#xEDE1;" FontSize="15"/>
                             <TextBlock x:Uid="ExportButton"/>
@@ -51,7 +51,7 @@
                     </Button>
                     <TextBlock x:Uid="RestoreHeader" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="1,0,0,10"/>
                     <TextBlock x:Uid="RestoreText" FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10"/>
-                    <Button x:Name="import" Style="{StaticResource AccentButtonStyle}" Click="import_Click" Margin="1,0,0,20">
+                    <Button x:Name="import" Style="{ThemeResource AccentButtonStyle}" Click="import_Click" Margin="1,0,0,20">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <FontIcon Margin="0,0,10,0" Glyph="&#xEDE2;" FontSize="15"/>
                             <TextBlock x:Uid="ImportButton"/>
@@ -75,7 +75,7 @@
                         <Image Source="..\Assets\Logo.png" Height="50" HorizontalAlignment="Center" Margin="0,0,10,0" Grid.Column="0"/>
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Column="1">
                             <TextBlock TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="14" Opacity=".8" x:Uid="AdvertTag" TextAlignment="Left" HorizontalTextAlignment="Left"/>
-                            <TextBlock TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="14" Opacity=".7" x:Uid="AdvertUWPTag" TextAlignment="Left" HorizontalTextAlignment="Left"/>
+                            <TextBlock TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="14" Opacity=".7" x:Name="VersionTag" x:Uid="AdvertUWPTag" TextAlignment="Left" HorizontalTextAlignment="Left"/>
                         </StackPanel>
                     </Grid>
                     <TextBlock TextWrapping="Wrap" Margin="0,20,0,0" HorizontalAlignment="Left" FontSize="15" Opacity=".9" TextAlignment="Left" x:Uid="AboutApp" HorizontalTextAlignment="Left"/>
