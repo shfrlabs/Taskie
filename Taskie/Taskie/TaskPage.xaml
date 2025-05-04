@@ -110,7 +110,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <AppBarButton x:Name="AddAttachment" Label="Attach" LabelPosition="Collapsed" Width="48" Height="48" VerticalContentAlignment="Center" Click="AddAttachment_Click" Icon="Attach" Grid.Column="0"/>
-                            <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Visible" Grid.Column="1" Height="60" HorizontalAlignment="Left" HorizontalScrollMode="Enabled" Loaded="AttachmentListView_Loaded" DataContextChanged="AttachmentListView_DataContextChanged" SizeChanged="AttachmentListView_SizeChanged">
+                            <ScrollViewer VerticalScrollBarVisibility="Hidden" x:Name="AttachmentScroll" HorizontalScrollBarVisibility="Visible" Grid.Column="1" Height="60" HorizontalAlignment="Left" HorizontalScrollMode="Enabled" Loaded="AttachmentListView_Loaded" DataContextChanged="AttachmentListView_DataContextChanged" SizeChanged="AttachmentListView_SizeChanged">
                                 <StackPanel>
                                     <Grid
                                         Height="48"

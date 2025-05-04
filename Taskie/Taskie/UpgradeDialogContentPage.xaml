@@ -31,8 +31,6 @@
                     Height="*" />
                 <RowDefinition
                     Height="*" />
-                <RowDefinition
-                    Height="*" />
             </Grid.RowDefinitions>
             <Grid
                 Grid.Row="0">
@@ -94,29 +92,10 @@
                     Margin="5,0,0,0"
                     FontSize="16"
                     Grid.Column="1"
-                    x:Uid="GroupSpecificKanbanUpgrade" />
-            </Grid>
-            <Grid
-                Grid.Row="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="30" />
-                    <ColumnDefinition
-                        Width="*" />
-                </Grid.ColumnDefinitions>
-                <CheckBox
-                    VerticalAlignment="Center"
-                    IsEnabled="False"
-                    IsChecked="True" />
-                <TextBlock
-                    VerticalAlignment="Center"
-                    Margin="5,0,0,0"
-                    FontSize="16"
-                    Grid.Column="1"
                     x:Uid="FileAttachmentUpgrade" />
             </Grid>
             <Grid
-                Grid.Row="5">
+                Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition
                         Width="30" />

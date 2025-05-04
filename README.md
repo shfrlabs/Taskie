@@ -11,16 +11,15 @@
 - Reminders - set a custom notification to appear at your chosen time.
 - Subtasks - split any task into managable chunks.
 - List customization - change a list's emoji, *wallpaper*, and *font* (*Pro only*)
-
+- Attachments - add files to task to organize your life further. (*Pro only*)
 
 ## 🦾 Why should I get Pro?
 *(I won't nag you in the app, don't worry)*
 
 You can get Pro for its current and future features:
-- [x] priority support
-- [x] advanced list customization
-- [ ] task attachments
-- [ ] kanban/Trello-like view for specific list groups
+- priority support
+- advanced list customization
+- task attachments
 
 ..all for a small price of $1.99 (lifetime) or 0.99 zł in Poland.
 

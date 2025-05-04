@@ -7,13 +7,17 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using TaskieLib;
+using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
+using Windows.ApplicationModel.Store;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.System;
 using Windows.UI;
+using Windows.UI.Notifications;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -63,17 +67,32 @@ namespace Taskie {
             catch { }
         }
         private async void AddAttachment_Click(object sender, RoutedEventArgs e) {
-            FileOpenPicker openPicker = new FileOpenPicker();
-            openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            openPicker.FileTypeFilter.Add("*");
-            StorageFile file = await openPicker.PickSingleFileAsync();
-            if (file != null) {
-                var task = (sender as Button)?.DataContext as ListTask;
-                if (task != null) {
-                    await task.AddAttachmentAsync(file, listId);
+            if (await Settings.CheckIfProAsync()) {
+                FileOpenPicker openPicker = new FileOpenPicker();
+                openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                openPicker.FileTypeFilter.Add("*");
+                StorageFile file = await openPicker.PickSingleFileAsync();
+                if (file != null) {
+                    var task = (sender as Button)?.DataContext as ListTask;
+                    if (task != null) {
+                        await task.AddAttachmentAsync(file, listId);
+                    }
                 }
+                else { }
             }
-            else { }
+            else {
+                ContentDialog dialog = new ContentDialog();
+                Frame frame = new Frame();
+                dialog.BorderBrush = (LinearGradientBrush?)Application.Current.Resources["ProBG"];
+                dialog.BorderThickness = new Thickness(2);
+                frame.Navigate(typeof(UpgradeDialogContentPage));
+                dialog.Content = frame;
+                dialog.PrimaryButtonText = string.Format(resourceLoader.GetString("UpgradeFor"), await Settings.GetProPriceAsync());
+                dialog.DefaultButton = ContentDialogButton.Primary;
+                dialog.PrimaryButtonClick += Dialog_UpgradeAction;
+                dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
+                await dialog.ShowAsync();
+            }
         }
         private async void CustomizeList_Click(object sender, RoutedEventArgs e) {
             StackPanel panel = new StackPanel() { Margin = new Thickness(2) };
@@ -221,9 +240,12 @@ namespace Taskie {
                 return;
             }
             await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () => {
-                foreach (AttachmentMetadata attachment in taskToDelete.Attachments) {
-                    await taskToDelete.RemoveAttachmentAsync(attachment);
+                try {
+                    foreach (AttachmentMetadata attachment in taskToDelete.Attachments) {
+                        await taskToDelete.RemoveAttachmentAsync(attachment);
+                    }
                 }
+                catch (Exception ex) { Debug.WriteLine("[DeleteTask_Click] Exception occured: " + ex.Message); }
             });
             var data = ListTools.ReadList(listId);
             var metadata = data.Metadata;
@@ -653,6 +675,11 @@ namespace Taskie {
                             addSubTaskBox.Width = newWidth + 120;
                             addSubTaskBox.MaxWidth = newWidth + 120;
                         }
+                        var attachmentGrid = FindDescendant<ScrollViewer>(contentElement, "AttachmentScroll");
+                        if (attachmentGrid != null) {
+                            attachmentGrid.Width = newWidth + 120;
+                            attachmentGrid.MaxWidth = newWidth + 120;
+                        }
                     }
                 }
             }
@@ -758,7 +785,30 @@ namespace Taskie {
 
         #region Other events
 
+        private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs? args) {
+            if (!await Settings.CheckIfProAsync()) {
+                try {
+                    ProductPurchaseStatus result = (await CurrentApp.RequestProductPurchaseAsync("ProLifetime")).Status;
+                    if (result.HasFlag(ProductPurchaseStatus.Succeeded) || result.HasFlag(ProductPurchaseStatus.AlreadyPurchased)) {
+                        var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
+                        var stringElements = toastXml.GetElementsByTagName("text");
+                        stringElements[0].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgrade")));
+                        stringElements[1].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgradeSub")));
 
+                        // Add arguments to the toast notification
+                        var toastElement = (XmlElement?)toastXml.SelectSingleNode("/toast");
+
+                        var toast = new ScheduledToastNotification(toastXml, DateTimeOffset.Now.AddSeconds(1)) {
+                            Id = "proUpgrade"
+                        };
+
+                        ToastNotificationManager.CreateToastNotifier().AddToSchedule(toast);
+                        await CoreApplication.RequestRestartAsync("Pro status changed.");
+                    }
+                }
+                catch { }
+            }
+        }
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args) {
             ChangeWidth(NameBox);
         }
