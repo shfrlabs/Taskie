@@ -198,7 +198,7 @@ namespace Taskie {
 
         public async void CheckSecurity() {
             UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
-            if ((availability != UserConsentVerifierAvailability.Available && Settings.isAuthUsed) || Settings.isAuthUsed) {
+            if ((availability != UserConsentVerifierAvailability.Available && Settings.isAuthUsed)) {
                 Settings.isAuthUsed = false;
                 ContentDialog contentDialog = new ContentDialog() { Title = resourceLoader.GetString("AuthDisabledTitle"), Content = resourceLoader.GetString("AuthDisabledDescription"), PrimaryButtonText = "OK", DefaultButton = ContentDialogButton.Primary };
                 await contentDialog.ShowAsync();

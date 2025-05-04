@@ -48,44 +48,62 @@ namespace TaskieLib {
             return emojis.ToArray();
         }
 
-        private static void SetThemeForTitleBar(bool isLightTheme) {
+        public static void SetThemeForTitleBar(string theme) {
+            bool isLightTheme;
+
+            switch (theme) {
+                case "Light":
+                    isLightTheme = true;
+                    break;
+                case "Dark":
+                    isLightTheme = false;
+                    break;
+                case "System":
+                    var uiSettings = new UISettings();
+                    var backgroundColor = uiSettings.GetColorValue(UIColorType.Background);
+                    isLightTheme = backgroundColor == Colors.White;
+                    break;
+                default:
+                    goto case "System";
+            }
+
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
             var grayColor = Color.FromArgb(255, 128, 128, 128);
 
-            var whiteForegroundColor = Color.FromArgb(255, 255, 255, 255);
-            var whitePressedForegroundColor = Color.FromArgb(255, 192, 192, 192);
-            var whiteHoverBackgroundColor = Color.FromArgb(24, 255, 255, 255);
-            var whitePressedBackgroundColor = Color.FromArgb(16, 255, 255, 255);
+            var blackForeground = Color.FromArgb(255, 0, 0, 0);
+            var blackPressedForeground = Color.FromArgb(255, 96, 96, 96);
 
-            var blackForegroundColor = Color.FromArgb(255, 0, 0, 0);
-            var blackPressedForegroundColor = Color.FromArgb(255, 96, 96, 96);
-            var blackHoverBackgroundColor = Color.FromArgb(24, 0, 0, 0);
-            var blackPressedBackgroundColor = Color.FromArgb(16, 0, 0, 0);
+            var whiteForeground = Color.FromArgb(255, 255, 255, 255);
+            var whitePressedForeground = Color.FromArgb(255, 192, 192, 192);
 
-            titleBar.ButtonForegroundColor = isLightTheme ? blackForegroundColor : whiteForegroundColor;
-            titleBar.ButtonHoverForegroundColor = isLightTheme ? blackForegroundColor : whiteForegroundColor;
-            titleBar.ButtonPressedForegroundColor = isLightTheme ? blackPressedForegroundColor : whitePressedForegroundColor;
+            titleBar.ButtonForegroundColor = isLightTheme ? blackForeground : whiteForeground;
+            titleBar.ButtonHoverForegroundColor = isLightTheme ? blackForeground : whiteForeground;
+            titleBar.ButtonPressedForegroundColor = isLightTheme ? blackPressedForeground : whitePressedForeground;
             titleBar.ButtonInactiveForegroundColor = grayColor;
             titleBar.InactiveForegroundColor = grayColor;
-            titleBar.ForegroundColor = isLightTheme ? blackForegroundColor : whiteForegroundColor;
+            titleBar.ForegroundColor = isLightTheme ? blackForeground : whiteForeground;
 
             titleBar.BackgroundColor = Colors.Transparent;
             titleBar.ButtonBackgroundColor = Colors.Transparent;
             titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            titleBar.ButtonHoverBackgroundColor = isLightTheme ? blackHoverBackgroundColor : whiteHoverBackgroundColor;
-            titleBar.ButtonPressedBackgroundColor = isLightTheme ? blackPressedBackgroundColor : whitePressedBackgroundColor;
+            titleBar.ButtonHoverBackgroundColor = Colors.Transparent;
+            titleBar.ButtonPressedBackgroundColor = Colors.Transparent;
             titleBar.InactiveBackgroundColor = Colors.Transparent;
         }
+
+
 
         public static async void SetTheme(string theme) {
             try {
                 switch (theme) {
                     case "Light":
                         Application.Current.RequestedTheme = ApplicationTheme.Light;
+                        SetThemeForTitleBar(theme);
                         break;
                     case "Dark":
                         Application.Current.RequestedTheme = ApplicationTheme.Dark;
+                        SetThemeForTitleBar(theme);
                         break;
                     default:
                         break;

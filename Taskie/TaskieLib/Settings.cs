@@ -26,7 +26,7 @@ namespace TaskieLib {
                 if (value == "Light" || value == "Dark" || value == "System") {
                     savedSettings["theme"] = value;
                 }
-                //Tools.SetTheme(value); mica bug
+                Tools.SetTheme(value);
             }
         }
 
