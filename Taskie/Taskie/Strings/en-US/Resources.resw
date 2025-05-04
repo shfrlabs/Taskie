@@ -166,7 +166,7 @@
     <value>Backups</value>
   </data>
   <data name="BackupText.Text" xml:space="preserve">
-    <value>Export all lists with one click below. To export one list, right-click it and choose Export or use the three-dot menu after opening it.</value>
+    <value>Export all lists with one click below. To export one list, right-click it and choose Export or use the three-dot menu after opening it. Attachments are not included in exports.</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -374,5 +374,14 @@
   </data>
   <data name="CreateListHeader" xml:space="preserve">
     <value>Create a new list</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>{0} File</value>
+  </data>
+  <data name="NoAttachments.Text" xml:space="preserve">
+    <value>No attachments yet.</value>
+  </data>
+  <data name="UnknownFile" xml:space="preserve">
+    <value>Unknown filetype</value>
   </data>
 </root>

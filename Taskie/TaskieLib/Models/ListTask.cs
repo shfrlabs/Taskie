@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
 using Windows.Data.Xml.Dom;
+using Windows.Storage;
 using Windows.UI.Notifications;
 
 namespace TaskieLib
@@ -19,13 +24,15 @@ namespace TaskieLib
         private string _name;
         private bool _isDone;
         private ObservableCollection<ListTask> _subTasks;
+        private ObservableCollection<AttachmentMetadata> _attachments;
 
         [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ObservableCollection<ListTask>))]
         [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ListTask))]
         public ListTask()
         {
-            _creationDate = DateTime.UtcNow; // Use UTC for consistency
+            _creationDate = DateTime.UtcNow;
             _subTasks = new ObservableCollection<ListTask>();
+            _attachments = new ObservableCollection<AttachmentMetadata>();
         }
 
         #region Reminders
@@ -124,6 +131,17 @@ namespace TaskieLib
             => string.Format(ToastTagFormat, _creationDate.Ticks, listId);
         #endregion
 
+        [JsonIgnore]
+        public ObservableCollection<AttachmentMetadata> Attachments {
+            get => _attachments;
+            private set {
+                if (_attachments != value) {
+                    _attachments = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         [JsonPropertyName("SubTasks")]
         public ObservableCollection<ListTask> SubTasks
         {
@@ -196,12 +214,63 @@ namespace TaskieLib
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     
-        private static void ValidateMainThread()
-        {
-            if (!CoreApplication.MainView.CoreWindow.Dispatcher.HasThreadAccess)
-            {
-                throw new InvalidOperationException("Must be called from UI thread");
-            }
+        #region Attachments
+
+        private const string AttachmentsRoot = "TaskAttachments";
+
+        public async Task<AttachmentMetadata?> AddAttachmentAsync(StorageFile file, string? listId) {
+            var root = ApplicationData.Current.LocalFolder;
+            var taskFolder = await EnsureTaskFolderAsync(root, this.CreationDate, listId);
+            var newFile = await file.CopyAsync(taskFolder,
+                $"{Guid.NewGuid()}_{file.Name}", NameCollisionOption.GenerateUniqueName);
+            var props = await newFile.GetBasicPropertiesAsync();
+            var meta = new AttachmentMetadata {
+                Id = Path.GetFileNameWithoutExtension(newFile.Name).Split('_')[0],
+                FileName = file.Name,
+                MimeType = file.ContentType,
+                RelativePath = newFile.Path.Substring(root.Path.Length + 1)
+            };
+            Attachments.Add(meta);
+            return meta;
         }
+
+        public async Task RemoveAttachmentAsync(AttachmentMetadata attachment) {
+            var root = ApplicationData.Current.LocalFolder;
+            try {
+                var file = await StorageFile.GetFileFromPathAsync(Path.Combine(root.Path, attachment.RelativePath));
+                await file.DeleteAsync();
+            }
+            catch { }
+            Attachments.Remove(attachment);
+        }
+
+        public async Task LoadAttachmentsAsync(string listId) {
+            var root = ApplicationData.Current.LocalFolder;
+            Attachments.Clear();
+            try {
+                var tasksRoot = await root.GetFolderAsync(AttachmentsRoot);
+                var listFolder = await tasksRoot.GetFolderAsync(listId);
+                var taskFolder = await listFolder.GetFolderAsync(this.CreationDate.Ticks.ToString());
+                var files = await taskFolder.GetFilesAsync();
+                foreach (var f in files) {
+                    var props = await f.GetBasicPropertiesAsync();
+                    var parts = f.Name.Split('_', 2);
+                    Attachments.Add(new AttachmentMetadata {
+                        Id = parts[0],
+                        FileName = parts.Length > 1 ? parts[1] : f.Name,
+                        MimeType = f.ContentType,
+                        RelativePath = f.Path.Substring(root.Path.Length + 1)
+                    });
+                }
+            }
+            catch { }
+        }
+
+        private static async Task<StorageFolder> EnsureTaskFolderAsync(StorageFolder root, DateTime creation, string? listId) {
+            var tasksRoot = await root.CreateFolderAsync(AttachmentsRoot, CreationCollisionOption.OpenIfExists);
+            var listFolder = await tasksRoot.CreateFolderAsync(listId, CreationCollisionOption.OpenIfExists);
+            return await listFolder.CreateFolderAsync(creation.Ticks.ToString(), CreationCollisionOption.OpenIfExists);
+        }
+        #endregion
     }
 }
