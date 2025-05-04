@@ -75,9 +75,12 @@ namespace TaskieLib {
 
         public static async void RemoveAttachmentsFromList(string id) {
             StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("TaskAttachments");
-            if (folder.GetFolderAsync(id) != null) {
-                StorageFolder attachmentFolder = await folder.GetFolderAsync(id);
-                await attachmentFolder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            if (Directory.Exists(Path.Combine(folder.Path, id))) {
+                try {
+                    StorageFolder attachmentFolder = await folder.GetFolderAsync(id);
+                    await attachmentFolder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+                }
+                catch { }
             }
         }
 

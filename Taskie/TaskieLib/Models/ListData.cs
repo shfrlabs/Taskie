@@ -1,24 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
+using TaskieLib;
 
-namespace TaskieLib {
-    /// <summary>
-    /// Encapsulates a list's data, including its metadata and tasks.
-    /// </summary>
-    /// <remarks>
-    /// This is used in favor of an anonymous type to allow for source-generated JSON serialization.
-    /// </remarks>
-    public sealed class ListData {
-        public ListData(ListMetadata listmetadata, List<ListTask> tasks) {
-            this.Metadata = listmetadata;
-            this.Tasks = tasks;
-        }
+public sealed class ListData {
+    [JsonPropertyName("listmetadata")]
+    public ListMetadata Metadata { get; set; }
 
-        [JsonPropertyName("listmetadata")]
-        public ListMetadata Metadata { get; set; }
+    [JsonPropertyName("tasks")]
+    public List<ListTask> Tasks { get; set; }
 
-        [JsonPropertyName("tasks")]
-        public List<ListTask> Tasks { get; set; }
+    // Match parameter names to CLR properties:
+    [JsonConstructor]
+    public ListData(ListMetadata metadata, List<ListTask> tasks) {
+        Metadata = metadata;
+        Tasks = tasks;
     }
 }

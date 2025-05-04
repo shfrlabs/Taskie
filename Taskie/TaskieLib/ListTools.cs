@@ -234,21 +234,62 @@ namespace TaskieLib {
             if (File.Exists(exportPath))
                 File.Delete(exportPath);
 
+
+            StorageFolder? exportFolder = await tempFolder.CreateFolderAsync(
+                "forexport",
+                CreationCollisionOption.ReplaceExisting
+            );
+
+            foreach (StorageFile file in await ApplicationData.Current.LocalFolder.GetFilesAsync()) {
+                if (file.Name.EndsWith(".json")) {
+                    await file.CopyAsync(exportFolder, file.Name, NameCollisionOption.ReplaceExisting);
+                }
+            }
+
             ZipFile.CreateFromDirectory(
-                ApplicationData.Current.LocalFolder.Path,
+                exportFolder.Path,
                 exportPath
             );
+
+            await exportFolder.DeleteAsync();
             return await tempFolder.GetFileAsync("Export.taskie");
         }
 
-        public static async Task ImportFile(StorageFile file) {
-            try {
-                StorageFolder? tempFolder = ApplicationData.Current.TemporaryFolder;
-                StorageFile? tempFile = await file.CopyAsync(tempFolder, "import.taskie", NameCollisionOption.ReplaceExisting);
-                ZipFile.ExtractToDirectory(tempFile.Path, ApplicationData.Current.LocalFolder.Path, true);
+        public static async Task ImportJson(StorageFile jsonFile) {
+            ListData data = JsonSerializer.Deserialize(
+                    (await jsonFile.OpenReadAsync()).AsStreamForRead(),
+                    TaskieJsonContext.Default.ListData
+                );
+            if (GetLists().Select(t => t.name).Contains(data.Metadata.Name)) {
+                data.Metadata.Name = GenerateUniqueListName(data.Metadata.Name);
             }
-            catch (Exception ex) {
-                Debug.WriteLine($"[File import] Exception: {ex.Message}");
+            SaveList(
+                Guid.NewGuid().ToString(),
+                data.Tasks,
+                data.Metadata
+            );
+        }
+
+        public static async Task ImportFile(StorageFile file) {
+            if (file.Name.EndsWith(".json")) {
+                await ImportJson(file);
+            }
+            else {
+                try {
+                    StorageFolder? tempFolder = ApplicationData.Current.TemporaryFolder;
+                    StorageFile? tempFile = await file.CopyAsync(tempFolder, "import.taskie", NameCollisionOption.ReplaceExisting);
+                    ZipFile.ExtractToDirectory(tempFile.Path, Path.Combine(ApplicationData.Current.TemporaryFolder.Path, "tempexport"), true);
+                    foreach (StorageFile f in await tempFolder.GetFilesAsync()) {
+                        if (f.Name.EndsWith(".json")) {
+                            await ImportJson(f);
+                        }
+                    }
+                    await tempFile.DeleteAsync(StorageDeleteOption.PermanentDelete);
+                    await (await tempFolder.GetFolderAsync("tempexport")).DeleteAsync(StorageDeleteOption.PermanentDelete);
+                }
+                catch (Exception ex) {
+                    Debug.WriteLine($"[File import] Exception: {ex.Message}");
+                }
             }
         }
 
