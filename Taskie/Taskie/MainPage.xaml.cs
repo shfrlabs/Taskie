@@ -213,7 +213,7 @@ namespace Taskie {
             }
         }
 
-        public async void DeterminePro() // Locks down features for free users.
+        public async void DeterminePro()
         {
             if (await Settings.CheckIfProAsync()) {
                 proText.Text = "PRO";
@@ -226,11 +226,9 @@ namespace Taskie {
         }
 
         public void HandleToastActivation(string argument) {
-            // Extract the task ID from the argument
+            // probably doesnt work
             var listId = argument.Split('=')[1];
-            System.Diagnostics.Debug.WriteLine($"Toast notification activated. List ID: {listId}");
 
-            // Navigate to the specific task page
             contentFrame.Navigate(typeof(TaskPage), listId);
             foreach (ListViewItem item in Navigation.Items) {
                 if (item?.Tag?.ToString()?.Replace(".json", null) == listId) {
@@ -339,7 +337,7 @@ namespace Taskie {
         }
 
         private void ListEmojiChanged(string? listID, string? name, string? emoji) {
-            Debug.WriteLine("List emoji changed:" + listID);
+            Debug.WriteLine("List emoji changed: " + listID);
             foreach (var item in Navigation.Items) {
                 if (item is ListViewItem navigationItem) {
                     if (navigationItem?.Tag?.ToString()?.Replace(".json", null) == listID && navigationItem != null) {

@@ -139,7 +139,8 @@ namespace Taskie {
 
             Expander fontExpander = new Expander() {
                 Header = new StackPanel() { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center, Children = { new FontIcon() { Glyph = "\uE8D2", Margin = new Thickness(0, 0, 10, 0) }, new TextBlock() { Text = resourceLoader.GetString("ChangeFont") } } },
-                Width = 300
+                Width = 300,
+                IsEnabled = await Settings.CheckIfProAsync()
             };
             ListView fontChooser = new ListView() {
                 SelectionMode = ListViewSelectionMode.Single,
@@ -1079,7 +1080,6 @@ namespace Taskie {
                     }
                 }
             }
-            Debug.WriteLine(index);
             if (index > -1) {
                 tasks[index] = parent;
                 ListTools.SaveList(listId, tasks, metadata);
