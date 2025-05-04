@@ -17,13 +17,13 @@ namespace Taskie {
             //ApplicationLanguages.PrimaryLanguageOverride = "en-US";
             Tools.SetTheme(Settings.Theme);
 
-            foreach (var view in CoreApplication.Views) {
-                view.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, static () => {
-                    if (Window.Current.Content is Page root) {
-                        BackdropMaterial.SetApplyToRootOrPageBackground(root, true);
-                    }
-                });
-            }
+            //foreach (var view in CoreApplication.Views) {
+            //    view.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, static () => {
+            //        if (Window.Current.Content is Page root) {
+            //            BackdropMaterial.SetApplyToRootOrPageBackground(root, true);
+            //        }
+            //    });
+            //}
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
