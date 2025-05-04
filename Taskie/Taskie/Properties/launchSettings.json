@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Taskie": {
+    "App1": {
       "commandName": "MsixPackage"
     }
   }
