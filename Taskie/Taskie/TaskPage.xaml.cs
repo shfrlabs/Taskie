@@ -215,11 +215,16 @@ namespace Taskie {
             }
         }
 
-        private void DeleteTask_Click(object sender, RoutedEventArgs e) {
+        private async void DeleteTask_Click(object sender, RoutedEventArgs e) {
             ListTask? taskToDelete = (sender as MenuFlyoutItem)?.DataContext as ListTask;
             if (taskToDelete == null) {
                 return;
             }
+            await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () => {
+                foreach (AttachmentMetadata attachment in taskToDelete.Attachments) {
+                    await taskToDelete.RemoveAttachmentAsync(attachment);
+                }
+            });
             var data = ListTools.ReadList(listId);
             var metadata = data.Metadata;
             var tasks = data.Tasks;

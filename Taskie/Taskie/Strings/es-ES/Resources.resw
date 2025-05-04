@@ -381,4 +381,7 @@
   <data name="UnknownFile" xml:space="preserve">
     <value>PLACEHOLDER</value>
   </data>
+  <data name="NoAttachments.Text" xml:space="preserve">
+    <value>PLACEHOLDER</value>
+  </data>
 </root>

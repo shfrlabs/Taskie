@@ -379,6 +379,9 @@
   <data name="File" xml:space="preserve">
     <value>Plik {0}</value>
   </data>
+  <data name="NoAttachments.Text" xml:space="preserve">
+    <value>Brak załączników.</value>
+  </data>
   <data name="UnknownFile" xml:space="preserve">
     <value>Plik z nieznanym rozszerzeniem</value>
   </data>

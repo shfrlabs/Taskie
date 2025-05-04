@@ -172,6 +172,7 @@ namespace TaskieLib {
             catch (Exception ex) {
                 Debug.WriteLine("[List deletion] Exception occured: " + ex.Message);
             }
+            Tools.RemoveAttachmentsFromList(listId);
         }
 
         public static void RenameList(string? listId, string? newListName) {

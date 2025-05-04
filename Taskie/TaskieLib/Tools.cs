@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
@@ -68,6 +70,14 @@ namespace TaskieLib {
                 if (Window.Current.Content is FrameworkElement rootElement) {
                     rootElement.RequestedTheme = theme2;
                 }
+            }
+        }
+
+        public static async void RemoveAttachmentsFromList(string id) {
+            StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("TaskAttachments");
+            if (folder.GetFolderAsync(id) != null) {
+                StorageFolder attachmentFolder = await folder.GetFolderAsync(id);
+                await attachmentFolder.DeleteAsync(StorageDeleteOption.PermanentDelete);
             }
         }
 
