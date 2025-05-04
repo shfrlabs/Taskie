@@ -166,7 +166,7 @@
     <value>Kopie zapasowe</value>
   </data>
   <data name="BackupText.Text" xml:space="preserve">
-    <value>Wyeksportuj wszystkie listy jednym kliknięciem poniżej. By wyeksportować jedną listę, kliknij na nią prawym przyciskiem myszy, i wybierz "Eksportuj" by wygenerować plik, którego możesz użyć, by przywrócić listę do aplikacji.</value>
+    <value>Wyeksportuj wszystkie listy jednym kliknięciem poniżej. By wyeksportować jedną listę, kliknij na nią prawym przyciskiem myszy, i wybierz "Eksportuj" by wygenerować plik, którego możesz użyć, by przywrócić listę do aplikacji. Załączniki nie są eksportowane.</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Anuluj</value>
@@ -375,5 +375,11 @@
   </data>
   <data name="CreateListHeader" xml:space="preserve">
     <value>Utwórz nową listę</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Plik {0}</value>
+  </data>
+  <data name="UnknownFile" xml:space="preserve">
+    <value>Plik z nieznanym rozszerzeniem</value>
   </data>
 </root>

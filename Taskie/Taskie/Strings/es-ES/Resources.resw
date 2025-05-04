@@ -166,7 +166,7 @@
     <value>Copia de seguridad</value>
   </data>
   <data name="BackupText.Text" xml:space="preserve">
-    <value>A continuación exporte todas las listas con un solo clic. En el caso de querer exportar solo una lista, haga clic derecho sobre ella y seleccione Exportar o utilice el menú de tres puntos después de abrirla.</value>
+    <value>A continuación exporte todas las listas con un solo clic. En el caso de querer exportar solo una lista, haga clic derecho sobre ella y seleccione Exportar o utilice el menú de tres puntos después de abrirla. Los archivos adjuntos no están incluidos en las exportaciones.</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancelar</value>
@@ -374,5 +374,11 @@
   </data>
   <data name="CreateListHeader" xml:space="preserve">
     <value>Crear una nueva lista</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Copiar {0}</value>
+  </data>
+  <data name="UnknownFile" xml:space="preserve">
+    <value>PLACEHOLDER</value>
   </data>
 </root>

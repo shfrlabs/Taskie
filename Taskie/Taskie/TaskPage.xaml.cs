@@ -38,6 +38,43 @@ namespace Taskie {
 
         #region Click handlers
 
+
+        private async void RemoveAttachment_Click(object sender, RoutedEventArgs e) {
+            var button = sender as AppBarButton;
+            if (button == null)
+                return;
+
+            DependencyObject current = button;
+            while (current != null && !(current is ListView)) {
+                current = VisualTreeHelper.GetParent(current);
+            }
+
+            var listView = current as ListView;
+            if (listView != null && button.DataContext as AttachmentMetadata != null) {
+                var parentDataContext = listView.DataContext;
+                await (parentDataContext as ListTask)?.RemoveAttachmentAsync(button.DataContext as AttachmentMetadata);
+            }
+        }
+
+        private async void OpenAttachment_Click(object sender, RoutedEventArgs e) {
+            try {
+                Launcher.LaunchFileAsync(await StorageFile.GetFileFromPathAsync(System.IO.Path.Join(ApplicationData.Current.LocalFolder.Path, ((sender as AppBarButton)?.DataContext as AttachmentMetadata).RelativePath)));
+            }
+            catch { }
+        }
+        private async void AddAttachment_Click(object sender, RoutedEventArgs e) {
+            FileOpenPicker openPicker = new FileOpenPicker();
+            openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            openPicker.FileTypeFilter.Add("*");
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            if (file != null) {
+                var task = (sender as Button)?.DataContext as ListTask;
+                if (task != null) {
+                    await task.AddAttachmentAsync(file, listId);
+                }
+            }
+            else { }
+        }
         private async void CustomizeList_Click(object sender, RoutedEventArgs e) {
             StackPanel panel = new StackPanel() { Margin = new Thickness(2) };
 
@@ -572,7 +609,6 @@ namespace Taskie {
             Storyboard.SetTargetProperty(animation, "Opacity");
             storyboard.Begin();
         }
-
         private void ChangeWidth(object sender) {
             double newWidth = (sender as Rectangle)?.ActualWidth ?? 0;
 
@@ -616,7 +652,6 @@ namespace Taskie {
                 }
             }
         }
-
         private T FindVisualChild<T>(DependencyObject obj, string name) where T : DependencyObject {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++) {
                 var child = VisualTreeHelper.GetChild(obj, i);
@@ -629,7 +664,6 @@ namespace Taskie {
             }
             return null;
         }
-
         private T FindDescendant<T>(DependencyObject parent, string name) where T : FrameworkElement {
             int childCount = VisualTreeHelper.GetChildrenCount(parent);
             for (int i = 0; i < childCount; i++) {
@@ -642,45 +676,10 @@ namespace Taskie {
             }
             return null;
         }
-
-
-
-        private (int, int) SubTaskNumber(Expander expander, bool addOne = false, int overrideTotal = -1) {
-            int total = 0;
-            int completed = 0;
-
-            if (expander.Content is StackPanel stackPanel) {
-                foreach (var child in stackPanel.Children) {
-                    if (child is ListView listView) {
-                        foreach (var item in listView.Items) {
-                            var container = listView.ContainerFromItem(item) as ListViewItem;
-                            if (container != null) {
-                                var checkBox = FindDescendant<CheckBox>(container, "SubTaskCheckBox");
-                                if (checkBox != null) {
-                                    total++;
-                                    if (checkBox.IsChecked == true) {
-                                        completed++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (addOne)
-                total++;
-            if (overrideTotal != -1)
-                total = overrideTotal;
-            return (total, completed);
-        }
-
         public ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
-
         public string? listname { get; set; }
         public string? listId { get; set; }
-
         private static SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
-
         private void UpdateFlyoutMenu(MenuFlyout flyout, ListTask task, Button btn) {
             flyout.Items.Remove(flyout.Items.FirstOrDefault(item => (item as MenuFlyoutItem)?.Tag?.ToString() == "Reminder"));
 
@@ -741,6 +740,12 @@ namespace Taskie {
                 };
 
                 flyout.Items.Add(removeReminderItem);
+            }
+        }
+
+        private void ChangeWidthAttachments(object sender) {
+            if (sender is ScrollViewer sv) {
+                sv.Width = NameBox.ActualWidth + 73;
             }
         }
 
@@ -817,8 +822,9 @@ namespace Taskie {
 
             await Task.Run(async () => {
                 if (tasks != null && data != null) {
-                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => {
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, async () => {
                         foreach (ListTask task in tasks) {
+                            await task.LoadAttachmentsAsync(listId);
                             taskListView.Items.Add(task);
                         }
                     });
@@ -934,6 +940,7 @@ namespace Taskie {
                     addSubTaskBox.Width = newWidth + 120;
                     addSubTaskBox.MaxWidth = newWidth + 120;
                 }
+
 
                 addSubTaskBox.Loaded += (s, args) => {
 
@@ -1057,6 +1064,9 @@ namespace Taskie {
                 }
             }
         }
+        private void AttachmentListView_Loaded(object sender, RoutedEventArgs e) { ChangeWidthAttachments(sender); }
+        private void AttachmentListView_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) { ChangeWidthAttachments(sender); }
+        private void AttachmentListView_SizeChanged(object sender, SizeChangedEventArgs e) { ChangeWidthAttachments(sender); }
+        #endregion
     }
 }
-        #endregion
