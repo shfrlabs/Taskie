@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Controls;
+using System;
 using TaskieLib;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
@@ -13,6 +16,14 @@ namespace Taskie {
         public App() {
             //ApplicationLanguages.PrimaryLanguageOverride = "en-US";
             Tools.SetTheme(Settings.Theme);
+
+            foreach (var view in CoreApplication.Views) {
+                view.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, static () => {
+                    if (Window.Current.Content is Page root) {
+                        BackdropMaterial.SetApplyToRootOrPageBackground(root, true);
+                    }
+                });
+            }
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }

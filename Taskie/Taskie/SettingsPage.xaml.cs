@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Windows.Security.Credentials.UI;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -81,7 +83,7 @@ namespace Taskie {
             }
         }
 
-        private void RadioButton_StateChanged(object sender, RoutedEventArgs e) {
+        private async void RadioButton_StateChanged(object sender, RoutedEventArgs e) {
             if (isUpdating)
                 return;
 
@@ -96,6 +98,19 @@ namespace Taskie {
                 Settings.Theme = selectedTheme;
                 isUpdating = false;
             }
+
+            Tools.SetTheme(Settings.Theme);
+            //var window = Window.Current;
+            //foreach (var view in CoreApplication.Views) {
+            //    await view.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            //    {
+            //        if (window.Content is Page root) {
+            //            BackdropMaterial.SetApplyToRootOrPageBackground(root, false);
+            //            BackdropMaterial.SetApplyToRootOrPageBackground(root, true);
+            //        }
+            //    });
+            //}
+            //microsoft-ui-xaml issue 2886 
         }
 
         private async void export_Click(object sender, RoutedEventArgs e) {
