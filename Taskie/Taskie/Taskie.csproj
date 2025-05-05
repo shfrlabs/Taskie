@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
@@ -24,8 +24,12 @@
 	<IlcDisableReflection>false</IlcDisableReflection>
 	<IlcGenerateStackTraceData>true</IlcGenerateStackTraceData>
 	<TrimmerDiagnostics>true</TrimmerDiagnostics>
-    <AppxBundle>Never</AppxBundle>
+    <AppxBundle>Always</AppxBundle>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <MicrosoftWindowsSdkBuildToolsMSIXPackageVersion>1.5.20250417.1</MicrosoftWindowsSdkBuildToolsMSIXPackageVersion>
+    <AppxPackageDir>C:\Users\Bruno\Desktop\</AppxPackageDir>
+    <AppxBundlePlatforms>x86|x64|arm64</AppxBundlePlatforms>
+    <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.UI.Xaml" Version="2.8.7" />
@@ -33,5 +37,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TaskieLib\TaskieLib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Update="Strings\pl-PL\Resources.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
   </ItemGroup>
 </Project>

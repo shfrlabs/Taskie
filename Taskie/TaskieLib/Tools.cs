@@ -133,6 +133,7 @@ namespace TaskieLib {
         }
 
         public static async void RemoveAttachmentsFromList(string id) {
+            await ApplicationData.Current.LocalFolder.CreateFolderAsync("TaskAttachments", CreationCollisionOption.OpenIfExists);
             StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("TaskAttachments");
             if (Directory.Exists(Path.Combine(folder.Path, id))) {
                 try {

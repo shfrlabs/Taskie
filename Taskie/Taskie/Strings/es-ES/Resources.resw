@@ -166,7 +166,7 @@
     <value>Copia de seguridad</value>
   </data>
   <data name="BackupText.Text" xml:space="preserve">
-    <value>A continuación exporte todas las listas con un solo clic. En el caso de querer exportar solo una lista, haga clic derecho sobre ella y seleccione Exportar o utilice el menú de tres puntos después de abrirla. Los archivos adjuntos no están incluidos en las exportaciones.</value>
+    <value>A continuación exporta todas las listas con un solo clic. En el caso de querer exportar solo una lista, haz clic derecho sobre ella y seleccione Exportar o utiliza el menú de tres puntos después de abrirla. Los archivos adjuntos no están incluidos en las exportaciones.</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancelar</value>
@@ -226,7 +226,7 @@
     <value>Restaurar</value>
   </data>
   <data name="RestoreText.Text" xml:space="preserve">
-    <value>Importe aquí una lista (*.json) o una copia de seguridad completa (*.taskie). Si ya existe una lista, se importará con un (2) junto a su nombre.</value>
+    <value>Importa aquí una lista (*.json) o una copia de seguridad completa (*.taskie). Si ya existe una lista, se importará con un (2) junto a su nombre.</value>
   </data>
   <data name="SearchBox.PlaceholderText" xml:space="preserve">
     <value>Buscar</value>
@@ -262,7 +262,7 @@
     <value>Indicador Pro</value>
   </data>
   <data name="CloseCO.Text" xml:space="preserve">
-    <value>Cierre la superposición compacta para trabajar en esta ventana.</value>
+    <value>Cierra la superposición compacta para trabajar en esta ventana.</value>
   </data>
   <data name="tipwrongname.Title" xml:space="preserve">
     <value>No puedes hacer eso!</value>
@@ -271,7 +271,7 @@
     <value>Ya existe una lista con este nombre.</value>
   </data>
   <data name="successfulUpgrade" xml:space="preserve">
-    <value>Actualización exitosa!</value>
+    <value>¡Actualización exitosa!</value>
   </data>
   <data name="SuccessfulUpgradeSub" xml:space="preserve">
     <value>Taskie Pro fue desbloqueado.</value>
@@ -346,7 +346,7 @@
     <value>Agrega tus tareas, organiza listas y personaliza la aplicación.</value>
   </data>
   <data name="Welcome3.Text" xml:space="preserve">
-    <value>Diviértete y sé productivo!</value>
+    <value>¡Diviértete y sé productivo!</value>
   </data>
   <data name="UpgradeUnavailable" xml:space="preserve">
     <value>Temporalmente no disponible</value>
@@ -358,7 +358,7 @@
     <value>Mi sitio web</value>
   </data>
   <data name="Oops" xml:space="preserve">
-    <value>Ups!</value>
+    <value>¡Ups!</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Cerrar</value>
@@ -379,9 +379,9 @@
     <value>Copiar {0}</value>
   </data>
   <data name="UnknownFile" xml:space="preserve">
-    <value>PLACEHOLDER</value>
+    <value>Archivo desconocido</value>
   </data>
   <data name="NoAttachments.Text" xml:space="preserve">
-    <value>PLACEHOLDER</value>
+    <value>Sin archivos adjuntos.</value>
   </data>
 </root>

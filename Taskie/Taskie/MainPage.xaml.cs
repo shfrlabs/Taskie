@@ -56,6 +56,10 @@ namespace Taskie {
                 ListTools.DeleteList(listId);
                 ListDeleted(listId);
                 DeterminePro();
+                try {
+                    Tools.RemoveAttachmentsFromList(listId);
+                }
+                catch { }
             }
         }
 

@@ -7,8 +7,8 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="shef3r.TaskProject.Taskie"
-    Publisher="CN=Bruno"
+    Name="BRStudios.Taskie"
+    Publisher="CN=A43ACDD8-D8D2-4B12-B25B-98D2138C0CFE"
     Version="1.6.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="1427a407-37be-4e8e-afa4-35943a87f9fe" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
@@ -30,7 +30,7 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="shef3r.TaskProject.Taskie">
+      EntryPoint="BRStudios.Taskie">
       <uap:VisualElements
         DisplayName="Taskie"
         Square150x150Logo="Assets\Square150x150Logo.png"
