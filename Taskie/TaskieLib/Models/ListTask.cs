@@ -35,7 +35,6 @@ namespace TaskieLib
             _attachments = new ObservableCollection<AttachmentMetadata>();
         }
 
-        #region Reminders
         private const string ToastTagFormat = "{0}_{1}"; // Format: CreationTicks_ListId
 
         /// <summary>
@@ -129,7 +128,7 @@ namespace TaskieLib
 
         private string GetToastTag(string listId)
             => string.Format(ToastTagFormat, _creationDate.Ticks, listId);
-        #endregion
+        
 
         [JsonIgnore]
         public ObservableCollection<AttachmentMetadata> Attachments {
@@ -214,7 +213,6 @@ namespace TaskieLib
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     
-        #region Attachments
 
         private const string AttachmentsRoot = "TaskAttachments";
 
@@ -271,6 +269,6 @@ namespace TaskieLib
             var listFolder = await tasksRoot.CreateFolderAsync(listId, CreationCollisionOption.OpenIfExists);
             return await listFolder.CreateFolderAsync(creation.Ticks.ToString(), CreationCollisionOption.OpenIfExists);
         }
-        #endregion
+        
     }
 }

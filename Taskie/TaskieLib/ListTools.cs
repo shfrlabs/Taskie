@@ -18,7 +18,6 @@ namespace TaskieLib {
             TypeInfoResolver = TaskieJsonContext.Default
         };
 
-        #region Event declarations
 
         private static bool _isawopen;
         public static bool isAWOpen {
@@ -44,9 +43,7 @@ namespace TaskieLib {
         public delegate void ListEmojiChanged(string? listID, string? name, string? emoji);
         public static event ListEmojiChanged? ListEmojiChangedEvent;
 
-        #endregion
 
-        #region List handling methods
 
         public static (string? name, string id, string? emoji)[] GetLists() {
             try {
@@ -214,9 +211,8 @@ namespace TaskieLib {
             }
         }
 
-        #endregion
+        
 
-        #region File operations
 
         private static string GetFilePath(string? listId) {
             return Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{listId}.json");
@@ -297,6 +293,6 @@ namespace TaskieLib {
             await file.CopyAsync(ApplicationData.Current.LocalFolder, "bg_" + listId, NameCollisionOption.ReplaceExisting);
         }
 
-        #endregion
+        
     }
 }

@@ -48,7 +48,6 @@ namespace Taskie {
             }
         }
 
-        #region Click handlers
 
         private void DeleteList_Click(object sender, RoutedEventArgs? e) {
             var listId = ((MenuFlyoutItem)sender).Tag?.ToString()?.Replace(".json", "");
@@ -172,9 +171,8 @@ namespace Taskie {
             dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
             await dialog.ShowAsync();
         }
-        #endregion
+        
 
-        #region Startup methods, loaded events, activation handlers
 
 
 #if DEBUG
@@ -298,9 +296,8 @@ namespace Taskie {
             SetupNavigationMenu();
         }
 
-        #endregion
+        
 
-        #region Taskie Mini events
         private void Tools_AWClosedEvent() // Executes when Taskie Mini is closed.
         {
             Navigation.IsEnabled = true;
@@ -319,9 +316,8 @@ namespace Taskie {
             NewListBtnIcon.Foreground = (Brush?)Resources["ButtonDisabledForegroundThemeBrush"];
             NewListBtnText.Foreground = (Brush?)Resources["ButtonDisabledForegroundThemeBrush"];
         }
-        #endregion
+        
 
-        #region List-related events
         private void ListRenamed(string? listID, string? newname, string? emoji) {
             Debug.WriteLine("List got renamed:" + listID);
             foreach (var item in Navigation.Items) {
@@ -372,9 +368,8 @@ namespace Taskie {
             DeterminePro();
         }
 
-        #endregion
+        
 
-        #region Right click handlers
         private void AddRightClickMenu(ListViewItem item) {
             item.RightTapped += OpenRightClickList;
         }
@@ -389,9 +384,8 @@ namespace Taskie {
             ((MenuFlyoutItem)flyout.Items[2]).Click += DeleteList_Click;
             flyout.ShowAt((ListViewItem?)sender);
         }
-        #endregion
+        
 
-        #region Other events
 
         private void ListSelector_SelectionChanged(object sender, SelectionChangedEventArgs e) { // opens a list
             ListView NavList = (ListView)sender;
@@ -555,4 +549,3 @@ namespace Taskie {
 
     }
 }
-#endregion

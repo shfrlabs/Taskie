@@ -15,16 +15,8 @@ namespace Taskie {
     sealed partial class App : Application {
         public App() {
             //ApplicationLanguages.PrimaryLanguageOverride = "en-US";
-            Tools.SetTheme(Settings.Theme);
-
-            //foreach (var view in CoreApplication.Views) {
-            //    view.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, static () => {
-            //        if (Window.Current.Content is Page root) {
-            //            BackdropMaterial.SetApplyToRootOrPageBackground(root, true);
-            //        }
-            //    });
-            //}
             this.InitializeComponent();
+            Tools.SetTheme(Settings.Theme);
             this.Suspending += OnSuspending;
         }
         public string ToastActivationArgument { get; private set; }

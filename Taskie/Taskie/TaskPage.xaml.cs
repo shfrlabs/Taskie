@@ -40,7 +40,6 @@ namespace Taskie {
             ListTools.ListRenamedEvent += ListRenamed;
         }
 
-        #region Click handlers
 
 
         private async void RemoveAttachment_Click(object sender, RoutedEventArgs e) {
@@ -418,9 +417,7 @@ namespace Taskie {
             this.Frame.Navigate(typeof(COClosePage));
         }
 
-        #endregion
-
-        #region Double click and right click handlers
+        
 
         private void TaskNameText_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e) {
             TextBlock textBlock = (TextBlock)sender;
@@ -620,9 +617,6 @@ namespace Taskie {
             ((sender as Button).Flyout as MenuFlyout).Items[0].Tag = sender;
         }
 
-        #endregion
-
-        #region Utility methods
 
         private void AnimateOpacity(UIElement element) {
             var animation = new DoubleAnimation {
@@ -782,9 +776,6 @@ namespace Taskie {
             }
         }
 
-        #endregion
-
-        #region Other events
 
         private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs? args) {
             if (!await Settings.CheckIfProAsync()) {
@@ -1122,6 +1113,6 @@ namespace Taskie {
         private void AttachmentListView_Loaded(object sender, RoutedEventArgs e) { ChangeWidthAttachments(sender); }
         private void AttachmentListView_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) { ChangeWidthAttachments(sender); }
         private void AttachmentListView_SizeChanged(object sender, SizeChangedEventArgs e) { ChangeWidthAttachments(sender); }
-        #endregion
+        
     }
 }

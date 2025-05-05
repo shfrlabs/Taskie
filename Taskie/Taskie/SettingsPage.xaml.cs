@@ -32,7 +32,6 @@ namespace Taskie {
             ActualThemeChanged += SettingsPage_ActualThemeChanged;
         }
 
-        #region Feature avialability checks
 
         private async void CheckSecurity() {
             UserConsentVerifierAvailability availability = await UserConsentVerifier.CheckAvailabilityAsync();
@@ -43,9 +42,8 @@ namespace Taskie {
             }
         }
 
-        #endregion
+        
 
-        #region Restoring switch/radio states
 
         private void SetSecurity() {
             AuthToggle.IsOn = Settings.isAuthUsed;
@@ -73,9 +71,8 @@ namespace Taskie {
             isUpdating = false;
         }
 
-        #endregion
+        
 
-        #region Click and toggle handlers
 
         private void AuthToggleSwitch_Toggled(object sender, RoutedEventArgs e) {
             if ((sender as ToggleSwitch)?.Tag?.ToString() == "Auth" && sender != null) {
@@ -157,9 +154,8 @@ namespace Taskie {
             var result = await CoreApplication.RequestRestartAsync("Theme has been changed");
         }
 
-        #endregion
+        
 
-        #region Other methods and events
 
         private async Task ProcessTaskieFile(StorageFile taskieFile) {
             using (var zipStream = await taskieFile.OpenStreamForReadAsync()) {
@@ -201,6 +197,6 @@ namespace Taskie {
             public required string Page { get; set; }
         }
 
-        #endregion
+        
     }
 }
