@@ -1,15 +1,13 @@
 using System;
 using System.ComponentModel;
 
-// Object used for list metadata in a list's JSON
 public class ListMetadata : INotifyPropertyChanged {
     private DateTime _creationDate;
-    private string? _name;
-    private string? _emoji;
-    private int? _groupID;
-    private string? _titlefont;
+    private string _name;
+    private string _emoji;
+    private string _titlefont;
 
-    public string? TitleFont
+    public string TitleFont
     {
         get => _titlefont;
         set
@@ -32,7 +30,7 @@ public class ListMetadata : INotifyPropertyChanged {
         }
     }
 
-    public string? Name {
+    public string Name {
         get => _name;
         set {
             if (_name != value) {
@@ -42,7 +40,7 @@ public class ListMetadata : INotifyPropertyChanged {
         }
     }
 
-    public string? Emoji {
+    public string Emoji {
         get => _emoji;
         set {
             if (_emoji != value) {
@@ -52,18 +50,7 @@ public class ListMetadata : INotifyPropertyChanged {
         }
     }
 
-    public int? GroupID // grouping lists (coming soon)
-    {
-        get => _groupID;
-        set {
-            if (value != _groupID) {
-                _groupID = value;
-                OnPropertyChanged(nameof(GroupID));
-            }
-        }
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public event PropertyChangedEventHandler PropertyChanged;
 
     protected virtual void OnPropertyChanged(string propertyName) {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

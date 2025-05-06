@@ -9,7 +9,6 @@ public sealed class ListData {
     [JsonPropertyName("tasks")]
     public List<ListTask> Tasks { get; set; }
 
-    // Match parameter names to CLR properties:
     [JsonConstructor]
     public ListData(ListMetadata metadata, List<ListTask> tasks) {
         Metadata = metadata;

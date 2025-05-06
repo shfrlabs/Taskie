@@ -80,7 +80,7 @@ namespace Taskie {
             }
         }
 
-        private async void RadioButton_StateChanged(object sender, RoutedEventArgs e) {
+        private void RadioButton_StateChanged(object sender, RoutedEventArgs e) {
             if (isUpdating)
                 return;
 
@@ -88,7 +88,7 @@ namespace Taskie {
             if (radioButton == null)
                 return;
 
-            string? selectedTheme = radioButton.Tag?.ToString();
+            string selectedTheme = radioButton.Tag?.ToString();
 
             if (radioButton.IsChecked == true && selectedTheme != null) {
                 isUpdating = true;
@@ -192,9 +192,9 @@ namespace Taskie {
         }
 
         private class SettingCategory {
-            public required string Emoji { get; set; }
-            public required string Name { get; set; }
-            public required string Page { get; set; }
+            public string Emoji { get; set; }
+            public string Name { get; set; }
+            public string Page { get; set; }
         }
 
         

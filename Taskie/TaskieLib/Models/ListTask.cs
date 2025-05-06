@@ -26,8 +26,6 @@ namespace TaskieLib
         private ObservableCollection<ListTask> _subTasks;
         private ObservableCollection<AttachmentMetadata> _attachments;
 
-        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ObservableCollection<ListTask>))]
-        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ListTask))]
         public ListTask()
         {
             _creationDate = DateTime.UtcNow;
@@ -35,11 +33,8 @@ namespace TaskieLib
             _attachments = new ObservableCollection<AttachmentMetadata>();
         }
 
-        private const string ToastTagFormat = "{0}_{1}"; // Format: CreationTicks_ListId
+        private const string ToastTagFormat = "{0}_{1}";
 
-        /// <summary>
-        /// Adds a toast reminder for this task at the specified future time.
-        /// </summary>
         public void AddReminder(DateTimeOffset reminderDateTime, string listId)
         {
             if (reminderDateTime <= DateTimeOffset.UtcNow)
@@ -49,17 +44,13 @@ namespace TaskieLib
             ScheduleToastNotification(reminderDateTime, listId);
         }
 
-        /// <summary>
-        /// Removes any scheduled or delivered reminder for this task.
-        /// </summary>
         public void RemoveReminder(string listId)
         {
             try
             {
                 var notifier = ToastNotificationManager.CreateToastNotifier();
-                var tag = GetToastTag(listId);
+                string tag = GetToastTag(listId);
 
-                // Remove scheduled notifications
                 var scheduled = notifier.GetScheduledToastNotifications()
                     .Where(t => t.Tag == tag)
                     .ToList();
@@ -68,7 +59,6 @@ namespace TaskieLib
                     notifier.RemoveFromSchedule(toast);
                 }
 
-                // Remove from action center if already delivered
                 ToastNotificationManager.History.Remove(tag, listId);
             }
             catch (Exception ex)
@@ -77,15 +67,12 @@ namespace TaskieLib
             }
         }
 
-        /// <summary>
-        /// Checks if a reminder is currently scheduled for this task.
-        /// </summary>
         public bool HasReminder(string listId)
         {
             try
             {
                 var notifier = ToastNotificationManager.CreateToastNotifier();
-                var tag = GetToastTag(listId);
+                string tag = GetToastTag(listId);
                 var toast = notifier.GetScheduledToastNotifications()
                     .FirstOrDefault(t => t.Tag == tag);
                 return toast != null && toast.DeliveryTime > DateTimeOffset.UtcNow;
@@ -107,7 +94,6 @@ namespace TaskieLib
                     ResourceLoader.GetForCurrentView().GetString("ReminderGreeting")));
                 textNodes[1].AppendChild(toastXml.CreateTextNode(Name));
 
-                // Set launch args so app can navigate to the specific task
                 var toastElement = (XmlElement)toastXml.SelectSingleNode("//toast");
                 toastElement?.SetAttribute("launch",
                     $"action=viewTask&creationDate={CreationDate:o}&listId={listId}");
@@ -216,7 +202,7 @@ namespace TaskieLib
 
         private const string AttachmentsRoot = "TaskAttachments";
 
-        public async Task<AttachmentMetadata?> AddAttachmentAsync(StorageFile file, string? listId) {
+        public async Task<AttachmentMetadata> AddAttachmentAsync(StorageFile file, string listId) {
             var root = ApplicationData.Current.LocalFolder;
             var taskFolder = await EnsureTaskFolderAsync(root, this.CreationDate, listId);
             var newFile = await file.CopyAsync(taskFolder,
@@ -264,7 +250,7 @@ namespace TaskieLib
             catch { }
         }
 
-        private static async Task<StorageFolder> EnsureTaskFolderAsync(StorageFolder root, DateTime creation, string? listId) {
+        private static async Task<StorageFolder> EnsureTaskFolderAsync(StorageFolder root, DateTime creation, string listId) {
             var tasksRoot = await root.CreateFolderAsync(AttachmentsRoot, CreationCollisionOption.OpenIfExists);
             var listFolder = await tasksRoot.CreateFolderAsync(listId, CreationCollisionOption.OpenIfExists);
             return await listFolder.CreateFolderAsync(creation.Ticks.ToString(), CreationCollisionOption.OpenIfExists);

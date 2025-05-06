@@ -21,15 +21,14 @@ namespace TaskieLib {
 
             var emojiRanges = new (int Start, int End)[]
             {
-            (0x1F600, 0x1F64F), // Emoticons
-            (0x1F300, 0x1F5FF), // Miscellaneous Symbols and Pictographs
-            (0x1F680, 0x1F6FF), // Transport and Map Symbols
-            (0x1F700, 0x1F77F), // Alchemical Symbols
-            (0x1F900, 0x1F9FF), // Supplemental Symbols and Pictographs
-            (0x1FA70, 0x1FAFF), // Symbols and Pictographs Extended-A
-            (0x2600, 0x26FF),   // Miscellaneous Symbols
-            (0x2700, 0x27BF),   // Dingbats
-            (0xFE00, 0xFE0F),   // Variation Selectors
+                (0x1F300, 0x1F5FF),
+                (0x1F680, 0x1F6FF),
+                (0x1F900, 0x1F9FF),
+                (0x1FA70, 0x1FAFF),
+                (0x1F1E6, 0x1F1FF),
+                (0x1F3FB, 0x1F3FF),
+                (0x200D,   0x200D),
+                (0xFE0F,   0xFE0F),
             };
 
             foreach (var (start, end) in emojiRanges) {
@@ -94,7 +93,7 @@ namespace TaskieLib {
 
 
 
-        public static async void SetTheme(string theme) {
+        public static void SetTheme(string theme) {
             try {
                 switch (theme) {
                     case "Light":
@@ -109,27 +108,7 @@ namespace TaskieLib {
                         break;
                 }
             }
-            catch {
-                //await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                //{
-                //    var themeSetting = Settings.Theme;
-
-                //    if (themeSetting == "System") {
-                //        var foregroundColor = Color.FromArgb(255, 255, 255, 255);
-
-                //        (Window.Current.Content as FrameworkElement).RequestedTheme = ElementTheme.Default;
-
-                //        SetThemeForTitleBar(foregroundColor == Color.FromArgb(255, 0, 0, 0));
-                //    }
-                //    else {
-                //        var isLightTheme = themeSetting == "Light";
-
-                //        (Window.Current.Content as FrameworkElement).RequestedTheme = isLightTheme ? ElementTheme.Light : ElementTheme.Dark;
-
-                //        SetThemeForTitleBar(isLightTheme);
-                //    }
-                //});
-            }
+            catch { }
         }
 
         public static async void RemoveAttachmentsFromList(string id) {

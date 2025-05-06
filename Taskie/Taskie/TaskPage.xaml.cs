@@ -32,7 +32,7 @@ using Windows.UI.Xaml.Shapes;
 
 namespace Taskie {
     public sealed partial class TaskPage : Page {
-        private List<ListTask>? tasks;
+        private List<ListTask> tasks;
 
         public TaskPage() {
             this.InitializeComponent();
@@ -61,7 +61,7 @@ namespace Taskie {
 
         private async void OpenAttachment_Click(object sender, RoutedEventArgs e) {
             try {
-                Launcher.LaunchFileAsync(await StorageFile.GetFileFromPathAsync(System.IO.Path.Join(ApplicationData.Current.LocalFolder.Path, ((sender as AppBarButton)?.DataContext as AttachmentMetadata).RelativePath)));
+                await Launcher.LaunchFileAsync(await StorageFile.GetFileFromPathAsync(System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, ((sender as AppBarButton)?.DataContext as AttachmentMetadata).RelativePath)));
             }
             catch { }
         }
@@ -82,7 +82,7 @@ namespace Taskie {
             else {
                 ContentDialog dialog = new ContentDialog();
                 Frame frame = new Frame();
-                dialog.BorderBrush = (LinearGradientBrush?)Application.Current.Resources["ProBG"];
+                dialog.BorderBrush = (LinearGradientBrush)Application.Current.Resources["ProBG"];
                 dialog.BorderThickness = new Thickness(2);
                 frame.Navigate(typeof(UpgradeDialogContentPage));
                 dialog.Content = frame;
@@ -216,7 +216,7 @@ namespace Taskie {
             input.KeyDown += (s, args) => { if (args.Key == VirtualKey.Enter) { flyout.Hide(); } };
 
             flyout.Closed += (s, args) => {
-                string? newName = input.Text;
+                string newName = input.Text;
                 if (!string.IsNullOrEmpty(newName) && newName != note.Name) {
                     note.Name = newName;
 
@@ -235,7 +235,7 @@ namespace Taskie {
         }
 
         private async void DeleteTask_Click(object sender, RoutedEventArgs e) {
-            ListTask? taskToDelete = (sender as MenuFlyoutItem)?.DataContext as ListTask;
+            ListTask taskToDelete = (sender as MenuFlyoutItem)?.DataContext as ListTask;
             if (taskToDelete == null) {
                 return;
             }
@@ -277,7 +277,7 @@ namespace Taskie {
             };
             input.KeyDown += (s, args) => { if (args.Key == VirtualKey.Enter) { flyout.Hide(); } };
             flyout.Closed += (s, args) => {
-                string? text = input.Text;
+                string text = input.Text;
                 if (!string.IsNullOrEmpty(text)) {
                     ListTools.RenameList(listId, text);
                     listname = text;
@@ -305,7 +305,7 @@ namespace Taskie {
                     StorageFile file = await savePicker.PickSaveFileAsync();
                     if (file != null) {
                         CachedFileManager.DeferUpdates(file);
-                        string? content = ListTools.GetTaskFileContent(listId);
+                        string content = ListTools.GetTaskFileContent(listId);
                         await FileIO.WriteTextAsync(file, content);
 
                         FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
@@ -348,7 +348,7 @@ namespace Taskie {
                     if (index > -1) {
                         ListTask parentTask = tasks[index];
 
-                        ListTask? taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
+                        ListTask taskToRemove = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
                         if (taskToRemove != null) {
                             var subTaskToUpdate = parentTask.SubTasks.FirstOrDefault(t => t.CreationDate == subTask.CreationDate);
                             if (subTaskToUpdate != null) {
@@ -367,7 +367,7 @@ namespace Taskie {
         }
 
         private void DeleteSubTask_Click(object sender, RoutedEventArgs e) {
-            ListTask? subTask = (sender as MenuFlyoutItem)?.DataContext as ListTask;
+            ListTask subTask = (sender as MenuFlyoutItem)?.DataContext as ListTask;
             if (subTask == null) {
                 return;
             }
@@ -421,7 +421,7 @@ namespace Taskie {
 
         private void TaskNameText_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e) {
             TextBlock textBlock = (TextBlock)sender;
-            ListTask? note = textBlock.DataContext as ListTask;
+            ListTask note = textBlock.DataContext as ListTask;
 
             TextBox input = new TextBox() {
                 PlaceholderText = resourceLoader.GetString("TaskName"),
@@ -597,7 +597,7 @@ namespace Taskie {
         private void TaskThreeDots_Loaded(object sender, RoutedEventArgs e) {
             tasks = ListTools.ReadList(listId).Tasks;
             Button button = sender as Button;
-            (button.Flyout as MenuFlyout).Items[0].Tag = button;
+            ((MenuFlyout)button?.Flyout).Items[0].Tag = button;
             ListTask boundTask = button.DataContext as ListTask;
             ListTask task;
             try {
@@ -704,8 +704,8 @@ namespace Taskie {
             return null;
         }
         public ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
-        public string? listname { get; set; }
-        public string? listId { get; set; }
+        public string listname { get; set; }
+        public string listId { get; set; }
         private static SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
         private void UpdateFlyoutMenu(MenuFlyout flyout, ListTask task, Button btn) {
             flyout.Items.Remove(flyout.Items.FirstOrDefault(item => (item as MenuFlyoutItem)?.Tag?.ToString() == "Reminder"));
@@ -777,7 +777,7 @@ namespace Taskie {
         }
 
 
-        private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs? args) {
+        private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args) {
             if (!await Settings.CheckIfProAsync()) {
                 try {
                     ProductPurchaseStatus result = (await CurrentApp.RequestProductPurchaseAsync("ProLifetime")).Status;
@@ -788,7 +788,7 @@ namespace Taskie {
                         stringElements[1].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgradeSub")));
 
                         // Add arguments to the toast notification
-                        var toastElement = (XmlElement?)toastXml.SelectSingleNode("/toast");
+                        var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");
 
                         var toast = new ScheduledToastNotification(toastXml, DateTimeOffset.Now.AddSeconds(1)) {
                             Id = "proUpgrade"
@@ -815,7 +815,7 @@ namespace Taskie {
             this.Frame.Navigate(typeof(EmptyPage));
         }
 
-        private void ListRenamed(string? oldname, string? newname, string? emoji) {
+        private void ListRenamed(string oldname, string newname, string emoji) {
             testname.Text = newname;
         }
 
