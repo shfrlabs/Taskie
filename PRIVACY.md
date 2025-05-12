@@ -21,6 +21,7 @@ Thank you for using Taskie! We value your privacy and want to make sure you unde
 
 ## Website
 - The Taskie website does not store or transmit any personal information.
+- Cookies used by the Taskie website don't contain any personal information and are required for it to function.
 
 If you have any questions or concerns, feel free to contact me at sheferdev@proton.me.
 Thank you for using my app!
