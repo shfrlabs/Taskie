@@ -184,6 +184,18 @@ namespace Taskie {
             var selectedEmoji = emojiSource.FirstOrDefault(e => e.ToString() == data.Emoji);
             content.SelectedItem = selectedEmoji;
 
+            AutoSuggestBox searchBox = new AutoSuggestBox() { PlaceholderText = resourceLoader.GetString("SearchBox/PlaceholderText"), Margin = new Thickness(0, 0, 0, 10), Width = 250, MaxWidth = 250, QueryIcon = new SymbolIcon(Symbol.Find) };
+            searchBox.TextChanged += (s, args) => {
+                if (string.IsNullOrWhiteSpace(searchBox.Text)) {
+                    content.ItemsSource = new Tools.IncrementalEmojiSource();
+                }
+                else {
+                    var searchTerm = searchBox.Text.ToLower();
+                    content.ItemsSource = (new Tools()).Emojis.Where(e => e.SearchTerms.Any(term => term.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+                        .ToList();
+                }
+            };
+
             content.SelectionChanged += (sender, args) => {
                 if (!string.IsNullOrEmpty(listId) && (sender as GridView)?.SelectedItem != null) {
                     var selected = ((GridView)sender).SelectedItem;
@@ -191,7 +203,10 @@ namespace Taskie {
                     ListTools.ChangeListEmoji(listId.Replace(".json", string.Empty), emojiString);
                 }
             };
-            emojiExpander.Content = content;
+            StackPanel emojiPanel = new StackPanel() { Orientation = Orientation.Vertical };
+            emojiPanel.Children.Add(searchBox);
+            emojiPanel.Children.Add(content);
+            emojiExpander.Content = emojiPanel;
             panel.Children.Add(emojiExpander);
 
             Flyout flyout = new Flyout();

@@ -90,7 +90,7 @@ namespace TaskieLib {
                 catch { }
             }
         }
-
+        public SingleEmoji[] Emojis = Emoji.All.ToArray();
         public partial class IncrementalEmojiSource : ObservableCollection<SingleEmoji>, ISupportIncrementalLoading
         {
             private readonly SingleEmoji[] allEmojis;

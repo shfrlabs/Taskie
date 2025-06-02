@@ -461,15 +461,15 @@ namespace Taskie {
             SetupNavigationMenu();
             contentFrame.Navigate(typeof(EmptyPage));
             DeterminePro();
-        } // Resets the main view
+        }
 
         private async void AddList(object sender, RoutedEventArgs e) {
             ContentDialog dialog = new ContentDialog();
             TextBox box = new TextBox() { VerticalContentAlignment = VerticalAlignment.Bottom, MaxWidth = 300, BorderThickness = new Thickness(0), PlaceholderText = resourceLoader.GetString("NewList"), Padding = new Thickness(9, 9, 4, 4), FontSize = 15, CornerRadius = new CornerRadius(4) };
             Button emojiButton = new Button() { Content = "📋", Padding = new Thickness(0), HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Width = 40, Height = 40, FontSize = 20 };
             var flyout = new Flyout();
+            StackPanel emojiPanel = new StackPanel() { Orientation = Orientation.Vertical };
             var gridView = new GridView();
-
             gridView.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
             gridView.ItemTemplate = (DataTemplate)Application.Current.Resources["EmojiBlock"];
             gridView.ItemsSource = new Tools.IncrementalEmojiSource();
@@ -478,8 +478,23 @@ namespace Taskie {
                 emojiButton.Content = gridView.SelectedItem;
                 flyout.Hide();
             };
-
-            flyout.Content = gridView;
+            AutoSuggestBox searchBox = new AutoSuggestBox() { PlaceholderText = resourceLoader.GetString("SearchBox/PlaceholderText"), Margin = new Thickness(0, 0, 0, 10), Width = 240, MaxWidth = 240, QueryIcon = new SymbolIcon(Symbol.Find)};
+            searchBox.TextChanged += (s, args) =>
+            {
+                if (string.IsNullOrWhiteSpace(searchBox.Text))
+                {
+                    gridView.ItemsSource = new Tools.IncrementalEmojiSource();
+                }
+                else
+                {
+                    var searchTerm = searchBox.Text.ToLower();
+                    gridView.ItemsSource = (new Tools()).Emojis.Where(e => e.SearchTerms.Any(term => term.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+                        .ToList();
+                }
+            };
+            emojiPanel.Children.Add(searchBox);
+            emojiPanel.Children.Add(gridView);
+            flyout.Content = emojiPanel;
             flyout.Placement = FlyoutPlacementMode.Bottom;
             emojiButton.Click += (sender, args) => { flyout.ShowAt(emojiButton); };
             Grid panel = new Grid() {
