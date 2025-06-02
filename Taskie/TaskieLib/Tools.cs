@@ -9,43 +9,11 @@ using Windows.UI.ViewManagement;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Core;
-using Windows.ApplicationModel.Core;
-using Microsoft.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using NeoSmart.Unicode;
+using System.Linq;
 
 namespace TaskieLib {
     public partial class Tools {
-        public static string[] GetSystemEmojis() {
-            List<string> emojis = new List<string>();
-
-            var emojiRanges = new (int Start, int End)[]
-            {
-                (0x1F300, 0x1F5FF),
-                (0x1F680, 0x1F6FF),
-                (0x1F900, 0x1F9FF),
-                (0x1FA70, 0x1FAFF),
-                (0x1F1E6, 0x1F1FF),
-                (0x1F3FB, 0x1F3FF),
-                (0x200D,   0x200D),
-                (0xFE0F,   0xFE0F),
-            };
-
-            foreach (var (start, end) in emojiRanges) {
-                for (int codePoint = start; codePoint <= end; codePoint++) {
-                    if (char.IsSurrogate((char)codePoint))
-                        continue;
-
-                    try {
-                        string emoji = char.ConvertFromUtf32(codePoint);
-                        emojis.Add(emoji);
-                    }
-                    catch { }
-                }
-            }
-
-            return emojis.ToArray();
-        }
 
         public static void SetThemeForTitleBar(string theme) {
             bool isLightTheme;
@@ -123,14 +91,14 @@ namespace TaskieLib {
             }
         }
 
-        public partial class IncrementalEmojiSource : ObservableCollection<string>, ISupportIncrementalLoading // source for emojis in the "Change emoji" dialog
+        public partial class IncrementalEmojiSource : ObservableCollection<SingleEmoji>, ISupportIncrementalLoading
         {
-            private readonly string[] allEmojis;
+            private readonly SingleEmoji[] allEmojis;
             private int currentIndex = 0;
             private const int BatchSize = 30;
 
-            public IncrementalEmojiSource(string[] emojis) {
-                allEmojis = emojis;
+            public IncrementalEmojiSource() {
+                allEmojis = Emoji.All.ToArray();
             }
 
             public bool HasMoreItems => currentIndex < allEmojis.Length;

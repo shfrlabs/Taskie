@@ -472,7 +472,7 @@ namespace Taskie {
 
             gridView.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
             gridView.ItemTemplate = (DataTemplate)Application.Current.Resources["EmojiBlock"];
-            gridView.ItemsSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
+            gridView.ItemsSource = new Tools.IncrementalEmojiSource();
             gridView.SelectionMode = ListViewSelectionMode.Single;
             gridView.SelectionChanged += (s, args) => {
                 emojiButton.Content = gridView.SelectedItem;

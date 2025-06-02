@@ -170,7 +170,7 @@ namespace Taskie {
                 Width = 300,
                 Margin = new Thickness(0, 10, 0, 0)
             };
-            var emojiSource = new Tools.IncrementalEmojiSource(Tools.GetSystemEmojis());
+            var emojiSource = new Tools.IncrementalEmojiSource();
             GridView content = new GridView {
                 ItemsSource = emojiSource,
                 ItemTemplate = (DataTemplate)Application.Current.Resources["EmojiBlock"],
@@ -180,14 +180,20 @@ namespace Taskie {
                 Height = 200,
             };
             content.ItemsPanel = (ItemsPanelTemplate)Application.Current.Resources["WrapGridPanel"];
-            content.SelectedItem = data.Emoji;
+
+            var selectedEmoji = emojiSource.FirstOrDefault(e => e.ToString() == data.Emoji);
+            content.SelectedItem = selectedEmoji;
+
             content.SelectionChanged += (sender, args) => {
                 if (!string.IsNullOrEmpty(listId) && (sender as GridView)?.SelectedItem != null) {
-                    ListTools.ChangeListEmoji(listId.Replace(".json", string.Empty), ((GridView)sender).SelectedItem.ToString());
+                    var selected = ((GridView)sender).SelectedItem;
+                    string emojiString = selected?.ToString();
+                    ListTools.ChangeListEmoji(listId.Replace(".json", string.Empty), emojiString);
                 }
             };
             emojiExpander.Content = content;
             panel.Children.Add(emojiExpander);
+
             Flyout flyout = new Flyout();
             flyout.Content = panel;
             flyout.ShowAt(topoptions, new FlyoutShowOptions() { Placement = FlyoutPlacementMode.BottomEdgeAlignedRight });

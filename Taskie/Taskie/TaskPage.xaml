@@ -140,8 +140,8 @@
                                                     <AppBarButton Icon="Go" Label="Open" LabelPosition="Collapsed" Grid.Column="3" x:Name="OpenAttachment" Click="OpenAttachment_Click" Width="42" VerticalContentAlignment="Center"/>
                                                     <SymbolIcon Symbol="Document" Grid.Column="0"/>
                                                     <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="0,0,10,0">
-                                                        <TextBlock Text="{x:Bind FileName, Mode=OneWay}" FontSize="12" FontWeight="SemiBold"/>
-                                                        <TextBlock Text="{x:Bind MimeType, Converter={StaticResource FileTypeConverter}, Mode=OneWay}" FontSize="11"/>
+                                                        <TextBlock Text="{x:Bind FileName}" FontSize="12" FontWeight="SemiBold"/>
+                                                        <TextBlock Text="{x:Bind MimeType, Converter={StaticResource FileTypeConverter}}" FontSize="11"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </DataTemplate>
