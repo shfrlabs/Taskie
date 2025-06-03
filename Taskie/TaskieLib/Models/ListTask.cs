@@ -26,6 +26,9 @@ namespace TaskieLib
         private ObservableCollection<ListTask> _subTasks;
         private ObservableCollection<AttachmentMetadata> _attachments;
 
+        // Add this field to store reminders locally
+        private List<DateTimeOffset> _reminders = new List<DateTimeOffset>();
+
         public ListTask()
         {
             _creationDate = DateTime.UtcNow;
@@ -35,6 +38,29 @@ namespace TaskieLib
 
         private const string ToastTagFormat = "{0}_{1}";
 
+        [JsonIgnore]
+        public IReadOnlyList<DateTimeOffset> Reminders
+        {
+            get
+            {
+                var now = DateTimeOffset.UtcNow;
+                bool removed = _reminders.RemoveAll(r => r <= now) > 0;
+                if (removed)
+                {
+                    OnPropertyChanged(nameof(Reminders));
+                }
+                return _reminders.AsReadOnly();
+            }
+            private set
+            {
+                if (!_reminders.SequenceEqual(value))
+                {
+                    _reminders = new List<DateTimeOffset>(value);
+                    OnPropertyChanged(nameof(Reminders));
+                }
+            }
+        }
+
         public void AddReminder(DateTimeOffset reminderDateTime, string listId)
         {
             if (reminderDateTime <= DateTimeOffset.UtcNow)
@@ -42,6 +68,11 @@ namespace TaskieLib
 
             RemoveReminder(listId);
             ScheduleToastNotification(reminderDateTime, listId);
+
+            // Local store logic
+            _reminders.Clear();
+            _reminders.Add(reminderDateTime);
+            OnPropertyChanged(nameof(Reminders));
         }
 
         public void RemoveReminder(string listId)
@@ -64,6 +95,13 @@ namespace TaskieLib
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error removing reminder: {ex.Message}");
+            }
+
+            // Local store logic
+            if (_reminders.Count > 0)
+            {
+                _reminders.Clear();
+                OnPropertyChanged(nameof(Reminders));
             }
         }
 

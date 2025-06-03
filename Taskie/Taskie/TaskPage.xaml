@@ -28,6 +28,8 @@
             x:Key="ProVisibilityConverter" />
         <lib:FileTypeConverter
             x:Key="FileTypeConverter" />
+        <lib:RemindersTextConverter
+            x:Key="RemindersTextConverter" />
         <DataTemplate
             x:Key="TaskItemTemplate"
             x:DataType="lib:ListTask">
@@ -60,7 +62,11 @@
                                 Unchecked="TaskStateChanged"
                                 IsChecked="{x:Bind IsDone, Mode=OneWay}" />
                             <Grid
-                                Grid.Column="1">
+                                Grid.Column="1" x:Name="TaskNameTextCont">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
                                 <TextBlock
                                     Text="{x:Bind Name, Mode=OneWay}"
                                     DoubleTapped="TaskNameText_DoubleTapped"
@@ -70,6 +76,9 @@
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left"
                                     x:Name="TaskNameText" />
+                                <TextBlock
+                                    Text="{x:Bind Reminders, Mode=OneWay, Converter={StaticResource RemindersTextConverter}}"
+                                    Grid.Column="1"/>
                             </Grid>
                             <Button
                                 Background="Transparent"

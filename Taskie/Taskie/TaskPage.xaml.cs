@@ -664,7 +664,7 @@ namespace Taskie {
                 var expander = FindDescendant<Expander>(taskContainer, "rootGrid");
                 if (expander != null) {
                     if (expander.Header is FrameworkElement headerElement) {
-                        var taskNameText = FindDescendant<TextBlock>(headerElement, "TaskNameText");
+                        var taskNameText = FindDescendant<Grid>(headerElement, "TaskNameTextCont");
                         if (taskNameText != null) {
                             taskNameText.Width = newWidth;
                         }
@@ -981,7 +981,7 @@ namespace Taskie {
             double newWidth = NameBox.ActualWidth;
             Expander expander = sender as Expander;
             if (expander.Header is FrameworkElement headerElement) {
-                var taskNameText = FindDescendant<TextBlock>(headerElement, "TaskNameText");
+                var taskNameText = FindDescendant<Grid>(headerElement, "TaskNameTextCont");
                 if (taskNameText != null) {
                     taskNameText.Width = newWidth;
                 }
@@ -1102,7 +1102,7 @@ namespace Taskie {
             double newWidth = NameBox.ActualWidth;
             Expander expander = sender;
             if (expander.Header is FrameworkElement headerElement) {
-                var taskNameText = FindDescendant<TextBlock>(headerElement, "TaskNameText");
+                var taskNameText = FindDescendant<Grid>(headerElement, "TaskNameTextCont");
                 if (taskNameText != null) {
                     taskNameText.Width = newWidth;
                 }
