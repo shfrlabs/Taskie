@@ -182,7 +182,6 @@ namespace TaskieLib {
                 ListData data = ReadList(listId);
                 ListMetadata newData = data.Metadata;
                 newData.Emoji = newEmoji;
-                Debug.WriteLine(newData.Emoji);
                 SaveList(listId, data.Tasks, newData);
                 ListEmojiChangedEvent?.Invoke(listId, newData.Name, newEmoji);
             }

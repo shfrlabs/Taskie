@@ -21,7 +21,7 @@ namespace TaskieLib {
 
             TimeSpan diff = timeDifference ?? TimeSpan.Zero;
 
-            return diff.Humanize();
+            return diff.Humanize(minUnit: Humanizer.Localisation.TimeUnit.Second);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

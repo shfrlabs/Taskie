@@ -248,7 +248,6 @@ namespace TaskieLib
         private RemindersTextConverter _reminderstextconverter = new RemindersTextConverter();
         public void SetReminderText() {
             ReminderText = _reminderstextconverter.Convert(GetReminderDateTime()) as string;
-            Debug.WriteLine(ReminderText);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
