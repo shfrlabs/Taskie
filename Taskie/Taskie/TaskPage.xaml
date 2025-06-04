@@ -77,8 +77,11 @@
                                     HorizontalAlignment="Left"
                                     x:Name="TaskNameText" />
                                 <TextBlock
-                                    Text="{x:Bind Reminders, Mode=OneWay, Converter={StaticResource RemindersTextConverter}}"
-                                    Grid.Column="1"/>
+                                    x:Name="ReminderText"
+                                    Grid.Column="1"
+                                    Text="{x:Bind ReminderText, Mode=OneWay}"
+                                    Loaded="ReminderText_Loaded"
+                                    VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11" Opacity="0.7"/>
                             </Grid>
                             <Button
                                 Background="Transparent"

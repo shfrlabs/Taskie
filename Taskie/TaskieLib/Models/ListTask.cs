@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
 using Windows.Data.Xml.Dom;
 using Windows.Storage;
+using Windows.System;
 using Windows.UI.Notifications;
 
 namespace TaskieLib
@@ -25,12 +27,14 @@ namespace TaskieLib
         private bool _isDone;
         private ObservableCollection<ListTask> _subTasks;
         private ObservableCollection<AttachmentMetadata> _attachments;
+        private string _listId;
 
-        // Add this field to store reminders locally
-        private List<DateTimeOffset> _reminders = new List<DateTimeOffset>();
-
-        public ListTask()
+        public ListTask(string listId = null)
         {
+            if (_listId == null)
+            {
+                _listId = listId;
+            }
             _creationDate = DateTime.UtcNow;
             _subTasks = new ObservableCollection<ListTask>();
             _attachments = new ObservableCollection<AttachmentMetadata>();
@@ -38,49 +42,26 @@ namespace TaskieLib
 
         private const string ToastTagFormat = "{0}_{1}";
 
-        [JsonIgnore]
-        public IReadOnlyList<DateTimeOffset> Reminders
-        {
-            get
-            {
-                var now = DateTimeOffset.UtcNow;
-                bool removed = _reminders.RemoveAll(r => r <= now) > 0;
-                if (removed)
-                {
-                    OnPropertyChanged(nameof(Reminders));
-                }
-                return _reminders.AsReadOnly();
-            }
-            private set
-            {
-                if (!_reminders.SequenceEqual(value))
-                {
-                    _reminders = new List<DateTimeOffset>(value);
-                    OnPropertyChanged(nameof(Reminders));
-                }
-            }
-        }
 
-        public void AddReminder(DateTimeOffset reminderDateTime, string listId)
+        public void AddReminder(DateTimeOffset reminderDateTime)
         {
             if (reminderDateTime <= DateTimeOffset.UtcNow)
                 throw new ArgumentException("Reminder time must be in the future", nameof(reminderDateTime));
 
-            RemoveReminder(listId);
-            ScheduleToastNotification(reminderDateTime, listId);
+            RemoveReminder();
+            ScheduleToastNotification(reminderDateTime);
+            SetReminderText();
 
-            // Local store logic
-            _reminders.Clear();
-            _reminders.Add(reminderDateTime);
-            OnPropertyChanged(nameof(Reminders));
+            System.Diagnostics.Debug.WriteLine($"Reminder added for task '{Name}' at {reminderDateTime} with listId '{_listId}'");
         }
 
-        public void RemoveReminder(string listId)
+
+        public void RemoveReminder()
         {
             try
             {
                 var notifier = ToastNotificationManager.CreateToastNotifier();
-                string tag = GetToastTag(listId);
+                string tag = GetToastTag();
 
                 var scheduled = notifier.GetScheduledToastNotifications()
                     .Where(t => t.Tag == tag)
@@ -90,27 +71,37 @@ namespace TaskieLib
                     notifier.RemoveFromSchedule(toast);
                 }
 
-                ToastNotificationManager.History.Remove(tag, listId);
+                ToastNotificationManager.History.Remove(tag, _listId);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error removing reminder: {ex.Message}");
             }
-
-            // Local store logic
-            if (_reminders.Count > 0)
-            {
-                _reminders.Clear();
-                OnPropertyChanged(nameof(Reminders));
-            }
+            SetReminderText();
         }
 
-        public bool HasReminder(string listId)
+        private DateTimeOffset? GetReminderDateTime()
         {
             try
             {
                 var notifier = ToastNotificationManager.CreateToastNotifier();
-                string tag = GetToastTag(listId);
+                string tag = GetToastTag();
+                var toast = notifier.GetScheduledToastNotifications()
+                    .FirstOrDefault(t => t.Tag == tag);
+                return toast?.DeliveryTime;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool HasReminder()
+        {
+            try
+            {
+                var notifier = ToastNotificationManager.CreateToastNotifier();
+                string tag = GetToastTag();
                 var toast = notifier.GetScheduledToastNotifications()
                     .FirstOrDefault(t => t.Tag == tag);
                 return toast != null && toast.DeliveryTime > DateTimeOffset.UtcNow;
@@ -121,7 +112,7 @@ namespace TaskieLib
             }
         }
 
-        private void ScheduleToastNotification(DateTimeOffset reminderDateTime, string listId)
+        private void ScheduleToastNotification(DateTimeOffset reminderDateTime)
         {
             try
             {
@@ -134,12 +125,12 @@ namespace TaskieLib
 
                 var toastElement = (XmlElement)toastXml.SelectSingleNode("//toast");
                 toastElement?.SetAttribute("launch",
-                    $"action=viewTask&creationDate={CreationDate:o}&listId={listId}");
+                    $"action=viewTask&creationDate={CreationDate:o}&listId={_listId}");
 
                 var scheduledToast = new ScheduledToastNotification(toastXml, reminderDateTime)
                 {
-                    Tag = GetToastTag(listId),
-                    Group = listId
+                    Tag = GetToastTag(),
+                    Group = _listId
                 };
 
                 ToastNotificationManager.CreateToastNotifier().AddToSchedule(scheduledToast);
@@ -150,9 +141,20 @@ namespace TaskieLib
             }
         }
 
-        private string GetToastTag(string listId)
-            => string.Format(ToastTagFormat, _creationDate.Ticks, listId);
+        private string GetToastTag()
+            => string.Format(ToastTagFormat, _creationDate.Ticks, _listId);
         
+        public string ListId
+        {
+            get => _listId;
+            set
+            {
+                if (_listId == value) return;
+                _listId = value;
+                OnPropertyChanged(nameof(ListId));
+            }
+        }
+
 
         [JsonIgnore]
         public ObservableCollection<AttachmentMetadata> Attachments {
@@ -230,6 +232,25 @@ namespace TaskieLib
             }
         }
 
+        private string _ReminderText = string.Empty;
+
+        [JsonIgnore]
+        public string ReminderText {
+            get => _ReminderText;
+            set {
+                if (_ReminderText == value)
+                    return;
+                _ReminderText = value;
+                OnPropertyChanged();
+            }
+        }
+        // getting closer
+        private RemindersTextConverter _reminderstextconverter = new RemindersTextConverter();
+        public void SetReminderText() {
+            ReminderText = _reminderstextconverter.Convert(GetReminderDateTime()) as string;
+            Debug.WriteLine(ReminderText);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -266,26 +287,28 @@ namespace TaskieLib
             Attachments.Remove(attachment);
         }
 
-        public async Task LoadAttachmentsAsync(string listId) {
-            var root = ApplicationData.Current.LocalFolder;
-            Attachments.Clear();
-            try {
-                var tasksRoot = await root.GetFolderAsync(AttachmentsRoot);
-                var listFolder = await tasksRoot.GetFolderAsync(listId);
-                var taskFolder = await listFolder.GetFolderAsync(this.CreationDate.Ticks.ToString());
-                var files = await taskFolder.GetFilesAsync();
-                foreach (var f in files) {
-                    var props = await f.GetBasicPropertiesAsync();
-                    var parts = f.Name.Split('_', 2);
-                    Attachments.Add(new AttachmentMetadata {
-                        Id = parts[0],
-                        FileName = parts.Length > 1 ? parts[1] : f.Name,
-                        MimeType = f.ContentType,
-                        RelativePath = f.Path.Substring(root.Path.Length + 1)
-                    });
+        public void LoadAttachments(string listId) {
+            DispatcherQueue.GetForCurrentThread().TryEnqueue(DispatcherQueuePriority.Low, async () => {
+                var root = ApplicationData.Current.LocalFolder;
+                Attachments.Clear();
+                try {
+                    var tasksRoot = await root.GetFolderAsync(AttachmentsRoot);
+                    var listFolder = await tasksRoot.GetFolderAsync(listId);
+                    var taskFolder = await listFolder.GetFolderAsync(this.CreationDate.Ticks.ToString());
+                    var files = await taskFolder.GetFilesAsync();
+                    foreach (var f in files) {
+                        var props = await f.GetBasicPropertiesAsync();
+                        var parts = f.Name.Split('_', 2);
+                        Attachments.Add(new AttachmentMetadata {
+                            Id = parts[0],
+                            FileName = parts.Length > 1 ? parts[1] : f.Name,
+                            MimeType = f.ContentType,
+                            RelativePath = f.Path.Substring(root.Path.Length + 1)
+                        });
+                    }
                 }
-            }
-            catch { }
+                catch { }
+            });
         }
 
         private static async Task<StorageFolder> EnsureTaskFolderAsync(StorageFolder root, DateTime creation, string listId) {
@@ -293,6 +316,5 @@ namespace TaskieLib
             var listFolder = await tasksRoot.CreateFolderAsync(listId, CreationCollisionOption.OpenIfExists);
             return await listFolder.CreateFolderAsync(creation.Ticks.ToString(), CreationCollisionOption.OpenIfExists);
         }
-        
     }
 }

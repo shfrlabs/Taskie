@@ -731,7 +731,7 @@ namespace Taskie {
         private void UpdateFlyoutMenu(MenuFlyout flyout, ListTask task, Button btn) {
             flyout.Items.Remove(flyout.Items.FirstOrDefault(item => (item as MenuFlyoutItem)?.Tag?.ToString() == "Reminder"));
 
-            if (!task.HasReminder(listId)) {
+            if (!task.HasReminder()) {
                 var addReminderItem = new MenuFlyoutItem {
                     Icon = new SymbolIcon(Symbol.Calendar),
                     Text = resourceLoader.GetString("AddReminder/Text"),
@@ -765,7 +765,7 @@ namespace Taskie {
                 timeChooser.Content = stackPanel;
                 addReminderBtn.Click += (s, args) => {
                     DateTime date = new DateTime(datePicker.Date.Value.Year, datePicker.Date.Value.Month, datePicker.Date.Value.Day, timePicker.Time.Hours, timePicker.Time.Minutes, timePicker.Time.Seconds);
-                    if (date > DateTime.Now) { task.AddReminder(date, listId); }
+                    if (date > DateTime.Now) { task.AddReminder(date); task.SetReminderText(); }
                     timeChooser.Hide();
                 };
 
@@ -783,7 +783,7 @@ namespace Taskie {
                 };
 
                 removeReminderItem.Click += (s, args) => {
-                    task.RemoveReminder(listId);
+                    task.RemoveReminder();
                     UpdateFlyoutMenu(flyout, task, btn);
                 };
 
@@ -890,9 +890,9 @@ namespace Taskie {
 
             await Task.Run(async () => {
                 if (tasks != null && data != null) {
-                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, async () => {
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => {
                         foreach (ListTask task in tasks) {
-                            await task.LoadAttachmentsAsync(listId);
+                            task.LoadAttachments(listId);
                             taskListView.Items.Add(task);
                         }
                     });
@@ -906,7 +906,7 @@ namespace Taskie {
                 var metadata = data.Metadata;
                 var tasks = data.Tasks;
 
-                ListTask task = new ListTask() {
+                ListTask task = new ListTask(listId) {
                     Name = args.QueryText,
                     CreationDate = DateTime.Now,
                     IsDone = false
@@ -964,7 +964,7 @@ namespace Taskie {
                 var metadata = data.Metadata;
                 var tasks = data.Tasks;
 
-                ListTask task = new ListTask() {
+                ListTask task = new ListTask(listId) {
                     Name = (sender as AutoSuggestBox).Text,
                     CreationDate = DateTime.Now,
                     IsDone = false
@@ -1074,7 +1074,7 @@ namespace Taskie {
             if (parent != null) {
 
                 if (!string.IsNullOrEmpty(sender.Text)) {
-                    ListTask task2add = new ListTask {
+                    ListTask task2add = new ListTask(listId) {
                         CreationDate = DateTime.Now,
                         ParentCreationDate = parent.CreationDate,
                         IsDone = false,
@@ -1134,6 +1134,16 @@ namespace Taskie {
         private void AttachmentListView_Loaded(object sender, RoutedEventArgs e) { ChangeWidthAttachments(sender); }
         private void AttachmentListView_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args) { ChangeWidthAttachments(sender); }
         private void AttachmentListView_SizeChanged(object sender, SizeChangedEventArgs e) { ChangeWidthAttachments(sender); }
-        
+
+        private void ReminderText_Loaded(object sender, RoutedEventArgs e) {
+            ((sender as TextBlock).DataContext as ListTask).SetReminderText();
+            DispatcherTimer timer = new DispatcherTimer() {
+                Interval = TimeSpan.FromSeconds(1), // should be 60, bit of a workaround
+            };
+            timer.Tick += (s, args) => {
+                ((sender as TextBlock).DataContext as ListTask).SetReminderText();
+            };
+            timer.Start();
+        }
     }
 }

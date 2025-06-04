@@ -1,23 +1,27 @@
 ﻿using Humanizer;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace TaskieLib {
     public partial class RemindersTextConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
+        public object Convert(object value, Type targetType = null, object parameter = null, string language = null)
         {
-            IReadOnlyList<DateTimeOffset> reminders = value as IReadOnlyList<DateTimeOffset>;
-            if (reminders == null || reminders.Count == 0)
+            DateTimeOffset? reminders = value as DateTimeOffset?;
+            if (reminders == null)
             {
                 return string.Empty;
             }
 
-            TimeSpan timeDifference = reminders[0] - DateTimeOffset.Now;
 
-            return timeDifference.Humanize(minUnit: Humanizer.Localisation.TimeUnit.Minute);
+            TimeSpan? timeDifference = reminders - DateTimeOffset.Now;
+
+            TimeSpan diff = timeDifference ?? TimeSpan.Zero;
+
+            return diff.Humanize();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

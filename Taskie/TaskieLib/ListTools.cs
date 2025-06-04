@@ -195,7 +195,7 @@ namespace TaskieLib {
             try {
                 ListData data = ReadList(listId);
                 ListMetadata newData = data.Metadata;
-                //newData.TitleFont = font;
+                newData.TitleFont = font;
                 SaveList(listId, data.Tasks, newData);
             }
             catch (Exception ex) {
