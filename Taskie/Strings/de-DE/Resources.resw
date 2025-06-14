@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutApp.Text" xml:space="preserve">
+    <value>
+Danke für die Unterstützung! Taskie ist eins meiner ersten Projekte, in das ich eine Menge Detailliebe gesteckt habe. Meine andere Projekte findest Du auf GitHub. Ich hoffe dir gefällt Taskie. 
+Beste Grüße aus Polen!</value>
+  </data>
+  <data name="AboutCategory" xml:space="preserve">
+    <value>Über</value>
+  </data>
+  <data name="AddTaskBox.PlaceholderText" xml:space="preserve">
+    <value>Aufgabe hinzufügen...</value>
+  </data>
+  <data name="AdvertTag.Text" xml:space="preserve">
+    <value>Dein schneller und privater Aufgaben-Helfer.</value>
+  </data>
+  <data name="AdvertUWPTag.Text" xml:space="preserve">
+    <value>Gebaut mithilfe von UWP.</value>
+  </data>
+  <data name="AppearanceCategory" xml:space="preserve">
+    <value>Erscheinungsbild</value>
+  </data>
+  <data name="AppearanceText.Text" xml:space="preserve">
+    <value>Erscheinungsbild</value>
+  </data>
+  <data name="AppThemeSubText.Text" xml:space="preserve">
+    <value>App-Design verändern</value>
+  </data>
+  <data name="AppThemeText.Text" xml:space="preserve">
+    <value>Design</value>
+  </data>
+  <data name="AuthDescription.Text" xml:space="preserve">
+    <value>
+Lass die App mithilfe von Windows Hello nach deinem Passwort/Pin/Biometrie fragen. Diese Option könnte nicht verfügbar sein, wenn Dein Computer kein Passwort hat.</value>
+  </data>
+  <data name="AuthDisabledDescription" xml:space="preserve">
+    <value>
+Es könnte sein, dass du oder dein Administrator Biometrie oder Passwort entfernt haben oder etwas anderes passiert ist. Überprüfe dazu deine Windows-Einstellungen.</value>
+  </data>
+  <data name="AuthDisabledTitle" xml:space="preserve">
+    <value>Authentisierung wurde deaktiviert.</value>
+  </data>
+  <data name="AuthText.Text" xml:space="preserve">
+    <value>Authentisierung nutzen</value>
+  </data>
+  <data name="BackupHeader.Text" xml:space="preserve">
+    <value>Backup erstellen</value>
+  </data>
+  <data name="BackupsCategory" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="BackupsText.Text" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="BackupText.Text" xml:space="preserve">
+    <value>Exportiere alle Listen mit einem Klick. Wenn Du eine einzelne Liste exportieren willst, markiere diese mit Rechtsklick und währe die Option Exportieren. Nutze alternativ das Dreipunkt-Menü innerhalb einer geöffneten Liste. Anhänge sind nicht in den Exporten enthalten.</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="CompactOverlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Öffne Taskie Mini</value>
+  </data>
+  <data name="DarkThemeRadio.Content" xml:space="preserve">
+    <value>Dunkel</value>
+  </data>
+  <data name="DeleteList.Text" xml:space="preserve">
+    <value>Liste löschen</value>
+  </data>
+  <data name="DeleteTask.Text" xml:space="preserve">
+    <value>Aufgabe löschen</value>
+  </data>
+  <data name="ExportButton.Text" xml:space="preserve">
+    <value>Exportieren</value>
+  </data>
+  <data name="ExportList.Text" xml:space="preserve">
+    <value>Exportieren</value>
+  </data>
+  <data name="GitHubLink.Content" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="ImportButton.Text" xml:space="preserve">
+    <value>Importieren</value>
+  </data>
+  <data name="LightThemeRadio.Content" xml:space="preserve">
+    <value>Hell</value>
+  </data>
+  <data name="ListName" xml:space="preserve">
+    <value>Listenname</value>
+  </data>
+  <data name="LoginMessage" xml:space="preserve">
+    <value>Log dich mithilfe von Windows Hello in Taskie ein. Du kannst diese Option in den Einstellungen ausschalten.</value>
+  </data>
+  <data name="NewList" xml:space="preserve">
+    <value>Neue Liste</value>
+  </data>
+  <data name="NewListBtn.Text" xml:space="preserve">
+    <value>Neue Liste</value>
+  </data>
+  <data name="RenameList.Text" xml:space="preserve">
+    <value>Liste umbenennen</value>
+  </data>
+  <data name="RenameTask.Text" xml:space="preserve">
+    <value>Umbenennen</value>
+  </data>
+  <data name="RestartButton.Text" xml:space="preserve">
+    <value>Neustart</value>
+  </data>
+  <data name="RestartWarning.Text" xml:space="preserve">
+    <value>Das benötigt das Neustarten der App.</value>
+  </data>
+  <data name="RestoreHeader.Text" xml:space="preserve">
+    <value>Wiederherstellen</value>
+  </data>
+  <data name="RestoreText.Text" xml:space="preserve">
+    <value>Importiere hier eine Liste (*.json) oder ein vollständiges Backup (*.taskie) in die App. Wenn eine Liste bereits existiert, wird sie mit der Markierung (2) in ihrem Namen importiert.</value>
+  </data>
+  <data name="SearchBox.PlaceholderText" xml:space="preserve">
+    <value>Suche</value>
+  </data>
+  <data name="SecurityCategory" xml:space="preserve">
+    <value>Sicherheit</value>
+  </data>
+  <data name="SecurityHeader.Text" xml:space="preserve">
+    <value>Sicherheit</value>
+  </data>
+  <data name="SettingsText.Text" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="SystemThemeRadio.Content" xml:space="preserve">
+    <value>Systemdesign</value>
+  </data>
+  <data name="TaskName" xml:space="preserve">
+    <value>Aufgabenname</value>
+  </data>
+  <data name="TwitterLink.Content" xml:space="preserve">
+    <value>Twitter</value>
+  </data>
+  <data name="UpgradeText.Text" xml:space="preserve">
+    <value>Upgrade</value>
+  </data>
+  <data name="ListLimitText.Text" xml:space="preserve">
+    <value>Entferne die Limitierung auf drei Listen</value>
+  </data>
+  <data name="WinHelloText.Text" xml:space="preserve">
+    <value>Logge Dich sicher mit Windows Hello ein</value>
+  </data>
+  <data name="IndicatorText.Text" xml:space="preserve">
+    <value>Pro-Markierung</value>
+  </data>
+  <data name="CloseCO.Text" xml:space="preserve">
+    <value>Schließe die Kompaktansicht um in diesem Fenster zu arbeiten.</value>
+  </data>
+  <data name="tipwrongname.Title" xml:space="preserve">
+    <value>Das ist nicht möglich!</value>
+  </data>
+  <data name="tipwrongname.Subtitle" xml:space="preserve">
+    <value>Es gibt bereits eine Liste mit diesem Namen.</value>
+  </data>
+  <data name="successfulUpgrade" xml:space="preserve">
+    <value>Erfolgreich upgegradet!</value>
+  </data>
+  <data name="SuccessfulUpgradeSub" xml:space="preserve">
+    <value>Taskie Pro wurde freigeschalten.</value>
+  </data>
+  <data name="ProCancelled" xml:space="preserve">
+    <value>Pro wurde dir zurückerstattet.</value>
+  </data>
+  <data name="ProCancelledSub" xml:space="preserve">
+    <value>Pro-Funktionen wurden blockiert.</value>
+  </data>
+  <data name="ChangeEmoji" xml:space="preserve">
+    <value>Emoji ändern</value>
+  </data>
+  <data name="ChangeFont" xml:space="preserve">
+    <value>Schriftart ändern</value>
+  </data>
+  <data name="UpgradeFor" xml:space="preserve">
+    <value>Upgrade für {0}</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>App schließen</value>
+  </data>
+  <data name="GetStarted" xml:space="preserve">
+    <value>Loslegen</value>
+  </data>
+  <data name="AdvancedCustomizationUpgrade.Text" xml:space="preserve">
+    <value>Erweiterte Personalisierung</value>
+  </data>
+  <data name="FileAttachmentUpgrade.Text" xml:space="preserve">
+    <value>Füge Dateien an Aufgaben an</value>
+  </data>
+  <data name="GroupSpecificKanbanUpgrade.Text" xml:space="preserve">
+    <value>Kanban-Ansicht</value>
+  </data>
+  <data name="PrioritySupportUpgrade.Text" xml:space="preserve">
+    <value>Priorisierter Support</value>
+  </data>
+  <data name="RemoveBannersUpgrade.Text" xml:space="preserve">
+    <value>Entferne die Werbung für Pro (Schaltfläche)</value>
+  </data>
+  <data name="DeleteSubTask.Text" xml:space="preserve">
+    <value>Unteraufgabe löschen</value>
+  </data>
+  <data name="AddSubTaskBox.PlaceholderText" xml:space="preserve">
+    <value>Unteraufgabe hinzufügen...</value>
+  </data>
+  <data name="RenameSubTask.Text" xml:space="preserve">
+    <value>Unteraufgabe umbenennen</value>
+  </data>
+  <data name="NoSubTasks.Text" xml:space="preserve">
+    <value>No subtasks avialable.</value>
+  </data>
+  <data name="RenameSubTaskTitle" xml:space="preserve">
+    <value>Unteraufgabe umbenennen</value>
+  </data>
+  <data name="NewSubTaskTitle" xml:space="preserve">
+    <value>Neue Unteraufgabe</value>
+  </data>
+  <data name="AddReminder.Text" xml:space="preserve">
+    <value>Erinnerung hinzufügen</value>
+  </data>
+  <data name="RemoveReminder.Text" xml:space="preserve">
+    <value>Erinnerung entfernen</value>
+  </data>
+  <data name="ReminderGreeting" xml:space="preserve">
+    <value>Hier ist Deine geplante Erinnerung:</value>
+  </data>
+  <data name="Welcome1.Text" xml:space="preserve">
+    <value>Lern Deinen schenllen und privaten Aufgaben-Kompagnon kennen.</value>
+  </data>
+  <data name="Welcome2.Text" xml:space="preserve">
+    <value>Füge deine Aufgaben hinzu, organisiere Listen und personalisiere diese App.</value>
+  </data>
+  <data name="Welcome3.Text" xml:space="preserve">
+    <value>Hab Spaß und sei produktiv!</value>
+  </data>
+  <data name="UpgradeUnavailable" xml:space="preserve">
+    <value>Temporär nicht verfügbar</value>
+  </data>
+  <data name="EmptyListText.Text" xml:space="preserve">
+    <value>Wähle oder erstelle eine Liste im Seitenmenü.</value>
+  </data>
+  <data name="WebsiteLink.Content" xml:space="preserve">
+    <value>Meine Website</value>
+  </data>
+  <data name="Oops" xml:space="preserve">
+    <value>Ups!</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="CustomizeList.Text" xml:space="preserve">
+    <value>Anpassen</value>
+  </data>
+  <data name="ChangeListBackground" xml:space="preserve">
+    <value>Listenhintergrund ändern</value>
+  </data>
+  <data name="SetAsBackground" xml:space="preserve">
+    <value>Als Hintergrund festlegen</value>
+  </data>
+  <data name="CreateListHeader" xml:space="preserve">
+    <value>Erstelle eine neue Liste</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>{0} Datei</value>
+  </data>
+  <data name="NoAttachments.Text" xml:space="preserve">
+    <value>Bisher keine Anhänge.</value>
+  </data>
+  <data name="UnknownFile" xml:space="preserve">
+    <value>Unbekanntes Dateiformat</value>
+  </data>
+</root>

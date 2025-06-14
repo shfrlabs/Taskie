@@ -1,7 +1,0 @@
-﻿<Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
-	<Application>
-		<Assembly Name="Taskie" Dynamic="Required All" />
-		<Type Name="TaskieLib.ListTask" Dynamic="Required All" />
-		<Type Name="System.Collections.ObjectModel.ObservableCollection{TaskieLib.ListTask}" Dynamic="Required All" />
-	</Application>
-</Directives>
