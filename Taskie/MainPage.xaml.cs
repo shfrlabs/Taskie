@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 using TaskieLib;
+using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
 using Windows.ApplicationModel.Store;
@@ -24,6 +25,7 @@ namespace Taskie
 {
     public sealed partial class MainPage : Page
     {
+        public AppServiceConnection _connection;
         public MainPage()
         {
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Windows.Foundation.Size(500, 600));
@@ -635,6 +637,5 @@ namespace Taskie
                 catch { }
             }
         }
-
     }
 }

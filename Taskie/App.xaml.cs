@@ -6,6 +6,12 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.AppService;
+using Windows.UI;
+using TaskieLib.Models;
 
 namespace Taskie
 {
@@ -13,7 +19,7 @@ namespace Taskie
     {
         public App()
         {
-            //ApplicationLanguages.PrimaryLanguageOverride = "en-US";
+            ValidateFairmarkAttachmentsOnStartup();
             this.InitializeComponent();
             Tools.SetTheme(Settings.Theme);
             this.Suspending += OnSuspending;
@@ -52,6 +58,7 @@ namespace Taskie
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
                 Window.Current.Activate();
+
                 if (Settings.Theme == "Dark")
                 {
                     ApplicationView.GetForCurrentView().TitleBar.ButtonForegroundColor = Windows.UI.Colors.White;
@@ -73,6 +80,47 @@ namespace Taskie
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             deferral.Complete();
+        }
+
+        private async void ValidateFairmarkAttachmentsOnStartup()
+        {
+            // Connect to Fairmark app service
+            var connection = new AppServiceConnection
+            {
+                AppServiceName = "com.sheferslabs.fairmarkservices",
+                PackageFamilyName = "BRStudios.3763783C2F5C2_ynj0a7qyfqv8c"
+            };
+            var status = await connection.OpenAsync();
+            if (status != AppServiceConnectionStatus.Success)
+                return;
+            var response = await connection.SendMessageAsync(new Windows.Foundation.Collections.ValueSet());
+            if (response.Status != AppServiceResponseStatus.Success)
+                return;
+            string resultString = response.Message["Result"] as string;
+            var fairmarkNotes = System.Text.Json.JsonSerializer.Deserialize<List<FairmarkNoteData>>(resultString);
+            var fairmarkNoteIds = new HashSet<string>(fairmarkNotes.Select(n => n.id));
+
+            foreach (var (name, id, emoji) in TaskieLib.ListTools.GetLists())
+            {
+                var data = TaskieLib.ListTools.ReadList(id);
+                bool changed = false;
+                foreach (var task in data.Tasks)
+                {
+                    if (task.FMAttachmentIDs != null)
+                    {
+                        var toRemove = task.FMAttachmentIDs.Where(a => !fairmarkNoteIds.Contains(a)).ToList();
+                        foreach (var att in toRemove)
+                        {
+                            task.FMAttachmentIDs.Remove(att);
+                            changed = true;
+                        }
+                    }
+                }
+                if (changed)
+                {
+                    TaskieLib.ListTools.SaveList(id, data.Tasks, data.Metadata);
+                }
+            }
         }
     }
 }

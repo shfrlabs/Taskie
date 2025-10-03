@@ -120,10 +120,14 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AttachmentIconConverter.cs" />
+    <Compile Include="ColorsGradientConverter.cs" />
     <Compile Include="EmptyCollectionVisibilityConverter.cs" />
     <Compile Include="FileTypeConverter.cs" />
+    <Compile Include="GlyphFontConverter.cs" />
     <Compile Include="ListTools.cs" />
     <Compile Include="Models\AttachmentMetadata.cs" />
+    <Compile Include="Models\FairmarkNoteData.cs" />
     <Compile Include="Models\ListData.cs" />
     <Compile Include="Models\ListMetadata.cs" />
     <Compile Include="Models\ListTask.cs" />

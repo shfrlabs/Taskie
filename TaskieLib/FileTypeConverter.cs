@@ -8,9 +8,11 @@ namespace TaskieLib
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is string fileType)
-            {
+            if (value is string fileType && fileType != ".fairmark") {
                 return string.Format(ResourceLoader.GetForCurrentView().GetString("File"), fileType.ToUpper());
+            }
+            else if (value is string fileType2 && fileType2 == ".fairmark") {
+                return ResourceLoader.GetForCurrentView().GetString("FairmarkFile");
             }
             else return ResourceLoader.GetForCurrentView().GetString("UnknownFile");
         }

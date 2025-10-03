@@ -60,8 +60,21 @@ namespace Taskie
             var listView = current as ListView;
             if (listView != null && button.DataContext as AttachmentMetadata != null)
             {
-                var parentDataContext = listView.DataContext;
-                await (parentDataContext as ListTask)?.RemoveAttachmentAsync(button.DataContext as AttachmentMetadata);
+                var parentDataContext = listView.DataContext as ListTask;
+                var attachment = button.DataContext as AttachmentMetadata;
+                await parentDataContext?.RemoveAttachmentAsync(attachment);
+
+                // Persist the removal of Fairmark attachments
+                if (attachment != null && attachment.IsFairmark)
+                {
+                    // Update the tasks list to reflect the removal
+                    var index = tasks.FindIndex(t => t.CreationDate == parentDataContext.CreationDate);
+                    if (index != -1)
+                    {
+                        tasks[index] = parentDataContext;
+                    }
+                }
+                ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
             }
         }
 
@@ -69,7 +82,12 @@ namespace Taskie
         {
             try
             {
-                await Launcher.LaunchFileAsync(await StorageFile.GetFileFromPathAsync(System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, ((sender as AppBarButton)?.DataContext as AttachmentMetadata).RelativePath)));
+                if (((sender as AppBarButton)?.DataContext as AttachmentMetadata).IsFairmark) {
+                    await Launcher.LaunchUriAsync(new Uri("fairmark://default/" + ((sender as AppBarButton)?.DataContext as AttachmentMetadata).Id));
+                }
+                else {
+                    await Launcher.LaunchFileAsync(await StorageFile.GetFileFromPathAsync(System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, ((sender as AppBarButton)?.DataContext as AttachmentMetadata).RelativePath)));
+                }
             }
             catch { }
         }
@@ -77,19 +95,43 @@ namespace Taskie
         {
             if (await Settings.CheckIfProAsync())
             {
-                FileOpenPicker openPicker = new FileOpenPicker();
-                openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-                openPicker.FileTypeFilter.Add("*");
-                StorageFile file = await openPicker.PickSingleFileAsync();
-                if (file != null)
-                {
-                    var task = (sender as Button)?.DataContext as ListTask;
-                    if (task != null)
-                    {
-                        await task.AddAttachmentAsync(file, listId);
+                MenuFlyout menuFlyout = new MenuFlyout();
+                MenuFlyoutItem fileItem = new MenuFlyoutItem() { Text = "~~Attach file" };
+                fileItem.Click += async (s, args) => {
+                    FileOpenPicker openPicker = new FileOpenPicker();
+                    openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                    openPicker.FileTypeFilter.Add("*");
+                    StorageFile file = await openPicker.PickSingleFileAsync();
+                    if (file != null) {
+                        var task = (sender as Button)?.DataContext as ListTask;
+                        if (task != null) {
+                            await task.AddAttachmentAsync(file, listId);
+                        }
                     }
-                }
-                else { }
+                    else { }
+                };
+                MenuFlyoutItem noteItem = new MenuFlyoutItem() { Text = "~~Attach Fairmark note" };
+                noteItem.Click += async (s, args) => {
+                    FairmarkFlyout flyout = new FairmarkFlyout();
+                    flyout.Closed += async (snd, arg) => {
+                        var selectedNote = flyout.selectedNote;
+                        if (selectedNote != null)
+                        {
+                            Debug.WriteLine("Adding note attachment");
+                            var task = (sender as Button)?.DataContext as ListTask;
+                            if (task != null)
+                            {
+                                task.AddFairmarkAttachment(selectedNote, listId);
+                                Debug.WriteLine("Note attachment added");
+                                ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
+                            }
+                        }
+                    };
+                    flyout.ShowAt(sender as AppBarButton);
+                };
+                menuFlyout.Items.Add(fileItem);
+                menuFlyout.Items.Add(noteItem);
+                menuFlyout.ShowAt(sender as AppBarButton);
             }
             else
             {
@@ -1044,7 +1086,7 @@ namespace Taskie
             var data = ListTools.ReadList(listId);
             var metadata = data.Metadata;
             var tasks = data.Tasks;
-
+            
             if (e.Parameter != null)
             {
                 string name = metadata.Name;

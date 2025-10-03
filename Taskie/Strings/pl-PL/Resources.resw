@@ -385,4 +385,7 @@
   <data name="UnknownFile" xml:space="preserve">
     <value>Plik z nieznanym rozszerzeniem</value>
   </data>
+  <data name="FairmarkFile" xml:space="preserve">
+    <value>Notatka Fairmarka</value>
+  </data>
 </root>

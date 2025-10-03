@@ -30,6 +30,10 @@
             x:Key="FileTypeConverter" />
         <lib:RemindersTextConverter
             x:Key="RemindersTextConverter" />
+        <lib:AttachmentIconConverter
+            x:Key="AttachmentIconConverter" />
+        <lib:GlyphFontConverter
+            x:Key="GlyphFontConverter" />
         <DataTemplate
             x:Key="TaskItemTemplate"
             x:DataType="lib:ListTask">
@@ -150,10 +154,10 @@
                                                     </Grid.ColumnDefinitions>
                                                     <AppBarButton Icon="Delete" Label="Delete" LabelPosition="Collapsed" Grid.Column="2" x:Name="RemoveAttachment" Click="RemoveAttachment_Click" Width="42" VerticalContentAlignment="Center"/>
                                                     <AppBarButton Icon="Go" Label="Open" LabelPosition="Collapsed" Grid.Column="3" x:Name="OpenAttachment" Click="OpenAttachment_Click" Width="42" VerticalContentAlignment="Center"/>
-                                                    <SymbolIcon Symbol="Document" Grid.Column="0"/>
+                                                    <FontIcon Glyph="{x:Bind Emoji, Converter={StaticResource AttachmentIconConverter}}" FontFamily="{x:Bind IsFairmark, Converter={StaticResource GlyphFontConverter}}" Grid.Column="0"/>
                                                     <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="0,0,10,0">
                                                         <TextBlock Text="{x:Bind FileName}" FontSize="12" FontWeight="SemiBold"/>
-                                                        <TextBlock Text="{x:Bind MimeType, Converter={StaticResource FileTypeConverter}}" FontSize="11"/>
+                                                        <TextBlock Text="{x:Bind FileType, Converter={StaticResource FileTypeConverter}}" FontSize="11"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </DataTemplate>

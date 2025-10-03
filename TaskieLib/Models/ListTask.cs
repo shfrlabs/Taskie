@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using TaskieLib.Models;
+using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Resources;
 using Windows.Data.Xml.Dom;
 using Windows.Storage;
@@ -22,6 +26,7 @@ namespace TaskieLib
         private bool _isDone;
         private ObservableCollection<ListTask> _subTasks;
         private ObservableCollection<AttachmentMetadata> _attachments;
+        private List<string> _fairmarkattachments;
         private string _listId;
 
         public ListTask(string listId = null)
@@ -33,6 +38,7 @@ namespace TaskieLib
             _creationDate = DateTime.UtcNow;
             _subTasks = new ObservableCollection<ListTask>();
             _attachments = new ObservableCollection<AttachmentMetadata>();
+            _fairmarkattachments = new List<string>();
         }
 
         private const string ToastTagFormat = "{0}_{1}";
@@ -150,6 +156,15 @@ namespace TaskieLib
             }
         }
 
+        [JsonPropertyName("FairmarkAttachments")]
+        public List<string> FMAttachmentIDs {
+            get => _fairmarkattachments ?? (_fairmarkattachments = new List<string>());
+            set {
+                _fairmarkattachments = value ?? new List<string>();
+                Debug.WriteLine($"FMAttachmentIDs set to: {string.Join(", ", _fairmarkattachments)}");
+                OnPropertyChanged(nameof(FMAttachmentIDs));
+            }
+        }
 
         [JsonIgnore]
         public ObservableCollection<AttachmentMetadata> Attachments
@@ -272,23 +287,44 @@ namespace TaskieLib
             {
                 Id = Path.GetFileNameWithoutExtension(newFile.Name).Split('_')[0],
                 FileName = file.Name,
-                MimeType = file.ContentType,
+                FileType = file.FileType,
                 RelativePath = newFile.Path.Substring(root.Path.Length + 1)
             };
             Attachments.Add(meta);
             return meta;
         }
 
+        public AttachmentMetadata AddFairmarkAttachment(FairmarkNoteData note, string listId) {
+            if (!FMAttachmentIDs.Contains(note.id))
+                FMAttachmentIDs.Add(note.id);
+            if (!Attachments.Any(a => a.IsFairmark && a.Id == note.id)) {
+                var meta = new AttachmentMetadata {
+                    Id = note.id,
+                    IsFairmark = true,
+                    FileName = note.name,
+                    FileType = ".fairmark",
+                    Emoji = note.emoji,
+                    Colors = note.colors
+                };
+                Attachments.Add(meta);
+                return meta;
+            }
+            return Attachments.First(a => a.IsFairmark && a.Id == note.id);
+        }
+
         public async Task RemoveAttachmentAsync(AttachmentMetadata attachment)
         {
             var root = ApplicationData.Current.LocalFolder;
-            try
-            {
-                var file = await StorageFile.GetFileFromPathAsync(Path.Combine(root.Path, attachment.RelativePath));
-                await file.DeleteAsync();
+            if (!attachment.IsFairmark) {
+                try {
+                    var file = await StorageFile.GetFileFromPathAsync(Path.Combine(root.Path, attachment.RelativePath));
+                    await file.DeleteAsync();
+                }
+                catch { }
             }
-            catch { }
             Attachments.Remove(attachment);
+            if (attachment.IsFairmark)
+                FMAttachmentIDs?.Remove(attachment.Id);
         }
 
         public void LoadAttachments(string listId)
@@ -296,7 +332,40 @@ namespace TaskieLib
             DispatcherQueue.GetForCurrentThread().TryEnqueue(DispatcherQueuePriority.Low, async () =>
             {
                 var root = ApplicationData.Current.LocalFolder;
+                // Clear all attachments before repopulating
                 Attachments.Clear();
+                // Load Fairmark attachments from IDs
+                try {
+                    var connection = new AppServiceConnection {
+                        AppServiceName = "com.sheferslabs.fairmarkservices",
+                        PackageFamilyName = "BRStudios.3763783C2F5C2_ynj0a7qyfqv8c"
+                    };
+                    var status = await connection.OpenAsync();
+                    if (status != AppServiceConnectionStatus.Success)
+                        return;
+                    var response = await connection.SendMessageAsync(new Windows.Foundation.Collections.ValueSet());
+                    if (response.Status != AppServiceResponseStatus.Success)
+                        return;
+                    string resultString = response.Message["Result"] as string;
+                    var fairmarkNotes = System.Text.Json.JsonSerializer.Deserialize<List<FairmarkNoteData>>(resultString);
+                    var fairmarkNoteIds = new HashSet<string>(fairmarkNotes.Select(n => n.id));
+
+                    foreach (var id in FMAttachmentIDs.Where(id => fairmarkNoteIds.Contains(id))) {
+                        var note = fairmarkNotes.First(n => n.id == id);
+                        Attachments.Add(new AttachmentMetadata {
+                            Id = note.id,
+                            IsFairmark = true,
+                            FileName = note.name,
+                            FileType = ".fairmark",
+                            Emoji = note.emoji,
+                            Colors = note.colors
+                        });
+                    }
+                }
+                catch {
+                }
+
+                // Load file attachments from folder
                 try
                 {
                     var tasksRoot = await root.GetFolderAsync(AttachmentsRoot);
@@ -307,13 +376,16 @@ namespace TaskieLib
                     {
                         var props = await f.GetBasicPropertiesAsync();
                         var parts = f.Name.Split('_', 2);
-                        Attachments.Add(new AttachmentMetadata
+                        if (!Attachments.Any(a => !a.IsFairmark && a.FileName == (parts.Length > 1 ? parts[1] : f.Name)))
                         {
-                            Id = parts[0],
-                            FileName = parts.Length > 1 ? parts[1] : f.Name,
-                            MimeType = f.ContentType,
-                            RelativePath = f.Path.Substring(root.Path.Length + 1)
-                        });
+                            Attachments.Add(new AttachmentMetadata
+                            {
+                                Id = parts[0],
+                                FileName = parts.Length > 1 ? parts[1] : f.Name,
+                                FileType = f.FileType,
+                                RelativePath = f.Path.Substring(root.Path.Length + 1)
+                            });
+                        }
                     }
                 }
                 catch { }

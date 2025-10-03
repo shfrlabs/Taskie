@@ -384,4 +384,7 @@
   <data name="UnknownFile" xml:space="preserve">
     <value>Unknown filetype</value>
   </data>
+  <data name="FairmarkFile" xml:space="preserve">
+    <value>Fairmark note</value>
+  </data>
 </root>

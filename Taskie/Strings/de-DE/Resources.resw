@@ -388,4 +388,7 @@ Es könnte sein, dass du oder dein Administrator Biometrie oder Passwort entfern
   <data name="UnknownFile" xml:space="preserve">
     <value>Unbekanntes Dateiformat</value>
   </data>
+  <data name="FairmarkFile" xml:space="preserve">
+    <value>Fairmark-Hinweis</value>
+  </data>
 </root>

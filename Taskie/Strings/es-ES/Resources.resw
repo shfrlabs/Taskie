@@ -378,10 +378,13 @@
   <data name="File" xml:space="preserve">
     <value>Copiar {0}</value>
   </data>
+  <data name="NoAttachments.Text" xml:space="preserve">
+    <value>Sin archivos adjuntos.</value>
+  </data>
   <data name="UnknownFile" xml:space="preserve">
     <value>Archivo desconocido</value>
   </data>
-  <data name="NoAttachments.Text" xml:space="preserve">
-    <value>Sin archivos adjuntos.</value>
+  <data name="FairmarkFile" xml:space="preserve">
+    <value>Nota de Fairmark</value>
   </data>
 </root>
