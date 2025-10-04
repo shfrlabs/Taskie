@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Windows.Foundation.Collections;
 using Windows.Services.Store;
 using Windows.Storage;
+using Windows.UI.Xaml;
 
 namespace TaskieLib
 {
@@ -60,6 +61,26 @@ namespace TaskieLib
             set
             {
                 savedSettings["launched"] = value ? "1" : "0";
+            }
+        }
+
+        public static GridLength SidebarSize {
+            get {
+                if (savedSettings.ContainsKey("size") && savedSettings["size"] is int sizeInt)
+                {
+                    return new GridLength(sizeInt);
+                }
+                return new GridLength(185);
+            }
+            set {
+                if (value.GridUnitType == GridUnitType.Pixel)
+                {
+                    savedSettings["size"] = (int)value.Value;
+                }
+                else
+                {
+                    savedSettings["size"] = 185;
+                }
             }
         }
 

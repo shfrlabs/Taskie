@@ -52,8 +52,14 @@ namespace Taskie
                 HandleToastActivation(app.ToastActivationArgument);
             }
         }
-
-
+        public GridLength sidebarSize
+        {
+            get => Settings.SidebarSize;
+            set
+            {
+                Settings.SidebarSize = value;
+            }
+        }
         private void DeleteList_Click(object sender, RoutedEventArgs e)
         {
             var listId = ((MenuFlyoutItem)sender).Tag?.ToString()?.Replace(".json", "");
@@ -280,36 +286,48 @@ namespace Taskie
             Window.Current.SetTitleBar(TTB);
         }
 
+        private Grid CreateNavigationItemContent(string emoji, string name, Thickness margin)
+        {
+            var content = new Grid
+            {
+                Margin = margin,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Stretch
+            };
+            content.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            content.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            var fontIcon = new FontIcon
+            {
+                Glyph = emoji ?? "📋",
+                FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"),
+                FontSize = 12
+            };
+            Grid.SetColumn(fontIcon, 0);
+
+            var textBlock = new TextBlock
+            {
+                Text = name,
+                Margin = new Thickness(10, 0, 0, 0),
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                MaxLines = 1,
+                FontSize = 12,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            Grid.SetColumn(textBlock, 1);
+
+            content.Children.Add(fontIcon);
+            content.Children.Add(textBlock);
+
+            return content;
+        }
+
         private void SetupNavigationMenu()
         {
             foreach (var list in ListTools.GetLists().Where(l => !string.IsNullOrEmpty(l.name)))
             {
                 var listEmoji = list.emoji ?? "📋";
-                var content = new StackPanel
-                {
-                    Orientation = Orientation.Horizontal,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Margin = new Thickness(-3),
-                    Children =
-                    {
-                new FontIcon
-                {
-                    Glyph = listEmoji,
-                    FontFamily = new FontFamily("Segoe UI Emoji"),
-                    FontSize = 12
-                },
-                new TextBlock
-                {
-                    Text = list.name,
-                    Margin = new Thickness(10, 0, 0, 0),
-                    TextTrimming = TextTrimming.CharacterEllipsis,
-                    MaxLines = 1,
-                    Width = 100,
-                    FontSize = 12,
-                    VerticalAlignment = VerticalAlignment.Center
-                }
-            }
-                };
+                var content = CreateNavigationItemContent(listEmoji, list.name, new Thickness(-3));
 
                 var item = new ListViewItem
                 {
@@ -363,13 +381,7 @@ namespace Taskie
                 {
                     if (navigationItem?.Tag?.ToString()?.Replace(".json", null) == listID && navigationItem != null)
                     {
-                        StackPanel content = new StackPanel();
-                        content.Margin = new Thickness(-3);
-                        content.Orientation = Orientation.Horizontal;
-                        content.VerticalAlignment = VerticalAlignment.Center;
-                        content.Children.Add(new FontIcon() { Glyph = emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 12 });
-                        content.Children.Add(new TextBlock { Text = newname, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 12, VerticalAlignment = VerticalAlignment.Center });
-                        navigationItem.Content = content;
+                        navigationItem.Content = CreateNavigationItemContent(emoji, newname, new Thickness(-3));
                         break;
                     }
                 }
@@ -385,12 +397,7 @@ namespace Taskie
                 {
                     if (navigationItem?.Tag?.ToString()?.Replace(".json", null) == listID && navigationItem != null)
                     {
-                        StackPanel content = new StackPanel(); content.Margin = new Thickness(-2);
-                        content.Orientation = Orientation.Horizontal;
-                        content.VerticalAlignment = VerticalAlignment.Center;
-                        content.Children.Add(new FontIcon() { Glyph = emoji ?? "📋", FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI Emoji"), FontSize = 12 });
-                        content.Children.Add(new TextBlock { Text = name, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, MaxLines = 1, Width = 100, FontSize = 12, VerticalAlignment = VerticalAlignment.Center });
-                        navigationItem.Content = content;
+                        navigationItem.Content = CreateNavigationItemContent(emoji, name, new Thickness(-2));
                         break;
                     }
                 }
@@ -635,6 +642,12 @@ namespace Taskie
                     }
                 }
                 catch { }
+            }
+        }
+
+        private void mainGrid_SizeChanged(object sender, SizeChangedEventArgs e) {
+            if (mainGrid.ColumnDefinitions[0].ActualWidth + 300 > ActualWidth) {
+                mainGrid.ColumnDefinitions[0].Width = new GridLength(185);
             }
         }
     }

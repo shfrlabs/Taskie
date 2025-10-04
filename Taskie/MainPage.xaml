@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
     mc:Ignorable="d"
     Loaded="Page_Loaded"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
@@ -58,13 +59,15 @@
             </StackPanel>
         </Grid>
         <Grid
-            x:Name="mainGrid">
+            x:Name="mainGrid"
+            SizeChanged="mainGrid_SizeChanged">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
-                    Width="185" />
+                    Width="{x:Bind sidebarSize, Mode=TwoWay}" MinWidth="185" />
                 <ColumnDefinition
-                    Width="*" />
+                    Width="*" MinWidth="300" />
             </Grid.ColumnDefinitions>
+            <toolkit:GridSplitter Opacity="0" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="-15,0,15,0" Foreground="Transparent"/>
             <Frame
                 x:Name="contentFrame"
                 Grid.Column="1"
@@ -169,7 +172,7 @@
                     Grid.Row="1"
                     VerticalAlignment="Stretch">
                     <NavigationViewItemSeparator
-                        Width="300"
+                        Width="3000"
                         Margin="-100, 0, 0, 0"
                         Opacity=".3"></NavigationViewItemSeparator>
                     <ListView
@@ -187,7 +190,7 @@
                     Orientation="Vertical"
                     Grid.Row="2">
                     <NavigationViewItemSeparator
-                        Width="300"
+                        Width="3000"
                         Margin="-100, 0, 0, 0"
                         Opacity=".3"></NavigationViewItemSeparator>
                     <Button
@@ -244,14 +247,13 @@
             </Grid>
             <Grid
                 VerticalAlignment="Stretch"
-                Margin="-20"
+                Margin="-20,-20,20,-20"
                 Grid.Column="0"
                 Grid.RowSpan="4"
                 Background="{ThemeResource SystemAltLowColorBrush}"
                 Canvas.ZIndex="-10"
                 Opacity="1"
-                Width="185"
-                HorizontalAlignment="Left"
+                HorizontalAlignment="Stretch"
                 x:Name="rect2" />
         </Grid>
         <muxc:TeachingTip
