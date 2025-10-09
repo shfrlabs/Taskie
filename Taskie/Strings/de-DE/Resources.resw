@@ -392,21 +392,21 @@ Es könnte sein, dass du oder dein Administrator Biometrie oder Passwort entfern
     <value>Fairmark-Hinweis</value>
   </data>
   <data name="AttachNote" xml:space="preserve">
-    <value />
+    <value>Fairmark-Notiz anhängen</value>
   </data>
   <data name="AttachFile" xml:space="preserve">
-    <value />
+    <value>Datei anhängen</value>
   </data>
   <data name="AttachNoteButton.Content" xml:space="preserve">
-    <value />
+    <value>Ausgewählte Notiz anhängen</value>
   </data>
   <data name="NoNotes" xml:space="preserve">
-    <value />
+    <value>Keine Notizen gefunden.</value>
   </data>
   <data name="ConnectionFailed" xml:space="preserve">
-    <value />
+    <value>Verbindung zum Dienst konnte nicht hergestellt werden. Ist Fairmark installiert?</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value />
+    <value>Laden...</value>
   </data>
 </root>
