@@ -28,7 +28,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Margin="5,5,5,2" CornerRadius="3" HorizontalAlignment="Stretch" Style="{ThemeResource AccentButtonStyle}" x:Name="AttachButton" IsEnabled="False" Click="AttachButton_Click">~Attach selected note</Button>
+            <Button Margin="5,5,5,2" CornerRadius="3" HorizontalAlignment="Stretch" Style="{ThemeResource AccentButtonStyle}" x:Name="AttachButton" IsEnabled="False" Click="AttachButton_Click" x:Uid="AttachNoteButton"/>
         </StackPanel>
     </Flyout.Content>
 </Flyout>

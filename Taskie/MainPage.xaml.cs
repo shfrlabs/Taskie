@@ -168,17 +168,31 @@ namespace Taskie
         {
             if (mainGrid.ColumnDefinitions[0].Width == new GridLength(0))
             {
+                mainGrid.ColumnDefinitions[0].MinWidth = 185;
                 mainGrid.ColumnDefinitions[0].Width = new GridLength(185);
                 rect2.Visibility = Visibility.Visible;
                 contentFrame.Margin = new Thickness(-20, 0, 0, 0);
                 SidebarButton.Opacity = 1;
+                sb.Visibility = Visibility.Visible;
+                Splitter.Visibility = Visibility.Visible;
+                SidebarTop.SetBinding(FrameworkElement.WidthProperty, new Windows.UI.Xaml.Data.Binding
+                {
+                    Path = new PropertyPath("ActualWidth"),
+                    ElementName = "Sizer1",
+                    Mode = Windows.UI.Xaml.Data.BindingMode.OneWay
+                });
             }
             else
             {
+                mainGrid.ColumnDefinitions[0].MinWidth = 0;
                 mainGrid.ColumnDefinitions[0].Width = new GridLength(0);
                 rect2.Visibility = Visibility.Collapsed;
                 contentFrame.Margin = new Thickness(0, 10, 0, 0);
                 SidebarButton.Opacity = 0.7;
+                sb.Visibility = Visibility.Collapsed;
+                Splitter.Visibility = Visibility.Collapsed;
+                SidebarTop.ClearValue(FrameworkElement.WidthProperty);
+                SidebarTop.Width = 165;
             }
         }
 
@@ -649,6 +663,10 @@ namespace Taskie
             if (mainGrid.ColumnDefinitions[0].ActualWidth + 300 > ActualWidth) {
                 mainGrid.ColumnDefinitions[0].Width = new GridLength(185);
             }
+        }
+
+        private void Sizer1_SizeChanged(object sender, SizeChangedEventArgs e) {
+            SidebarTop.Width = e.NewSize.Width;
         }
     }
 }

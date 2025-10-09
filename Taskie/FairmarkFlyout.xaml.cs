@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TaskieLib.Models;
 using Windows.ApplicationModel.AppService;
+using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -24,22 +25,26 @@ namespace Taskie {
         }
         public FairmarkNoteData note;
         public AppServiceConnection _connection;
+        public ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
         private async void ListView_Loaded(object sender, RoutedEventArgs e) {
             (sender as ListView).Visibility = Visibility.Collapsed;
             TextBlock temp = new TextBlock() { Opacity = .7, Margin = new Thickness(20), HorizontalAlignment = HorizontalAlignment.Center };
-            temp.Text = "~Loading...";
+            temp.Text = resourceLoader.GetString("Loading");
             panel.Children.Add(temp);
 
             if (_connection == null) {
                 _connection = new AppServiceConnection();
                 _connection.AppServiceName = "com.sheferslabs.fairmarkservices";
-                _connection.PackageFamilyName = "BRStudios.3763783C2F5C2_ynj0a7qyfqv8c";
-
+                _connection.PackageFamilyName = "BRStudios.3763783C2F5C2_4e5f56w1y9a5p";
                 var status = await _connection.OpenAsync();
                 if (status != AppServiceConnectionStatus.Success) {
-                   temp.Text = "~Failed to connect to service. Is Fairmark installed?";
-                    _connection = null;
-                    return;
+                    _connection.PackageFamilyName = "BRStudios.3763783C2F5C2_ynj0a7qyfqv8c";
+                    status = await _connection.OpenAsync();
+                    if (status != AppServiceConnectionStatus.Success) {
+                        temp.Text = resourceLoader.GetString("ConnectionFailed");
+                        _connection = null;
+                        return;
+                    }
                 }
             }
 
@@ -54,7 +59,7 @@ namespace Taskie {
                     panel.Children.Remove(temp);
                 }
                 else {
-                    temp.Text = "~No notes found.";
+                    temp.Text = resourceLoader.GetString("NoNotes");
                 }
             }
             else {

@@ -11,30 +11,32 @@
     Loaded="Page_Loaded"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
     <Grid>
-        <Button
-            x:Name="SidebarButton"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            IsTabStop="False"
-            Height="30"
-            Width="30"
-            Padding="0"
-            Margin="125, 7, 0, 7"
-            Background="Transparent"
-            BorderThickness="0"
-            VerticalContentAlignment="Center"
-            Canvas.ZIndex="999999"
-            Click="SidebarButton_Click">
-            <FontIcon
-                Glyph="&#xE90C;"
-                FontSize="14" />
-        </Button>
+        <Grid Height="45" x:Name="SidebarTop" VerticalAlignment="Top" HorizontalAlignment="Left" Canvas.ZIndex="999">
+            <Button
+                x:Name="SidebarButton"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                IsTabStop="False"
+                Height="30"
+                Width="30"
+                Padding="0"
+                Margin="0,0,8,0"
+                Background="Transparent"
+                BorderThickness="0"
+                VerticalContentAlignment="Center"
+                Canvas.ZIndex="10000"
+                Click="SidebarButton_Click">
+                <FontIcon
+                    Glyph="&#xE90C;"
+                    FontSize="14" />
+            </Button>
+        </Grid>
         <Grid
             Background="Transparent"
             x:Name="TTB"
             VerticalAlignment="Top"
             Height="44"
-            Canvas.ZIndex="9999">
+            Canvas.ZIndex="1">
             <Image
                 Source="Assets\Logo.png"
                 Width="20"
@@ -67,7 +69,7 @@
                 <ColumnDefinition
                     Width="*" MinWidth="300" />
             </Grid.ColumnDefinitions>
-            <toolkit:GridSplitter Opacity="0" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="-15,0,15,0" Foreground="Transparent"/>
+            <toolkit:GridSplitter x:Name="Splitter" Opacity="0" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="-15,0,15,0" Foreground="Transparent"/>
             <Frame
                 x:Name="contentFrame"
                 Grid.Column="1"
@@ -75,7 +77,8 @@
             <Grid
                 Grid.Column="0"
                 Margin="0, 38, 20, 10"
-                VerticalAlignment="Stretch">
+                VerticalAlignment="Stretch"
+                x:Name="sb">
                 <Grid.RowDefinitions>
                     <RowDefinition
                         Height="88" />
@@ -85,10 +88,11 @@
                         Height="105"
                         x:Name="BottomRow" />
                 </Grid.RowDefinitions>
+                <Rectangle Height="40" Fill="Transparent" Canvas.ZIndex="-99" SizeChanged="Sizer1_SizeChanged" x:Name="Sizer1" HorizontalAlignment="Stretch"/>
                 <StackPanel
                     Grid.Row="0"
                     Orientation="Vertical"
-                    VerticalAlignment="Bottom">
+                    VerticalAlignment="Bottom" x:Name="SP1">
                     <Button
                         Background="{ThemeResource ButtonBG}"
                         x:Name="AddItemBtn"

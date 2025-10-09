@@ -38,7 +38,7 @@ namespace TaskieLib
             _creationDate = DateTime.UtcNow;
             _subTasks = new ObservableCollection<ListTask>();
             _attachments = new ObservableCollection<AttachmentMetadata>();
-            _fairmarkattachments = new List<string>();
+            if (_fairmarkattachments == null) _fairmarkattachments = new List<string>();
         }
 
         private const string ToastTagFormat = "{0}_{1}";

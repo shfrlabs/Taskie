@@ -388,4 +388,22 @@
   <data name="FairmarkFile" xml:space="preserve">
     <value>Notatka Fairmarka</value>
   </data>
+  <data name="AttachNote" xml:space="preserve">
+    <value>Dołącz notatkę Fairmarka</value>
+  </data>
+  <data name="AttachFile" xml:space="preserve">
+    <value>Dołącz plik</value>
+  </data>
+  <data name="AttachNoteButton.Content" xml:space="preserve">
+    <value>Dołącz wybraną notatkę</value>
+  </data>
+  <data name="NoNotes" xml:space="preserve">
+    <value>Nie znaleziono notatek.</value>
+  </data>
+  <data name="ConnectionFailed" xml:space="preserve">
+    <value>Nie można połączyć z usługą. Czy Fairmark jest zainstalowany?</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Ładowanie...</value>
+  </data>
 </root>

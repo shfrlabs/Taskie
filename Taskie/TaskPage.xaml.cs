@@ -74,6 +74,15 @@ namespace Taskie
                         tasks[index] = parentDataContext;
                     }
                 }
+                else
+                {
+                    // Always update the instance for file attachments too
+                    var index = tasks.FindIndex(t => t.CreationDate == parentDataContext.CreationDate);
+                    if (index != -1)
+                    {
+                        tasks[index] = parentDataContext;
+                    }
+                }
                 ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
             }
         }
@@ -96,7 +105,7 @@ namespace Taskie
             if (await Settings.CheckIfProAsync())
             {
                 MenuFlyout menuFlyout = new MenuFlyout();
-                MenuFlyoutItem fileItem = new MenuFlyoutItem() { Text = "~~Attach file" };
+                MenuFlyoutItem fileItem = new MenuFlyoutItem() { Text = resourceLoader.GetString("AttachFile"), Icon = new SymbolIcon(Symbol.OpenFile) };
                 fileItem.Click += async (s, args) => {
                     FileOpenPicker openPicker = new FileOpenPicker();
                     openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
@@ -106,11 +115,17 @@ namespace Taskie
                         var task = (sender as Button)?.DataContext as ListTask;
                         if (task != null) {
                             await task.AddAttachmentAsync(file, listId);
+                            // Ensure the correct instance in tasks is updated
+                            var index = tasks.FindIndex(t => t.CreationDate == task.CreationDate);
+                            if (index != -1) {
+                                tasks[index] = task;
+                            }
+                            ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
                         }
                     }
                     else { }
                 };
-                MenuFlyoutItem noteItem = new MenuFlyoutItem() { Text = "~~Attach Fairmark note" };
+                MenuFlyoutItem noteItem = new MenuFlyoutItem() { Text = resourceLoader.GetString("AttachNote"), Icon = new SymbolIcon(Symbol.Document) };
                 noteItem.Click += async (s, args) => {
                     FairmarkFlyout flyout = new FairmarkFlyout();
                     flyout.Closed += async (snd, arg) => {
@@ -123,6 +138,11 @@ namespace Taskie
                             {
                                 task.AddFairmarkAttachment(selectedNote, listId);
                                 Debug.WriteLine("Note attachment added");
+                                // Ensure the correct instance in tasks is updated
+                                var index = tasks.FindIndex(t => t.CreationDate == task.CreationDate);
+                                if (index != -1) {
+                                    tasks[index] = task;
+                                }
                                 ListTools.SaveList(listId, tasks, ListTools.ReadList(listId).Metadata);
                             }
                         }

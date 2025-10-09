@@ -387,4 +387,22 @@
   <data name="FairmarkFile" xml:space="preserve">
     <value>Fairmark note</value>
   </data>
+  <data name="AttachNote" xml:space="preserve">
+    <value>Attach Fairmark note</value>
+  </data>
+  <data name="AttachFile" xml:space="preserve">
+    <value>Attach file</value>
+  </data>
+  <data name="AttachNoteButton.Content" xml:space="preserve">
+    <value>Attach selected note</value>
+  </data>
+  <data name="NoNotes" xml:space="preserve">
+    <value>No notes found.</value>
+  </data>
+  <data name="ConnectionFailed" xml:space="preserve">
+    <value>Failed to connect to service. Is Fairmark installed?</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
 </root>
