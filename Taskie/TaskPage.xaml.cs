@@ -102,9 +102,7 @@ namespace Taskie
         }
         private async void AddAttachment_Click(object sender, RoutedEventArgs e)
         {
-            if (await Settings.CheckIfProAsync())
-            {
-                MenuFlyout menuFlyout = new MenuFlyout();
+             MenuFlyout menuFlyout = new MenuFlyout();
                 MenuFlyoutItem fileItem = new MenuFlyoutItem() { Text = resourceLoader.GetString("AttachFile"), Icon = new SymbolIcon(Symbol.OpenFile) };
                 fileItem.Click += async (s, args) => {
                     FileOpenPicker openPicker = new FileOpenPicker();
@@ -152,21 +150,6 @@ namespace Taskie
                 menuFlyout.Items.Add(fileItem);
                 menuFlyout.Items.Add(noteItem);
                 menuFlyout.ShowAt(sender as AppBarButton);
-            }
-            else
-            {
-                ContentDialog dialog = new ContentDialog();
-                Frame frame = new Frame();
-                dialog.BorderBrush = (LinearGradientBrush)Application.Current.Resources["ProBG"];
-                dialog.BorderThickness = new Thickness(2);
-                frame.Navigate(typeof(UpgradeDialogContentPage));
-                dialog.Content = frame;
-                dialog.PrimaryButtonText = string.Format(resourceLoader.GetString("UpgradeFor"), await Settings.GetProPriceAsync());
-                dialog.DefaultButton = ContentDialogButton.Primary;
-                dialog.PrimaryButtonClick += Dialog_UpgradeAction;
-                dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
-                await dialog.ShowAsync();
-            }
         }
         private async void CustomizeList_Click(object sender, RoutedEventArgs e)
         {
@@ -188,7 +171,6 @@ namespace Taskie
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10)
             };
-            button.IsEnabled = await Settings.CheckIfProAsync();
 
             button.Click += async (sender2, args) =>
             {
@@ -221,7 +203,6 @@ namespace Taskie
             {
                 Header = new StackPanel() { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center, Children = { new FontIcon() { Glyph = "\uE8D2", Margin = new Thickness(0, 0, 10, 0) }, new TextBlock() { Text = resourceLoader.GetString("ChangeFont") } } },
                 Width = 300,
-                IsEnabled = await Settings.CheckIfProAsync()
             };
             ListView fontChooser = new ListView()
             {
@@ -230,7 +211,6 @@ namespace Taskie
                 Width = 250,
                 HorizontalAlignment = HorizontalAlignment.Center
             };
-            fontChooser.IsEnabled = await Settings.CheckIfProAsync();
             fontChooser.SelectionChanged += (s, a) =>
             {
                 ListTools.ChangeListFont(listId, ((ListViewItem)fontChooser.SelectedItem).Tag.ToString());
@@ -999,37 +979,6 @@ namespace Taskie
             if (sender is ScrollViewer sv)
             {
                 sv.Width = NameBox.ActualWidth + 73;
-            }
-        }
-
-
-        private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            if (!await Settings.CheckIfProAsync())
-            {
-                try
-                {
-                    ProductPurchaseStatus result = (await CurrentApp.RequestProductPurchaseAsync("ProLifetime")).Status;
-                    if (result.HasFlag(ProductPurchaseStatus.Succeeded) || result.HasFlag(ProductPurchaseStatus.AlreadyPurchased))
-                    {
-                        var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
-                        var stringElements = toastXml.GetElementsByTagName("text");
-                        stringElements[0].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgrade")));
-                        stringElements[1].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgradeSub")));
-
-                        // Add arguments to the toast notification
-                        var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");
-
-                        var toast = new ScheduledToastNotification(toastXml, DateTimeOffset.Now.AddSeconds(1))
-                        {
-                            Id = "proUpgrade"
-                        };
-
-                        ToastNotificationManager.CreateToastNotifier().AddToSchedule(toast);
-                        await CoreApplication.RequestRestartAsync("Pro status changed.");
-                    }
-                }
-                catch { }
             }
         }
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)

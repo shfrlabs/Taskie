@@ -253,17 +253,11 @@ Es könnte sein, dass du oder dein Administrator Biometrie oder Passwort entfern
   <data name="TwitterLink.Content" xml:space="preserve">
     <value>Twitter</value>
   </data>
-  <data name="UpgradeText.Text" xml:space="preserve">
-    <value>Upgrade</value>
-  </data>
   <data name="ListLimitText.Text" xml:space="preserve">
     <value>Entferne die Limitierung auf drei Listen</value>
   </data>
   <data name="WinHelloText.Text" xml:space="preserve">
     <value>Logge Dich sicher mit Windows Hello ein</value>
-  </data>
-  <data name="IndicatorText.Text" xml:space="preserve">
-    <value>Pro-Markierung</value>
   </data>
   <data name="CloseCO.Text" xml:space="preserve">
     <value>Schließe die Kompaktansicht um in diesem Fenster zu arbeiten.</value>
@@ -274,47 +268,17 @@ Es könnte sein, dass du oder dein Administrator Biometrie oder Passwort entfern
   <data name="tipwrongname.Subtitle" xml:space="preserve">
     <value>Es gibt bereits eine Liste mit diesem Namen.</value>
   </data>
-  <data name="successfulUpgrade" xml:space="preserve">
-    <value>Erfolgreich upgegradet!</value>
-  </data>
-  <data name="SuccessfulUpgradeSub" xml:space="preserve">
-    <value>Taskie Pro wurde freigeschalten.</value>
-  </data>
-  <data name="ProCancelled" xml:space="preserve">
-    <value>Pro wurde dir zurückerstattet.</value>
-  </data>
-  <data name="ProCancelledSub" xml:space="preserve">
-    <value>Pro-Funktionen wurden blockiert.</value>
-  </data>
   <data name="ChangeEmoji" xml:space="preserve">
     <value>Emoji ändern</value>
   </data>
   <data name="ChangeFont" xml:space="preserve">
     <value>Schriftart ändern</value>
   </data>
-  <data name="UpgradeFor" xml:space="preserve">
-    <value>Upgrade für {0}</value>
-  </data>
   <data name="Exit" xml:space="preserve">
     <value>App schließen</value>
   </data>
   <data name="GetStarted" xml:space="preserve">
     <value>Loslegen</value>
-  </data>
-  <data name="AdvancedCustomizationUpgrade.Text" xml:space="preserve">
-    <value>Erweiterte Personalisierung</value>
-  </data>
-  <data name="FileAttachmentUpgrade.Text" xml:space="preserve">
-    <value>Füge Dateien an Aufgaben an</value>
-  </data>
-  <data name="GroupSpecificKanbanUpgrade.Text" xml:space="preserve">
-    <value>Kanban-Ansicht</value>
-  </data>
-  <data name="PrioritySupportUpgrade.Text" xml:space="preserve">
-    <value>Priorisierter Support</value>
-  </data>
-  <data name="RemoveBannersUpgrade.Text" xml:space="preserve">
-    <value>Entferne die Werbung für Pro (Schaltfläche)</value>
   </data>
   <data name="DeleteSubTask.Text" xml:space="preserve">
     <value>Unteraufgabe löschen</value>
@@ -351,9 +315,6 @@ Es könnte sein, dass du oder dein Administrator Biometrie oder Passwort entfern
   </data>
   <data name="Welcome3.Text" xml:space="preserve">
     <value>Hab Spaß und sei produktiv!</value>
-  </data>
-  <data name="UpgradeUnavailable" xml:space="preserve">
-    <value>Temporär nicht verfügbar</value>
   </data>
   <data name="EmptyListText.Text" xml:space="preserve">
     <value>Wähle oder erstelle eine Liste im Seitenmenü.</value>

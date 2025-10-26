@@ -32,7 +32,6 @@ namespace Taskie
             InitializeComponent();
             SetupTitleBar();
             CheckSecurity();
-            DeterminePro();
             CheckOnboarding();
 
             Navigation.Height = rectlist.ActualHeight;
@@ -67,7 +66,6 @@ namespace Taskie
             {
                 ListTools.DeleteList(listId);
                 ListDeleted(listId);
-                DeterminePro();
                 try
                 {
                     Tools.RemoveAttachmentsFromList(listId);
@@ -196,21 +194,6 @@ namespace Taskie
             }
         }
 
-        private async void UpgradeButton_Click(object sender, RoutedEventArgs e)
-        {
-            ContentDialog dialog = new ContentDialog();
-            Frame frame = new Frame();
-            dialog.BorderBrush = (LinearGradientBrush)Application.Current.Resources["ProBG"];
-            dialog.BorderThickness = new Thickness(2);
-            frame.Navigate(typeof(UpgradeDialogContentPage));
-            dialog.Content = frame;
-            dialog.PrimaryButtonText = string.Format(resourceLoader.GetString("UpgradeFor"), await Settings.GetProPriceAsync());
-            dialog.DefaultButton = ContentDialogButton.Primary;
-            dialog.PrimaryButtonClick += Dialog_UpgradeAction;
-            dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
-            await dialog.ShowAsync();
-        }
-
 
 
 
@@ -259,21 +242,6 @@ namespace Taskie
                 Navigation.Visibility = Visibility.Visible;
             }
         }
-
-        public async void DeterminePro()
-        {
-            if (await Settings.CheckIfProAsync())
-            {
-                proText.Text = "PRO";
-                BottomRow.Height = new GridLength(62);
-                UpdateButton.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                proText.Text = "FREE";
-            }
-        }
-
         public void HandleToastActivation(string argument)
         {
             // probably doesnt work
@@ -353,7 +321,6 @@ namespace Taskie
                 Navigation.Items.Add(item);
                 AddRightClickMenu(item);
             }
-            DeterminePro();
         }
 
 
@@ -434,7 +401,6 @@ namespace Taskie
                     }
                 }
             }
-            DeterminePro();
         }
 
 
@@ -546,7 +512,6 @@ namespace Taskie
             Navigation.Items.Clear();
             SetupNavigationMenu();
             contentFrame.Navigate(typeof(EmptyPage));
-            DeterminePro();
         }
 
         private async void AddList(object sender, RoutedEventArgs e)
@@ -626,37 +591,6 @@ namespace Taskie
             };
 
             await dialog.ShowAsync();
-        }
-
-
-        private async void Dialog_UpgradeAction(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            if (!await Settings.CheckIfProAsync())
-            {
-                try
-                {
-                    ProductPurchaseStatus result = (await CurrentApp.RequestProductPurchaseAsync("ProLifetime")).Status;
-                    if (result.HasFlag(ProductPurchaseStatus.Succeeded) || result.HasFlag(ProductPurchaseStatus.AlreadyPurchased))
-                    {
-                        var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
-                        var stringElements = toastXml.GetElementsByTagName("text");
-                        stringElements[0].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgrade")));
-                        stringElements[1].AppendChild(toastXml.CreateTextNode(resourceLoader.GetString("successfulUpgradeSub")));
-
-                        // Add arguments to the toast notification
-                        var toastElement = (XmlElement)toastXml.SelectSingleNode("/toast");
-
-                        var toast = new ScheduledToastNotification(toastXml, DateTimeOffset.Now.AddSeconds(1))
-                        {
-                            Id = "proUpgrade"
-                        };
-
-                        ToastNotificationManager.CreateToastNotifier().AddToSchedule(toast);
-                        await CoreApplication.RequestRestartAsync("Pro status changed.");
-                    }
-                }
-                catch { }
-            }
         }
 
         private void mainGrid_SizeChanged(object sender, SizeChangedEventArgs e) {

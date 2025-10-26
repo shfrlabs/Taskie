@@ -38,7 +38,7 @@ namespace TaskieLib
             }
         }
 
-        // Authentication via Windows Hello (Pro only)
+        // Authentication via Windows Hello
         public static bool isAuthUsed
         {
             get
@@ -82,55 +82,6 @@ namespace TaskieLib
                     savedSettings["size"] = 185;
                 }
             }
-        }
-
-        private static StoreContext context;
-
-
-
-        public static async Task<bool> CheckIfProAsync()
-        {
-            if (context == null)
-            {
-                context = StoreContext.GetDefault();
-            }
-
-            string[] productKinds = { "Durable" };
-            var filterList = new List<string>(productKinds);
-
-            StoreAppLicense license = await context.GetAppLicenseAsync();
-            if (license == null) { return false; }
-
-            string productId = "9N7T6N7R39NR";
-            foreach (var prod in license.AddOnLicenses)
-            {
-                if (prod.Key.StartsWith(productId) && prod.Value.IsActive)
-                    return true;
-            }
-            return false;
-        }
-
-        public static async Task<string> GetProPriceAsync()
-        {
-            if (context == null)
-            {
-                context = StoreContext.GetDefault();
-            }
-            var productKinds = new List<string> { "Durable" };
-
-            StoreProductQueryResult result = await context.GetStoreProductsAsync(productKinds, new List<string> { "9N7T6N7R39NR" });
-
-            if (result.ExtendedError != null)
-            {
-                Debug.WriteLine($"[Store status] Error: {result.ExtendedError.Message}");
-            }
-
-            if (result.Products.TryGetValue("9N7T6N7R39NR", out StoreProduct product))
-            {
-                return product.Price.FormattedPrice;
-            }
-
-            return "...";
         }
     }
 }

@@ -52,12 +52,6 @@
                     Margin="0,0,5,0"
                     FontSize="12"
                     FontFamily="Segoe UI Variable Text">Taskie</TextBlock>
-                <TextBlock
-                    Margin="0,0,0,1"
-                    VerticalAlignment="Bottom"
-                    FontSize="9"
-                    Opacity=".7"
-                    x:Name="proText">FREE</TextBlock>
             </StackPanel>
         </Grid>
         <Grid
@@ -85,7 +79,7 @@
                     <RowDefinition
                         Height="*" />
                     <RowDefinition
-                        Height="105"
+                        Height="55"
                         x:Name="BottomRow" />
                 </Grid.RowDefinitions>
                 <Rectangle Height="40" Fill="Transparent" Canvas.ZIndex="-99" SizeChanged="Sizer1_SizeChanged" x:Name="Sizer1" HorizontalAlignment="Stretch"/>
@@ -197,27 +191,6 @@
                         Width="3000"
                         Margin="-100, 0, 0, 0"
                         Opacity=".3"></NavigationViewItemSeparator>
-                    <Button
-                        x:Name="UpdateButton"
-                        Click="UpgradeButton_Click"
-                        HorizontalContentAlignment="Center"
-                        Margin="10, 3, 10 ,10"
-                        HorizontalAlignment="Stretch"
-                        Height="35"
-                        CornerRadius="8"
-                        BorderThickness="2"
-                        BorderBrush="{ThemeResource ButtonBG}">
-                        <StackPanel
-                            Orientation="Horizontal">
-                            <FontIcon
-                                Glyph="&#xE74A;"
-                                FontSize="15"
-                                Margin="0,0,10,0" />
-                            <TextBlock
-                                FontSize="13"
-                                x:Uid="UpgradeText"></TextBlock>
-                        </StackPanel>
-                    </Button>
                     <Button
                         x:Name="SettingsButton"
                         Click="SettingsButton_Click"

@@ -249,17 +249,8 @@
   <data name="TwitterLink.Content" xml:space="preserve">
     <value>Twitter</value>
   </data>
-  <data name="UpgradeText.Text" xml:space="preserve">
-    <value>Mejorar</value>
-  </data>
-  <data name="ListLimitText.Text" xml:space="preserve">
-    <value>Remover el límite de 3 listas</value>
-  </data>
   <data name="WinHelloText.Text" xml:space="preserve">
     <value>Inicio de sesión seguro con Windows Hello</value>
-  </data>
-  <data name="IndicatorText.Text" xml:space="preserve">
-    <value>Indicador Pro</value>
   </data>
   <data name="CloseCO.Text" xml:space="preserve">
     <value>Cierra la superposición compacta para trabajar en esta ventana.</value>
@@ -270,47 +261,17 @@
   <data name="tipwrongname.Subtitle" xml:space="preserve">
     <value>Ya existe una lista con este nombre.</value>
   </data>
-  <data name="successfulUpgrade" xml:space="preserve">
-    <value>¡Actualización exitosa!</value>
-  </data>
-  <data name="SuccessfulUpgradeSub" xml:space="preserve">
-    <value>Taskie Pro fue desbloqueado.</value>
-  </data>
-  <data name="ProCancelled" xml:space="preserve">
-    <value>Has devuelto Taskie Pro.</value>
-  </data>
-  <data name="ProCancelledSub" xml:space="preserve">
-    <value>Las funciones Pro fueron bloqueadas.</value>
-  </data>
   <data name="ChangeEmoji" xml:space="preserve">
     <value>Cambiar emoji</value>
   </data>
   <data name="ChangeFont" xml:space="preserve">
     <value>Cambiar fuente</value>
   </data>
-  <data name="UpgradeFor" xml:space="preserve">
-    <value>Mejorar por {0}</value>
-  </data>
   <data name="Exit" xml:space="preserve">
     <value>Salir de la app</value>
   </data>
   <data name="GetStarted" xml:space="preserve">
     <value>Comenzemos</value>
-  </data>
-  <data name="AdvancedCustomizationUpgrade.Text" xml:space="preserve">
-    <value>Personalización avanzada</value>
-  </data>
-  <data name="FileAttachmentUpgrade.Text" xml:space="preserve">
-    <value>Adjuntar archivos a las tareas</value>
-  </data>
-  <data name="GroupSpecificKanbanUpgrade.Text" xml:space="preserve">
-    <value>Vista kanban</value>
-  </data>
-  <data name="PrioritySupportUpgrade.Text" xml:space="preserve">
-    <value>Soporte prioritario</value>
-  </data>
-  <data name="RemoveBannersUpgrade.Text" xml:space="preserve">
-    <value>Remover la publicidad (botón de Taskie Pro)</value>
   </data>
   <data name="DeleteSubTask.Text" xml:space="preserve">
     <value>Borrar subtarea</value>
@@ -347,9 +308,6 @@
   </data>
   <data name="Welcome3.Text" xml:space="preserve">
     <value>¡Diviértete y sé productivo!</value>
-  </data>
-  <data name="UpgradeUnavailable" xml:space="preserve">
-    <value>Temporalmente no disponible</value>
   </data>
   <data name="EmptyListText.Text" xml:space="preserve">
     <value>Seleccione o cree una lista en la barra lateral.</value>

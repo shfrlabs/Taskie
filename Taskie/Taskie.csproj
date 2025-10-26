@@ -149,9 +149,6 @@
     <Compile Include="TaskPage.xaml.cs">
       <DependentUpon>TaskPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UpgradeDialogContentPage.xaml.cs">
-      <DependentUpon>UpgradeDialogContentPage.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -281,10 +278,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="TaskPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UpgradeDialogContentPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
