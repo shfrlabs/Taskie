@@ -4,33 +4,18 @@
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
 </a></p>
 
-<h2 align=center>The simple, yet powerful to-do companion for Windows 10/11.</h2>
-<h4 align=center>Made with <b>UWP</b>.</h4>
+<h2 align=center>A simple to-do app for Windows 10/11.</h2>
 
 ### ✨ Now with new features:
 - Reminders - set a custom notification to appear at your chosen time.
-- Subtasks - split any task into managable chunks.
 - List customization - change a list's emoji, *wallpaper*, and *font* (*Pro only*)
-- Attachments - add files to task to organize your life further. (*Pro only*)
+- Attachments - add files and Fairmark notes to tasks to organize your life further. (*Pro only*)
 
-## 🦾 Why should I get Pro?
-*(I won't nag you in the app, don't worry)*
+## How does it work?
 
-You can get Pro for its current and future features:
-- priority support
-- advanced list customization
-- task attachments
-
-..all for a small price of $1.99 (lifetime) or 0.99 zł in Poland.
-
-## 🛠️ How does it work?
-
-### 📂 File structure
+### File structure
 Taskie stores your lists as JSON files in the app's local folder (`%localappdata%\Packages\BRStudios.Taskie_xxxxxxxxxxxx\LocalState`.
 You can export them into a `.taskie` file (that's just a renamed ZIP containing the JSON files) and import them in Settings, by choosing either a loose JSON file or a full backup.
-
-### 🧠 How was it made?
-Taskie uses the **Universal Windows Platform** for its sandboxing and clean installs. *(yes, I really do like UWP)*
 
 ## How to translate?
 - Download [this](https://github.com/shef3r/Taskie/blob/main/Taskie/Strings/en-US/Resources.resw) file. (or clone the repo if you know what you're doing)
