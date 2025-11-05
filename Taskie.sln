@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36203.30 d17.14
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11123.170 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskie", "Taskie\Taskie.csproj", "{06C6E362-C68D-4A2E-9A68-94BBABA7A7FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskieLib", "TaskieLib\TaskieLib.csproj", "{A29BE5CB-E46D-41FF-A541-B2073D77061A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskieAppService", "TaskieAppService\TaskieAppService.csproj", "{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,22 @@ Global
 		{A29BE5CB-E46D-41FF-A541-B2073D77061A}.Release|x64.Build.0 = Release|x64
 		{A29BE5CB-E46D-41FF-A541-B2073D77061A}.Release|x86.ActiveCfg = Release|x86
 		{A29BE5CB-E46D-41FF-A541-B2073D77061A}.Release|x86.Build.0 = Release|x86
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Debug|ARM.ActiveCfg = Debug|ARM
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Debug|ARM.Build.0 = Debug|ARM
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Debug|ARM64.Build.0 = Debug|ARM64
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Debug|x64.ActiveCfg = Debug|x64
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Debug|x64.Build.0 = Debug|x64
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Debug|x86.ActiveCfg = Debug|x86
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Debug|x86.Build.0 = Debug|x86
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Release|ARM.ActiveCfg = Release|ARM
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Release|ARM.Build.0 = Release|ARM
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Release|ARM64.ActiveCfg = Release|ARM64
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Release|ARM64.Build.0 = Release|ARM64
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Release|x64.ActiveCfg = Release|x64
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Release|x64.Build.0 = Release|x64
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Release|x86.ActiveCfg = Release|x86
+		{F02D2860-11F5-4FE7-8B59-4F6EC0591C90}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

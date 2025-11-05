@@ -157,8 +157,6 @@ namespace TaskieLib
                     IncludeFields = true
                 };
 
-                DataPackage pkg = new DataPackage();
-                Clipboard.SetContent(pkg);
                 var listData = new ListData(metadata, tasks);
                 File.WriteAllText(
                     GetFilePath(listId),

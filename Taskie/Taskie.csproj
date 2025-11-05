@@ -234,6 +234,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TaskieAppService\TaskieAppService.csproj">
+      <Project>{f02d2860-11f5-4fe7-8b59-4f6ec0591c90}</Project>
+      <Name>TaskieAppService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TaskieLib\TaskieLib.csproj">
       <Project>{a29be5cb-e46d-41ff-a541-b2073d77061a}</Project>
       <Name>TaskieLib</Name>
