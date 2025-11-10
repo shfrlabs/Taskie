@@ -12,6 +12,7 @@ namespace TaskieLib
     public static class Settings
     {
         private static IPropertySet savedSettings = ApplicationData.Current.LocalSettings.Values;
+        public static event EventHandler<bool> AppServiceStatusChanged;
 
         // Application theme (light/dark)
         public static string Theme
@@ -48,6 +49,17 @@ namespace TaskieLib
             set
             {
                 savedSettings["auth"] = value ? "1" : "0";
+            }
+        }
+
+        // App Service for communicating with other apps (Fairmark, Anchor, etc.)
+        public static bool appService {
+            get {
+                return savedSettings.ContainsKey("as") && (string)savedSettings["as"] == "1";
+            }
+            set {
+                savedSettings["as"] = value ? "1" : "0";
+                AppServiceStatusChanged?.Invoke(null, value);
             }
         }
 

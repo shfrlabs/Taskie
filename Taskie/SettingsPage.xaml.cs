@@ -90,6 +90,12 @@ namespace Taskie
             }
         }
 
+        private void AppServiceToggle_Toggled(object sender, RoutedEventArgs e) {
+            if ((sender as ToggleSwitch)?.Tag?.ToString() == "AppService" && sender != null) {
+                Settings.appService = ((ToggleSwitch)sender).IsOn;
+            }
+        }
+
         private void RadioButton_StateChanged(object sender, RoutedEventArgs e)
         {
             if (isUpdating)
@@ -229,7 +235,5 @@ namespace Taskie
             public string Name { get; set; }
             public string Page { get; set; }
         }
-
-
     }
 }

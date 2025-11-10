@@ -150,6 +150,9 @@ Beste Grüße aus Polen!</value>
     <value>
 Lass die App mithilfe von Windows Hello nach deinem Passwort/Pin/Biometrie fragen. Diese Option könnte nicht verfügbar sein, wenn Dein Computer kein Passwort hat.</value>
   </data>
+  <data name="AppServiceDescription.Text" xml:space="preserve">
+    <value>Erlauben Sie der App die Kommunikation mit verbundenen Apps, damit diese die Funktionen von Taskie integrieren können. Dadurch wird der Versand der Inhalte Ihrer Listen ermöglicht.</value>
+  </data>
   <data name="AuthDisabledDescription" xml:space="preserve">
     <value>
 Es könnte sein, dass du oder dein Administrator Biometrie oder Passwort entfernt haben oder etwas anderes passiert ist. Überprüfe dazu deine Windows-Einstellungen.</value>
@@ -159,6 +162,9 @@ Es könnte sein, dass du oder dein Administrator Biometrie oder Passwort entfern
   </data>
   <data name="AuthText.Text" xml:space="preserve">
     <value>Authentisierung nutzen</value>
+  </data>
+  <data name="AppServiceText.Text" xml:space="preserve">
+    <value>App-Dienst</value>
   </data>
   <data name="BackupHeader.Text" xml:space="preserve">
     <value>Backup erstellen</value>

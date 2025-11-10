@@ -23,6 +23,15 @@ namespace TaskieAppService
         {
             _deferral = taskInstance.GetDeferral();
 
+            if (!Settings.appService)
+            {
+                _deferral.Complete();
+                _deferral = null;
+                return;
+            }
+
+            Settings.AppServiceStatusChanged += OnAppServiceStatusChanged;
+
             var details = taskInstance.TriggerDetails as AppServiceTriggerDetails;
             if (details == null)
             {
@@ -34,6 +43,14 @@ namespace TaskieAppService
             _connection = details.AppServiceConnection;
             _connection.RequestReceived += OnRequestReceived;
             _connection.ServiceClosed += OnServiceClosed;
+        }
+
+        private void OnAppServiceStatusChanged(object sender, bool e)
+        {
+            if (!e)
+            {
+                _connection?.Dispose();
+            }
         }
 
         private async void OnRequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
@@ -184,6 +201,7 @@ namespace TaskieAppService
 
         private void OnServiceClosed(AppServiceConnection sender, AppServiceClosedEventArgs args)
         {
+            Settings.AppServiceStatusChanged -= OnAppServiceStatusChanged;
             lock (_lock)
             {
                 _subscribers.Remove(sender);

@@ -147,6 +147,9 @@
   <data name="AuthDescription.Text" xml:space="preserve">
     <value>Spraw, by aplikacja prosiła o hasło lub biometrię przez Windows Hello. Ta opcja może nie być dostępna, jeżeli ten komputer nie jest zabezpieczony hasłem i biometrią/PINem.</value>
   </data>
+  <data name="AppServiceDescription.Text" xml:space="preserve">
+    <value>Zezwól aplikacji na komunikację z powiązanymi aplikacjami, aby umożliwić im integrację z funkcjami Taskie. Umożliwi to wysyłanie zawartości Twoich list.</value>
+  </data>
   <data name="AuthDisabledDescription" xml:space="preserve">
     <value>Usunięto metodę biometrii, PIN lub hasło, administrator systemu wyłączył tę opcję lub stało się coś innego. Sprawdź Ustawienia Windows &gt; Konta &gt; Opcje logowania.</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="AuthText.Text" xml:space="preserve">
     <value>Użyj uwierzytelniania</value>
+  </data>
+  <data name="AppServiceText.Text" xml:space="preserve">
+    <value>Usługa aplikacji</value>
   </data>
   <data name="BackupHeader.Text" xml:space="preserve">
     <value>Kopia zapasowa</value>

@@ -147,6 +147,9 @@
   <data name="AuthDescription.Text" xml:space="preserve">
     <value>Make the app ask for your password/pin/biometrics via Windows Hello. This option may not be avialable if your computer doesn't have a password.</value>
   </data>
+  <data name="AppServiceDescription.Text" xml:space="preserve">
+    <value>Allow the app to communicate with affiliated apps to allow them to integrate with Taskie's features. This allows your lists' content to be sent.</value>
+  </data>
   <data name="AuthDisabledDescription" xml:space="preserve">
     <value>You might have removed biometrics or password, your administrator removed the option or something else happened. Check Windows Settings.</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="AuthText.Text" xml:space="preserve">
     <value>Use authentication</value>
+  </data>
+  <data name="AppServiceText.Text" xml:space="preserve">
+    <value>App service</value>
   </data>
   <data name="BackupHeader.Text" xml:space="preserve">
     <value>Back up</value>

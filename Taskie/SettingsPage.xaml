@@ -38,6 +38,13 @@
                         <ToggleSwitch Margin="0,0,0,20" Toggled="AuthToggleSwitch_Toggled" Tag="Auth" x:Name="AuthToggle"/>
                     </StackPanel>
                 </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Vertical" Margin="1,0,0,0">
+                        <TextBlock x:Uid="AppServiceText" FontSize="20" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,10"/>
+                        <TextBlock FontSize="13" Opacity=".7" TextWrapping="Wrap" Margin="1,0,5,10" x:Uid="AppServiceDescription"/>
+                        <ToggleSwitch Margin="0,0,0,20" Toggled="AppServiceToggle_Toggled" Tag="AppService" x:Name="AppServiceToggle"/>
+                    </StackPanel>
+                </StackPanel>
                 <NavigationViewItemSeparator Margin="0, 20, 0, 0" />
                 <TextBlock x:Uid="BackupsText" FontSize="30" FontWeight="SemiBold" FontFamily="Segoe UI Variable" Margin="0,0,0,20" Grid.Row="0"/>
                 <StackPanel Orientation="Vertical">

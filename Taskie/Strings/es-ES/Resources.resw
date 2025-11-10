@@ -147,6 +147,9 @@
   <data name="AuthDescription.Text" xml:space="preserve">
     <value>Haz que la aplicación te pida tu contraseña/PIN/datos biométricos a través de Windows Hello. Es posible que esta opción no esté disponible si tu computadora no tiene contraseña.</value>
   </data>
+  <data name="AppServiceDescription.Text" xml:space="preserve">
+    <value>Permite que la aplicación se comunique con aplicaciones afiliadas para que puedan integrarse con las funciones de Taskie. Esto permite que se envíe el contenido de tus listas.</value>
+  </data>
   <data name="AuthDisabledDescription" xml:space="preserve">
     <value>Es posible que hayas eliminado los datos biométricos o la contraseña, que tu administrador haya eliminado la opción o que haya ocurrido algo más. Consulta la configuración de Windows.</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="AuthText.Text" xml:space="preserve">
     <value>Utilizar autenticación</value>
+  </data>
+  <data name="AppServiceText.Text" xml:space="preserve">
+    <value>Servicio de aplicación</value>
   </data>
   <data name="BackupHeader.Text" xml:space="preserve">
     <value>Respaldar</value>
