@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -29,6 +29,7 @@ namespace Taskie
             ((AcrylicBrush)this.Background).FallbackColor = (Color)Application.Current.Resources["SystemAltLowColor"];
             SetAppearance();
             SetSecurity();
+            SetAppService();
             CheckSecurity();
             ActualThemeChanged += SettingsPage_ActualThemeChanged;
         }
@@ -51,6 +52,11 @@ namespace Taskie
         private void SetSecurity()
         {
             AuthToggle.IsOn = Settings.isAuthUsed;
+        }
+
+        private void SetAppService()
+        {
+            AppServiceToggle.IsOn = Settings.appService;
         }
 
         private void SetAppearance()
