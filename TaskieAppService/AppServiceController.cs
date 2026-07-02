@@ -1,6 +1,8 @@
-﻿using System;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -8,6 +10,7 @@ using TaskieLib;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 
 namespace TaskieAppService
 {
@@ -15,6 +18,8 @@ namespace TaskieAppService
     {
         private static List<AppServiceConnection> _subscribers = new List<AppServiceConnection>();
         private static object _lock = new object();
+        private static FileSystemWatcher _watcher;
+        private static ConcurrentDictionary<string, DateTime> _recentlyNotified = new ConcurrentDictionary<string, DateTime>();
 
         private BackgroundTaskDeferral _deferral;
         private AppServiceConnection _connection;
@@ -28,6 +33,21 @@ namespace TaskieAppService
                 _deferral.Complete();
                 _deferral = null;
                 return;
+            }
+
+            lock (_lock)
+            {
+                if (_watcher == null)
+                {
+                    _watcher = new FileSystemWatcher(ApplicationData.Current.LocalFolder.Path, "*.json")
+                    {
+                        NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName
+                    };
+                    _watcher.Changed += OnListFileChanged;
+                    _watcher.Created += OnListFileChanged;
+                    _watcher.Deleted += OnListFileChanged;
+                    _watcher.EnableRaisingEvents = true;
+                }
             }
 
             Settings.AppServiceStatusChanged += OnAppServiceStatusChanged;
@@ -157,6 +177,31 @@ namespace TaskieAppService
             finally
             {
                 requestDeferral.Complete();
+            }
+        }
+
+        private async void OnListFileChanged(object sender, FileSystemEventArgs e)
+        {
+            try
+            {
+                string listId = Path.GetFileNameWithoutExtension(e.Name);
+                if (string.IsNullOrEmpty(listId)) return;
+
+                var now = DateTime.UtcNow;
+
+                if (_recentlyNotified.TryGetValue(listId, out var lastTime))
+                {
+                    if ((now - lastTime).TotalMilliseconds < 500)
+                        return;
+                }
+                _recentlyNotified[listId] = now;
+
+                await Task.Delay(100); // allow file writes to settle
+                await NotifySubscribers(listId);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"OnListFileChanged failed: {ex}");
             }
         }
 

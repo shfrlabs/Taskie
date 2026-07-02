@@ -1,4 +1,4 @@
-﻿using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,12 +35,71 @@ namespace Taskie
     public sealed partial class TaskPage : Page
     {
         private List<ListTask> tasks;
+        private FileSystemWatcher _watcher;
+        private DateTime _lastReloadTime = DateTime.MinValue;
+        private readonly object _watcherLock = new object();
 
         public TaskPage()
         {
             this.InitializeComponent();
             ActualThemeChanged += TaskPage_ActualThemeChanged;
             ListTools.ListRenamedEvent += ListRenamed;
+
+            _watcher = new FileSystemWatcher(ApplicationData.Current.LocalFolder.Path, "*.json")
+            {
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName
+            };
+            _watcher.Changed += OnFileChanged;
+            _watcher.EnableRaisingEvents = true;
+        }
+
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            if (string.IsNullOrEmpty(listId)) return;
+            if (e.Name != listId + ".json") return;
+
+            // Ignore the update if this foreground process was the one who just saved it
+            if (ListTools.ProcessLastSaveTime.TryGetValue(listId, out var lastSaveTime))
+            {
+                if ((DateTime.UtcNow - lastSaveTime).TotalMilliseconds < 1500)
+                {
+                    return;
+                }
+            }
+
+            lock (_watcherLock)
+            {
+                var now = DateTime.UtcNow;
+                if ((now - _lastReloadTime).TotalMilliseconds < 500) return;
+                _lastReloadTime = now;
+            }
+
+            Task.Run(async () =>
+            {
+                await Task.Delay(100);
+
+                try
+                {
+                    var data = ListTools.ReadList(listId);
+                    if (data == null || data.Tasks == null) return;
+                    var newTasks = data.Tasks;
+
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        this.tasks = newTasks;
+                        taskListView.Items.Clear();
+                        foreach (ListTask task in newTasks)
+                        {
+                            task.LoadAttachments(listId);
+                            taskListView.Items.Add(task);
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[OnFileChanged] Exception occurred while reloading list: {ex.Message}");
+                }
+            });
         }
 
 
@@ -989,6 +1048,12 @@ namespace Taskie
         private void TaskPage_Unloaded(object sender, RoutedEventArgs e)
         {
             ListTools.ListRenamedEvent -= ListRenamed;
+            if (_watcher != null)
+            {
+                _watcher.Changed -= OnFileChanged;
+                _watcher.Dispose();
+                _watcher = null;
+            }
         }
 
         private void AWClosed(AppWindow sender, AppWindowClosedEventArgs args)
@@ -1363,33 +1428,32 @@ namespace Taskie
 
         private void ReminderText_Loaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                ((sender as TextBlock).DataContext as ListTask).SetReminderText();
-            }
-            catch
-            {
-                // it crashes sometimes but thats not a big deal, it just means the task is null or something
-            }
-            finally
-            {
-                DispatcherTimer timer = new DispatcherTimer()
-                {
-                    Interval = TimeSpan.FromSeconds(1), // should be 60, bit of a workaround
-                };
-                timer.Tick += (s, args) =>
-                {
-                    try
-                    {
-                        ((sender as TextBlock).DataContext as ListTask).SetReminderText();
-                    }
-                    catch
-                    {
+            var textBlock = sender as TextBlock;
+            if (textBlock == null) return;
 
-                    }
-                };
-                timer.Start();
-            }
+            var task = textBlock.DataContext as ListTask;
+            task?.SetReminderText();
+
+            DispatcherTimer timer = new DispatcherTimer()
+            {
+                Interval = TimeSpan.FromSeconds(1),
+            };
+
+            timer.Tick += (s, args) =>
+            {
+                var currentTask = textBlock.DataContext as ListTask;
+                currentTask?.SetReminderText();
+            };
+
+            RoutedEventHandler unloadedHandler = null;
+            unloadedHandler = (s, args) =>
+            {
+                timer.Stop();
+                textBlock.Unloaded -= unloadedHandler;
+            };
+            textBlock.Unloaded += unloadedHandler;
+
+            timer.Start();
         }
     }
 }

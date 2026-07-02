@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,6 +13,7 @@ namespace TaskieLib
 {
     public class ListTools
     {
+        public static System.Collections.Concurrent.ConcurrentDictionary<string, DateTime> ProcessLastSaveTime = new System.Collections.Concurrent.ConcurrentDictionary<string, DateTime>();
 
         private static bool _isawopen;
         public static bool isAWOpen
@@ -151,6 +152,8 @@ namespace TaskieLib
         {
             try
             {
+                ProcessLastSaveTime[listId] = DateTime.UtcNow;
+
                 var options = new JsonSerializerOptions
                 {
                     WriteIndented = true,
