@@ -24,12 +24,24 @@ namespace TaskieAppService
         private BackgroundTaskDeferral _deferral;
         private AppServiceConnection _connection;
 
+        public static void Log(string message)
+        {
+            try
+            {
+                var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                System.IO.File.AppendAllText(System.IO.Path.Combine(folder.Path, "appservice_log.txt"), $"{DateTime.Now}: {message}\n");
+            }
+            catch { }
+        }
+
         public void Run(IBackgroundTaskInstance taskInstance)
         {
+            Log("Run called");
             _deferral = taskInstance.GetDeferral();
 
             if (!Settings.appService)
             {
+                Log("Settings.appService is false. Exiting.");
                 _deferral.Complete();
                 _deferral = null;
                 return;
@@ -55,6 +67,7 @@ namespace TaskieAppService
             var details = taskInstance.TriggerDetails as AppServiceTriggerDetails;
             if (details == null)
             {
+                Log("details == null. Exiting.");
                 _deferral.Complete();
                 _deferral = null;
                 return;
@@ -63,6 +76,7 @@ namespace TaskieAppService
             _connection = details.AppServiceConnection;
             _connection.RequestReceived += OnRequestReceived;
             _connection.ServiceClosed += OnServiceClosed;
+            Log("Run successfully hooked events.");
         }
 
         private void OnAppServiceStatusChanged(object sender, bool e)
@@ -81,37 +95,41 @@ namespace TaskieAppService
             try
             {
                 string command = message["command"] as string;
+                Log($"Received command: {command}");
                 var response = new ValueSet();
 
                 switch (command)
                 {
                     case "get-lists":
-                        var lists = ListTools.GetLists().Select(l => new { l.name, id = l.id.Replace(".json", string.Empty), l.emoji }).ToList();
+                        var lists = ListTools.GetLists().Select(l => new AppServiceListSummaryDto { name = l.name, id = l.id.Replace(".json", string.Empty), emoji = l.emoji }).ToList();
                         response["Result"] = JsonSerializer.Serialize(lists);
+                        Log("get-lists successful");
                         break;
 
                     case "get-tasks":
                         if (message.TryGetValue("listId", out object listIdObj) && listIdObj is string listId)
                         {
                             var listData = ListTools.ReadList(listId);
-                            var tasks = listData.Tasks.Select(t => new
+                            var tasks = listData.Tasks.Select(t => new AppServiceTaskItemDto
                             {
-                                t.Name,
-                                t.IsDone,
+                                Name = t.Name,
+                                IsDone = t.IsDone,
                                 CreationDate = t.CreationDate.Ticks,
-                                SubTasks = t.SubTasks.Select(st => new
+                                SubTasks = t.SubTasks.Select(st => new AppServiceSubTaskItemDto
                                 {
-                                    st.Name,
-                                    st.IsDone,
+                                    Name = st.Name,
+                                    IsDone = st.IsDone,
                                     CreationDate = st.CreationDate.Ticks,
                                     ParentCreationDate = st.ParentCreationDate?.Ticks
                                 }).ToList()
                             }).ToList();
                             response["Result"] = JsonSerializer.Serialize(tasks);
+                            Log($"get-tasks successful for listId: {listId}");
                         }
                         else
                         {
                             response["Error"] = "Missing or invalid 'listId'.";
+                            Log("get-tasks failed: Missing or invalid listId");
                         }
                         break;
 
@@ -131,15 +149,18 @@ namespace TaskieAppService
                                 ListTools.SaveList(listIdForUpdate, listData.Tasks, listData.Metadata);
                                 response["Result"] = "Success";
                                 await NotifySubscribers(listIdForUpdate);
+                                Log($"set-task-status successful for listId: {listIdForUpdate}, taskId: {taskId}");
                             }
                             else
                             {
                                 response["Error"] = "Task not found.";
+                                Log("set-task-status failed: Task not found");
                             }
                         }
                         else
                         {
                             response["Error"] = "Missing or invalid parameters for 'set-task-status'.";
+                            Log("set-task-status failed: Missing or invalid parameters");
                         }
                         break;
 
@@ -152,17 +173,21 @@ namespace TaskieAppService
                             }
                         }
                         response["Result"] = "Subscribed";
+                        Log("subscribe-to-updates successful");
                         break;
 
                     default:
                         response["Error"] = "Unknown command.";
+                        Log($"Unknown command: {command}");
                         break;
                 }
 
                 await args.Request.SendResponseAsync(response);
+                Log($"Response sent for command: {command}");
             }
             catch (Exception ex)
             {
+                Log($"OnRequestReceived exception: {ex}");
                 Debug.WriteLine($"OnRequestReceived failed: {ex}");
                 var errorResponse = new ValueSet { { "Error", ex.Message } };
                 try
@@ -171,6 +196,7 @@ namespace TaskieAppService
                 }
                 catch (Exception e)
                 {
+                    Log($"Failed to send error response: {e.Message}");
                     Debug.WriteLine($"Failed to send error response: {e.Message}");
                 }
             }

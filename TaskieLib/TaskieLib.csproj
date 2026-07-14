@@ -127,6 +127,7 @@
     <Compile Include="GlyphFontConverter.cs" />
     <Compile Include="ListTools.cs" />
     <Compile Include="Models\AttachmentMetadata.cs" />
+    <Compile Include="AppServiceDtos.cs" />
     <Compile Include="Models\FairmarkNoteData.cs" />
     <Compile Include="Models\ListData.cs" />
     <Compile Include="Models\ListMetadata.cs" />
